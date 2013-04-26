@@ -14,9 +14,16 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
+import android.opengl.Matrix;
 
 public class Hexagon {
 
+	public int[][] screenCoords = new int[5000][14];
+	public int screenCoordCount;
+	
+	private float[] vec = new float[4];
+	private float[] resultVec = new float[4];
+	
 	private float vertices[];
 	
 	private short indices[] = {
@@ -55,7 +62,7 @@ public class Hexagon {
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer indexBuffer;
 	private FloatBuffer[] texBuffer =  new FloatBuffer[3];
-	
+		
 	public Hexagon(GL10 gl, Context context) {
 		
 		float C = 1.0f;
@@ -68,8 +75,7 @@ public class Hexagon {
 		vertices[6] = A + C; vertices[7] = 0; vertices[8] = 0;
 		vertices[9] = 2 * C; vertices[10] = 0; vertices[11] = B;
 		vertices[12] = A + C; vertices[13] = 0; vertices[14] = 2 * B;
-		vertices[15] = A; vertices[16] = 0; vertices[17] = 2 * B;
-		
+		vertices[15] = A; vertices[16] = 0; vertices[17] = 2 * B;		
 		
 		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
 		vbb.order(ByteOrder.nativeOrder());
@@ -117,13 +123,10 @@ public class Hexagon {
 		
 	}
 	
-	public void draw(GL10 gl, float x, float y, float z, int typ)
+	public void draw(GL10 gl, float[] transformMatrix, float[] projectionMatrix, int typ)
 	{		
 		
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);		
-		
-		gl.glPushMatrix();
-		gl.glTranslatef(x, y, z);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);				
 		
 		gl.glFrontFace(GL10.GL_CW);		
 		gl.glEnable(GL10.GL_CULL_FACE); 
@@ -142,9 +145,30 @@ public class Hexagon {
 
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glDisable(GL10.GL_CULL_FACE);
+		gl.glDisable(GL10.GL_CULL_FACE);		
 		
-		gl.glPopMatrix();
+		float w = (float)GLRenderer.GLwidth / 2f;
+		float h = (float)GLRenderer.GLheight / 2f;
+		
+		// compute screen co-ordinates for the picking routine
+		for (int m = 0; m < 6; m++)
+		{
+			// get the vertex
+			vec[0] = vertices[m * 3];
+			vec[1] = vertices[m * 3 + 1];
+			vec[2] = vertices[m * 3 + 2];
+			vec[3] = 1.0f;
+			
+			Matrix.multiplyMV(resultVec, 0, transformMatrix, 0, vec, 0);
+			Matrix.multiplyMV(vec, 0, projectionMatrix, 0, resultVec, 0);
+			if (vec[3] == 0)
+				vec[3] = 0.000001f;
+			screenCoords[screenCoordCount][m * 2] = (int)(w + vec[0] / vec[3] * w);
+			screenCoords[screenCoordCount][m * 2 + 1] = (int)(h - vec[1] / vec[3] * h);		
+		}	
+		
+		screenCoordCount++;		
+	
 		
 	}
 }
