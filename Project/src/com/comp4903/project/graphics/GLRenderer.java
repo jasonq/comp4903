@@ -43,6 +43,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	private Hexagon hex; // get rid of this
 	private int[][] tileset = new int[40][40]; // this too
 	
+	private HUD headsUpDisplay;
+	
 	/*	GLRENDERER
 	 * 
 	 * Constructor, need to provide app context for access to
@@ -84,6 +86,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glEnable(GL10.GL_TEXTURE_2D);		
 		
 		hex = new Hexagon(gl, context);
+		headsUpDisplay = new HUD(context, 1200, 300);
+		headsUpDisplay.initialBoxTexture(gl);
 		
 		viewX = 0;
 		viewY = 0;
@@ -116,7 +120,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		
 		Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1f, 0f);
 				
-		draw(gl);		
+		draw(gl);	
+		
+		headsUpDisplay.drawHUD(gl);
 				
 		selectedTile = pick(640,360);
 	}
