@@ -1,0 +1,18 @@
+<Items>
+    <Item type="Armor">
+        <Name>Test Armor</Name>
+        <Description>This is test armor.</Description>
+        <Attack>0</Attack>
+        <Defence>5</Defence>
+        <Accuracy>-10</Accuracy>
+        <Avoidance>5</Avoidance>
+    </Item>
+    <Item type="Weapon">
+        <Name>Test Weapon</Name>
+        <Description>This is test weapon.</Description>
+        <Attack>5</Attack>
+        <Defence>1</Defence>
+        <Range>1</Range>
+        <Accuracy>90</Accuracy>
+    </Item>
+</Items>
