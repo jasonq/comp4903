@@ -24,14 +24,14 @@ public class LauncherActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         
 		super.onCreate(savedInstanceState);
-        
 		//setContentView(R.layout.main);
-        
 		// Start up OpenGL ES 1.0, by creating a
 		// GLSurfaceView, and setting it as the main renderer
         GLSurfaceView view = new MyGLSurfaceView(this);
         //view.setRenderer(new GLRenderer(this));
         setContentView(view);
+        
+        
         
     }
 }

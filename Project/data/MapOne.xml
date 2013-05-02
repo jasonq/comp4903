@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Map width="18" height="13" defaultType="Grass">
+	<TileGroup type="Mountain">
+	    <Tile x="0" y="12"/>
+	    <Tile x="1" y="12"/>
+	    <Tile x="2" y="12"/>
+	    <Tile x="3" y="12"/>
+	    <Tile x="8" y="12"/>
+	    <Tile x="9" y="12"/>
+	    <Tile x="0" y="11"/>
+	    <Tile x="1" y="11"/>
+	    <Tile x="2" y="11"/>
+	    <Tile x="0" y="10"/>
+	    <Tile x="1" y="10"/>
+	    <Tile x="4" y="10"/>
+	</TileGroup>
+	<TileGroup type="Forest">
+	    <Tile x="14" y="1"/>
+	    <Tile x="15" y="1"/>
+	    <Tile x="13" y="0"/>
+	    <Tile x="14" y="0"/>
+	    <Tile x="15" y="0"/>
+	    <Tile x="16" y="0"/>
+	</TileGroup>
+</Map>

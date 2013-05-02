@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Weapon>
+    <Name>Rifle</Name>
+    <Description>A bolt-action rifle with high accuracy and damage.</Description>
+    <Damage>10</Damage>
+    <Accuracy>90</Accuracy>
+    <Rounds>1</Rounds>
+    <Range>2</Range>
+</Weapon>
+
+<Weapon>
+    <Name>Sub Machine Gun</Name>
+    <Description>A small, fast weapon that can fire 5 times with poor range and accuracy. It also increase avoidance by %avoid%</Description>
+    <Damage>3</Damage>
+    <Accuracy>75</Accuracy>
+    <Rounds>5</Rounds>
+    <Range>1</Range>
+    <Modifier parameter="Avoid">5</Modifier>
+</Weapon>
+
+<Weapon>
+    <Name>Automatic Rifle</Name>
+    <Description>Fast rifle fires at medium range</Description>
+    <Damage>3</Damage>
+    <Accuracy>85</Accuracy>
+    <Rounds>3</Rounds>
+    <Range>2</Range>
+    <Modifier parameter="Avoid">5</Modifier>
+</Weapon>
+
+<Weapon>
+    <Name>Sniper Rifle</Name>
+    <Description>A long range rifle with high accuracy and damage. Decrease avoidance by %avoid%</Description>
+    <Damage>15</Damage>
+    <Accuracy>95</Accuracy>
+    <Rounds>1</Rounds>
+    <Range>3</Range>
+    <Modifier parameter="Avoid">-5</Modifier>
+</Weapon>
+
+<Weapon>
+    <Name>Shotgun</Name>
+    <Description>A short range weapon with high fire power</Description>
+    <Damage>15</Damage>
+    <Accuracy>80</Accuracy>
+    <Rounds>1</Rounds>
+    <Range>1</Range>
+</Weapon>

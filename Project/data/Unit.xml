@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Unit name="Soldier" type="Soldier" health="3" movement="2"/>
+<Unit name="Knight" type="Knight" health="3" movement="4"/>
+<Unit name="Mage" type="Mage" health="3" movement="2"/>
+<Unit name="Archer" type="Archer" health="3" movement="2"/>

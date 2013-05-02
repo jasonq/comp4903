@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="DefaultLocale">
+        <ignore path="src\com\comp4903\project\gameEngine\enums\TypeFinder.java" />
+    </issue>
+</lint>

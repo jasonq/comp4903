@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ability>
+    <Name>Hyper Awareness</Name>
+    <Description>Increase unit's evasion by %evasion% for the next %dodgenumber% attacks. Last %duration% turns.</Description>
+    <Health>0</Health>
+    <Mana>30</Mana>
+    <Target>Self</Target>
+    <Range>0</Range>
+    <Modifier parameter="Duration">2</Modifier>
+    <Modifier parameter="DodgeNumber">1</Modifier>
+    <Modifier parameter="Evasion">60</Modifier>
+</Ability>
+
+<Ability>
+    <Name>Expose Weakness</Name>
+    <Description>Decrease target unit's armour by %armour% and deal %damage% bonus damage. Last %duration% turns.</Description>
+    <Health>0</Health>
+    <Mana>25</Mana>
+    <Target>Enemy</Target>
+    <Range>2</Range>
+    <Modifier parameter="Armour">-2</Modifier>
+    <Modifier parameter="Damage">0</Modifier>
+    <Modifier parameter="Duration">3</Modifier>
+</Ability>
+
+<Ability>
+    <Name>Stim Pack</Name>
+    <Description>Increase damage by %damage% and decrease accuracy by &accuracy&. Last %duration% turns.</Description>
+    <Health>0</Health>
+    <Mana>25</Mana>
+    <Target>Self</Target>
+    <Range>0</Range>
+    <Modifier parameter="Armour">-2</Modifier>
+    <Modifier parameter="Damage">0</Modifier>
+    <Modifier parameter="Duration">1</Modifier>
+</Ability>
+
+<Ability>
+    <Name>Cripple</Name>
+    <Description>Decrease target's movement by %movement%. Last %duration% turns</Description>
+    <Health>0</Health>
+    <Mana>20</Mana>
+    <Target>Enemy</Target>
+    <Range>2</Range>
+    <Modifier parameter="Movement">-2</Modifier>
+    <Modifier parameter="Duration">0</Modifier>
+</Ability>
+
+<Ability>
+    <Name>Draining Grenade</Name>
+    <Description>Drain target's energy by %energy%</Description>
+    <Health>0</Health>
+    <Mana>15</Mana>
+    <Target>Enemy</Target>
+    <Range>2</Range>
+    <Modifier parameter="Energy">50</Modifier>
+</Ability>
+
+<Ability>
+    <Name>Energy Void</Name>
+    <Description>Deal target's missing energy times %multipler% damage to target unit</Description>
+    <Health>0</Health>
+    <Mana>40</Mana>
+    <Target>Enemy</Target>
+    <Range>2</Range>
+    <Modifier parameter="Multipler">1.3</Modifier>
+</Ability>
+
+<Ability>
+    <Name>Headshot</Name>
+    <Description>Decrease target unit's accuracy by %accuracy% for %duration% turns. Has a %chance% percent chance to instantly kill the target.</Description>
+    <Health>0</Health>
+    <Mana>40</Mana>
+    <Target>Enemy</Target>
+    <Range>3</Range>
+    <Modifier parameter="Accuracy">20</Modifier>
+    <Modifier parameter="Duration">1</Modifier>
+    <Modifier parameter="Accuracy">10</Modifier>
+</Ability>
+
+<Ability>
+    <Name>Disable</Name>
+    <Description>Decrease target unit's accuracy by %accuracy% and avoidance by %avoid%. Last %duration% turns</Description>
+    <Health>0</Health>
+    <Mana>40</Mana>
+    <Target>Enemy</Target>
+    <Range>2</Range>
+    <Modifier parameter="Accuracy">20</Modifier>
+    <Modifier parameter="Avoid">10</Modifier>
+    <Modifier parameter="Duration">1</Modifier>
+</Ability>
+
+<Ability>
+    <Name>Double Time</Name>
+    <Description>Allow the unit to move again after attacking.</Description>
+    <Health>0</Health>
+    <Mana>40</Mana>
+    <Target>Self</Target>
+    <Range>0</Range>
+    <Modifier parameter="Bonus">1</Modifier>
+</Ability>
+
+<Ability>
+    <Name>Flamethrower</Name>
+    <Description>Deals %damage% bonus damage and burns the target an additional %burn% fire damage at the end of the enemies turn. Last %duration% turns.</Description>
+    <Health>0</Health>
+    <Mana>40</Mana>
+    <Target>Self</Target>
+    <Range>0</Range>
+    <Modifier parameter="Damage">10</Modifier>
+    <Modifier parameter="Burn">5</Modifier>
+    <Modifier parameter="Duration">3</Modifier>
+</Ability>
