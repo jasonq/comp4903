@@ -9,6 +9,8 @@ import com.comp4903.project.graphics.MyGLSurfaceView;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.Window;
+
 import com.comp4903.project.gameEngine.factory.*;;
 /* LAUNCHERACTIVITY
  * 
@@ -22,26 +24,36 @@ import com.comp4903.project.gameEngine.factory.*;;
 
 public class LauncherActivity extends Activity {
 	// Main entry point beyond the constructor
-	
+
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
 		//setContentView(R.layout.main);
 		// Start up OpenGL ES 1.0, by creating a
 		// GLSurfaceView, and setting it as the main renderer
-        //GLSurfaceView view = new MyGLSurfaceView(this);
-        //view.setRenderer(new GLRenderer(this));
-        //setContentView(view);
-		boolean loaded = loadContent();
-		System.out.println("Loaded: " + loaded);
-		GameStats.PrintSkillList();
-    }
-	
+		//GLSurfaceView view = new MyGLSurfaceView(this);
+		//view.setRenderer(new GLRenderer(this));
+		//setContentView(view);
+		//boolean loaded = loadContent();
+		//System.out.println("Loaded: " + loaded);
+		//GameStats.PrintSkillList();
+		
+		
+		GLSurfaceView view = new MyGLSurfaceView(this);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//view.setRenderer(new GLRenderer(this));
+		setContentView(view);
+
+
+	}
+
 	private boolean loadContent(){
 		InputStream in;
 		try {
 			in = getResources().getAssets().open("Weapons.xml");
-	        GameStats.InitializeWeaponData(in);
+			GameStats.InitializeWeaponData(in);
 			in = getResources().getAssets().open("Skills.xml");
 			GameStats.InitializeSkillData(in);
 		} catch (IOException e) {
