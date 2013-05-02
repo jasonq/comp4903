@@ -1,105 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Unit>
-    <Name>Scout</Name>
-    <Health>100</Health>
-    <Energy>50</Energy>
-    <Attack>1</Attack>
-    <Defence>0</Defence>
-    <Movement>6</Movement>
-    <WeaponLimit>
-        <Weapon>Rifle</Weapon>
-        <Weapon>Sub Machine Gun</Weapon>
-    </WeaponLimit>
-    <ArmourLimit>
-        <Armour>Light Armour</Armour>
-    </ArmourLimit>
-    <SpellList>
-        <Spell level="1">Hyper Awareness</Spell>
-        <Spell level="3">Expose Weakness</Spell>
-    </SpellList>
-</Unit>
-
-<Unit>
-    <Name>Assult</Name>
-    <Health>120</Health>
-    <Energy>30</Energy>
-    <Attack>2</Attack>
-    <Defence>1</Defence>
-    <Movement>4</Movement>
-    <WeaponLimit>
-        <Weapon>Automatic Rifle</Weapon>
-        <Weapon>Sub Machine Gun</Weapon>
-    </WeaponLimit>
-    <ArmourLimit>
-        <Armour>Light Armour</Armour>
-        <Armour>Medium Armour</Armour>
-    </ArmourLimit>
-    <SpellList>
-        <Spell level="1">Stim Pack</Spell>
-        <Spell level="3">Cripple</Spell>
-    </SpellList>
-</Unit>
-
-<Unit>
-    <Name>Specialist</Name>
-    <Health>95</Health>
-    <Energy>80</Energy>
-    <Attack>1</Attack>
-    <Defence>0</Defence>
-    <Movement>4</Movement>
-    <WeaponLimit>
-        <Weapon>Automatic Rifle</Weapon>
-        <Weapon>Rifle</Weapon>
-    </WeaponLimit>
-    <ArmourLimit>
-        <Armour>Light Armour</Armour>
-        <Armour>Medium Armour</Armour>
-    </ArmourLimit>
-    <SpellList>
-        <Spell level="1">Draining Grenade</Spell>
-        <Spell level="3">Energy Void</Spell>
-    </SpellList>
-</Unit>
-
-<Unit>
-    <Name>Sniper</Name>
-    <Health>80</Health>
-    <Energy>50</Energy>
-    <Attack>3</Attack>
-    <Defence>0</Defence>
-    <Movement>3</Movement>
-    <WeaponLimit>
-        <Weapon>Rifle</Weapon>
-        <Weapon>Sniper Rifle</Weapon>
-    </WeaponLimit>
-    <ArmourLimit>
-        <Armour>Light Armour</Armour>
-    </ArmourLimit>
-    <SpellList>
-        <Spell level="1">Head Shot</Spell>
-        <Spell level="3">Disable</Spell>
-    </SpellList>
-</Unit>
-
-<Unit>
-    <Name>Storm Trooper</Name>
-    <Health>130</Health>
-    <Energy>50</Energy>
-    <Attack>2</Attack>
-    <Defence>1</Defence>
-    <Movement>3</Movement>
-    <WeaponLimit>
-        <Weapon>Automatic Rifle</Weapon>
-        <Weapon>Shotguns</Weapon>
-    </WeaponLimit>
-    <ArmourLimit>
-        <Armour>Light Armour</Armour>
-        <Armour>Medium Armour</Armour>
-        <Armour>Heavy Armour</Armour>
-    </ArmourLimit>
-    <SpellList>
-        <Spell level="1">Double Time</Spell>
-        <Spell level="3">Flamethrower</Spell>
-    </SpellList>
-</Unit>
-
+<UnitList>
+	<Unit>
+	    <Name>Scout</Name>
+	    <Health>100</Health>
+	    <Energy>50</Energy>
+	    <Attack>1</Attack>
+	    <Defence>0</Defence>
+	    <Movement>6</Movement>
+	    <WeaponLimit>
+	        <Weapon>Rifle</Weapon>
+	        <Weapon>Sub Machine Gun</Weapon>
+	    </WeaponLimit>
+	    <ArmourLimit>
+	        <Armour>Light Armour</Armour>
+	    </ArmourLimit>
+	    <SpellList>
+	        <Spell level="1">Hyper Awareness</Spell>
+	        <Spell level="3">Expose Weakness</Spell>
+	    </SpellList>
+	</Unit>
+	<Unit>
+	    <Name>Assult</Name>
+	    <Health>120</Health>
+	    <Energy>30</Energy>
+	    <Attack>2</Attack>
+	    <Defence>1</Defence>
+	    <Movement>4</Movement>
+	    <WeaponLimit>
+	        <Weapon>Automatic Rifle</Weapon>
+	        <Weapon>Sub Machine Gun</Weapon>
+	    </WeaponLimit>
+	    <ArmourLimit>
+	        <Armour>Light Armour</Armour>
+	        <Armour>Medium Armour</Armour>
+	    </ArmourLimit>
+	    <SpellList>
+	        <Spell level="1">Stim Pack</Spell>
+	        <Spell level="3">Cripple</Spell>
+	    </SpellList>
+	</Unit>
+	<Unit>
+	    <Name>Specialist</Name>
+	    <Health>95</Health>
+	    <Energy>80</Energy>
+	    <Attack>1</Attack>
+	    <Defence>0</Defence>
+	    <Movement>4</Movement>
+	    <WeaponLimit>
+	        <Weapon>Automatic Rifle</Weapon>
+	        <Weapon>Rifle</Weapon>
+	    </WeaponLimit>
+	    <ArmourLimit>
+	        <Armour>Light Armour</Armour>
+	        <Armour>Medium Armour</Armour>
+	    </ArmourLimit>
+	    <SpellList>
+	        <Spell level="1">Draining Grenade</Spell>
+	        <Spell level="3">Energy Void</Spell>
+	    </SpellList>
+	</Unit>
+	<Unit>
+	    <Name>Sniper</Name>
+	    <Health>80</Health>
+	    <Energy>50</Energy>
+	    <Attack>3</Attack>
+	    <Defence>0</Defence>
+	    <Movement>3</Movement>
+	    <WeaponLimit>
+	        <Weapon>Rifle</Weapon>
+	        <Weapon>Sniper Rifle</Weapon>
+	    </WeaponLimit>
+	    <ArmourLimit>
+	        <Armour>Light Armour</Armour>
+	    </ArmourLimit>
+	    <SpellList>
+	        <Spell level="1">Head Shot</Spell>
+	        <Spell level="3">Disable</Spell>
+	    </SpellList>
+	</Unit>
+	<Unit>
+	    <Name>Storm Trooper</Name>
+	    <Health>130</Health>
+	    <Energy>50</Energy>
+	    <Attack>2</Attack>
+	    <Defence>1</Defence>
+	    <Movement>3</Movement>
+	    <WeaponLimit>
+	        <Weapon>Automatic Rifle</Weapon>
+	        <Weapon>Shotguns</Weapon>
+	    </WeaponLimit>
+	    <ArmourLimit>
+	        <Armour>Light Armour</Armour>
+	        <Armour>Medium Armour</Armour>
+	        <Armour>Heavy Armour</Armour>
+	    </ArmourLimit>
+	    <SpellList>
+	        <Spell level="1">Double Time</Spell>
+	        <Spell level="3">Flamethrower</Spell>
+	    </SpellList>
+	</Unit>
+</UnitList>

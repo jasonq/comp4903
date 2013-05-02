@@ -8,10 +8,10 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.comp4903.project.gameEngine.data.MapData;
-import com.comp4903.project.gameEngine.data.Point;
-import com.comp4903.project.gameEngine.enums.TileType;
 import com.comp4903.project.gameEngine.enums.TypeFinder;
+import com.comp4903.zoldcode.MapData;
+import com.comp4903.zoldcode.Point;
+import com.comp4903.zoldcode.TileType;
 
 import android.util.Xml;
 
