@@ -3,6 +3,7 @@ package com.comp4903.project.graphics;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.comp4903.project.GUI.HUD;
 import com.comp4903.project.graphics.Hexagon;
 
 import android.content.Context;
@@ -121,9 +122,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1f, 0f);
 				
 		draw(gl);	
-		
-		headsUpDisplay.drawHUD(gl);
-				
+		//headsUpDisplay.SwithToOrtho(gl);
+		//headsUpDisplay.drawHUD(gl);
+		//headsUpDisplay.SwitchToPerspective(gl);
 		selectedTile = pick(640,360);
 	}
 	
@@ -178,6 +179,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1, 1, 3, 200);		
 		gl.glMatrixMode(GL10.GL_PROJECTION);	
 		gl.glLoadMatrixf(projectionMatrix, 0);
+		
+		headsUpDisplay = new HUD(context, width, height);
+		headsUpDisplay.initialBoxTexture(gl);
 	
 	} 
 	
