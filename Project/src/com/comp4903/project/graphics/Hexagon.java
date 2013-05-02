@@ -30,7 +30,7 @@ public class Hexagon {
 		0, 5, 1, 1, 5, 4, 1, 4, 2, 2, 4, 3 	
 	};
 	
-	private float texcoords1[] = {
+	/*private float texcoords1[] = {
 			0.02f, 0.26f,
 			0.08f, 0.04f,
 			0.22f, 0.04f,
@@ -55,7 +55,35 @@ public class Hexagon {
 			0.91f, 0.35f,
 			0.80f, 0.68f,
 			0.65f, 0.68f			
+	};*/
+	
+	private float texcoords1[] = {
+			0.005f, 0.055f,
+			0.031f, 0.005f,
+			0.09f, 0.005f,
+			0.117f, 0.055f,
+			0.09f, 0.107f,
+			0.031f, 0.107f,						
 	};
+	
+	private float texcoords2[] = {
+			0.13f, 0.12f,
+			0.185f, 0.005f,
+			0.30f, 0.005f,
+			0.355f, 0.12f,
+			0.30f, 0.235f,
+			0.185f, 0.235f			
+	};
+	
+	private float texcoords3[] = {
+			0.375f, 0.125f,
+			0.435f, 0.01f,
+			0.55f, 0.01f,
+			0.605f, 0.125f,
+			0.55f, 0.24f,
+			0.435f, 0.24f			
+	};
+	
 	
 	private int textures[] = new int[1];
 	
@@ -110,7 +138,7 @@ public class Hexagon {
 		Bitmap bitmap;		
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inScaled = false;
-		bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.texturetest, options);		
+		bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.metals, options);		
 		
 		gl.glGenTextures(1, textures, 0);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
@@ -130,7 +158,7 @@ public class Hexagon {
 		
 		gl.glFrontFace(GL10.GL_CW);		
 		gl.glEnable(GL10.GL_CULL_FACE); 
-		gl.glCullFace(GL10.GL_BACK); 
+		gl.glCullFace(GL10.GL_BACK);
 
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);

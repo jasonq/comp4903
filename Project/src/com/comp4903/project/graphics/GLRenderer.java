@@ -1,12 +1,20 @@
 package com.comp4903.project.graphics;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.GUI.HUD;
 import com.comp4903.project.graphics.Hexagon;
+import com.comp4903.project.graphics.model.MaterialLibrary;
+import com.comp4903.project.graphics.model.Model3D;
+import com.comp4903.project.graphics.model.ModelLoader;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,7 +50,12 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	private Context context;
 	
 	private Hexagon hex; // get rid of this
+	private Model3D[] testmodels;
 	private int[][] tileset = new int[40][40]; // this too
+	
+	private float[] ambientLight = { 0.4f, 0.4f, 0.4f, 1 };
+	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
+	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 10.0f };
 	
 	private HUD headsUpDisplay;
 	
@@ -61,9 +74,11 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		for (int x = 0; x < 40; x++)
 			for (int y = 0; y < 40; y++)
 			{
-				tileset[x][y] = 2;
+				tileset[x][y] = 0;
 				if ((x * y) % 16 > 10)
 					tileset[x][y] = 1;
+				if ((x * y) % 16 > 14)
+					tileset[x][y] = 2;
 				if ((x > 18) && (x < 22))
 					tileset[x][y] = 0;
 			}
@@ -90,13 +105,48 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		headsUpDisplay = new HUD(context, 1200, 300);
 		headsUpDisplay.initialBoxTexture(gl);
 		
-		viewX = 0;
+		viewX = 20;
 		viewY = 0;
-		viewZ = 0;
-		distance = 5;
-		viewAngle = 1.57f / 2f;
+		viewZ = 20;
+		distance = 7;
+		viewAngle = 0; //1.57f / 2f;
+		
+		modeltest(gl);
 		
 	}	
+	
+	public void modeltest(GL10 gl) 
+	{
+		MaterialLibrary.init(gl, context);
+		AssetManager am = context.getAssets();
+		testmodels = new Model3D[5];
+		
+		for (int t = 0; t < 3; t++)
+		{
+			testmodels[t] = new Model3D();
+			try {
+				InputStream buf = null;
+				if (t < 2)
+					buf = am.open("models/testmodel.mdl");
+				else
+					buf = am.open("models/soldier.gmodel");
+				ModelLoader.load(buf, testmodels[t]);
+				testmodels[t].SetScale(.08f, .08f, .08f);
+				testmodels[t].SetPosition(1, 1, 1);
+				buf.close();
+				
+			} catch (IOException e)
+			{ }			
+		}
+		testmodels[0].SetPosition(21,1,21);
+		testmodels[1].YRotate(-0.4f);
+		testmodels[1].SetPosition(23, 1, 23);
+		testmodels[2].YRotate(1.6f);
+		testmodels[2].XRotate(1.57f);
+		testmodels[2].SetScale(1, 1, 1);
+		testmodels[2].SetPosition(26, 0.5f, 23);
+		
+	}
 	
 	/*
 	 * ONDRAWFRAME(non-Javadoc)
@@ -115,17 +165,17 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		eyeZ = (float) ((Math.sin(viewAngle) + Math.cos(viewAngle)) * distance);
 		eyeX += viewX;
 		eyeZ += viewZ;
-		eyeY = distance;
-		
-		//GLU.gluLookAt(gl, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1.0f, 0f);
+		eyeY = distance*(distance / 5f);		
 		
 		Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1f, 0f);
 				
 		draw(gl);	
+
 		//headsUpDisplay.SwithToOrtho(gl);
 		//headsUpDisplay.drawHUD(gl);
 		//headsUpDisplay.SwitchToPerspective(gl);
-		selectedTile = pick(640,360);
+		//headsUpDisplay.drawHUD(gl);
+
 	}
 	
 	// Test routine to draw the map
@@ -139,8 +189,12 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			for (int y = 0; y < 40; y++)
 			{
 				float dx, dy, dz;
-				dx = ((float)x) * 3.05f + (y % 2) * 1.525f;
-				dz = ((float)y)* .9f;
+				//dx = ((float)x) * 3.05f + (y % 2) * 1.525f;
+				//dz = ((float)y)* .9f;
+				
+				dx = ((float)x) * 3f + (y % 2) * 1.5f;
+				dz = ((float)y) * 0.8660254038f;
+				
 				dy = 0;
 				
 				if ((x == selectedTile.x) && (y == selectedTile.y))
@@ -163,7 +217,18 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 				
 					hex.draw(gl, modelViewMatrix, projectionMatrix, tileset[x][y]);
 				}
-			}
+			}		
+		
+		gl.glEnable(GL10.GL_LIGHTING);
+		gl.glEnable(GL10.GL_LIGHT0);
+		gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, ambientLight, 0);
+		gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, diffuseLight, 0);
+		gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPosition, 0);
+		
+		for (int t = 0; t < 3; t++)
+			testmodels[t].display(gl, viewMatrix);
+		gl.glDisable(GL10.GL_LIGHTING);
+		
 	}
 	
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -175,8 +240,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		GLheight = height;
 		
 		// set up projection transformation		
-		float ratio = (float) width / height;
-		Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1, 1, 3, 200);		
+		//float ratio = (float) width / height;
+		//Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1f, 1f, 2, 100);	
+		SetProjectionMatrix(gl);
 		gl.glMatrixMode(GL10.GL_PROJECTION);	
 		gl.glLoadMatrixf(projectionMatrix, 0);
 		
@@ -196,8 +262,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		if (amount > 1)
 			distance -= 0.1f;
 		
-		if (distance < 1)
-			distance = 1;
+		if (distance < 3)
+			distance = 3;
 		
 		if (distance > 10)
 			distance = 10;	
@@ -206,8 +272,16 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	// moves the view camera by an arbitrary amount
 	public void cameraMoveRequest(float dx, float dy)
 	{
-		viewX -= dx * 0.03f;
-		viewZ -= dy * 0.03f;
+		float xAngle = viewAngle + 1.57f;
+		float zAngle = viewAngle;
+		viewX += (float) ((Math.cos(xAngle) - Math.sin(xAngle)) * dx * distance * 0.002f );		 
+		viewZ += (float) ((Math.sin(xAngle) + Math.cos(xAngle)) * dx * distance *0.002f );
+		
+		viewX -= (float) ((Math.cos(zAngle) - Math.sin(zAngle)) * dy * distance * 0.002f);		 
+		viewZ -= (float) ((Math.sin(zAngle) + Math.cos(zAngle)) * dy * distance *0.002f);
+		
+		//viewX -= dx * 0.03f;
+		//viewZ -= dy * 0.03f;
 	}
 	
 	// a crazy way of doing picking.  Don't look too closely at this code.
@@ -263,6 +337,41 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		selectedTile = s;		
 	}
 	
-	
+	public void SetProjectionMatrix(GL10 gl)
+	{		
+		Matrix.setIdentityM(projectionMatrix, 0);
+
+		projectionMatrix[15] = 0; // 3,3
+
+		float near_plane = 1;
+		float far_plane = 1000;
+		
+		//h_fov = 30.0 * ((float)width_ / (float)height_);
+		//v_fov = 60.0 * ((float)height_ / (float)width_);
+
+		float h_fov = (float) (30.0 * ((float)GLwidth / (float)GLheight));
+		float v_fov = 30.0f;
+		
+		float aspect = (float)GLwidth / (float)GLheight;
+		float f = (float) (1.0f / Math.tan(v_fov / 180.0f * 3.141593f * 0.5f));		
+
+		float w = (float) (1.0f / Math.tan(h_fov / 180.0f * 3.141593f * 0.5f));
+		float h = (float) (1.0f / Math.tan(v_fov / 180.0f * 3.141593f * 0.5f));
+		float q = far_plane / (far_plane - near_plane);
+		
+		/*projectionMatrix[0] = w;
+		projectionMatrix[5] = h; // 1, 1
+		projectionMatrix[10] = q; // 2,2
+		projectionMatrix[11] = -q*near_plane; // 3,2
+		projectionMatrix[14] = 1; // 2,3*/	
+		
+		projectionMatrix[0] = f / aspect;
+		projectionMatrix[5] = f;
+		projectionMatrix[10] = (far_plane + near_plane) / (near_plane - far_plane);
+		projectionMatrix[11] = -1;
+		projectionMatrix[14] = (2f * far_plane * near_plane) / (near_plane - far_plane);
+		projectionMatrix[15] = 0;
+			
+	}
 	
 }
