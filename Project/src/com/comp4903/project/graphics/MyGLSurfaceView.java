@@ -11,7 +11,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	
 	private final GLRenderer mRenderer;
 	private ScaleGestureDetector mScaleDetector;
-	
+	private boolean down = false;
+	private float downx,downy;
+	private float pickx,picky;
+	private boolean menupressed = false;
 	public MyGLSurfaceView(Context context) {
 		
 		super(context);
@@ -61,6 +64,32 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				mRenderer.cameraMoveRequest(dx, dy);
 			
 			requestRender();
+			
+		//PICKING
+		case MotionEvent.ACTION_DOWN:
+			down = true;
+			downx = e.getX();
+			downy = e.getY();
+			/*if(this.mRenderer.checkHUD((int)downx, (int)downy)){
+				menupressed = true;
+				this.mRenderer.setSelectedHUD((int)e.getY(), menupressed);
+			
+			}else{
+				menupressed = false;
+				this.mRenderer.setSelectedHUD((int)e.getY(), menupressed);
+			}*/
+
+			requestRender();
+		case MotionEvent.ACTION_UP:
+			//this.mRenderer.setSelectedHUD(1, false);
+			//menupressed = false;
+			if(down){
+				pickx = e.getX();
+				picky = e.getY();
+				down = false;
+				mRenderer.selectTile(mRenderer.pick(pickx,picky));
+				requestRender();
+			}
 		}
 
 		mPreviousX = x;

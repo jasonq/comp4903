@@ -171,9 +171,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 				
 		draw(gl);	
 
-		//headsUpDisplay.SwithToOrtho(gl);
-		//headsUpDisplay.drawHUD(gl);
-		//headsUpDisplay.SwitchToPerspective(gl);
+		headsUpDisplay.SwithToOrtho(gl);
+		headsUpDisplay.drawHUD(gl);
+		headsUpDisplay.SwitchToPerspective(gl);
 		//headsUpDisplay.drawHUD(gl);
 
 	}
