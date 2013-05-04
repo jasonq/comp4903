@@ -1,0 +1,14 @@
+package com.comp4903.project.graphics.tile;
+
+public class Tile {
+	
+	float texcoords[] = new float[12];
+	String name;
+	int textureMap;
+	
+	public Tile(String n)
+	{
+		name = n;
+	}
+	
+}

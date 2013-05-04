@@ -8,10 +8,10 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.GUI.HUD;
-import com.comp4903.project.graphics.Hexagon;
 import com.comp4903.project.graphics.model.MaterialLibrary;
 import com.comp4903.project.graphics.model.Model3D;
 import com.comp4903.project.graphics.model.ModelLoader;
+import com.comp4903.project.graphics.tile.Hexagon;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -59,6 +59,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 	private HUD headsUpDisplay;
 	
+	private MapRenderer map;
+	
 	/*	GLRENDERER
 	 * 
 	 * Constructor, need to provide app context for access to
@@ -69,9 +71,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		context = c;
 		selectedTile.x = 0;
 		selectedTile.y = 0;
-		
+				
 		// random map
-		for (int x = 0; x < 40; x++)
+		/*for (int x = 0; x < 40; x++)
 			for (int y = 0; y < 40; y++)
 			{
 				tileset[x][y] = 0;
@@ -81,7 +83,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 					tileset[x][y] = 2;
 				if ((x > 18) && (x < 22))
 					tileset[x][y] = 0;
-			}
+			}*/
+		
+		
 	}
 	
 	/*
@@ -99,11 +103,22 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glClearColor(.5f, .5f, .5f, 1);
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
-		gl.glEnable(GL10.GL_TEXTURE_2D);		
+		gl.glDepthFunc(GL10.GL_LEQUAL);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glDisable(GL10.GL_BLEND);
 		
-		hex = new Hexagon(gl, context);
+		gl.glFrontFace(GL10.GL_CW);		
+		gl.glEnable(GL10.GL_CULL_FACE); 
+		gl.glCullFace(GL10.GL_BACK);
+		
+		//hex = new Hexagon(gl, context);
 		headsUpDisplay = new HUD(context, 1200, 300);
 		headsUpDisplay.initialBoxTexture(gl);
+		
+		MaterialLibrary.init(gl, context);
+		
+		map = new MapRenderer(gl, context);
+		map.init(40, 40);
 		
 		viewX = 20;
 		viewY = 0;
@@ -117,7 +132,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 	public void modeltest(GL10 gl) 
 	{
-		MaterialLibrary.init(gl, context);
+		
 		AssetManager am = context.getAssets();
 		testmodels = new Model3D[5];
 		
@@ -169,55 +184,20 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		
 		Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1f, 0f);
 				
-		draw(gl);	
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		map.render(viewMatrix, projectionMatrix, viewX, viewY, viewZ);
+		
+		draw(gl);
 
-		headsUpDisplay.SwithToOrtho(gl);
-		headsUpDisplay.drawHUD(gl);
-		headsUpDisplay.SwitchToPerspective(gl);
+		//headsUpDisplay.SwithToOrtho(gl);
 		//headsUpDisplay.drawHUD(gl);
-
+		//headsUpDisplay.SwitchToPerspective(gl);
+		
 	}
 	
-	// Test routine to draw the map
+	// Test routine to draw the models
 	public void draw(GL10 gl)
 	{
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-
-		hex.screenCoordCount = 0;
-		
-		for (int x = 0; x < 40; x++)
-			for (int y = 0; y < 40; y++)
-			{
-				float dx, dy, dz;
-				//dx = ((float)x) * 3.05f + (y % 2) * 1.525f;
-				//dz = ((float)y)* .9f;
-				
-				dx = ((float)x) * 3f + (y % 2) * 1.5f;
-				dz = ((float)y) * 0.8660254038f;
-				
-				dy = 0;
-				
-				if ((x == selectedTile.x) && (y == selectedTile.y))
-					dy = .1f;
-				
-				if ((dx > viewX - 16) &&
-					(dz > viewZ - 16) &&
-					(dx < viewX + 16) &&
-					(dz < viewZ + 8))
-				{
-					hex.screenCoords[hex.screenCoordCount][12] = x;
-					hex.screenCoords[hex.screenCoordCount][13] = y;
-				
-					// set up the model-view matrix for this hexagon
-					Matrix.setIdentityM(modelMatrix, 0);				
-					Matrix.multiplyMM(modelViewMatrix, 0, modelMatrix, 0, viewMatrix, 0);
-					Matrix.translateM(modelViewMatrix, 0, dx, dy, dz);
-					gl.glMatrixMode(GL10.GL_MODELVIEW);
-					gl.glLoadMatrixf(modelViewMatrix, 0);
-				
-					hex.draw(gl, modelViewMatrix, projectionMatrix, tileset[x][y]);
-				}
-			}		
 		
 		gl.glEnable(GL10.GL_LIGHTING);
 		gl.glEnable(GL10.GL_LIGHT0);
@@ -238,10 +218,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		
 		GLwidth = width;
 		GLheight = height;
-		
-		// set up projection transformation		
-		//float ratio = (float) width / height;
-		//Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1f, 1f, 2, 100);	
+				
 		SetProjectionMatrix(gl);
 		gl.glMatrixMode(GL10.GL_PROJECTION);	
 		gl.glLoadMatrixf(projectionMatrix, 0);
@@ -262,8 +239,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		if (amount > 1)
 			distance -= 0.1f;
 		
-		if (distance < 3)
-			distance = 3;
+		if (distance < 6)
+			distance = 6;
 		
 		if (distance > 10)
 			distance = 10;	
@@ -288,52 +265,23 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	// Given two screen co-ordinates, will return
 	// a Point, containing the x and y map co-ordinates selected.
 	public Point pick(float x, float y)
-	{
-		Point r = new Point(-1, -1);
-		int v = 5;
-		boolean p = true;
-		
-		r.x = -1;
-		r.y = -1;
-		
-		for (int m = 0; m < hex.screenCoordCount; m++)
-		{
-			p = false;
-			for (int t = 0; t < 5; t++)
-			{
-				if (  (((float)hex.screenCoords[m][t * 2 + 1] > y) != ((float)hex.screenCoords[m][v * 2 + 1] > y))
-					  &&
-					  ((float)x < ((float)hex.screenCoords[m][v * 2] - (float)hex.screenCoords[m][t * 2]) *
-							  ((float)y - (float)hex.screenCoords[m][t * 2 + 1]) / 
-							  ((float)hex.screenCoords[m][v * 2 + 1] - (float)hex.screenCoords[m][t * 2 + 1]) + (float)hex.screenCoords[m][t * 2])
-					  
-					)
-				{
-					p = !p;
-				}
-				v = t;
-			}		
-			if (p)
-			{
-				r.x = (int)(hex.screenCoords[m][12]);
-				r.y = (int)(hex.screenCoords[m][13]);
-			}
-		}
-		
-		return r;
+	{		
+		return map.pick(x, y);
 	}
 	
 	// Makes tile x,y the selected tile
 	public void selectTile(int x, int y)
 	{
-		selectedTile.x = x;
-		selectedTile.y = y;
+		map.selectTile(x, y);
+		//selectedTile.x = x;
+		//selectedTile.y = y;
 	}
 	
 	// Makes tile x,y the selected tile
 	// can be used directly with pick (ex...   selectTile(pick(screenX, screenY)); )
 	public void selectTile(Point s)
 	{
+		map.selectTile(s.x, s.y);
 		selectedTile = s;		
 	}
 	

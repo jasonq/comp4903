@@ -1,0 +1,14 @@
+<def:tileset name="set.selection" map="SelectionTiles.png">
+
+	<def:tile name="reachable">
+		<def:base>
+			<def:point1 u="0.01"	v="0.01"/>
+			<def:point2 u="0.015"	v="0.005"/>
+			<def:point3 u="0.02"	v="0.005"/>
+			<def:point4 u="0.025"	v="0.01"/>
+			<def:point5 u="0.02"	v="0.015"/>
+			<def:point6 u="0.015"	v="0.015"/>		
+		</def:base>
+	</def:tile>
+		
+</def:tileset>

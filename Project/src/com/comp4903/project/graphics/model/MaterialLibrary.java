@@ -39,9 +39,10 @@ public class MaterialLibrary {
 	public static GL10 gl;
 	public static Context context;
 	
-	public static void init(GL10 g, Context context)
+	public static void init(GL10 g, Context c)
 	{
 		gl = g;
+		context = c;
 		// sets aside 100 texturemap entries in openGL
 		gl.glGenTextures(100, texturenames, 0);
 		

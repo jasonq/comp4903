@@ -1,0 +1,5 @@
+package com.comp4903.project.graphics;
+
+public class TileSetDefinition {
+
+}
