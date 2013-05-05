@@ -120,7 +120,10 @@ public class Hexagon {
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);		
-			
+		
+		float w = (float)GLRenderer.GLwidth / 2f;
+		float h = (float)GLRenderer.GLheight / 2f;
+		
 		if (cpick)
 			computePick(transformMatrix, projectionMatrix);
 	
@@ -129,10 +132,6 @@ public class Hexagon {
 	
 	private void computePick(float[] transformMatrix, float[]projectionMatrix)
 	{
-		
-		float w = (float)GLRenderer.GLwidth / 2f;
-		float h = (float)GLRenderer.GLheight / 2f;
-		
 		// compute screen co-ordinates for the picking routine
 		for (int m = 0; m < 6; m++)
 		{

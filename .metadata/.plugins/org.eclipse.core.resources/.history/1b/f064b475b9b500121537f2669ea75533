@@ -35,9 +35,6 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	public static int GLwidth;
 	public static int GLheight;
 	public static Point selectedTile = new Point(0,0);
-	public static boolean isRenderingNow = false;
-	public static boolean pauseRender = false;
-	
 	public boolean showmenu = false;
 	
 	private float viewX, viewY, viewZ; // co-ordinate of the location we are looking at
@@ -65,7 +62,6 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	private HUD headsUpDisplay;
 	
 	private MapRenderer map;
-	
 	
 	/*	GLRENDERER
 	 * 
@@ -163,11 +159,6 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	 */	
 	public void onDrawFrame(GL10 gl) {
 		
-		if (pauseRender)
-			return;
-		
-		isRenderingNow = true;
-		
 		// clear the buffer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);		
 				
@@ -192,8 +183,6 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		headsUpDisplay.drawHUD(gl, showmenu);
 		headsUpDisplay.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
-		
-		isRenderingNow = false;
 	}
 	
 	// Test routine to draw the models
@@ -266,7 +255,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	// Given two screen co-ordinates, will return
 	// a Point, containing the x and y map co-ordinates selected.
 	public Point pick(float x, float y)
-	{			
+	{	
+		headsUpDisplay.character.setTransformation(1.0f, 1.0f,800f, 200f);
 		return map.pick(x, y);
 	}
 	

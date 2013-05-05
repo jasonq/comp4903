@@ -105,7 +105,7 @@ public class Hexagon {
 	 *  typ					texture index
 	 * 
 	 */
-	public void draw(GL10 gl, float[] transformMatrix, float[] projectionMatrix, int set, int typ, boolean cpick)
+	public void draw(GL10 gl, float[] transformMatrix, float[] projectionMatrix, int set, int typ)
 	{		
 		int tex = tileDefinitions[set].textureMap;
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, MaterialLibrary.texturenames[tex]);
@@ -120,15 +120,6 @@ public class Hexagon {
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);		
-			
-		if (cpick)
-			computePick(transformMatrix, projectionMatrix);
-	
-		
-	}
-	
-	private void computePick(float[] transformMatrix, float[]projectionMatrix)
-	{
 		
 		float w = (float)GLRenderer.GLwidth / 2f;
 		float h = (float)GLRenderer.GLheight / 2f;
@@ -141,7 +132,7 @@ public class Hexagon {
 			vec[1] = vertices[m * 3 + 1];
 			vec[2] = vertices[m * 3 + 2];
 			vec[3] = 1.0f;
-				
+			
 			Matrix.multiplyMV(resultVec, 0, transformMatrix, 0, vec, 0);
 			Matrix.multiplyMV(vec, 0, projectionMatrix, 0, resultVec, 0);
 			if (vec[3] == 0)
@@ -149,8 +140,10 @@ public class Hexagon {
 			screenCoords[screenCoordCount][m].x = (int)(w + vec[0] / vec[3] * w);
 			screenCoords[screenCoordCount][m].y = (int)(h - vec[1] / vec[3] * h);		
 		}	
-				
-		screenCoordCount++;	
+		
+		screenCoordCount++;		
+	
+		
 	}
 	
 	// a crazy way of doing picking.  Don't look too closely at this code.

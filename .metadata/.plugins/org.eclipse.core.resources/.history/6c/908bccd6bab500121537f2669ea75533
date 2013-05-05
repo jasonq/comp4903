@@ -31,9 +31,14 @@ public class Hexagon {
 	private float vertices[];
 	
 	private TileSetDefinition[] tileDefinitions = new TileSetDefinition[10];
-		
+	
+	private short indices[] = {
+		0, 5, 1, 1, 5, 4, 1, 4, 2, 2, 4, 3 	
+	};		
+	
 	private FloatBuffer vertexBuffer;
-		
+	private ShortBuffer indexBuffer;	
+	
 	/* CONSTRUCTOR - sets up default shape for the hexagons, and
 	 * initializes the vertex and index buffers	 * 
 	 */
@@ -63,7 +68,13 @@ public class Hexagon {
 		vbb.order(ByteOrder.nativeOrder());
 		vertexBuffer = vbb.asFloatBuffer();
 		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);		
+		vertexBuffer.position(0);
+		
+		ByteBuffer ibb = ByteBuffer.allocateDirect(indices.length * 2);
+		ibb.order(ByteOrder.nativeOrder());
+		indexBuffer = ibb.asShortBuffer();
+		indexBuffer.put(indices);
+		indexBuffer.position(0);		
 		
 		for (int i = 0; i < 5000; i++)
 			for (int p = 0; p < 7; p++)
@@ -105,8 +116,9 @@ public class Hexagon {
 	 *  typ					texture index
 	 * 
 	 */
-	public void draw(GL10 gl, float[] transformMatrix, float[] projectionMatrix, int set, int typ, boolean cpick)
+	public void draw(GL10 gl, float[] transformMatrix, float[] projectionMatrix, int set, int typ)
 	{		
+				
 		int tex = tileDefinitions[set].textureMap;
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, MaterialLibrary.texturenames[tex]);
 	
@@ -120,15 +132,6 @@ public class Hexagon {
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);		
-			
-		if (cpick)
-			computePick(transformMatrix, projectionMatrix);
-	
-		
-	}
-	
-	private void computePick(float[] transformMatrix, float[]projectionMatrix)
-	{
 		
 		float w = (float)GLRenderer.GLwidth / 2f;
 		float h = (float)GLRenderer.GLheight / 2f;
@@ -141,7 +144,7 @@ public class Hexagon {
 			vec[1] = vertices[m * 3 + 1];
 			vec[2] = vertices[m * 3 + 2];
 			vec[3] = 1.0f;
-				
+			
 			Matrix.multiplyMV(resultVec, 0, transformMatrix, 0, vec, 0);
 			Matrix.multiplyMV(vec, 0, projectionMatrix, 0, resultVec, 0);
 			if (vec[3] == 0)
@@ -149,8 +152,10 @@ public class Hexagon {
 			screenCoords[screenCoordCount][m].x = (int)(w + vec[0] / vec[3] * w);
 			screenCoords[screenCoordCount][m].y = (int)(h - vec[1] / vec[3] * h);		
 		}	
-				
-		screenCoordCount++;	
+		
+		screenCoordCount++;		
+	
+		
 	}
 	
 	// a crazy way of doing picking.  Don't look too closely at this code.
@@ -158,9 +163,6 @@ public class Hexagon {
 	// a Point, containing the x and y map co-ordinates selected.
 	public Point pick(float x, float y)
 	{
-		
-		GLRenderer.pauseRender = true;
-		while (GLRenderer.isRenderingNow);
 		
 		Point r = new Point(-1, -1);
 		Point[] pnts;
@@ -175,12 +177,12 @@ public class Hexagon {
 			pnts = screenCoords[m];
 			
 			p = false;
-			for (int t = 0; t < 6; t++)
+			for (int t = 0; t < 5; t++)
 			{				
-				if (  ((float)pnts[t].y > y) != ((float)pnts[v].y > y)
+				if (  ((pnts[t].y > y) != (pnts[v].y > y))
 						  &&
-						  (x < ((float)pnts[v].x - (float)pnts[t].x) *
-								  (y - (float)pnts[t].y) / ((float)pnts[v].y - (float)pnts[t].y) + (float)pnts[t].x  ))
+						  (x < (pnts[v].x - pnts[t].x) *
+								  (y - pnts[t].y) / (pnts[v].y - pnts[t].y) + pnts[t].x)  )
 						  
 						
 				{
@@ -194,9 +196,7 @@ public class Hexagon {
 				r.y = (int)(screenCoords[m][6].y);
 			}
 		}
-
-		GLRenderer.pauseRender = false;
-		
+			
 		return r;
 	}
 	

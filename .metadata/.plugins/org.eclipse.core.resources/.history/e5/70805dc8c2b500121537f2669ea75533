@@ -266,7 +266,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	// Given two screen co-ordinates, will return
 	// a Point, containing the x and y map co-ordinates selected.
 	public Point pick(float x, float y)
-	{			
+	{	
+		headsUpDisplay.character.setTransformation(10.0f, 10.0f,x, y);
 		return map.pick(x, y);
 	}
 	

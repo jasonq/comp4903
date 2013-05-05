@@ -141,7 +141,7 @@ public class MapRenderer {
 					gl.glMatrixMode(GL10.GL_MODELVIEW);
 					gl.glLoadMatrixf(modelViewMatrix, 0);
 				
-					hex.draw(gl, modelViewMatrix, projectionMatrix, 1, tileMap[x][y].tile, true);
+					hex.draw(gl, modelViewMatrix, projectionMatrix, 1, tileMap[x][y].tile);
 				}
 			}
 		}
@@ -182,7 +182,7 @@ public class MapRenderer {
 				
 					if (tileMap[x][y].state != -1)
 					{
-						hex.draw(gl, modelViewMatrix, projectionMatrix, 0, tileMap[x][y].state, false);
+						hex.draw(gl, modelViewMatrix, projectionMatrix, 0, tileMap[x][y].state);
 					}
 				}
 			}

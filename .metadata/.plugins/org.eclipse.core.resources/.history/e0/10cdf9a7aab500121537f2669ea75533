@@ -131,8 +131,8 @@ public class MapRenderer {
 					(dx < eyeX + 16) &&
 					(dz < eyeZ + 8))
 				{
-					hex.screenCoords[hex.screenCoordCount][6].x = x;
-					hex.screenCoords[hex.screenCoordCount][6].y = y;
+					hex.screenCoords[hex.screenCoordCount][12] = x;
+					hex.screenCoords[hex.screenCoordCount][13] = y;
 				
 					// set up the model-view matrix for this hexagon
 					Matrix.setIdentityM(modelMatrix, 0);				
@@ -141,7 +141,7 @@ public class MapRenderer {
 					gl.glMatrixMode(GL10.GL_MODELVIEW);
 					gl.glLoadMatrixf(modelViewMatrix, 0);
 				
-					hex.draw(gl, modelViewMatrix, projectionMatrix, 1, tileMap[x][y].tile, true);
+					hex.draw(gl, modelViewMatrix, projectionMatrix, 1, tileMap[x][y].tile);
 				}
 			}
 		}
@@ -182,7 +182,7 @@ public class MapRenderer {
 				
 					if (tileMap[x][y].state != -1)
 					{
-						hex.draw(gl, modelViewMatrix, projectionMatrix, 0, tileMap[x][y].state, false);
+						hex.draw(gl, modelViewMatrix, projectionMatrix, 0, tileMap[x][y].state);
 					}
 				}
 			}
