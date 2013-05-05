@@ -55,19 +55,20 @@ public class HUD {
 		character.loadUITexture(gl, context.getResources(), R.drawable.statpanel);
 	}
 
-	public void drawHUD(GL10 gl){
-		action.draw(gl);
-		//character.setTransformation(50.0f, 20.0f, 50.0f, 20.0f);
-		character.draw(gl);
+	public void drawHUD(GL10 gl,boolean menuflag){
+		if(menuflag){
+			action.draw(gl);
+			character.draw(gl);
+		}
 	}
-	
+
 	public boolean checkTouchingMenu(int x, int y){
 		if(x <= action.xBot && x >= action.xTop && y <= action.yBot && y >=action.yTop)
 			return true;
 		else
 			return false;
 	}
-	
+
 	public void SwithToOrtho(GL10 gl){
 		//gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(gl.GL_PROJECTION); // Select Projection

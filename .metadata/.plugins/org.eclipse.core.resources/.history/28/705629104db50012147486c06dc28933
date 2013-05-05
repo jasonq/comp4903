@@ -13,7 +13,7 @@ import com.comp4903.project.graphics.GLRenderer;
 public class MyGLSurfaceView extends GLSurfaceView {
 
 	private final GLRenderer mRenderer;
-	private ScaleGestureDetector mScaleDetector;	
+	private ScaleGestureDetector mScaleDetector;
 
 	private boolean shomenu = false;
 	private float downx,downy;
@@ -31,7 +31,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		gDetect = new GestureDetector(context, new GestureDetection()); 
 		mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 		// Render the view only when there is a change in the drawing data
-		//setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	}
 
 	private final float TOUCH_SCALE_FACTOR = 180.0f / 320;

@@ -35,8 +35,6 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	public static int GLwidth;
 	public static int GLheight;
 	public static Point selectedTile = new Point(0,0);
-	public boolean showmenu = false;
-	
 	private float viewX, viewY, viewZ; // co-ordinate of the location we are looking at
 	private float eyeX, eyeY, eyeZ; // location of camera
 	private float distance; // distance of camera
@@ -72,7 +70,21 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	{
 		context = c;
 		selectedTile.x = 0;
-		selectedTile.y = 0;		
+		selectedTile.y = 0;
+				
+		// random map
+		/*for (int x = 0; x < 40; x++)
+			for (int y = 0; y < 40; y++)
+			{
+				tileset[x][y] = 0;
+				if ((x * y) % 16 > 10)
+					tileset[x][y] = 1;
+				if ((x * y) % 16 > 14)
+					tileset[x][y] = 2;
+				if ((x > 18) && (x < 22))
+					tileset[x][y] = 0;
+			}*/
+		
 		
 	}
 	
@@ -147,7 +159,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		testmodels[2].YRotate(1.6f);
 		testmodels[2].XRotate(1.57f);
 		testmodels[2].SetScale(1, 1, 1);
-		testmodels[2].SetPosition(26, 0, 23);
+		testmodels[2].SetPosition(26, 0.5f, 23);
 		
 	}
 	
@@ -177,9 +189,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		
 		draw(gl);
 
-		headsUpDisplay.SwithToOrtho(gl);
-		headsUpDisplay.drawHUD(gl, showmenu);
-		headsUpDisplay.SwitchToPerspective(gl);
+		//headsUpDisplay.SwithToOrtho(gl);
+		//headsUpDisplay.drawHUD(gl);
+		//headsUpDisplay.SwitchToPerspective(gl);
 		
 	}
 	
@@ -310,17 +322,4 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			
 	}
 	
-	public boolean checkHUD(int x, int y){
-		return this.headsUpDisplay.checkTouchingMenu(x, y);
-	}
-	
-	public void setSelectedHUD(int y,boolean flag){
-		if(flag){
-			this.headsUpDisplay.action.pressed = true; 
-			this.headsUpDisplay.action.menuSelected = this.headsUpDisplay.action.checkListItem(y);
-		}else{
-			this.headsUpDisplay.action.pressed = false;
-			this.headsUpDisplay.action.menuSelected = -1;
-		}
-	}	
 }

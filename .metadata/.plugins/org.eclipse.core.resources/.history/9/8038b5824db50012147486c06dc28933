@@ -72,7 +72,21 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	{
 		context = c;
 		selectedTile.x = 0;
-		selectedTile.y = 0;		
+		selectedTile.y = 0;
+				
+		// random map
+		/*for (int x = 0; x < 40; x++)
+			for (int y = 0; y < 40; y++)
+			{
+				tileset[x][y] = 0;
+				if ((x * y) % 16 > 10)
+					tileset[x][y] = 1;
+				if ((x * y) % 16 > 14)
+					tileset[x][y] = 2;
+				if ((x > 18) && (x < 22))
+					tileset[x][y] = 0;
+			}*/
+		
 		
 	}
 	
@@ -177,9 +191,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		
 		draw(gl);
 
-		headsUpDisplay.SwithToOrtho(gl);
-		headsUpDisplay.drawHUD(gl, showmenu);
-		headsUpDisplay.SwitchToPerspective(gl);
+		//headsUpDisplay.SwithToOrtho(gl);
+		//headsUpDisplay.drawHUD(gl);
+		//headsUpDisplay.SwitchToPerspective(gl);
 		
 	}
 	

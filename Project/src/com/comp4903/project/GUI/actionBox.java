@@ -18,8 +18,8 @@ public class actionBox extends UI{
 	public actionBox(Context c, int w, int h) {
 		super(c,w,h);
 		menuSelected = -1;
-		command = new Square[5];
-		pressedCommand = new Square[5];
+		command = new Square[6];
+		pressedCommand = new Square[6];
 		float sx = (width / 8);
 		float sy = (height*3/4) / 2;
 		float x = width/20 + sx;
@@ -33,31 +33,32 @@ public class actionBox extends UI{
 
 	public void loadUITexture(GL10 gl,Resources r, int id){
 		super.loadUITexture(gl, r, id);
-		//Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.button);
-		//int width = commandT.getWidth();
-		//int height = commandT.getHeight()/5;
+		Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.command_button);
+		int width = commandT.getWidth();
+		int height = commandT.getHeight()/6;
 		for(int i = 0; i < command.length; i++){
 			command[i] = new Square();
-			Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.button);
-			//Bitmap temp = Bitmap.createBitmap(commandT,
-				//	0 , i * height, width, height);
-			command[i].loadGLTexture(gl, context, commandT);
-			commandT.recycle();
-			//temp.recycle();
+			//Bitmap temp = BitmapFactory.decodeResource(context.getResources(), R.drawable.unpressed_button);
+			Bitmap temp = Bitmap.createBitmap(commandT,
+					0 , i * height, width, height);
+			command[i].loadGLTexture(gl, context, temp);
+			//commandT.recycle();
+			temp.recycle();
 		}
-		//commandT.recycle();
+		commandT.recycle();
 		
-		/*Bitmap pCommand =  BitmapFactory.decodeResource(r, R.drawable.pressed_command_icon);
+		Bitmap pCommand =  BitmapFactory.decodeResource(r, R.drawable.pressed_command_button);
 		width = pCommand.getWidth();
-		height = pCommand.getHeight()/5;
+		height = pCommand.getHeight()/6;
 		for(int i = 0; i < pressedCommand.length; i++){
 			pressedCommand[i] = new Square();
+			//Bitmap temp = BitmapFactory.decodeResource(context.getResources(), R.drawable.button);
 			Bitmap temp = Bitmap.createBitmap(pCommand,
 					0 , i * height, width, height);
 			pressedCommand[i].loadGLTexture(gl, context, temp);
 			temp.recycle();
-		}*/
-		//pCommand.recycle();
+		}		
+		pCommand.recycle();
 	}
 	public void draw(GL10 gl){
 		gl.glLoadIdentity();
@@ -68,18 +69,18 @@ public class actionBox extends UI{
 
 		gl.glLoadIdentity();
 		float sx = (width / 4)/2;
-		float sy = (height * 3 / 20)/2;
+		float sy = (height * 3 / 24)/2;
 		float x = width/20 + sx;
 		float y = height/20 + sy;
-
+		//command[0].draw(gl);
 		gl.glTranslatef(x,y,0.0f);
 		gl.glScalef(sx, sy, 1.0f);
-		int dis = (int)((float)(height/ sy) * 3 / 20);
+		int dis = (int)((float)(height/ sy) * 3/ 24);
 		for(int i = 0; i < command.length; i++){
 			
-			//if(menuSelected == i){
-				//pressedCommand[i].draw(gl);
-			//}else
+			if(menuSelected == i){
+				pressedCommand[i].draw(gl);
+			}else
 				command[i].draw(gl);
 			gl.glTranslatef(0.0f,dis,0);
 		}
