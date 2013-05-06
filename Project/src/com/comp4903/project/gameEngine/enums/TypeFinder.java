@@ -17,6 +17,17 @@ public class TypeFinder {
 	
 	public static UnitType findUnitType(String in){
 		in = in.toLowerCase();
+		if (in.equals("scout"))
+			return UnitType.Scout;
+		else if (in.equals("assult"))
+			return UnitType.Assult;
+		else if (in.equals("specialist"))
+			return UnitType.Specialist;
+		else if (in.equals("sniper"))
+			return UnitType.Sniper;
+		else if (in.equals("storm tropper"))
+			return UnitType.StormTropper;
+		else
 			return UnitType.None;
 	}
 	
@@ -76,4 +87,15 @@ public class TypeFinder {
 			return TargetType.None;
 	}
 
+	public static ArmourType findArmourType(String in){
+		in = in.toLowerCase();
+		if (in.equals("light armour"))
+			return ArmourType.LightArmour;
+		else if (in.equals("medium armour"))
+			return ArmourType.MediumArmour;
+		else if (in.equals("heavy armour"))
+			return ArmourType.HeavyArmour;
+		else
+			return ArmourType.None;
+	}
 }

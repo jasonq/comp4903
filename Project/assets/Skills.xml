@@ -24,7 +24,7 @@
 	</Ability>
 	<Ability>
 	    <Name>Stim Pack</Name>
-	    <Description>Increase damage by %damage% and decrease accuracy by &accuracy&. Last %duration% turns.</Description>
+	    <Description>Increase damage by %damage% and decrease accuracy by %accuracy%. Last %duration% turns.</Description>
 	    <Health>0</Health>
 	    <Energy>25</Energy>
 	    <Target>Self</Target>

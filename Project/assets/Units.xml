@@ -14,10 +14,10 @@
 	    <ArmourLimit>
 	        <Armour>Light Armour</Armour>
 	    </ArmourLimit>
-	    <SpellList>
-	        <Spell level="1">Hyper Awareness</Spell>
-	        <Spell level="3">Expose Weakness</Spell>
-	    </SpellList>
+	    <SkillList>
+	        <Skill level="1">Hyper Awareness</Skill>
+	        <Skill level="3">Expose Weakness</Skill>
+	    </SkillList>
 	</Unit>
 	<Unit>
 	    <Name>Assult</Name>
@@ -34,10 +34,10 @@
 	        <Armour>Light Armour</Armour>
 	        <Armour>Medium Armour</Armour>
 	    </ArmourLimit>
-	    <SpellList>
-	        <Spell level="1">Stim Pack</Spell>
-	        <Spell level="3">Cripple</Spell>
-	    </SpellList>
+	    <SkillList>
+	        <Skill level="1">Stim Pack</Skill>
+	        <Skill level="3">Cripple</Skill>
+	    </SkillList>
 	</Unit>
 	<Unit>
 	    <Name>Specialist</Name>
@@ -54,10 +54,10 @@
 	        <Armour>Light Armour</Armour>
 	        <Armour>Medium Armour</Armour>
 	    </ArmourLimit>
-	    <SpellList>
-	        <Spell level="1">Draining Grenade</Spell>
-	        <Spell level="3">Energy Void</Spell>
-	    </SpellList>
+	    <SkillList>
+	        <Skill level="1">Draining Grenade</Skill>
+	        <Skill level="3">Energy Void</Skill>
+	    </SkillList>
 	</Unit>
 	<Unit>
 	    <Name>Sniper</Name>
@@ -73,10 +73,10 @@
 	    <ArmourLimit>
 	        <Armour>Light Armour</Armour>
 	    </ArmourLimit>
-	    <SpellList>
-	        <Spell level="1">Head Shot</Spell>
-	        <Spell level="3">Disable</Spell>
-	    </SpellList>
+	    <SkillList>
+	        <Skill level="1">Head Shot</Skill>
+	        <Skill level="3">Disable</Skill>
+	    </SkillList>
 	</Unit>
 	<Unit>
 	    <Name>Storm Trooper</Name>
@@ -94,9 +94,9 @@
 	        <Armour>Medium Armour</Armour>
 	        <Armour>Heavy Armour</Armour>
 	    </ArmourLimit>
-	    <SpellList>
-	        <Spell level="1">Double Time</Spell>
-	        <Spell level="3">Flamethrower</Spell>
-	    </SpellList>
+	    <SkillList>
+	        <Skill level="1">Double Time</Skill>
+	        <Skill level="3">Flamethrower</Skill>
+	    </SkillList>
 	</Unit>
 </UnitList>

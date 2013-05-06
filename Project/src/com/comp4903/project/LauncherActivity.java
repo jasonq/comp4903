@@ -40,13 +40,11 @@ public class LauncherActivity extends Activity {
 		//System.out.println("Loaded: " + loaded);
 		//GameStats.PrintSkillList();
 		
-		
+		boolean loaded = loadContent();
 		GLSurfaceView view = new MyGLSurfaceView(this);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		//view.setRenderer(new GLRenderer(this));
 		setContentView(view);
-
-
 	}
 
 	private boolean loadContent(){
@@ -56,6 +54,10 @@ public class LauncherActivity extends Activity {
 			GameStats.InitializeWeaponData(in);
 			in = getResources().getAssets().open("Skills.xml");
 			GameStats.InitializeSkillData(in);
+			in = getResources().getAssets().open("Armours.xml");
+			GameStats.InitializeArmourData(in);
+			in = getResources().getAssets().open("Units.xml");
+			GameStats.InitializeUnitData(in);
 		} catch (IOException e) {
 			return false;
 		}

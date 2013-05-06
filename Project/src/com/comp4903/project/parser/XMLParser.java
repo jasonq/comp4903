@@ -11,10 +11,14 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
 import android.util.Xml;
 
+import com.comp4903.project.gameEngine.enums.ArmourType;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.TypeFinder;
+import com.comp4903.project.gameEngine.enums.UnitType;
 import com.comp4903.project.gameEngine.enums.WeaponType;
+import com.comp4903.project.gameEngine.factory.ArmourStats;
 import com.comp4903.project.gameEngine.factory.SkillStats;
+import com.comp4903.project.gameEngine.factory.UnitStats;
 import com.comp4903.project.gameEngine.factory.WeaponStats;
 
 public class XMLParser {
@@ -115,7 +119,6 @@ public class XMLParser {
 			String name = parser.getName();
 			if(name.equals("Ability")){
 				SkillStats stats = parseSkill(parser);
-				System.out.println("Find Ability");
 				skillList.put(TypeFinder.findSkillType(stats.name), stats);
 			} else {
 				skip(parser);
@@ -148,13 +151,179 @@ public class XMLParser {
 			}
 			else if (parser.getName().equals("Modifier")){
 				stats.addModifier(parser.getAttributeValue(null, "parameter"), 
-						Integer.parseInt(parser.nextText()));
+						Double.parseDouble(parser.nextText()));
 			}
 			else {
 				parser.nextText();
 			} 
 		}
 		return stats;
+	}
+	
+	/* *************************************************
+	 *                   Armour Parser                 *
+	 *              Reading Armour Input XML           *
+	 * *************************************************/
+	public static Map<ArmourType, ArmourStats> readArmourInputXML(InputStream in) throws IOException, XmlPullParserException{
+		try{
+			XmlPullParser parser = Xml.newPullParser();
+			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+			parser.setInput(in, null);
+			parser.nextTag();
+			return parseArmourList(parser);
+		}finally{
+			in.close();
+		}
+	}
+	
+	private static Map<ArmourType, ArmourStats> parseArmourList(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Map<ArmourType, ArmourStats> armourList = new HashMap<ArmourType, ArmourStats>();
+		parser.require(XmlPullParser.START_TAG, null, "ArmourList");
+		while(parser.next() != XmlPullParser.END_TAG){
+			if(parser.getEventType() != XmlPullParser.START_TAG){
+				continue;
+			}
+			String name = parser.getName();
+			if(name.equals("Armour")){
+				ArmourStats stats = parseArmour(parser);
+				armourList.put(TypeFinder.findArmourType(stats.name), stats);
+			} else {
+				skip(parser);
+			}
+		}
+		return armourList;
+	}
+	
+	private static ArmourStats parseArmour(XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
+		ArmourStats stats = new ArmourStats();  
+		while (parser.nextTag() == XmlPullParser.START_TAG) {
+			Log.d(TAG, "parse Item tag " + parser.getName());
+			if (parser.getName().equals("Name")) {
+				stats.name = parser.nextText();
+			}
+			else if (parser.getName().equals("Defence")) {
+				stats.defence = Integer.parseInt(parser.nextText());
+			}
+			else if (parser.getName().equals("Health")) {
+				stats.health = Integer.parseInt(parser.nextText());
+			}
+			else if (parser.getName().equals("Modifier")){
+				stats.addModifier(parser.getAttributeValue(null, "parameter"), 
+						Double.parseDouble(parser.nextText()));
+			}
+			else {
+				parser.nextText();
+			} 
+		}
+		return stats;
+	}
+	
+	/* *************************************************
+	 *                   Unit Parser                   *
+	 *              Reading Unit Input XML             *
+	 * *************************************************/
+	public static Map<UnitType, UnitStats> readUnitInputXML(InputStream in) throws IOException, XmlPullParserException{
+		try{
+			XmlPullParser parser = Xml.newPullParser();
+			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+			parser.setInput(in, null);
+			parser.nextTag();
+			return parseUnitList(parser);
+		}finally{
+			in.close();
+		}
+	}
+	
+	private static Map<UnitType, UnitStats> parseUnitList(XmlPullParser parser) throws XmlPullParserException, IOException {
+		Map<UnitType, UnitStats> unitList = new HashMap<UnitType, UnitStats>();
+		parser.require(XmlPullParser.START_TAG, null, "UnitList");
+		while(parser.next() != XmlPullParser.END_TAG){
+			if(parser.getEventType() != XmlPullParser.START_TAG){
+				continue;
+			}
+			String name = parser.getName();
+			if(name.equals("Unit")){
+				UnitStats stats = parseUnit(parser);
+				unitList.put(TypeFinder.findUnitType(stats.name), stats);
+			} else {
+				skip(parser);
+			}
+		}
+		return unitList;
+	}
+	
+	private static UnitStats parseUnit(XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
+		UnitStats stats = new UnitStats();  
+		while (parser.nextTag() == XmlPullParser.START_TAG) {
+			Log.d(TAG, "parse Item tag " + parser.getName());
+			if (parser.getName().equals("Name")) {
+				stats.name = parser.nextText();
+			}
+			else if (parser.getName().equals("Defence")) {
+				stats.defence = Integer.parseInt(parser.nextText());
+			}
+			else if (parser.getName().equals("Health")) {
+				stats.health = Integer.parseInt(parser.nextText());
+			}
+			else if (parser.getName().equals("Attack")) {
+				stats.attack = Integer.parseInt(parser.nextText());
+			}
+			else if (parser.getName().equals("Defence")) {
+				stats.defence = Integer.parseInt(parser.nextText());
+			}
+			else if (parser.getName().equals("Movement")) {
+				stats.movement = Integer.parseInt(parser.nextText());
+			}
+			else if (parser.getName().equals("WeaponLimit")){
+				parseWeaponLimit(parser, stats);
+			}
+			else if (parser.getName().equals("ArmourLimit")){
+				parseArmourLimit(parser, stats);
+			}
+			else if (parser.getName().equals("SkillList")){
+				parseSkillList(parser, stats);
+			}
+			else {
+				parser.nextText();
+			} 
+		}
+		return stats;
+	}
+	
+	private static void parseWeaponLimit(XmlPullParser parser, UnitStats stats) throws XmlPullParserException, IOException{
+		while (parser.nextTag() == XmlPullParser.START_TAG) {
+			Log.d(TAG, "In-Level: parse weaponLimit tag " + parser.getName());
+			if (parser.getName().equals("Weapon")){
+				stats.addWeaponLimit(TypeFinder.findWeaponType(parser.nextText()));
+			}
+			else {
+				parser.nextText();
+			}
+		}
+	}
+	
+	private static void parseArmourLimit(XmlPullParser parser, UnitStats stats) throws XmlPullParserException, IOException{
+		while (parser.nextTag() == XmlPullParser.START_TAG) {
+			Log.d(TAG, "In-Level: parse armourLimit tag " + parser.getName());
+			if (parser.getName().equals("Armour")){
+				stats.addArmourLimit(TypeFinder.findArmourType(parser.nextText()));
+			}
+			else {
+				parser.nextText();
+			}
+		}
+	}
+	
+	private static void parseSkillList(XmlPullParser parser, UnitStats stats) throws XmlPullParserException, IOException{
+		while (parser.nextTag() == XmlPullParser.START_TAG) {
+			Log.d(TAG, "In-Level: parse skillList tag " + parser.getName());
+			if (parser.getName().equals("Skill")){
+				stats.addSkillLimit(TypeFinder.findSkillType(parser.nextText()));
+			}
+			else {
+				parser.nextText();
+			}
+		}
 	}
 	/* *************************************************
 	 *                  Helper Parser                  *

@@ -3,32 +3,24 @@ package com.comp4903.project.gameEngine.factory;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.comp4903.project.gameEngine.enums.TargetType;
-
-public class SkillStats {
+public class ArmourStats {
 	public String name;
-	public String description;
-	public int healthCost;
-	public int energyCost;
-	public TargetType target;
-	public int range;
+	public int defence;
+	public int health;
 	private Map<String, Double> modifier;
 	
-	public SkillStats(){
+	public ArmourStats(){
 		name = "";
-		description = "";
-		healthCost = -1;
-		energyCost = -1;
-		target = TargetType.None;
-		range = -1;
+		defence = -1;
+		health = -1;
 		modifier = new HashMap<String, Double>();
 	}
 
-	public boolean addModifier(String key, Double value){
+	public boolean addModifier(String key, double d){
 		if (modifier.containsKey(key))
 			return false;
 		else
-			modifier.put(key, value);
+			modifier.put(key, d);
 		return true;
 	}
 	
@@ -39,5 +31,4 @@ public class SkillStats {
 	public Double getModifier(String key) {
 		return modifier.get(key);
 	}
-
 }
