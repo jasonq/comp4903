@@ -22,4 +22,10 @@
 	    <Tile x="15" y="0">Forest</Tile>
 	    <Tile x="16" y="0">Forest</Tile>
 	</TileGroup>
+	<Units group="Player One">
+	    <Unit x="0" y="0">StormTrooper</Unit>
+	</Units>
+	<Units group="Player Two">
+	    <Unit x="12" y="12">Sniper</Unit>
+	</Units>
 </Map>

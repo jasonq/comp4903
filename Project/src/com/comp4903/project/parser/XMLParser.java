@@ -11,9 +11,14 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
 import android.util.Xml;
 
+import com.comp4903.project.gameEngine.data.MapData;
+import com.comp4903.project.gameEngine.data.Point;
+import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.ArmourType;
 import com.comp4903.project.gameEngine.enums.SkillType;
+import com.comp4903.project.gameEngine.enums.TileType;
 import com.comp4903.project.gameEngine.enums.TypeFinder;
+import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.enums.UnitType;
 import com.comp4903.project.gameEngine.enums.WeaponType;
 import com.comp4903.project.gameEngine.factory.ArmourStats;
@@ -323,6 +328,76 @@ public class XMLParser {
 			else {
 				parser.nextText();
 			}
+		}
+	}
+
+	/* *************************************************
+	 *                   Map Parser                    *
+	 *              Reading Armour Map XML             *
+	 * *************************************************/
+	public static MapData readMapInputXML(InputStream in) throws IOException, XmlPullParserException{
+		try{
+			XmlPullParser parser = Xml.newPullParser();
+			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+			parser.setInput(in, null);
+			parser.nextTag();
+			return parseMap(parser);
+		}finally{
+			in.close();
+		}
+	}
+	
+	private static MapData parseMap(XmlPullParser parser) throws XmlPullParserException, IOException {
+		parser.require(XmlPullParser.START_TAG, null, "Map");
+		int w = Integer.parseInt(parser.getAttributeValue(null, "width"));
+		int h = Integer.parseInt(parser.getAttributeValue(null, "height"));
+		MapData map = new MapData(w,h);
+		map.defaultType(TypeFinder.findTileType(parser.getAttributeValue(null, "defaultType")));
+		while(parser.next() != XmlPullParser.END_TAG){
+			if(parser.getEventType() != XmlPullParser.START_TAG){
+				continue;
+			}
+			String name = parser.getName();
+			if(name.equals("TileGroup")){
+				parseTileGroup(map, parser);
+			} else if (name.equals("Units")) {
+				parseUnitGroup(map, parser);
+			}
+			else {
+				skip(parser);
+			}
+		}
+		return map;
+	}
+	
+	private static void parseTileGroup(MapData data, XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
+		while (parser.nextTag() == XmlPullParser.START_TAG) {
+			Log.d(TAG, "parse Item tag " + parser.getName());
+			if (parser.getName().equals("Tile")) {
+				int x = Integer.parseInt(parser.getAttributeValue(null, "x"));
+				int y = Integer.parseInt(parser.getAttributeValue(null, "y"));
+				TileType t = TypeFinder.findTileType(parser.nextText());
+				data._tileTypes[x][y] = t;
+			}
+			else {
+				parser.nextText();
+			} 
+		}
+	}
+	
+	private static void parseUnitGroup(MapData data, XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
+		UnitGroup currGroup = TypeFinder.findUnitGroup(parser.getAttributeValue(null, "group"));
+		while (parser.nextTag() == XmlPullParser.START_TAG) {
+			Log.d(TAG, "parse Item tag " + parser.getName());
+			if (parser.getName().equals("Tile")) {
+				int x = Integer.parseInt(parser.getAttributeValue(null, "x"));
+				int y = Integer.parseInt(parser.getAttributeValue(null, "y"));
+				UnitType t = TypeFinder.findUnitType(parser.nextText());
+				data._units.add(new Unit(t, currGroup, new Point(x,y)));
+			}
+			else {
+				parser.nextText();
+			} 
 		}
 	}
 	/* *************************************************

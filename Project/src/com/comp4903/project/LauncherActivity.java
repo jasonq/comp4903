@@ -11,6 +11,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Window;
 
+import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.factory.*;;
 /* LAUNCHERACTIVITY
  * 
@@ -29,21 +30,9 @@ public class LauncherActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		
-		//setContentView(R.layout.main);
-		// Start up OpenGL ES 1.0, by creating a
-		// GLSurfaceView, and setting it as the main renderer
-		//GLSurfaceView view = new MyGLSurfaceView(this);
-		//view.setRenderer(new GLRenderer(this));
-		//setContentView(view);
-		//boolean loaded = loadContent();
-		//System.out.println("Loaded: " + loaded);
-		//GameStats.PrintSkillList();
-		
 		boolean loaded = loadContent();
 		GLSurfaceView view = new MyGLSurfaceView(this);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		//view.setRenderer(new GLRenderer(this));
 		setContentView(view);
 	}
 
@@ -54,10 +43,12 @@ public class LauncherActivity extends Activity {
 			GameStats.InitializeWeaponData(in);
 			in = getResources().getAssets().open("Skills.xml");
 			GameStats.InitializeSkillData(in);
-			in = getResources().getAssets().open("Armours.xml");
+			in = getResources().getAssets().open("Armour.xml");
 			GameStats.InitializeArmourData(in);
 			in = getResources().getAssets().open("Units.xml");
 			GameStats.InitializeUnitData(in);
+			in = getResources().getAssets().open("MapOne.xml");
+			MapData data = MapFactory.generateMapData(in);
 		} catch (IOException e) {
 			return false;
 		}

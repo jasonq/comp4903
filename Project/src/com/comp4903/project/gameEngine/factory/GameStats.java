@@ -67,6 +67,7 @@ public class GameStats {
 		}
 		System.out.println("Unit Stats Initialized");
 	}
+
 	
 	public static WeaponStats getWeaponStats(WeaponType type){
 		if (type == WeaponType.None)

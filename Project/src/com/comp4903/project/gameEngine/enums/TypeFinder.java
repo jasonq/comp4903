@@ -1,16 +1,16 @@
 package com.comp4903.project.gameEngine.enums;
 
-import com.comp4903.zoldcode.TileType;
-
 public class TypeFinder {
 	public static TileType findTileType(String in){
 		in = in.toLowerCase();
-		if (in.equals("grass"))
-			return TileType.Grass;
-		else if (in.equals("mountain"))
-			return TileType.Mountain;
-		else if (in.equals("forest"))
-			return TileType.Forest;
+		if (in.equals("plain"))
+			return TileType.Plain;
+		else if (in.equals("sandbag"))
+			return TileType.Sandbag;
+		else if (in.equals("Generator"))
+			return TileType.Generator;
+		else if (in.equals("Building"))
+			return TileType.Building;
 		else
 			return TileType.None;
 	}
@@ -19,14 +19,14 @@ public class TypeFinder {
 		in = in.toLowerCase();
 		if (in.equals("scout"))
 			return UnitType.Scout;
-		else if (in.equals("assult"))
-			return UnitType.Assult;
+		else if (in.equals("assault"))
+			return UnitType.Assault;
 		else if (in.equals("specialist"))
 			return UnitType.Specialist;
 		else if (in.equals("sniper"))
 			return UnitType.Sniper;
 		else if (in.equals("storm tropper"))
-			return UnitType.StormTropper;
+			return UnitType.StormTrooper;
 		else
 			return UnitType.None;
 	}
@@ -97,5 +97,15 @@ public class TypeFinder {
 			return ArmourType.HeavyArmour;
 		else
 			return ArmourType.None;
+	}
+	
+	public static UnitGroup findUnitGroup(String in){
+		in = in.toLowerCase();
+		if (in.equals("player one"))
+			return UnitGroup.PlayerOne;
+		else if (in.equals("player two"))
+			return UnitGroup.PlayerTwo;
+		else
+			return UnitGroup.None;
 	}
 }

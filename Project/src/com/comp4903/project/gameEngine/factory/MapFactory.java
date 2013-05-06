@@ -8,10 +8,9 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.enums.TypeFinder;
-import com.comp4903.zoldcode.MapData;
-import com.comp4903.zoldcode.Point;
-import com.comp4903.zoldcode.TileType;
+import com.comp4903.project.parser.XMLParser;
 
 import android.util.Xml;
 
@@ -19,7 +18,15 @@ public class MapFactory {
 	
 	private static final String ns = null;
 	
-	public MapFactory(){
-		
+	public static MapData generateMapData(InputStream in){
+		MapData data = null;
+		try {
+			data = XMLParser.readMapInputXML(in);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			e.printStackTrace();
+		}
+		return data;
 	}
 }
