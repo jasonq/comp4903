@@ -20,15 +20,19 @@ public class actionBox extends UI{
 		menuSelected = -1;
 		command = new Square[6];
 		pressedCommand = new Square[6];
-		float sx = (width / 8);
-		float sy = (height*3/4) / 2;
-		float x = width/20 + sx;
-		float y = height/20 + sy;
-		this.setTransformation(sx, sy, x, y);
-		xTop = width/10;
+		box = new Square(width/20, height/10,width/4,(height*3)/4);
+		
+		int bHeight = height/8;
+		int nHeight = height/10;
+		for(int i = 0; i < command.length;i++){
+			command[i] = new Square(width/20, nHeight, width/4, bHeight );
+			pressedCommand[i] = new Square(width/20, nHeight, width/4,bHeight );
+			nHeight += bHeight;
+		}
+		xTop = width/20;
 		yTop = height/10;
 		xBot = xTop + (width/4);
-		yBot = yTop + (height * 3 /4);
+		yBot = yTop + ((height * 3) /4);
 	}
 
 	public void loadUITexture(GL10 gl,Resources r, int id){
@@ -37,7 +41,7 @@ public class actionBox extends UI{
 		int width = commandT.getWidth();
 		int height = commandT.getHeight()/6;
 		for(int i = 0; i < command.length; i++){
-			command[i] = new Square();
+			//command[i] = new Square();
 			//Bitmap temp = BitmapFactory.decodeResource(context.getResources(), R.drawable.unpressed_button);
 			Bitmap temp = Bitmap.createBitmap(commandT,
 					0 , i * height, width, height);
@@ -51,7 +55,7 @@ public class actionBox extends UI{
 		width = pCommand.getWidth();
 		height = pCommand.getHeight()/6;
 		for(int i = 0; i < pressedCommand.length; i++){
-			pressedCommand[i] = new Square();
+			//pressedCommand[i] = new Square();
 			//Bitmap temp = BitmapFactory.decodeResource(context.getResources(), R.drawable.button);
 			Bitmap temp = Bitmap.createBitmap(pCommand,
 					0 , i * height, width, height);
@@ -63,26 +67,26 @@ public class actionBox extends UI{
 	public void draw(GL10 gl){
 		gl.glLoadIdentity();
 		//draw the box
-		gl.glTranslatef(tranx,trany,0.0f);
-		gl.glScalef(scalex, scaley, 1.0f);
-		this.box.draw(gl);
+		//gl.glTranslatef(tranx,trany,0.0f);
+		//gl.glScalef(scalex, scaley, 1.0f);
+		box.draw(gl);
 
-		gl.glLoadIdentity();
-		float sx = (width / 4)/2;
-		float sy = (height * 3 / 24)/2;
-		float x = width/20 + sx;
-		float y = height/20 + sy;
+		//gl.glLoadIdentity();
+		//float sx = (width / 4)/2;
+		//float sy = (height * 3 / 24)/2;
+		//float x = width/20 + sx;
+		//float y = height/20 + sy;
 		//command[0].draw(gl);
-		gl.glTranslatef(x,y,0.0f);
-		gl.glScalef(sx, sy, 1.0f);
-		int dis = (int)((float)(height/ sy) * 3/ 24);
+		//gl.glTranslatef(x,y,0.0f);
+		//gl.glScalef(sx, sy, 1.0f);
+		//int dis = (int)((float)(height/ sy) * 3/ 24);
 		for(int i = 0; i < command.length; i++){
 			
 			if(menuSelected == i){
 				pressedCommand[i].draw(gl);
 			}else
 				command[i].draw(gl);
-			gl.glTranslatef(0.0f,dis,0);
+			//gl.glTranslatef(0.0f,dis,0);
 		}
 		
 	}
