@@ -40,7 +40,7 @@ public class LauncherActivity extends Activity {
 		//System.out.println("Loaded: " + loaded);
 		//GameStats.PrintSkillList();
 		
-		
+		boolean loaded = loadContent();
 		GLSurfaceView view = new MyGLSurfaceView(this);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		//view.setRenderer(new GLRenderer(this));
