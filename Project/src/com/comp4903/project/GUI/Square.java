@@ -58,9 +58,35 @@ public class Square {
 		textureBuffer.put(texture);
 		textureBuffer.position(0);
 	}
+	
+	public Square(int x, int y, int width,int height) {
+		float abc[] = this.decodeSize(x, y, width, height);
+		this.vertices = abc;
+		// a float has 4 bytes so we allocate for each coordinate 4 bytes
+		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(vertices.length * 4);
+		byteBuffer.order(ByteOrder.nativeOrder());
+		
+		// allocates the memory from the byte buffer
+		vertexBuffer = byteBuffer.asFloatBuffer();
+		
+		// fill the vertexBuffer with the vertices
+		vertexBuffer.put(vertices);
+		
+		// set the cursor position to the beginning of the buffer
+		vertexBuffer.position(0);
+		
+		byteBuffer = ByteBuffer.allocateDirect(texture.length * 4);
+		byteBuffer.order(ByteOrder.nativeOrder());
+		textureBuffer = byteBuffer.asFloatBuffer();
+		textureBuffer.put(texture);
+		textureBuffer.position(0);
+	}
 	public void SetTextures(int[] abc){
 		this.textures = abc;
 	
+	}
+	public void SetVertices(float[] abc){
+		this.vertices = abc;
 	}
 	/**
 	 * Load the texture for the square
@@ -112,5 +138,20 @@ public class Square {
 		//Disable the client state before leaving
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+	}
+	
+	public float[] decodeSize(int xcoor, int ycoor, int width, int height){
+		int hWidth = width / 2;
+		int hHeight = height / 2;
+		float result[] = {
+				xcoor, ycoor,  0.0f,		// V1 - bottom left
+				xcoor,  ycoor + height,  0.0f,		// V2 - top left
+				 xcoor + width, ycoor,  0.0f,		// V3 - bottom right
+				 xcoor + width,  ycoor + height,  0.0f			// V4 - top right
+		};
+		
+		return result;
+		
+		
 	}
 }
