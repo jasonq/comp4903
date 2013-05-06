@@ -34,7 +34,6 @@ public class LauncherActivity extends Activity {
         //setContentView(view);
 		boolean loaded = loadContent();
 		System.out.println("Loaded: " + loaded);
-		GameStats.PrintSkillList();
     }
 	
 	private boolean loadContent(){
@@ -44,6 +43,10 @@ public class LauncherActivity extends Activity {
 	        GameStats.InitializeWeaponData(in);
 			in = getResources().getAssets().open("Skills.xml");
 			GameStats.InitializeSkillData(in);
+			in = getResources().getAssets().open("Armours.xml");
+			GameStats.InitializeArmourData(in);
+			in = getResources().getAssets().open("Units.xml");
+			GameStats.InitializeUnitData(in);
 		} catch (IOException e) {
 			return false;
 		}
