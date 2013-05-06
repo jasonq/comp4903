@@ -7,9 +7,9 @@ public class TypeFinder {
 			return TileType.Plain;
 		else if (in.equals("sandbag"))
 			return TileType.Sandbag;
-		else if (in.equals("Generator"))
+		else if (in.equals("generator"))
 			return TileType.Generator;
-		else if (in.equals("Building"))
+		else if (in.equals("building"))
 			return TileType.Building;
 		else
 			return TileType.None;

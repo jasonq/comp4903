@@ -47,7 +47,7 @@ public class LauncherActivity extends Activity {
 			GameStats.InitializeArmourData(in);
 			in = getResources().getAssets().open("Units.xml");
 			GameStats.InitializeUnitData(in);
-			in = getResources().getAssets().open("MapOne.xml");
+			in = getResources().getAssets().open("MapTwo.xml");
 			MapData data = MapFactory.generateMapData(in);
 		} catch (IOException e) {
 			return false;
