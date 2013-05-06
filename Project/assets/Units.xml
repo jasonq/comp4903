@@ -20,7 +20,7 @@
 	    </SkillList>
 	</Unit>
 	<Unit>
-	    <Name>Assult</Name>
+	    <Name>Assault</Name>
 	    <Health>120</Health>
 	    <Energy>30</Energy>
 	    <Attack>2</Attack>

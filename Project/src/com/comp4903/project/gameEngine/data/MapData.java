@@ -21,9 +21,19 @@ public class MapData {
 	public MapData(int rows, int columns){
 		_movementBox = new ArrayList<Point>();
 		_attackBox = new ArrayList<Point>();
+		_units = new ArrayList<Unit>();
+		_activeGroup = UnitGroup.PlayerOne;
 		_numRows = rows;
 		_numColumns = columns;
 		_tileTypes = new TileType[_numRows][_numColumns];
+	}
+	
+	public void defaultType(TileType type){
+		for (int i = 0 ; i < _numRows; i++){
+			for (int j = 0; j < _numColumns; j++){
+				_tileTypes[i][j] = type;
+			}
+		}
 	}
 	
 	public int NumberOfRows(){

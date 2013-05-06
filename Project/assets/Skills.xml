@@ -70,7 +70,7 @@
 	    <Range>3</Range>
 	    <Modifier parameter="Accuracy">20</Modifier>
 	    <Modifier parameter="Duration">1</Modifier>
-	    <Modifier parameter="Accuracy">10</Modifier>
+	    <Modifier parameter="Chance">10</Modifier>
 	</Ability>
 	<Ability>
 	    <Name>Disable</Name>
@@ -80,7 +80,6 @@
 	    <Target>Enemy</Target>
 	    <Range>2</Range>
 	    <Modifier parameter="Accuracy">20</Modifier>
-	    <Modifier parameter="Avoid">10</Modifier>
 	    <Modifier parameter="Duration">1</Modifier>
 	</Ability>
 	<Ability>

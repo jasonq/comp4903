@@ -2,12 +2,13 @@ package com.comp4903.project.gameEngine.data;
 import com.comp4903.project.gameEngine.enums.*;
 
 public class Unit {
-	private UnitGroup _unitGroup;
-	private UnitType _unitType;
+	private UnitGroup unitGroup;
+	private UnitType unitType;
+	private Point position;
 	
-	// Unit Stats
-	private int _maxHealth;
-	private int _maxMovement;
-	private int _maxRange;
-	
+	public Unit(UnitType type, UnitGroup group, Point pos){
+		unitType = type;
+		unitGroup = group;
+		position = pos;
+	}
 }
