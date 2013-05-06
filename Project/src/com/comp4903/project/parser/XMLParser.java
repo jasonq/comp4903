@@ -349,12 +349,13 @@ public class XMLParser {
 	
 	private static MapData parseMap(XmlPullParser parser) throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, null, "Map");
-		int w = Integer.parseInt(parser.getAttributeValue(null, "width"));
-		int h = Integer.parseInt(parser.getAttributeValue(null, "height"));
+		int columns = Integer.parseInt(parser.getAttributeValue(null, "width"));
+		int rows = Integer.parseInt(parser.getAttributeValue(null, "height"));
 
-		Log.d(TAG, "Createing map " + w + ", " + h);
-		MapData map = new MapData(w,h);
-		map.defaultType(TypeFinder.findTileType(parser.getAttributeValue(null, "defaultType")));
+		Log.d(TAG, "Createing map " + rows + ", " + columns);
+		MapData map = new MapData(rows,columns);
+		TileType temp = TypeFinder.findTileType(parser.getAttributeValue(null, "defaultType"));
+		map.defaultType(temp);
 		while(parser.next() != XmlPullParser.END_TAG){
 			if(parser.getEventType() != XmlPullParser.START_TAG){
 				continue;
@@ -395,7 +396,7 @@ public class XMLParser {
 		UnitGroup currGroup = TypeFinder.findUnitGroup(parser.getAttributeValue(null, "group"));
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
 			Log.d(TAG, "parse Unit tag " + parser.getName());
-			if (parser.getName().equals("Tile")) {
+			if (parser.getName().equals("Unit")) {
 				int x = Integer.parseInt(parser.getAttributeValue(null, "x"));
 				int y = Integer.parseInt(parser.getAttributeValue(null, "y"));
 				UnitType t = TypeFinder.findUnitType(parser.nextText());

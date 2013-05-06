@@ -25,7 +25,7 @@ public class TypeFinder {
 			return UnitType.Specialist;
 		else if (in.equals("sniper"))
 			return UnitType.Sniper;
-		else if (in.equals("storm tropper"))
+		else if (in.equals("storm trooper"))
 			return UnitType.StormTrooper;
 		else
 			return UnitType.None;

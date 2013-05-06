@@ -29,10 +29,8 @@ public class MapFactory {
 			e.printStackTrace();
 		}
 		System.out.println("Num of units: " + data._units.size());
-		System.out.println("Building: " + (data._tileTypes[0][0]
-				== TileType.Building));
-		System.out.println("Plain: " + (data._tileTypes[1][12]
-				== TileType.Sandbag));
+		System.out.println("Building: " + data._tileTypes[0][0]);
+		System.out.println("Sandbag: " + data._tileTypes[2][2]);
 		return data;
 	}
 }

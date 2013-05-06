@@ -25,13 +25,13 @@ public class MapData {
 		_activeGroup = UnitGroup.PlayerOne;
 		_numRows = rows;
 		_numColumns = columns;
-		_tileTypes = new TileType[_numRows][_numColumns];
+		_tileTypes = new TileType[_numColumns][_numRows];
 	}
 	
 	public void defaultType(TileType type){
 		for (int i = 0 ; i < _numRows; i++){
 			for (int j = 0; j < _numColumns; j++){
-				_tileTypes[i][j] = type;
+				_tileTypes[j][i] = type;
 			}
 		}
 	}
