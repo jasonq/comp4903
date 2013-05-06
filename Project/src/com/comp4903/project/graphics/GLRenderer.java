@@ -8,6 +8,8 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.GUI.HUD;
+import com.comp4903.project.gameEngine.data.MapData;
+import com.comp4903.project.gameEngine.factory.MapFactory;
 import com.comp4903.project.graphics.model.MaterialLibrary;
 import com.comp4903.project.graphics.model.Model3D;
 import com.comp4903.project.graphics.model.ModelLoader;
@@ -110,7 +112,16 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		MaterialLibrary.init(gl, context);
 		
 		map = new MapRenderer(gl, context);
-		map.init(40, 40);
+		
+		InputStream in;
+		MapData data = null;
+		try {
+			in = context.getResources().getAssets().open("MapTwo.xml");
+			data = MapFactory.generateMapData(in);
+		} catch (IOException e) {}
+		
+		map.init(data.NumberOfColumns(), data.NumberOfRows());
+		map.defineMap(data);
 		
 		viewX = 20;
 		viewY = 0;

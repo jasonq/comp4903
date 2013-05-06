@@ -11,7 +11,7 @@
 		</def:base>
 	</def:tile>
 	
-	<def:tile name="rusty floor">
+	<def:tile name="rusty_floor">
 		<def:base>
 			<def:point1 u="0.13"	v="0.12"/>
 			<def:point2 u="0.185"	v="0.005"/>
@@ -22,7 +22,7 @@
 		</def:base>
 	</def:tile>
 	
-	<def:tile name="floor grate">
+	<def:tile name="floor_grate">
 		<def:base>
 			<def:point1 u="0.375"	v="0.125"/>
 			<def:point2 u="0.435"	v="0.01"/>
@@ -30,6 +30,17 @@
 			<def:point4 u="0.605"	v="0.125"/>
 			<def:point5 u="0.55"	v="0.24"/>
 			<def:point6 u="0.435"	v="0.24"/>					
+		</def:base>
+	</def:tile>
+	
+	<def:tile name="white_metal">
+	    <def:base>
+			<def:point1 u="0.5"	v="0.5"/>
+			<def:point2 u="0.5"	v="0.5"/>
+			<def:point3 u="0.5"	v="0.5"/>
+			<def:point4 u="0.5"	v="0.5"/>
+			<def:point5 u="0.5"	v="0.5"/>
+			<def:point6 u="0.5"	v="0.5"/>
 		</def:base>
 	</def:tile>
 	
