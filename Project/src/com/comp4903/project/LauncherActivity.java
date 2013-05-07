@@ -34,14 +34,15 @@ public class LauncherActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		boolean loaded = loadContent();
 		InputStream in;
 		
 		try {
 			in = getResources().getAssets().open("MapTwo.xml");
 			mapData = MapFactory.generateMapData(in);
 		} catch (IOException e) {}
-		
-		boolean loaded = loadContent(mapData);
+
+		PathFind.initialize(mapData);
 		
 		GLSurfaceView view = new MyGLSurfaceView(this, mapData);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -49,9 +50,8 @@ public class LauncherActivity extends Activity {
 		
 	}
 
-	private boolean loadContent(MapData md){
+	private boolean loadContent(){
 		InputStream in;
-		PathFind.initialize(md);
 		try {
 			in = getResources().getAssets().open("Weapons.xml");
 			GameStats.InitializeWeaponData(in);
