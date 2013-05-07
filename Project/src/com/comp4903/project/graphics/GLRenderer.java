@@ -65,8 +65,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 10.0f };
 	
 	public HUD headsUpDisplay;
-	
-	private MapRenderer map;
+		
 	private MapData mapData;
 	
 	/*	GLRENDERER
@@ -113,18 +112,11 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		
 		MaterialLibrary.init(gl, context);
 		
-		map = new MapRenderer(gl, context);
-		
-		/*InputStream in;
-		MapData data = null;
-		try {
-			in = context.getResources().getAssets().open("MapTwo.xml");
-			data = MapFactory.generateMapData(in);
-		} catch (IOException e) {}*/
-		
-		map.init(mapData.NumberOfColumns(), mapData.NumberOfRows());
-		map.loadModels();
-		map.defineMap(mapData);
+		RendererAccessor.init(gl,context);
+						
+		RendererAccessor.map.init(mapData.NumberOfColumns(), mapData.NumberOfRows());
+		RendererAccessor.map.loadModels();
+		RendererAccessor.map.defineMap(mapData);
 		
 		viewX = 20;
 		viewY = 0;
@@ -196,7 +188,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1f, 0f);
 				
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		map.render(viewMatrix, projectionMatrix, viewX, viewY, viewZ);
+		RendererAccessor.map.render(viewMatrix, projectionMatrix, viewX, viewY, viewZ);
 		
 		//draw(gl);
 		
@@ -281,13 +273,13 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	// a Point, containing the x and y map co-ordinates selected.
 	public Point pick(float x, float y)
 	{			
-		return map.pick(x, y);
+		return RendererAccessor.map.pick(x, y);
 	}
 	
 	// Makes tile x,y the selected tile
 	public void selectTile(int x, int y)
 	{
-		map.selectTile(x, y);
+		RendererAccessor.map.selectTile(x, y);
 		//selectedTile.x = x;
 		//selectedTile.y = y;
 	}
@@ -296,7 +288,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	// can be used directly with pick (ex...   selectTile(pick(screenX, screenY)); )
 	public void selectTile(Point s)
 	{
-		map.selectTile(s.x, s.y);
+		RendererAccessor.map.selectTile(s.x, s.y);
 		selectedTile = s;		
 	}
 	
