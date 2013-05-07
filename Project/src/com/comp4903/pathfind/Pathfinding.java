@@ -95,7 +95,7 @@ public class Pathfinding {
         while (openList.size() > 0)
         {
             cur = GetLowestFScore(openList);
-            if (cur.p == end)
+            if (cur.getP().getX() == end.getX() && cur.getP().getY() == end.getY())
             {
                 endFound = true;
                 break;
@@ -112,11 +112,11 @@ public class Pathfinding {
                  //   continue;
                 if (check == null)
                     openList.add(con);
-                else if (check != null && con.g < check.g)
+                else if (check != null && con.getG() < check.getG())
                 {
-                    check.parent = cur;
-                    check.g = con.g;
-                    check.f = con.f;
+                    check.setParent(cur);
+                    check.setG(con.getG());
+                    check.setF(con.getF());
                 }
 
             }
@@ -124,10 +124,10 @@ public class Pathfinding {
         if (endFound)
         {
             AStarNode endNode = cur;
-            while (cur.parent != null)
+            while (cur.getParent() != null)
             {
-                result.add(cur.p);
-                cur = cur.parent;
+                result.add(cur.getP());
+                cur = cur.getParent();
             }
         }
         return result;
@@ -141,7 +141,7 @@ public class Pathfinding {
     	
         for (AStarNode ln : l)
         {
-            if (ln.p.getX() == cur.p.getX() && ln.p.getY() == cur.p.getY())
+            if (ln.getP().getX() == cur.getP().getX() && ln.getP().getY() == cur.getP().getY())
             {
                 return ln;
             }
@@ -158,9 +158,9 @@ public class Pathfinding {
         AStarNode lowest = null;
         for (AStarNode ln : l)
         {
-            if (ln.f < lowestF)
+            if (ln.getF() < lowestF)
             {
-                lowestF = ln.f;
+                lowestF = ln.getG();
                 lowest = ln;
             }
         }
@@ -173,29 +173,29 @@ public class Pathfinding {
     private static List<AStarNode> connections(AStarNode cur, Point end)
     {
         List<AStarNode> connect = new ArrayList<AStarNode>();
-        Point cp = cur.p;
+        Point cp = cur.getP();
         Point westP = new Point(cp.getX() - 1, cp.getY());
-        AStarNode west = new AStarNode(westP, cur, cur.g + 1, cur.g + heuristic(westP, end));
+        AStarNode west = new AStarNode(westP, cur, cur.getG() + 1, cur.getG() + heuristic(westP, end));
         connect.add(west);
 
         Point eastP = new Point(cp.getX() + 1, cp.getY());
-        AStarNode east = new AStarNode(eastP, cur, cur.g + 1, cur.g + heuristic(eastP, end));
+        AStarNode east = new AStarNode(eastP, cur, cur.getG() + 1, cur.getG() + heuristic(eastP, end));
         connect.add(east);
 
         Point NWP = new Point(cp.getX(), cp.getY() - 1);
-        AStarNode NW = new AStarNode(NWP, cur, cur.g + 1, cur.g + heuristic(NWP, end));
+        AStarNode NW = new AStarNode(NWP, cur, cur.getG() + 1, cur.getG() + heuristic(NWP, end));
         connect.add(NW);
 
         Point NEP = new Point(cp.getX() + 1, cp.getY() - 1);
-        AStarNode NE = new AStarNode(NEP, cur, cur.g + 1, cur.g + heuristic(NEP, end));
+        AStarNode NE = new AStarNode(NEP, cur, cur.getG() + 1, cur.getG() + heuristic(NEP, end));
         connect.add(NE);
         
         Point SWP = new Point(cp.getX(), cp.getY() + 1);
-        AStarNode SW = new AStarNode(SWP, cur, cur.g + 1, cur.g + heuristic(SWP, end));
+        AStarNode SW = new AStarNode(SWP, cur, cur.getG() + 1, cur.getG() + heuristic(SWP, end));
         connect.add(SW);
         
         Point SEP = new Point(cp.getX() + 1, cp.getY() + 1);
-        AStarNode SE = new AStarNode(SEP, cur, cur.g + 1, cur.g + heuristic(SEP, end));
+        AStarNode SE = new AStarNode(SEP, cur, cur.getG() + 1, cur.getG() + heuristic(SEP, end));
         connect.add(SE);
         return connect;
     }
