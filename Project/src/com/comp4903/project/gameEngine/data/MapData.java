@@ -36,6 +36,11 @@ public class MapData {
 		}
 	}
 	
+	public boolean inMap(Point p){
+		return (p.getX() < _numColumns && p.getY() < _numRows
+				&& p.getX() >= 0 && p.getY() >= 0);
+	}
+	
 	public int NumberOfRows(){
 		return _numRows;
 	}
