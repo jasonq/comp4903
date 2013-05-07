@@ -19,7 +19,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 
 	private float pickx,picky;
-	private boolean picking = false;
+	private boolean pickControlledUnit = false;
+	private boolean pickEnemyUnit = false;
+	private boolean pickEmpty = false;
+	
 	private int decision = -1;
 	private GestureDetector gDetect;
 	
@@ -126,8 +129,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				picky = e.getY();
 				//down = false;
 				mRenderer.selectTile(mRenderer.pick(pickx,picky));
+				//mapData._tileSelected = mRenderer.pick(pickx, picky);
 				requestRender();
 			}
+			
+			
 			return true;
 		}
 
