@@ -3,6 +3,7 @@ package com.comp4903.project.graphics;
 import android.content.Context;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
+import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -19,7 +20,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 
 	private float pickx,picky;
-	private boolean picking = false;
+	
+	private boolean pickControlledUnit = false;
+	private boolean pickEnemyUnit = false;
+	private boolean pickEmpty = false;
+	
 	private int decision = -1;
 	private GestureDetector gDetect;
 	
@@ -115,7 +120,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		public boolean onSingleTapConfirmed (MotionEvent e){
 			Log.d("TAG", "Single Tap Detected ...");
 			boolean touchMenu = mRenderer.checkHUD((int)e.getX(), (int)e.getY());
-
+			Point pickPoint = mRenderer.pick(e.getX(), e.getY());
+			if(pickPoint.x == -1 & pickPoint.y == -1)
+				return false;
+			mapData._tileSelected = pickPoint;
+			
 			if(!touchMenu){
 				//picking = true;
 				if(!mRenderer.headsUpDisplay.showAction)
@@ -125,9 +134,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				pickx = e.getX();
 				picky = e.getY();
 				//down = false;
-				mRenderer.selectTile(mRenderer.pick(pickx,picky));
+				//mRenderer.selectTile(mRenderer.pick(pickx,picky));
+				mapData._tileSelected = mRenderer.pick(pickx, picky);
 				requestRender();
 			}
+			
+			
 			return true;
 		}
 
@@ -149,4 +161,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			break;
 		}
 	}
+	
+	
 }
