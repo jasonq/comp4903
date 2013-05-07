@@ -10,9 +10,9 @@ public class ArmourStats {
 	private Map<String, Double> modifier;
 	
 	public ArmourStats(){
-		name = "";
-		defence = -1;
-		health = -1;
+		name = "No Armour";
+		defence = 0;
+		health = 0;
 		modifier = new HashMap<String, Double>();
 	}
 

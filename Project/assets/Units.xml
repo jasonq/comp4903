@@ -15,7 +15,6 @@
 	        <Armour>Light Armour</Armour>
 	    </ArmourLimit>
 	    <SkillList>
-	        <Skill level="1">Hyper Awareness</Skill>
 	        <Skill level="3">Expose Weakness</Skill>
 	    </SkillList>
 	</Unit>

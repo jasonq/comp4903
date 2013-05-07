@@ -49,9 +49,7 @@ public class TypeFinder {
 	
 	public static SkillType findSkillType(String in){
 		in = in.toLowerCase();
-		if (in.equals("hyper awareness"))
-			return SkillType.HyperAwareness;
-		else if (in.equals("expose weakness"))
+		if (in.equals("expose weakness"))
 			return SkillType.ExposeWeakness;
 		else if (in.equals("stim pack"))
 			return SkillType.StimPack;
