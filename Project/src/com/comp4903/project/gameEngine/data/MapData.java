@@ -45,6 +45,8 @@ public class MapData {
 	}
 	
 	public boolean isOpen(Point p){
+		if (!inMap(p))
+			return false;
 		switch(_tileTypes[p.x][p.y]){
 			case Building:
 				return false;
