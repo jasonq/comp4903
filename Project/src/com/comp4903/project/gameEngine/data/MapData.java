@@ -4,6 +4,7 @@ import android.graphics.Point;
 
 import com.comp4903.project.gameEngine.enums.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MapData {
@@ -41,6 +42,23 @@ public class MapData {
 	public boolean inMap(Point p){
 		return (p.x < _numColumns && p.y < _numRows
 				&& p.x >= 0 && p.y >= 0);
+	}
+	
+	public boolean isOpen(Point p){
+		switch(_tileTypes[p.x][p.y]){
+			case Building:
+				return false;
+			default:
+				return true;
+		}
+	}
+	
+	public Unit getUnitAt(Point p){
+		for (Unit u : _units){
+			if (u.position.equals(p))
+				return u;
+		}
+		return null;
 	}
 	
 	public int NumberOfRows(){
