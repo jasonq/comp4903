@@ -8,6 +8,7 @@ import android.graphics.Point;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.factory.GameStats;
+import com.comp4903.project.graphics.RendererAccessor;
 
 public class PathFind {
 
@@ -25,5 +26,6 @@ public class PathFind {
 		_map.clearBoxes();
 		
 		_map._movementBox = l;
+		RendererAccessor.map.update(_map);
 	}
 }
