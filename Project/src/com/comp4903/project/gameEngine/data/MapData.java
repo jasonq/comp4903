@@ -1,5 +1,7 @@
 package com.comp4903.project.gameEngine.data;
 
+import android.graphics.Point;
+
 import com.comp4903.project.gameEngine.enums.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +39,8 @@ public class MapData {
 	}
 	
 	public boolean inMap(Point p){
-		return (p.getX() < _numColumns && p.getY() < _numRows
-				&& p.getX() >= 0 && p.getY() >= 0);
+		return (p.x < _numColumns && p.y < _numRows
+				&& p.x >= 0 && p.y >= 0);
 	}
 	
 	public int NumberOfRows(){

@@ -8,11 +8,11 @@ import java.util.Map;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.graphics.Point;
 import android.util.Log;
 import android.util.Xml;
 
 import com.comp4903.project.gameEngine.data.MapData;
-import com.comp4903.project.gameEngine.data.Point;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.ArmourType;
 import com.comp4903.project.gameEngine.enums.SkillType;
