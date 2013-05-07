@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.GestureDetector;
 
+import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.graphics.GLRenderer;
 
@@ -129,8 +130,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			mapData._tileSelected = pickPoint;
 			
 			if(mapData.getUnitAt(pickPoint) != null){
+				
 				pickControlledUnit = true;
 				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+				PathFind.getMovePoints(mapData.getUnitAt(pickPoint));
 			}else{
 				if(pickControlledUnit && touchMenu)
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
@@ -138,25 +141,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 					pickControlledUnit = false;
 					mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
+					
 				}
 				
 			}
 			requestRender();
-			/*if(!touchMenu){
-				//picking = true;
-				if(!mRenderer.headsUpDisplay.showAction)
-					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-				else
-					mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
-				pickx = e.getX();
-				picky = e.getY();
-				//down = false;
-				//mRenderer.selectTile(mRenderer.pick(pickx,picky));
-				mapData._tileSelected = mRenderer.pick(pickx, picky);
-				requestRender();
-			}*/
-			
-			
 			return true;
 		}
 

@@ -15,7 +15,7 @@ public class PathFind {
 	private static MapData _map;
 	public static void initialize(MapData map) { _map = map; Algorithms.initialize(map); }
 	
-	public void getMovePoints(Unit u){
+	public static void getMovePoints(Unit u){
 		List<Point> l = Algorithms.GetPointsBFS(u.position, u.combatStats.maxMovement);
 		for(Unit unit : _map._units){
 			for(Point p : l){
