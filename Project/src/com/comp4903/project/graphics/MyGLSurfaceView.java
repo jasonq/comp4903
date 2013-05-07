@@ -19,7 +19,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	private float downx,downy;
 	private float pickx,picky;
 	private boolean menupressed = false;
-
+	private int decision = -1;
 	private GestureDetector gDetect;
 	public MyGLSurfaceView(Context context) {
 
@@ -66,14 +66,19 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			break;
 			//PICKING
 		case MotionEvent.ACTION_DOWN:
-
-			if(touchMenu){
-				this.mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
-
-			}else{
-				this.mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
-			}
-
+			/*
+			 * return an int to decide which action taking
+			 * 0- Move
+			 * 1- Attack
+			 * 2- Items
+			 * 3- Ability
+			 * 4- Wait
+			 * 5- Cancel
+			 */
+			if(decision == 0 && !touchMenu )
+				break;
+			else
+				decision = this.mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
 			requestRender();
 			break;
 		}

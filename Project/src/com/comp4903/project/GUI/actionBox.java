@@ -20,7 +20,7 @@ public class actionBox extends UI{
 		menuSelected = -1;
 		command = new Square[6];
 		pressedCommand = new Square[6];
-		box = new Square(width/20, height/10,width/4,(height*3)/4);
+		box = new Square(width/20 - 10, height/10- 10,width/4 + 20,(height*3)/4 + 20);
 		
 		int bHeight = height/8;
 		int nHeight = height/10;
@@ -66,20 +66,9 @@ public class actionBox extends UI{
 	}
 	public void draw(GL10 gl){
 		gl.glLoadIdentity();
-		//draw the box
-		//gl.glTranslatef(tranx,trany,0.0f);
-		//gl.glScalef(scalex, scaley, 1.0f);
+		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
+		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
 		box.draw(gl);
-
-		//gl.glLoadIdentity();
-		//float sx = (width / 4)/2;
-		//float sy = (height * 3 / 24)/2;
-		//float x = width/20 + sx;
-		//float y = height/20 + sy;
-		//command[0].draw(gl);
-		//gl.glTranslatef(x,y,0.0f);
-		//gl.glScalef(sx, sy, 1.0f);
-		//int dis = (int)((float)(height/ sy) * 3/ 24);
 		for(int i = 0; i < command.length; i++){
 			
 			if(menuSelected == i){
@@ -88,7 +77,7 @@ public class actionBox extends UI{
 				command[i].draw(gl);
 			//gl.glTranslatef(0.0f,dis,0);
 		}
-		
+		gl.glDisable( GL10.GL_BLEND );                  // Disable Alpha Blend
 	}
 	public int checkListItem(float y){
 		int pad = (yBot - yTop)/command.length;
