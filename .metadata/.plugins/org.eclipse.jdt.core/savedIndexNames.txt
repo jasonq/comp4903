@@ -1,4 +1,0 @@
-INDEX VERSION 1.126+C:\Users\Bozo\Documents\GitHub\comp4903\.metadata\.plugins\org.eclipse.jdt.core
-3352491446.index
-449384428.index
-3201398653.index
