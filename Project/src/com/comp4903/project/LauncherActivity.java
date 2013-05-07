@@ -26,12 +26,22 @@ import com.comp4903.project.gameEngine.factory.*;;
 public class LauncherActivity extends Activity {
 	// Main entry point beyond the constructor
 
+	MapData mapData = null;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		boolean loaded = loadContent();
-		GLSurfaceView view = new MyGLSurfaceView(this);
+		
+		InputStream in;
+		
+		try {
+			in = getResources().getAssets().open("MapTwo.xml");
+			mapData = MapFactory.generateMapData(in);
+		} catch (IOException e) {}
+		
+		GLSurfaceView view = new MyGLSurfaceView(this, mapData);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(view);
 		

@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.GestureDetector;
+
+import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.graphics.GLRenderer;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -21,17 +23,21 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	private int decision = -1;
 	private GestureDetector gDetect;
 	
-	public MyGLSurfaceView(Context context) {
+	private MapData mapData = null;
+	
+	public MyGLSurfaceView(Context context, MapData md) {
 
 		super(context);
 
 		// Set the Renderer for drawing on the GLSurfaceView
-		mRenderer = new GLRenderer(context);
+		mRenderer = new GLRenderer(context, md);
 		setRenderer(mRenderer);
 		gDetect = new GestureDetector(context, new GestureDetection()); 
 		mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 		// Render the view only when there is a change in the drawing data
 		//setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+		
+		mapData = md;
 	}
 
 

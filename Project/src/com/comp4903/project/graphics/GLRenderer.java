@@ -67,18 +67,20 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	public HUD headsUpDisplay;
 	
 	private MapRenderer map;
-	
+	private MapData mapData;
 	
 	/*	GLRENDERER
 	 * 
 	 * Constructor, need to provide app context for access to
 	 * resource files such as textures	 * 
 	 */
-	public GLRenderer(Context c)
+	public GLRenderer(Context c, MapData md)
 	{
 		context = c;
 		selectedTile.x = 0;
-		selectedTile.y = 0;		
+		selectedTile.y = 0;	
+		
+		mapData = md;
 		
 	}
 	
@@ -113,16 +115,16 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		
 		map = new MapRenderer(gl, context);
 		
-		InputStream in;
+		/*InputStream in;
 		MapData data = null;
 		try {
 			in = context.getResources().getAssets().open("MapTwo.xml");
 			data = MapFactory.generateMapData(in);
-		} catch (IOException e) {}
+		} catch (IOException e) {}*/
 		
-		map.init(data.NumberOfColumns(), data.NumberOfRows());
+		map.init(mapData.NumberOfColumns(), mapData.NumberOfRows());
 		map.loadModels();
-		map.defineMap(data);
+		map.defineMap(mapData);
 		
 		viewX = 20;
 		viewY = 0;
