@@ -76,9 +76,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			requestRender();
 			break;
 			//PICKING
-		case MotionEvent.ACTION_DOWN:
-			/*
-			 * return an int to decide which action taking
+		//case MotionEvent.ACTION_DOWN:
+			
+			 /* return an int to decide which action taking
 			 * 0- Move
 			 * 1- Attack
 			 * 2- Items
@@ -86,11 +86,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			 * 4- Wait
 			 * 5- Cancel
 			 */
-			if(touchMenu)
-				decision = this.mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
+			//if(touchMenu && pickControlledUnit)
+				//decision = this.mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
 			
-			requestRender();
-			break;
+			//requestRender();
+			//break;
 		}
 		mPreviousX = x;
 		mPreviousY = y;
@@ -124,8 +124,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			
 			Point pickPoint = mRenderer.pick(e.getX(), e.getY());
 			
-			if(pickPoint.x == -1 & pickPoint.y == -1)
+			if(pickPoint.x == -1 & pickPoint.y == -1){
+				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
+				pickControlledUnit = false;
+				mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
 				return false;
+			}
 			
 			mapData._tileSelected = pickPoint;
 			
@@ -133,18 +137,18 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				
 				pickControlledUnit = true;
 				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-				PathFind.getMovePoints(mapData.getUnitAt(pickPoint));
+				//PathFind.getMovePoints(mapData.getUnitAt(pickPoint));
 			}else{
-				if(pickControlledUnit && touchMenu)
+				if(pickControlledUnit && touchMenu){
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-				else{
+					decision = mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
+				}else{
 					mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 					pickControlledUnit = false;
-					mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
-					
+					mRenderer.setSelectedHUD((int)e.getY(), touchMenu);			
 				}
-				
-			}
+			}			
+			
 			requestRender();
 			return true;
 		}
@@ -164,6 +168,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		case 4:
 			break;
 		case 5:
+		case -1:
 			break;
 		}
 	}
