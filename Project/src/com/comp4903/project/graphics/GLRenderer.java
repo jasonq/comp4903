@@ -64,7 +64,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 10.0f };
 	
-	private HUD headsUpDisplay;
+	public HUD headsUpDisplay;
 	
 	private MapRenderer map;
 	
@@ -200,7 +200,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		headsUpDisplay.SwithToOrtho(gl);
-		headsUpDisplay.drawHUD(gl, showmenu);
+		headsUpDisplay.drawHUD(gl);
 		headsUpDisplay.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
@@ -349,5 +349,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			this.headsUpDisplay.action.menuSelected = -1;
 			return -1;
 		}
-	}	
+	}
+	
+	
 }

@@ -27,6 +27,12 @@ public class HUD {
 	public Glyphs glyph;
 	public String[] actionCommand = {"Attack","ability","items","view Stats","cancel"};
 	public Square[] squareCommand;
+	
+	public boolean showAction = false;
+	public boolean showStat = false;
+	public boolean showAbility = false;
+	public boolean showAttack = false;
+	
 	public HUD(Context c, int w, int h){
 		context = c;		
 		width = w;
@@ -34,6 +40,13 @@ public class HUD {
 		glyph = new Glyphs(BitmapFactory.decodeResource(context.getResources(), R.drawable.glyphs_black));
 		action = new actionBox(context,width,height);
 		character = new characterBox(context,width,height);
+	}
+	
+	public void updateHUD(boolean showAction, boolean showStat, boolean showAbility, boolean showAttack){
+		this.showAction = showAction;
+		this.showStat = showStat;
+		this.showAbility = showAbility;
+		this.showAttack = showAttack;
 	}
 	public void getCommandSquare(GL10 gl){
 		//these 2 lines are important
@@ -55,11 +68,11 @@ public class HUD {
 		character.loadUITexture(gl, context.getResources(), R.drawable.statpanel);
 	}
 
-	public void drawHUD(GL10 gl,boolean menuflag){
-		if(menuflag){
-			action.draw(gl);
+	public void drawHUD(GL10 gl){
+		if(showAction)
+			action.draw(gl);		
+		if(showStat)
 			character.draw(gl);
-		}
 	}
 
 	public boolean checkTouchingMenu(int x, int y){

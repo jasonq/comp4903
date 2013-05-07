@@ -15,12 +15,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	private final GLRenderer mRenderer;
 	private ScaleGestureDetector mScaleDetector;	
 
-	private boolean shomenu = false;
-	private float downx,downy;
+
 	private float pickx,picky;
-	private boolean menupressed = false;
+	private boolean picking = false;
 	private int decision = -1;
 	private GestureDetector gDetect;
+	
 	public MyGLSurfaceView(Context context) {
 
 		super(context);
@@ -34,10 +34,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		//setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	}
 
-	private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
+
 	private float mPreviousX;
 	private float mPreviousY;
-
 	private int sens = 5;
 
 	public boolean onTouchEvent(MotionEvent e) {
@@ -75,10 +74,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			 * 4- Wait
 			 * 5- Cancel
 			 */
-			if(decision == 0 && !touchMenu )
-				break;
-			else
+			if(touchMenu)
 				decision = this.mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
+			
 			requestRender();
 			break;
 		}
@@ -113,10 +111,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			boolean touchMenu = mRenderer.checkHUD((int)e.getX(), (int)e.getY());
 
 			if(!touchMenu){
-				if(!mRenderer.showmenu)
-					mRenderer.showmenu = true;
+				//picking = true;
+				if(!mRenderer.headsUpDisplay.showAction)
+					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 				else
-					mRenderer.showmenu = false;	
+					mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 				pickx = e.getX();
 				picky = e.getY();
 				//down = false;
@@ -126,5 +125,22 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			return true;
 		}
 
+	}
+	
+	public void handleTouchEvent(){
+		switch(decision){
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		}
 	}
 }
