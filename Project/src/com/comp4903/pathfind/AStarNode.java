@@ -1,6 +1,7 @@
 package com.comp4903.pathfind;
 
-import com.comp4903.project.gameEngine.data.Point;
+import android.graphics.Point;
+
 
 public class AStarNode
 {

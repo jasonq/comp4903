@@ -3,7 +3,8 @@ package com.comp4903.pathfind;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.comp4903.project.gameEngine.data.Point;
+import android.graphics.Point;
+
 
 public class Pathfinding {
 	
@@ -26,37 +27,37 @@ public class Pathfinding {
                 break;
             steps.add(t.p);
 
-            BFSNode west = new BFSNode(new Point(t.p.getX() - 1, t.p.getY()), (t.step + 1));
+            BFSNode west = new BFSNode(new Point(t.p.x - 1, t.p.y), (t.step + 1));
             if (!ListHasNode(marked, west) )//&& _map.InMap(west.p))
             {
                 queue.add(west);
                 marked.add(west);
             }
-            BFSNode east = new BFSNode(new Point(t.p.getX() + 1, t.p.getY()), (t.step + 1));
+            BFSNode east = new BFSNode(new Point(t.p.x + 1, t.p.y), (t.step + 1));
             if (!ListHasNode(marked, east) )//&& _map.InMap(right.p))
             {
                 queue.add(east);
                 marked.add(east);
             }
-            BFSNode NW = new BFSNode(new Point(t.p.getX(), t.p.getY() - 1), (t.step + 1));
+            BFSNode NW = new BFSNode(new Point(t.p.x, t.p.y - 1), (t.step + 1));
             if (!ListHasNode(marked, NW) ) //&& _map.InMap(up.p))
             {
                 queue.add(NW);
                 marked.add(NW);
             }
-            BFSNode NE = new BFSNode(new Point(t.p.getX() + 1, t.p.getY() - 1), (t.step + 1));
+            BFSNode NE = new BFSNode(new Point(t.p.x + 1, t.p.y - 1), (t.step + 1));
             if (!ListHasNode(marked, NE) ) //&& _map.InMap(up.p))
             {
                 queue.add(NE);
                 marked.add(NE);
             }
-            BFSNode SW = new BFSNode(new Point(t.p.getX(), t.p.getY() + 1), (t.step + 1));
+            BFSNode SW = new BFSNode(new Point(t.p.x, t.p.y + 1), (t.step + 1));
             if (!ListHasNode(marked, SW) )// && _map.InMap(down.p))
             {
                 queue.add(SW);
                 marked.add(SW);
             }
-            BFSNode SE = new BFSNode(new Point(t.p.getX() + 1, t.p.getY() + 1), (t.step + 1));
+            BFSNode SE = new BFSNode(new Point(t.p.x + 1, t.p.y + 1), (t.step + 1));
             if (!ListHasNode(marked, SE) )// && _map.InMap(down.p))
             {
                 queue.add(SE);
@@ -73,7 +74,7 @@ public class Pathfinding {
     {
         for(BFSNode ln : l)
         {
-            if (ln.p.getX() == n.p.getX() && ln.p.getY() == n.p.getY())
+            if (ln.p.equals(n.p))
                 return true;
         }
         return false;
@@ -95,7 +96,7 @@ public class Pathfinding {
         while (openList.size() > 0)
         {
             cur = GetLowestFScore(openList);
-            if (cur.getP().getX() == end.getX() && cur.getP().getY() == end.getY())
+            if (cur.getP().equals(end))
             {
                 endFound = true;
                 break;
@@ -141,7 +142,7 @@ public class Pathfinding {
     	
         for (AStarNode ln : l)
         {
-            if (ln.getP().getX() == cur.getP().getX() && ln.getP().getY() == cur.getP().getY())
+            if (ln.getP().equals(cur.getP()))
             {
                 return ln;
             }
@@ -174,27 +175,27 @@ public class Pathfinding {
     {
         List<AStarNode> connect = new ArrayList<AStarNode>();
         Point cp = cur.getP();
-        Point westP = new Point(cp.getX() - 1, cp.getY());
+        Point westP = new Point(cp.x - 1, cp.y);
         AStarNode west = new AStarNode(westP, cur, cur.getG() + 1, cur.getG() + heuristic(westP, end));
         connect.add(west);
 
-        Point eastP = new Point(cp.getX() + 1, cp.getY());
+        Point eastP = new Point(cp.x + 1, cp.y);
         AStarNode east = new AStarNode(eastP, cur, cur.getG() + 1, cur.getG() + heuristic(eastP, end));
         connect.add(east);
 
-        Point NWP = new Point(cp.getX(), cp.getY() - 1);
+        Point NWP = new Point(cp.x, cp.y - 1);
         AStarNode NW = new AStarNode(NWP, cur, cur.getG() + 1, cur.getG() + heuristic(NWP, end));
         connect.add(NW);
 
-        Point NEP = new Point(cp.getX() + 1, cp.getY() - 1);
+        Point NEP = new Point(cp.x + 1, cp.y - 1);
         AStarNode NE = new AStarNode(NEP, cur, cur.getG() + 1, cur.getG() + heuristic(NEP, end));
         connect.add(NE);
         
-        Point SWP = new Point(cp.getX(), cp.getY() + 1);
+        Point SWP = new Point(cp.x, cp.y + 1);
         AStarNode SW = new AStarNode(SWP, cur, cur.getG() + 1, cur.getG() + heuristic(SWP, end));
         connect.add(SW);
         
-        Point SEP = new Point(cp.getX() + 1, cp.getY() + 1);
+        Point SEP = new Point(cp.x + 1, cp.y + 1);
         AStarNode SE = new AStarNode(SEP, cur, cur.getG() + 1, cur.getG() + heuristic(SEP, end));
         connect.add(SE);
         return connect;
@@ -205,7 +206,7 @@ public class Pathfinding {
      */
     private static int heuristic(Point cur, Point end)
     {
-        return Math.abs(cur.getX() - end.getX()) + Math.abs(cur.getY() - end.getY());
+        return Math.abs(cur.x - end.x) + Math.abs(cur.y - end.y);
     }
     
 }
