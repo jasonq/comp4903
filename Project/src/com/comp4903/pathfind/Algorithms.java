@@ -8,7 +8,7 @@ import com.comp4903.project.gameEngine.data.MapData;
 import android.graphics.Point;
 
 
-public class Pathfinding {
+public class Algorithms {
 	
 	private static MapData _map;
 	public static void initialize(MapData map) { _map = map; }

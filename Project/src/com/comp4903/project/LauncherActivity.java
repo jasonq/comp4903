@@ -14,7 +14,7 @@ import android.view.Window;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.factory.*;
 
-import com.comp4903.pathfind.Pathfinding;
+import com.comp4903.pathfind.PathFind;
 /* LAUNCHERACTIVITY
  * 
  * Main startup class for the comp 4903 Project
@@ -51,7 +51,7 @@ public class LauncherActivity extends Activity {
 
 	private boolean loadContent(MapData md){
 		InputStream in;
-		Pathfinding.initialize(md);
+		PathFind.initialize(md);
 		try {
 			in = getResources().getAssets().open("Weapons.xml");
 			GameStats.InitializeWeaponData(in);
