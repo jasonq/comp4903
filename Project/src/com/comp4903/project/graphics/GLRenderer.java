@@ -121,6 +121,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		} catch (IOException e) {}
 		
 		map.init(data.NumberOfColumns(), data.NumberOfRows());
+		map.loadModels();
 		map.defineMap(data);
 		
 		viewX = 20;
@@ -129,7 +130,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		distance = 7;
 		viewAngle = 0; //1.57f / 2f;
 		
-		modeltest(gl);
+		//modeltest(gl);
 		
 	}	
 	
@@ -195,7 +196,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		map.render(viewMatrix, projectionMatrix, viewX, viewY, viewZ);
 		
-		draw(gl);
+		//draw(gl);
 		
 		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glDisable(GL10.GL_DEPTH_TEST);

@@ -1,16 +1,25 @@
 package com.comp4903.project.graphics;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.gameEngine.data.MapData;
+import com.comp4903.project.gameEngine.enums.UnitType;
+import com.comp4903.project.graphics.model.Model3D;
+import com.comp4903.project.graphics.model.ModelLoader;
 import com.comp4903.project.graphics.tile.Hexagon;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Point;
 import android.opengl.Matrix;
 
@@ -44,7 +53,13 @@ public class MapRenderer {
 	private int reachableTilesCount = 0;
 	
 	private Hexagon hex;
+	private HashMap<Integer, Actor> actors;
+	private Model3D[] models;
 		
+	private float[] ambientLight = { 0.4f, 0.4f, 0.4f, 1 };
+	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
+	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 10.0f };
+	
 	/*	CONSTRUCTOR - sets up data structures
 	 * 
 	 */
@@ -54,6 +69,36 @@ public class MapRenderer {
 		context = c;
 		hex = new Hexagon(gl, context);
 		hex.readTileData();
+		actors = new HashMap<Integer, Actor>();
+	}
+	
+	public void loadModels()
+	{
+		AssetManager am = context.getAssets();
+		models = new Model3D[2];
+		
+		for (int t = 0; t < 2; t++)
+		{
+			models[t] = new Model3D();
+			try {
+				InputStream buf = null;
+				if (t == 0)
+					buf = am.open("models/testmodel.mdl");
+				else
+					buf = am.open("models/soldier.gmodel");
+				ModelLoader.load(buf, models[t]);
+				models[t].SetScale(.08f, .08f, .08f);
+				models[t].SetPosition(1, 1, 1);
+				buf.close();
+				
+			} catch (IOException e)
+			{ }			
+		}
+		models[0].SetPosition(21,1,21);		
+		//models[1].YRotate(1.6f);
+		//models[1].XRotate(1.57f);
+		models[1].SetScale(1, 1, 1);
+		models[1].SetPosition(26, 0, 23);
 	}
 	
 	/*	INIT - Used to initialize, or re-initialize the map
@@ -108,6 +153,7 @@ public class MapRenderer {
 		
 		setTileStates();
 		selectionPass();
+		actorPass();
 	}
 	
 	/* BASEPASS - clears the tile states and draws the base hexagon shaped floor tiles
@@ -191,6 +237,37 @@ public class MapRenderer {
 			}
 		gl.glDisable(GL10.GL_BLEND);
 	}
+	
+	private void actorPass()
+	{
+		Actor a;
+		Iterator<Entry<Integer, Actor>> i = actors.entrySet().iterator();
+		while (i.hasNext())
+		{
+			a = i.next().getValue();
+			float x = (float)a.tileX * 1.5f;
+			float z = (float)a.tileY * 0.8660254038f * 2f + (a.tileX % 2) * 0.8660254038f;
+			float y = 0;
+			
+			// cheat for now; raise Marvin so his feet are on the ground
+			if (a.model == 0)
+			{
+				y = 0.6f;
+			}
+			
+			gl.glEnable(GL10.GL_LIGHTING);
+			gl.glEnable(GL10.GL_LIGHT0);
+			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, ambientLight, 0);
+			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, diffuseLight, 0);
+			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPosition, 0);
+			
+			models[a.model].SetPosition(x, y, z);
+			models[a.model].display(gl, viewMatrix);
+			
+			gl.glDisable(GL10.GL_LIGHTING);
+			
+		}
+	}
 
 	/*	SETTILESTATES - sets the tile states (selected, reachable, path, etc...) prior to
 	 *  drawing the UI selection highlights
@@ -239,6 +316,19 @@ public class MapRenderer {
 				tileMap[x][y].tile = m._tileTypes[x][y].getCode();
 				tileMap[x][y].state = -1;
 			}
+		
+		actors.clear();
+		for (int i = 0; i < m._units.size(); i++)
+		{
+			Actor a = new Actor();
+			a.tileX = m._units.get(i).position.getX();
+			a.tileY = m._units.get(i).position.getY();
+			a.type = m._units.get(i).unitType;
+			a.model = a.type.getCode();
+			a.model = a.model % 2;
+				
+			actors.put(i, a);
+		}
 	}
 	
 	public void update(MapData m)
@@ -271,5 +361,11 @@ public class MapRenderer {
 		int state;
 		float size = 0f;
 	}
-	
+
+	private class Actor {
+		int model;
+		UnitType type;
+		int tileX;
+		int tileY;
+	}
 }
