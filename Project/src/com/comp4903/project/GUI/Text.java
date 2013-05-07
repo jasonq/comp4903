@@ -22,7 +22,10 @@ public class Text {
 
 	public void loadTextture(GL10 gl, Context context){
 		Bitmap bmp = glyph.getString(text);
-		boxtexture.loadGLTexture(gl, context, bmp);
+		Bitmap newbmp = Bitmap.createScaledBitmap(bmp, 64, 32, false);
+		boxtexture.loadGLTexture(gl, context, newbmp);
+		newbmp.recycle();
+		bmp.recycle();
 	}
 	public void drawText(GL10 gl){
 		boxtexture.draw(gl);
