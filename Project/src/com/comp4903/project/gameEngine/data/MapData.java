@@ -75,4 +75,6 @@ public class MapData {
 		_movementBox.clear();
 		_attackBox.clear();
 	}
+	
+	
 }

@@ -120,12 +120,29 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		public boolean onSingleTapConfirmed (MotionEvent e){
 			Log.d("TAG", "Single Tap Detected ...");
 			boolean touchMenu = mRenderer.checkHUD((int)e.getX(), (int)e.getY());
+			
 			Point pickPoint = mRenderer.pick(e.getX(), e.getY());
+			
 			if(pickPoint.x == -1 & pickPoint.y == -1)
 				return false;
+			
 			mapData._tileSelected = pickPoint;
 			
-			if(!touchMenu){
+			if(mapData.getUnitAt(pickPoint) != null){
+				pickControlledUnit = true;
+				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+			}else{
+				if(pickControlledUnit && touchMenu)
+					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+				else{
+					mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
+					pickControlledUnit = false;
+					mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
+				}
+				
+			}
+			requestRender();
+			/*if(!touchMenu){
 				//picking = true;
 				if(!mRenderer.headsUpDisplay.showAction)
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
@@ -137,7 +154,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				//mRenderer.selectTile(mRenderer.pick(pickx,picky));
 				mapData._tileSelected = mRenderer.pick(pickx, picky);
 				requestRender();
-			}
+			}*/
 			
 			
 			return true;
