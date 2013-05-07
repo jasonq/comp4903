@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.view.Window;
 
 import com.comp4903.project.gameEngine.data.MapData;
-import com.comp4903.project.gameEngine.factory.*;;
+import com.comp4903.project.gameEngine.factory.*;
+
+import com.comp4903.pathfind.Pathfinding;
 /* LAUNCHERACTIVITY
  * 
  * Main startup class for the comp 4903 Project
@@ -32,8 +34,6 @@ public class LauncherActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		boolean loaded = loadContent();
-		
 		InputStream in;
 		
 		try {
@@ -41,14 +41,17 @@ public class LauncherActivity extends Activity {
 			mapData = MapFactory.generateMapData(in);
 		} catch (IOException e) {}
 		
+		boolean loaded = loadContent(mapData);
+		
 		GLSurfaceView view = new MyGLSurfaceView(this, mapData);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(view);
 		
 	}
 
-	private boolean loadContent(){
+	private boolean loadContent(MapData md){
 		InputStream in;
+		Pathfinding.initialize(md);
 		try {
 			in = getResources().getAssets().open("Weapons.xml");
 			GameStats.InitializeWeaponData(in);

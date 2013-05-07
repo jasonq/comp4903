@@ -3,10 +3,16 @@ package com.comp4903.pathfind;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.comp4903.project.gameEngine.data.MapData;
+
 import android.graphics.Point;
 
 
 public class Pathfinding {
+	
+	private static MapData _map;
+	public static void initialize(MapData map) { _map = map; }
+	
 	
 	//--------------BFS Algorithm--------------//
 	/**
@@ -28,37 +34,37 @@ public class Pathfinding {
             steps.add(t.p);
 
             BFSNode west = new BFSNode(new Point(t.p.x - 1, t.p.y), (t.step + 1));
-            if (!ListHasNode(marked, west) )//&& _map.InMap(west.p))
+            if (!ListHasNode(marked, west) && _map.isOpen(west.p))
             {
                 queue.add(west);
                 marked.add(west);
             }
             BFSNode east = new BFSNode(new Point(t.p.x + 1, t.p.y), (t.step + 1));
-            if (!ListHasNode(marked, east) )//&& _map.InMap(right.p))
+            if (!ListHasNode(marked, east) && _map.isOpen(east.p))
             {
                 queue.add(east);
                 marked.add(east);
             }
             BFSNode NW = new BFSNode(new Point(t.p.x, t.p.y - 1), (t.step + 1));
-            if (!ListHasNode(marked, NW) ) //&& _map.InMap(up.p))
+            if (!ListHasNode(marked, NW) && _map.isOpen(NW.p))
             {
                 queue.add(NW);
                 marked.add(NW);
             }
             BFSNode NE = new BFSNode(new Point(t.p.x + 1, t.p.y - 1), (t.step + 1));
-            if (!ListHasNode(marked, NE) ) //&& _map.InMap(up.p))
+            if (!ListHasNode(marked, NE) && _map.isOpen(NE.p))
             {
                 queue.add(NE);
                 marked.add(NE);
             }
             BFSNode SW = new BFSNode(new Point(t.p.x, t.p.y + 1), (t.step + 1));
-            if (!ListHasNode(marked, SW) )// && _map.InMap(down.p))
+            if (!ListHasNode(marked, SW) && _map.isOpen(SW.p))
             {
                 queue.add(SW);
                 marked.add(SW);
             }
             BFSNode SE = new BFSNode(new Point(t.p.x + 1, t.p.y + 1), (t.step + 1));
-            if (!ListHasNode(marked, SE) )// && _map.InMap(down.p))
+            if (!ListHasNode(marked, SE) && _map.isOpen(SE.p))
             {
                 queue.add(SE);
                 marked.add(SE);
