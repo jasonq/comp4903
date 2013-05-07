@@ -10,5 +10,71 @@
 			<def:point6 u="0.015"	v="0.015"/>		
 		</def:base>
 	</def:tile>
+	
+	<def:tile name="arrow.up">
+	    <def:base>
+	    	<def:point1 u="0.315"	v="0.061"/>
+			<def:point2 u="0.3375"	v="0.01"/>
+			<def:point3 u="0.39"	v="0.01"/>
+			<def:point4 u="0.4175"	v="0.061"/>
+			<def:point5 u="0.39"	v="0.11"/>
+			<def:point6 u="0.3375"	v="0.11"/>	
+	    </def:base>
+	</def:tile>
+	
+	<def:tile name="arrow.up_right">
+	    <def:base>
+	    	<def:point1 u="0.345"	v="0.105"/>
+			<def:point2 u="0.31"	v="0.06"/>
+			<def:point3 u="0.33"	v="0.02"/>
+			<def:point4 u="0.385"	v="0.02"/>
+			<def:point5 u="0.42"	v="0.06"/>
+			<def:point6 u="0.40"	v="0.105"/>	
+	    </def:base>
+	</def:tile>
+	
+	<def:tile name="arrow.down_right">
+	    <def:base>
+	    	<def:point1 u="0.39"	v="0.105"/>
+			<def:point2 u="0.33"	v="0.105"/>
+			<def:point3 u="0.31"	v="0.06"/>
+			<def:point4 u="0.34"	v="0.02"/>
+			<def:point5 u="0.40"	v="0.02"/>
+			<def:point6 u="0.42"	v="0.06"/>	
+	    </def:base>
+	</def:tile>
+	
+	<def:tile name="arrow.down">
+	    <def:base>
+	        <def:point1 u="0.4175"	v="0.061"/>
+			<def:point2 u="0.39"	v="0.11"/>
+			<def:point3 u="0.3375"	v="0.11"/>	
+	    	<def:point4 u="0.315"	v="0.061"/>
+			<def:point5 u="0.3375"	v="0.01"/>
+			<def:point6 u="0.39"	v="0.01"/>				
+	    </def:base>
+	</def:tile>
 		
+	<def:tile name="arrow.down_left">
+	    <def:base>
+	        <def:point1 u="0.385"	v="0.02"/>
+			<def:point2 u="0.42"	v="0.06"/>
+			<def:point3 u="0.40"	v="0.105"/>	
+	    	<def:point4 u="0.345"	v="0.105"/>
+			<def:point5 u="0.31"	v="0.06"/>
+			<def:point6 u="0.33"	v="0.02"/>			
+	    </def:base>
+	</def:tile>
+	
+	<def:tile name="arrow.up_left">
+	    <def:base>	    	
+			<def:point1 u="0.34"	v="0.02"/>
+			<def:point2 u="0.40"	v="0.02"/>
+			<def:point3 u="0.42"	v="0.06"/>
+			<def:point4 u="0.39"	v="0.105"/>
+			<def:point5 u="0.33"	v="0.105"/>
+			<def:point6 u="0.31"	v="0.06"/>	
+	    </def:base>
+	</def:tile>
+	
 </def:tileset>

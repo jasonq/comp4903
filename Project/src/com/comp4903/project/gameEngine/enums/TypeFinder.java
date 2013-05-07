@@ -7,9 +7,9 @@ public class TypeFinder {
 			return TileType.Plain;
 		else if (in.equals("sandbag"))
 			return TileType.Sandbag;
-		else if (in.equals("Generator"))
+		else if (in.equals("generator"))
 			return TileType.Generator;
-		else if (in.equals("Building"))
+		else if (in.equals("building"))
 			return TileType.Building;
 		else
 			return TileType.None;
@@ -25,7 +25,7 @@ public class TypeFinder {
 			return UnitType.Specialist;
 		else if (in.equals("sniper"))
 			return UnitType.Sniper;
-		else if (in.equals("storm tropper"))
+		else if (in.equals("storm trooper"))
 			return UnitType.StormTrooper;
 		else
 			return UnitType.None;

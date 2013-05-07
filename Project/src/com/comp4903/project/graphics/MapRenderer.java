@@ -7,6 +7,7 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.graphics.tile.Hexagon;
 
 import android.content.Context;
@@ -77,7 +78,9 @@ public class MapRenderer {
 				if ((x * y) % 16 > 14)
 					tileMap[x][y].tile = 2;
 				if ((x > 18) && (x < 22))
-					tileMap[x][y].tile = 0;
+					tileMap[x][y].tile = 3;			
+				if (x == 23)
+					tileMap[x][y].state = 1 + (y%6);
 			}
 	
 	}
@@ -217,32 +220,7 @@ public class MapRenderer {
 		if (x == -1)
 			return;
 		
-		// remove this later
-		/*for (int i = 0; i < reachableTilesCount; i++)
-		{
-			if ((reachableTiles[i].x == x) && (reachableTiles[i].y == y))
-			{
-				reachableTiles[i].x = -1;
-				reachableTiles[i].y = -1;
-				return;
-			}
-		}
 		
-		for (int i = 0; i < reachableTilesCount; i++)
-		{
-			if ((reachableTiles[i].x == -1) && (reachableTiles[i].y == -1))
-			{
-				reachableTiles[i].x = x;
-				reachableTiles[i].y = y;
-				tileMap[reachableTiles[i].x][reachableTiles[i].y].size = 0;
-				return;
-			}
-		}
-		
-		reachableTiles[reachableTilesCount] = new Point();
-		reachableTiles[reachableTilesCount].x = x;
-		reachableTiles[reachableTilesCount].y = y;		
-		reachableTilesCount++;*/
 		
 		if (tileMap[x][y].state == -1)
 		{
@@ -251,6 +229,41 @@ public class MapRenderer {
 		}
 		else { tileMap[x][y].state = -1; }
 		
+	}
+	
+	public void defineMap(MapData m)
+	{
+		for (int x = 0; x < mapWidth; x++)
+			for (int y = 0; y < mapHeight; y++)
+			{
+				tileMap[x][y].tile = m._tileTypes[x][y].getCode();
+				tileMap[x][y].state = -1;
+			}
+	}
+	
+	public void update(MapData m)
+	{
+		GLRenderer.pauseRender = true;
+		while (GLRenderer.isRenderingNow);
+		
+		for (int x = 0; x < mapWidth; x++)
+			for (int y = 0; y < mapHeight; y++)
+				tileMap[x][y].state = -1;
+		
+		for (int i = 0; i < m._movementBox.size(); i++)
+		{
+			int dx = m._movementBox.get(i).getX();
+			int dy = m._movementBox.get(i).getY();
+			tileMap[dx][dy].state = 0;
+			tileMap[dx][dy].size = 0;
+		}
+		
+		for (int i = 0; i < m._units.size(); i++)
+		{
+			
+		}
+		
+		GLRenderer.pauseRender = false;
 	}
 	
 	private class Hex {

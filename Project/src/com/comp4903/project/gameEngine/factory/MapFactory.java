@@ -9,6 +9,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.comp4903.project.gameEngine.data.MapData;
+import com.comp4903.project.gameEngine.enums.TileType;
 import com.comp4903.project.gameEngine.enums.TypeFinder;
 import com.comp4903.project.parser.XMLParser;
 
@@ -27,6 +28,9 @@ public class MapFactory {
 		} catch (XmlPullParserException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Num of units: " + data._units.size());
+		System.out.println("Building: " + data._tileTypes[0][0]);
+		System.out.println("Sandbag: " + data._tileTypes[2][2]);
 		return data;
 	}
 }

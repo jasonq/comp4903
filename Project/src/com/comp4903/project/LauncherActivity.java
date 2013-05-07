@@ -34,6 +34,7 @@ public class LauncherActivity extends Activity {
 		GLSurfaceView view = new MyGLSurfaceView(this);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(view);
+		
 	}
 
 	private boolean loadContent(){
@@ -47,8 +48,8 @@ public class LauncherActivity extends Activity {
 			GameStats.InitializeArmourData(in);
 			in = getResources().getAssets().open("Units.xml");
 			GameStats.InitializeUnitData(in);
-			in = getResources().getAssets().open("MapOne.xml");
-			MapData data = MapFactory.generateMapData(in);
+			/*in = getResources().getAssets().open("MapTwo.xml");
+			MapData data = MapFactory.generateMapData(in);*/
 		} catch (IOException e) {
 			return false;
 		}

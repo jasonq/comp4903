@@ -349,19 +349,24 @@ public class XMLParser {
 	
 	private static MapData parseMap(XmlPullParser parser) throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, null, "Map");
-		int w = Integer.parseInt(parser.getAttributeValue(null, "width"));
-		int h = Integer.parseInt(parser.getAttributeValue(null, "height"));
-		MapData map = new MapData(w,h);
-		map.defaultType(TypeFinder.findTileType(parser.getAttributeValue(null, "defaultType")));
+		int columns = Integer.parseInt(parser.getAttributeValue(null, "width"));
+		int rows = Integer.parseInt(parser.getAttributeValue(null, "height"));
+
+		Log.d(TAG, "Createing map " + rows + ", " + columns);
+		MapData map = new MapData(rows,columns);
+		TileType temp = TypeFinder.findTileType(parser.getAttributeValue(null, "defaultType"));
+		map.defaultType(temp);
 		while(parser.next() != XmlPullParser.END_TAG){
 			if(parser.getEventType() != XmlPullParser.START_TAG){
 				continue;
 			}
 			String name = parser.getName();
 			if(name.equals("TileGroup")){
-				parseTileGroup(map, parser);
+				Log.d(TAG, "Tile Group" + parser.getName());
+				map = parseTileGroup(map, parser);
 			} else if (name.equals("Units")) {
-				parseUnitGroup(map, parser);
+				Log.d(TAG, "Units" + parser.getName());
+				map = parseUnitGroup(map, parser);
 			}
 			else {
 				skip(parser);
@@ -370,35 +375,39 @@ public class XMLParser {
 		return map;
 	}
 	
-	private static void parseTileGroup(MapData data, XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
+	private static MapData parseTileGroup(MapData data, XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "parse Item tag " + parser.getName());
+			Log.d(TAG, "parse Tile tag " + parser.getName());
 			if (parser.getName().equals("Tile")) {
 				int x = Integer.parseInt(parser.getAttributeValue(null, "x"));
 				int y = Integer.parseInt(parser.getAttributeValue(null, "y"));
 				TileType t = TypeFinder.findTileType(parser.nextText());
+				System.out.println("Tile: " + x + ", " + y + ", " + t);
 				data._tileTypes[x][y] = t;
 			}
 			else {
 				parser.nextText();
-			} 
+			}
 		}
+		return data;
 	}
 	
-	private static void parseUnitGroup(MapData data, XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
+	private static MapData parseUnitGroup(MapData data, XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
 		UnitGroup currGroup = TypeFinder.findUnitGroup(parser.getAttributeValue(null, "group"));
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "parse Item tag " + parser.getName());
-			if (parser.getName().equals("Tile")) {
+			Log.d(TAG, "parse Unit tag " + parser.getName());
+			if (parser.getName().equals("Unit")) {
 				int x = Integer.parseInt(parser.getAttributeValue(null, "x"));
 				int y = Integer.parseInt(parser.getAttributeValue(null, "y"));
 				UnitType t = TypeFinder.findUnitType(parser.nextText());
+				System.out.println("Unit: " + x + ", " + y + ", " + t);
 				data._units.add(new Unit(t, currGroup, new Point(x,y)));
 			}
 			else {
 				parser.nextText();
 			} 
 		}
+		return data;
 	}
 	/* *************************************************
 	 *                  Helper Parser                  *
