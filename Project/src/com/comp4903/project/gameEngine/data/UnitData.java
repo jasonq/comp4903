@@ -12,6 +12,7 @@ public class UnitData {
 	public int defence;
 	public int accuracy;
 	public Point position;
+	public boolean hasWeapon;
 	
 	public UnitData(){
 		maxHealth = -1;
@@ -23,5 +24,6 @@ public class UnitData {
 		defence = -1;
 		accuracy = -1;
 		position = new Point(-1,-1);
+		hasWeapon = false;
 	}
 }

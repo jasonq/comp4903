@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SkillList>
 	<Ability>
-	    <Name>Hyper Awareness</Name>
-	    <Description>Increase unit's evasion by %evasion% for the next %dodgenumber% attacks. Last %duration% turns.</Description>
-	    <Health>0</Health>
-	    <Energy>30</Energy>
-	    <Target>Self</Target>
-	    <Range>0</Range>
-	    <Modifier parameter="Duration">2</Modifier>
-	    <Modifier parameter="DodgeNumber">1</Modifier>
-	    <Modifier parameter="Evasion">60</Modifier>
-	</Ability>
-	<Ability>
 	    <Name>Expose Weakness</Name>
 	    <Description>Decrease target unit's armour by %armour% and deal %damage% bonus damage. Last %duration% turns.</Description>
 	    <Health>0</Health>
@@ -29,9 +18,9 @@
 	    <Energy>25</Energy>
 	    <Target>Self</Target>
 	    <Range>0</Range>
-	    <Modifier parameter="Armour">-2</Modifier>
-	    <Modifier parameter="Damage">0</Modifier>
-	    <Modifier parameter="Duration">1</Modifier>
+	    <Modifier parameter="Accuracy">-10</Modifier>
+	    <Modifier parameter="Damage">30</Modifier>
+	    <Modifier parameter="Duration">2</Modifier>
 	</Ability>
 	<Ability>
 	    <Name>Cripple</Name>

@@ -17,12 +17,12 @@ public class PathFind {
 	
 	public static void getMovePoints(Unit u){
 		List<Point> l = Algorithms.GetPointsBFS(u.position, u.combatStats.maxMovement);
-		for(Unit unit : _map._units){
-			for(Point p : l){
-				if(unit.position.equals(p))
-					l.remove(p);
-			}
-		}
+//		for(Unit unit : _map._units){
+//			for(Point p : l){
+//				if(unit.position.equals(p))
+//					l.remove(p);
+//			}
+//		}
 		_map.clearBoxes();
 		
 		_map._movementBox = l;

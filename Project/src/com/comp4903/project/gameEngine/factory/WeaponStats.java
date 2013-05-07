@@ -14,12 +14,12 @@ public class WeaponStats {
 	private Map<String, Integer> modifier;
 	
 	public WeaponStats(){
-		name = "";
+		name = "No Weapon";
 		description = "";
-		damage = -1;
-		accuracy = -1;
-		rounds = -1;
-		range = -1;
+		damage = 0;
+		accuracy = 0;
+		rounds = 0;
+		range = 0;
 		modifier = new HashMap<String, Integer>();
 	}
 
