@@ -1,5 +1,7 @@
 package com.comp4903.project.gameEngine.data;
 
+import android.graphics.Point;
+
 public class UnitData {
 	public int maxHealth;
 	public int currentHealth;

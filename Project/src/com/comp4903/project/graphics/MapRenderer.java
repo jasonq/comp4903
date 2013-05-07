@@ -2,10 +2,6 @@ package com.comp4903.project.graphics;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -321,8 +317,8 @@ public class MapRenderer {
 		for (int i = 0; i < m._units.size(); i++)
 		{
 			Actor a = new Actor();
-			a.tileX = m._units.get(i).position.getX();
-			a.tileY = m._units.get(i).position.getY();
+			a.tileX = m._units.get(i).position.x;
+			a.tileY = m._units.get(i).position.y;
 			a.type = m._units.get(i).unitType;
 			a.model = a.type.getCode();
 			a.model = a.model % 2;
@@ -342,8 +338,8 @@ public class MapRenderer {
 		
 		for (int i = 0; i < m._movementBox.size(); i++)
 		{
-			int dx = m._movementBox.get(i).getX();
-			int dy = m._movementBox.get(i).getY();
+			int dx = m._movementBox.get(i).x;
+			int dy = m._movementBox.get(i).y;
 			tileMap[dx][dy].state = 0;
 			tileMap[dx][dy].size = 0;
 		}
