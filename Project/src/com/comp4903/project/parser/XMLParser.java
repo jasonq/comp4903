@@ -264,11 +264,11 @@ public class XMLParser {
 			if (parser.getName().equals("Name")) {
 				stats.name = parser.nextText();
 			}
-			else if (parser.getName().equals("Defence")) {
-				stats.defence = Integer.parseInt(parser.nextText());
-			}
 			else if (parser.getName().equals("Health")) {
 				stats.health = Integer.parseInt(parser.nextText());
+			}
+			else if (parser.getName().equals("Energy")) {
+				stats.energy = Integer.parseInt(parser.nextText());
 			}
 			else if (parser.getName().equals("Attack")) {
 				stats.attack = Integer.parseInt(parser.nextText());

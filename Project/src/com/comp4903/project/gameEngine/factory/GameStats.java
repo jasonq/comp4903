@@ -140,6 +140,7 @@ public class GameStats {
 			System.out.println("Unit: " + stats.name);
 			System.out.println("Defence: " + stats.defence);
 			System.out.println("Health: " + stats.health);
+			System.out.println("Energy: " + stats.energy);
 			System.out.println("Rifle Use: " + stats.canUseThisWeapon(WeaponType.Rifle));
 			System.out.println("Medium Armour Use: " + stats.canUseThisArmour(ArmourType.MediumArmour));
 			System.out.println("SkillList: " + stats.getAvailableSkills().size());
