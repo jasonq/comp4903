@@ -40,6 +40,9 @@ public class Unit {
 		combatStats.attack = weaponStats.damage;
 		combatStats.defence = armourStats.defence;
 		combatStats.accuracy = weaponStats.accuracy;
+		combatStats.round = weaponStats.rounds;
+		combatStats.range = weaponStats.range;
+		combatStats.position = this.position;
 		combatStats.currentHealth = combatStats.maxHealth;
 		combatStats.currentEnergy = combatStats.maxEnergy;
 		

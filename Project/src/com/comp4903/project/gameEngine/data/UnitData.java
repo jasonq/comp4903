@@ -9,6 +9,8 @@ public class UnitData {
 	public int currentEnergy;
 	public int maxMovement;
 	public int attack;
+	public int round;
+	public int range;
 	public int defence;
 	public int accuracy;
 	public Point position;
@@ -23,6 +25,7 @@ public class UnitData {
 		attack = -1;
 		defence = -1;
 		accuracy = -1;
+		round = -1;
 		position = new Point(-1,-1);
 		hasWeapon = false;
 	}
