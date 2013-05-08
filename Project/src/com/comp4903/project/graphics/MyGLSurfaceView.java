@@ -129,9 +129,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			Point pickPoint = mRenderer.pick(e.getX(), e.getY());
 			
 			if(pickPoint.x == -1 & pickPoint.y == -1){
+				
 				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 				pickControlledUnit = false;
-				mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
+				mRenderer.setSelectedHUD((int)e.getY(), false);
+				
 				return false;
 			}
 			
@@ -148,10 +150,13 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				if(pickControlledUnit && touchMenu){
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 					decision = mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
+					
 				}else{
-					mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
-					pickControlledUnit = false;
-					mRenderer.setSelectedHUD((int)e.getY(), touchMenu);			
+					//mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
+					//pickControlledUnit = false;
+					//mRenderer.setSelectedHUD((int)e.getY(), touchMenu);	
+					//HANDLE DECISIONS
+					handleTouchEvent((int)e.getX(),(int)e.getY());
 				}
 			}			
 			
@@ -161,20 +166,36 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 	}
 	
-	public void handleTouchEvent(){
+	public void handleTouchEvent(int x , int y){
 		switch(decision){
 		case 0:
+			//moving to the selected tilte
+			//maintain the menu showing
+			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+			/*
+			 * if pick the wrong tilte 
+			 * 
+			 */
 			break;
 		case 1:
+			//Attacking enemy
+			//maintain the menu showing
+			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 			break;
 		case 2:
+			//Using items
+			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 			break;
 		case 3:
+			//Using abilities
+			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 			break;
 		case 4:
-			break;
 		case 5:
 		case -1:
+			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
+			pickControlledUnit = false;
+			mRenderer.setSelectedHUD((int)y, false);	
 			break;
 		}
 	}

@@ -10,8 +10,10 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.GUI.HUD;
+import com.comp4903.project.GUI.MainMenu;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.GameState;
 import com.comp4903.project.gameEngine.factory.MapFactory;
 import com.comp4903.project.graphics.model.MaterialLibrary;
 import com.comp4903.project.graphics.model.Model3D;
@@ -42,6 +44,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	public static Point selectedTile = new Point(0,0);
 	public static boolean isRenderingNow = false;
 	public static boolean pauseRender = false;
+	public static GameState state = GameState.Game_Screen;
 	
 	public boolean showmenu = false;
 	
@@ -68,6 +71,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 10.0f };
 	
 	public HUD headsUpDisplay;
+	public MainMenu mm;
 	public GL10 myGL;
 	public Unit character = null;
 	public boolean update= false;
@@ -114,6 +118,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		//hex = new Hexagon(gl, context);
 		headsUpDisplay = new HUD(context, GLwidth, GLheight);
 		headsUpDisplay.initialBoxTexture(gl);
+		
+		mm = new MainMenu(context,GLwidth,GLheight);
+		mm.loadMenuTexture(gl);
 		
 		MaterialLibrary.init(gl, context);
 		
@@ -179,9 +186,38 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		
 		isRenderingNow = true;
 		
+		switch (state)
+		{
+		case Main_Menu:
+			drawMainMenu(gl);
+			break;
+		case Network_Menu:
+			drawNetworkMenu(gl);
+			break;
+		case Game_Screen:
+			drawGameScreen(gl);
+			break;
+		}		
+		
+		isRenderingNow = false;
+		
+	}
+	
+	public void drawMainMenu(GL10 gl)
+	{
+		
+	}
+	
+	public void drawNetworkMenu(GL10 gl)
+	{
+		
+	}
+	
+	public void drawGameScreen(GL10 gl)
+	{
 		// clear the buffer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);		
-				
+						
 		// compute camera position based on the target view point and
 		// the distance
 		eyeX = (float) ((Math.cos(viewAngle) - Math.sin(viewAngle)) * distance);		 
@@ -189,27 +225,29 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		eyeX += viewX;
 		eyeZ += viewZ;
 		eyeY = distance*(distance / 5f);		
-		
+				
 		Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1f, 0f);
 				
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		RendererAccessor.map.render(viewMatrix, projectionMatrix, viewX, viewY, viewZ);
-		
+			
 		//draw(gl);
 		
 		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		headsUpDisplay.SwithToOrtho(gl);
 		headsUpDisplay.drawHUD(gl);
+		mm.drawMainMenu(gl);
 		headsUpDisplay.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
-		isRenderingNow = false;
 		if(update){
 			headsUpDisplay.updateStatPanel(gl, character);
 			update = false;
 		}
 		//headsUpDisplay.updateStatPanel(gl, character);
+		
+		
 	}
 	
 	// Test routine to draw the models
@@ -243,6 +281,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		headsUpDisplay = new HUD(context, width, height);
 		headsUpDisplay.initialBoxTexture(gl);
 	
+		mm = new MainMenu(context,GLwidth,GLheight);
+		mm.loadMenuTexture(gl);
+
 	} 
 	
 	// processes a scaling request ( which is interpreted as moving the camera closer
