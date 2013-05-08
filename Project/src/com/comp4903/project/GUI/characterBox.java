@@ -44,11 +44,11 @@ public class characterBox extends UI {
 			nameVal = "" + GameStats.getUnitStats(unit.unitType).name;
 			classVal = nameVal;
 			hpVal = "" + stat.currentHealth;
-			enVal = "" + 20;
+			enVal = "" + stat.currentEnergy;
 			currentHp = stat.currentHealth;
 			totalHp = stat.maxHealth;
-			currentE = 20;
-			totalE = 30;
+			currentE = stat.currentEnergy;
+			totalE = stat.maxEnergy;
 			
 		}
 	}
