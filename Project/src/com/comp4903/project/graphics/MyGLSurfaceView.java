@@ -144,7 +144,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				
 				pickControlledUnit = true;
 				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-				PathFind.getMovePoints(mapData.getUnitAt(pickPoint));
+				PathFind.DisplayUnitMoveBox(mapData.getUnitAt(pickPoint));
 				mRenderer.updateHUDPanel(pickUnit);
 				//Log.d("TAG", "Change unit ...");
 			}else{
