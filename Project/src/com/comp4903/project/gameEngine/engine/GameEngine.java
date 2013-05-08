@@ -12,12 +12,15 @@ public class GameEngine {
 	public static void Initialize(MapData data) { mapData = data; }
 	
 	public static boolean moveUnit(Unit unit, Point point){
+		System.out.println("Moving to:" + point.x + ", " + point.y);
 		Unit u = mapData.getUnitAt(unit.position);
 		if (u == null)
 			return false;
 		if (!mapData.inMap(point))
 			return false;
 		u.position = point;
+		System.out.println("Moved:" + point.x + ", " + point.y);
+		System.out.println("Unit at:" + u.position.x + ", " + u.position.y);
 		RendererAccessor.map.update(mapData);
 		return true;
 	}
