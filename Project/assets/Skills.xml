@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SkillList>
 	<Ability>
+	    <Name>Attack</Name>
+	    <Description>Attack target unit</Description>
+	    <Health>0</Health>
+	    <Energy>0</Energy>
+	    <Target>Enemy</Target>
+	    <Range>0</Range>
+	</Ability>
+	<Ability>
+	    <Name>Defence</Name>
+	    <Description>Defend and end turn</Description>
+	    <Health>0</Health>
+	    <Energy>0</Energy>
+	    <Target>Enemy</Target>
+	    <Range>0</Range>
+	</Ability>
+	<Ability>
 	    <Name>Expose Weakness</Name>
 	    <Description>Decrease target unit's armour by %armour% and deal %damage% bonus damage. Last %duration% turns.</Description>
 	    <Health>0</Health>
