@@ -3,6 +3,7 @@ package com.comp4903.project.GUI;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.R;
+import com.comp4903.project.gameEngine.data.Unit;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -39,7 +40,8 @@ public class HUD {
 		height = h;
 		glyph = new Glyphs(BitmapFactory.decodeResource(context.getResources(), R.drawable.glyphs_black));
 		action = new actionBox(context,width,height);
-		character = new characterBox(context,width,height);
+		Unit abc = null;
+		character = new characterBox(context,width,height,abc);
 	}
 	
 	public void updateHUD(boolean showAction, boolean showStat, boolean showAbility, boolean showAttack){
@@ -101,6 +103,12 @@ public class HUD {
 		gl.glMatrixMode( gl.GL_MODELVIEW ); // Select Modelview
 		//gl.glLoadIdentity();
 		gl.glPopMatrix();
+	}
+	
+	public void updateStatPanel(GL10 gl, Unit abc){
+		//character = new characterBox(context,width,height,abc);
+		character.setUnit(abc);
+		character.loadUITexture(gl, context.getResources(), R.drawable.statpanel);
 	}
 
 

@@ -25,7 +25,7 @@ import android.opengl.Matrix;
 public class MapRenderer {
 
 	// device and resource access
-	private GL10 gl;
+	public GL10 gl;
 	private Context context;
 	
 	// map statistics

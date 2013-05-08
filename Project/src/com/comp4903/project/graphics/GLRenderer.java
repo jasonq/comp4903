@@ -3,12 +3,15 @@ package com.comp4903.project.graphics;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.GUI.HUD;
 import com.comp4903.project.gameEngine.data.MapData;
+import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.factory.MapFactory;
 import com.comp4903.project.graphics.model.MaterialLibrary;
 import com.comp4903.project.graphics.model.Model3D;
@@ -65,7 +68,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 10.0f };
 	
 	public HUD headsUpDisplay;
-		
+	public GL10 myGL;
+	public Unit character = null;
+	public boolean update= false;
 	private MapData mapData;
 	
 	/*	GLRENDERER
@@ -78,7 +83,6 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		context = c;
 		selectedTile.x = 0;
 		selectedTile.y = 0;	
-		
 		mapData = md;
 		
 	}
@@ -92,6 +96,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	 *
 	 */
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		
 		
 		gl.glDisable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
@@ -200,6 +205,11 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
 		isRenderingNow = false;
+		if(update){
+			headsUpDisplay.updateStatPanel(gl, character);
+			update = false;
+		}
+		//headsUpDisplay.updateStatPanel(gl, character);
 	}
 	
 	// Test routine to draw the models
@@ -346,5 +356,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		}
 	}
 	
-	
+	public void updateHUDPanel(Unit abc){
+		character = abc;
+		update = true;
+		
+	}
 }

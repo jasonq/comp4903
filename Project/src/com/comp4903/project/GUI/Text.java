@@ -24,8 +24,7 @@ public class Text {
 		Bitmap bmp = glyph.getString(text);
 		Bitmap newbmp = Bitmap.createScaledBitmap(bmp, 256, 128, false);
 		boxtexture.loadGLTexture(gl, context, newbmp);
-		newbmp.recycle();
-		bmp.recycle();
+		
 	}
 	public void drawText(GL10 gl){
 		boxtexture.draw(gl);

@@ -1,5 +1,7 @@
 package com.comp4903.project.graphics;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import android.content.Context;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
@@ -12,6 +14,7 @@ import android.view.GestureDetector;
 
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
+import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.graphics.GLRenderer;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -44,13 +47,14 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		//setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 		
 		mapData = md;
+		//gl = RendererAccessor.map.gl;
 	}
 
 
 	private float mPreviousX;
 	private float mPreviousY;
 	private int sens = 5;
-
+	private GL10 gl;
 	public boolean onTouchEvent(MotionEvent e) {
 		// MotionEvent reports input details from the touch screen
 		// and other input controls. In this case, you are only
@@ -121,7 +125,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		public boolean onSingleTapConfirmed (MotionEvent e){
 			Log.d("TAG", "Single Tap Detected ...");
 			boolean touchMenu = mRenderer.checkHUD((int)e.getX(), (int)e.getY());
-			
+			gl = RendererAccessor.map.gl;
 			Point pickPoint = mRenderer.pick(e.getX(), e.getY());
 			
 			if(pickPoint.x == -1 & pickPoint.y == -1){
@@ -132,12 +136,14 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}
 			
 			mapData._tileSelected = pickPoint;
-			
-			if(mapData.getUnitAt(pickPoint) != null){
+			Unit pickUnit = mapData.getUnitAt(pickPoint);
+			if(pickUnit != null){
 				
 				pickControlledUnit = true;
 				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-				//PathFind.getMovePoints(mapData.getUnitAt(pickPoint));
+				PathFind.getMovePoints(mapData.getUnitAt(pickPoint));
+				mRenderer.updateHUDPanel(pickUnit);
+				//Log.d("TAG", "Change unit ...");
 			}else{
 				if(pickControlledUnit && touchMenu){
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
