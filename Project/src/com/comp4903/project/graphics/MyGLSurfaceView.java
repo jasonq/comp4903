@@ -15,11 +15,8 @@ import android.view.GestureDetector;
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
-<<<<<<< HEAD
 import com.comp4903.project.gameEngine.enums.GameState;
-=======
 import com.comp4903.project.gameEngine.engine.GameEngine;
->>>>>>> 8b335e21bcb18ad11cbdb88c067bd9df78cd7a72
 import com.comp4903.project.graphics.GLRenderer;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -174,16 +171,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					//pickControlledUnit = false;
 					//mRenderer.setSelectedHUD((int)e.getY(), touchMenu);	
 					//HANDLE DECISIONS
-<<<<<<< HEAD
-					handleTouchEvent(x,y);
-=======
 					//handleTouchEvent((int)e.getX(),(int)e.getY());
-
 					
 					Unit u = mapData._units.get(0);
 					if (u != null)
 						GameEngine.moveUnit(u, pickPoint);
->>>>>>> 8b335e21bcb18ad11cbdb88c067bd9df78cd7a72
 				}
 			}			
 
