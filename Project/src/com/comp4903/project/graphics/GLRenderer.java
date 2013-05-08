@@ -10,6 +10,7 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.GUI.HUD;
+import com.comp4903.project.GUI.MainMenu;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.factory.MapFactory;
@@ -68,6 +69,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 10.0f };
 	
 	public HUD headsUpDisplay;
+	public MainMenu mm;
 	public GL10 myGL;
 	public Unit character = null;
 	public boolean update= false;
@@ -114,6 +116,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		//hex = new Hexagon(gl, context);
 		headsUpDisplay = new HUD(context, GLwidth, GLheight);
 		headsUpDisplay.initialBoxTexture(gl);
+		
+		mm = new MainMenu(context,GLwidth,GLheight);
+		mm.loadMenuTexture(gl);
 		
 		MaterialLibrary.init(gl, context);
 		
@@ -201,6 +206,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		headsUpDisplay.SwithToOrtho(gl);
 		headsUpDisplay.drawHUD(gl);
+		mm.drawMainMenu(gl);
 		headsUpDisplay.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
@@ -210,6 +216,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			update = false;
 		}
 		//headsUpDisplay.updateStatPanel(gl, character);
+		
+		
 	}
 	
 	// Test routine to draw the models
@@ -243,6 +251,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		headsUpDisplay = new HUD(context, width, height);
 		headsUpDisplay.initialBoxTexture(gl);
 	
+		mm = new MainMenu(context,GLwidth,GLheight);
+		mm.loadMenuTexture(gl);
+
 	} 
 	
 	// processes a scaling request ( which is interpreted as moving the camera closer

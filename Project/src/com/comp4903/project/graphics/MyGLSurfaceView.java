@@ -132,7 +132,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				
 				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 				pickControlledUnit = false;
-				mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
+				mRenderer.setSelectedHUD((int)e.getY(), false);
+				
 				return false;
 			}
 			
