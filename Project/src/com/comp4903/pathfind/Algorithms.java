@@ -108,7 +108,7 @@ public class Algorithms {
 	/**
      * Determines the best movement path based on the a* from start to end points.
      */
-    private static List<Point> GetPathAStar(Point start, Point end)
+    public static List<Point> GetPathAStar(Point start, Point end)
     {
         List<AStarNode> openList = new ArrayList<AStarNode>();
         List<AStarNode> closedList = new ArrayList<AStarNode>();
@@ -120,7 +120,7 @@ public class Algorithms {
         while (openList.size() > 0)
         {
             cur = GetLowestFScore(openList);
-            if (cur.getP().equals(end))
+            if (cur.p.equals(end))
             {
                 endFound = true;
                 break;
@@ -129,19 +129,23 @@ public class Algorithms {
                 return new ArrayList<Point>();
             openList.remove(cur);
             closedList.add(cur);
-            List<AStarNode> neighbor = connections(cur, end);
+            List<AStarNode> neighbor; 
+            if(cur.p.x % 2 == 0)
+            	neighbor = evenConnections(cur, end);
+            else
+            	neighbor = oddConnections(cur, end);
             for (AStarNode con : neighbor)
             {
             	AStarNode check = ListHasAStarNode(closedList, con);
-                //if (!_map.IsOpen(con.p) || check != null) //need map function
-                 //   continue;
-                if (check == null)
+                if (!_map.isOpen(con.p) || check != null)
+                    continue;
+                else if (check == null)
                     openList.add(con);
-                else if (check != null && con.getG() < check.getG())
+                else if (check != null && con.g < check.g)
                 {
-                    check.setParent(cur);
-                    check.setG(con.getG());
-                    check.setF(con.getF());
+                    check.parent = cur;
+                    check.g = con.g;
+                    check.f = con.f;
                 }
 
             }
@@ -149,10 +153,10 @@ public class Algorithms {
         if (endFound)
         {
             AStarNode endNode = cur;
-            while (cur.getParent() != null)
+            while (cur.parent != null)
             {
-                result.add(cur.getP());
-                cur = cur.getParent();
+                result.add(cur.p);
+                cur = cur.parent;
             }
         }
         return result;
@@ -166,7 +170,7 @@ public class Algorithms {
     	
         for (AStarNode ln : l)
         {
-            if (ln.getP().equals(cur.getP()))
+            if (ln.p.equals(cur.p))
             {
                 return ln;
             }
@@ -183,9 +187,9 @@ public class Algorithms {
         AStarNode lowest = null;
         for (AStarNode ln : l)
         {
-            if (ln.getF() < lowestF)
+            if (ln.f < lowestF)
             {
-                lowestF = ln.getG();
+                lowestF = ln.g;
                 lowest = ln;
             }
         }
@@ -193,34 +197,67 @@ public class Algorithms {
     }
 
     /**
-     * Gets the nodes to the left, right, up and down of the current node
+     * Gets the adjacent node based on x odd value
      */
-    private static List<AStarNode> connections(AStarNode cur, Point end)
+    private static List<AStarNode> oddConnections(AStarNode cur, Point end)
     {
         List<AStarNode> connect = new ArrayList<AStarNode>();
-        Point cp = cur.getP();
-        Point westP = new Point(cp.x - 1, cp.y);
-        AStarNode west = new AStarNode(westP, cur, cur.getG() + 1, cur.getG() + heuristic(westP, end));
-        connect.add(west);
+        Point cp = cur.p;
+        Point northP = new Point(cp.x, cp.y - 1);
+        AStarNode north = new AStarNode(northP, cur, cur.g + 1, cur.g + heuristic(northP, end));
+        connect.add(north);
 
-        Point eastP = new Point(cp.x + 1, cp.y);
-        AStarNode east = new AStarNode(eastP, cur, cur.getG() + 1, cur.getG() + heuristic(eastP, end));
-        connect.add(east);
+        Point southP = new Point(cp.x, cp.y + 1);
+        AStarNode south = new AStarNode(southP, cur, cur.g + 1, cur.g + heuristic(southP, end));
+        connect.add(south);
 
-        Point NWP = new Point(cp.x, cp.y - 1);
-        AStarNode NW = new AStarNode(NWP, cur, cur.getG() + 1, cur.getG() + heuristic(NWP, end));
+        Point NWP = new Point(cp.x - 1, cp.y);
+        AStarNode NW = new AStarNode(NWP, cur, cur.g + 1, cur.g + heuristic(NWP, end));
         connect.add(NW);
 
-        Point NEP = new Point(cp.x + 1, cp.y - 1);
-        AStarNode NE = new AStarNode(NEP, cur, cur.getG() + 1, cur.getG() + heuristic(NEP, end));
+        Point NEP = new Point(cp.x + 1, cp.y);
+        AStarNode NE = new AStarNode(NEP, cur, cur.g + 1, cur.g + heuristic(NEP, end));
         connect.add(NE);
         
-        Point SWP = new Point(cp.x, cp.y + 1);
-        AStarNode SW = new AStarNode(SWP, cur, cur.getG() + 1, cur.getG() + heuristic(SWP, end));
+        Point SWP = new Point(cp.x - 1, cp.y + 1);
+        AStarNode SW = new AStarNode(SWP, cur, cur.g + 1, cur.g + heuristic(SWP, end));
         connect.add(SW);
         
         Point SEP = new Point(cp.x + 1, cp.y + 1);
-        AStarNode SE = new AStarNode(SEP, cur, cur.getG() + 1, cur.getG() + heuristic(SEP, end));
+        AStarNode SE = new AStarNode(SEP, cur, cur.g + 1, cur.g + heuristic(SEP, end));
+        connect.add(SE);
+        return connect;
+    }
+    
+    /**
+     * Gets the adjacent node based on x even value
+     */
+    private static List<AStarNode> evenConnections(AStarNode cur, Point end)
+    {
+        List<AStarNode> connect = new ArrayList<AStarNode>();
+        Point cp = cur.p;
+        Point northP = new Point(cp.x, cp.y - 1);
+        AStarNode north = new AStarNode(northP, cur, cur.g + 1, cur.g + heuristic(northP, end));
+        connect.add(north);
+
+        Point southP = new Point(cp.x, cp.y + 1);
+        AStarNode south = new AStarNode(southP, cur, cur.g + 1, cur.g + heuristic(southP, end));
+        connect.add(south);
+
+        Point NWP = new Point(cp.x - 1, cp.y - 1);
+        AStarNode NW = new AStarNode(NWP, cur, cur.g + 1, cur.g + heuristic(NWP, end));
+        connect.add(NW);
+
+        Point NEP = new Point(cp.x + 1, cp.y - 1);
+        AStarNode NE = new AStarNode(NEP, cur, cur.g + 1, cur.g + heuristic(NEP, end));
+        connect.add(NE);
+        
+        Point SWP = new Point(cp.x - 1, cp.y);
+        AStarNode SW = new AStarNode(SWP, cur, cur.g + 1, cur.g + heuristic(SWP, end));
+        connect.add(SW);
+        
+        Point SEP = new Point(cp.x + 1, cp.y);
+        AStarNode SE = new AStarNode(SEP, cur, cur.g + 1, cur.g + heuristic(SEP, end));
         connect.add(SE);
         return connect;
     }
