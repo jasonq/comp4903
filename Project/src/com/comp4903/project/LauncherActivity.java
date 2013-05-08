@@ -16,6 +16,7 @@ import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.factory.*;
+import com.comp4903.project.network.Networking;
 
 import com.comp4903.pathfind.PathFind;
 /* LAUNCHERACTIVITY
@@ -51,6 +52,7 @@ public class LauncherActivity extends Activity {
 		GLSurfaceView view = new MyGLSurfaceView(this, mapData);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(view);
+		NetworkTest();
 	}
 
 	private boolean loadContent(){
@@ -68,5 +70,12 @@ public class LauncherActivity extends Activity {
 			return false;
 		}
 		return true;
+	}
+	
+	public void NetworkTest()
+	{
+		//Networking net = new Networking();
+		//int n;
+		//n=0;
 	}
 }
