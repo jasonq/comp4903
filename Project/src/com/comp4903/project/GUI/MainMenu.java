@@ -58,6 +58,7 @@ public class MainMenu {
 			
 			Bitmap temp2 = Bitmap.createBitmap(button2,
 					0 , i * height, width, height);
+			pressed_menu_Item[i].loadGLTexture(gl, context, temp2);
 			temp2.recycle();
 			
 		}

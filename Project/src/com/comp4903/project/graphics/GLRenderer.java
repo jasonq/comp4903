@@ -44,7 +44,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	public static Point selectedTile = new Point(0,0);
 	public static boolean isRenderingNow = false;
 	public static boolean pauseRender = false;
-	public static GameState state = GameState.Game_Screen;
+	public static GameState state = GameState.Main_Menu;
 	
 	public boolean showmenu = false;
 	
@@ -205,7 +205,13 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 	public void drawMainMenu(GL10 gl)
 	{
-		
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);			
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+		headsUpDisplay.SwithToOrtho(gl);
+		//headsUpDisplay.drawHUD(gl);
+		mm.drawMainMenu(gl);
+		headsUpDisplay.SwitchToPerspective(gl);
+		gl.glEnable(GL10.GL_DEPTH_TEST);
 	}
 	
 	public void drawNetworkMenu(GL10 gl)
@@ -233,11 +239,10 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			
 		//draw(gl);
 		
-		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
-		gl.glDisable(GL10.GL_DEPTH_TEST);
+		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);		
 		headsUpDisplay.SwithToOrtho(gl);
 		headsUpDisplay.drawHUD(gl);
-		mm.drawMainMenu(gl);
+		//mm.drawMainMenu(gl);
 		headsUpDisplay.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
@@ -397,9 +402,22 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		}
 	}
 	
+	
+	public int setSelectMainMenu(int x, int y){
+		
+		if(!mm.checkPressingMenu(x, y)){
+			mm.selected = -1;
+			return -1;
+		}else{
+			int result = mm.checkListItem(y);
+			mm.selected = result;
+			return result;
+		}
+		
+	}
+	
 	public void updateHUDPanel(Unit abc){
 		character = abc;
 		update = true;
-		
 	}
 }
