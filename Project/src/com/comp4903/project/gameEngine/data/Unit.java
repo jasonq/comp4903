@@ -1,4 +1,6 @@
 package com.comp4903.project.gameEngine.data;
+import java.util.List;
+
 import android.graphics.Point;
 
 import com.comp4903.project.gameEngine.enums.*;
@@ -15,6 +17,7 @@ public class Unit {
 	public Point position;
 	public WeaponType weapon;
 	public ArmourType armour;
+	private List<Status> status;
 	public UnitData combatStats;
 	public boolean active;
 	
@@ -42,10 +45,8 @@ public class Unit {
 		combatStats.accuracy = weaponStats.accuracy;
 		combatStats.round = weaponStats.rounds;
 		combatStats.range = weaponStats.range;
-		combatStats.position = this.position;
 		combatStats.currentHealth = combatStats.maxHealth;
 		combatStats.currentEnergy = combatStats.maxEnergy;
-		
 	}
 	
 	public void UpdateCombatStats(){
