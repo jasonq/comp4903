@@ -13,7 +13,6 @@ public class UnitData {
 	public int range;
 	public int defence;
 	public int accuracy;
-	public Point position;
 	public boolean hasWeapon;
 	
 	public UnitData(){
@@ -26,7 +25,6 @@ public class UnitData {
 		defence = -1;
 		accuracy = -1;
 		round = -1;
-		position = new Point(-1,-1);
 		hasWeapon = false;
 	}
 }
