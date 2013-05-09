@@ -162,6 +162,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			Unit pickUnit = mapData.getUnitAt(pickPoint);
 			if(pickUnit != null){
 				//it is picking unittt
+				
 				pickControlledUnit = true;
 				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 				PathFind.DisplayUnitMoveBox(mapData.getUnitAt(pickPoint));
@@ -169,15 +170,14 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				currentUnit = pickUnit;
 				decision = -2;
 				finishMoving = false;
+				
 				//Log.d("TAG", "Change unit ...");
 			}else{
 				if(pickControlledUnit && touchMenu && finishMoving){
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 					//PathFind.DisplayUnitMoveBox(currentUnit);
 					decision = mRenderer.setSelectedHUD(y, touchMenu);
-					if(decision == 3 || decision == 4 || decision == -1){
-							ResetGUI();
-					}
+					handleTouchEvent(x,y,pickPoint);
 				}else if (pickControlledUnit && !touchMenu && !finishMoving){
 					handleTouchEvent(x,y,pickPoint);
 				}else{
@@ -233,6 +233,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			break;
 		case 0:
 			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+			PathFind.DisplayUnitAttackBox(currentUnit);
 			break;
 		case 1:
 			//Attacking enemy
