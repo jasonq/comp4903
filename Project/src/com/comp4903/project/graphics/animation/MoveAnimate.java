@@ -23,6 +23,7 @@ public class MoveAnimate extends AnimationProcessor {
 	
 	private float xStep, yStep, zStep;
 	private float x, y, z;
+	private Point startPosition = new Point();
 	
 	/*	INIT - initializes and starts move
 	 * 		u		Unit to move
@@ -32,12 +33,16 @@ public class MoveAnimate extends AnimationProcessor {
 	public void init(Unit u, List<Point> s)
 	{
 		actorID = u.uID;
-		step = 0;
-		nextstep = step + 1;
+		step = s.size();
+		nextstep = step - 1;
 		
+		startPosition = u.position;
+		
+		if (step <= 0)
+		   ended = true;
 		steps = s;
 				
-		if (nextstep < steps.size())
+		if (nextstep >= 0)
 			startNewMove();			
 		else
 			ended = true;		
@@ -51,13 +56,21 @@ public class MoveAnimate extends AnimationProcessor {
 	private void startNewMove()
 	{
 		int d = 0;
-		d = Hexagon.getDirection(steps.get(step), steps.get(nextstep));
+		if (step == steps.size())
+			d = Hexagon.getDirection(startPosition, steps.get(nextstep));
+		else
+			d = Hexagon.getDirection(steps.get(step), steps.get(nextstep));
 		
 		float a = angleFromDirection(d);
 		
 		RendererAccessor.map.setActorRotation(actorID, a);
 		
-		Point p = steps.get(step);
+		Point p;
+		
+		if (step == steps.size())
+			p = startPosition;
+		else
+			p = steps.get(step);
 		
 		x = (float)p.x * 1.5f;
 		z = (float)p.y * 0.8660254038f * 2f + (p.x % 2) * 0.8660254038f;
@@ -97,10 +110,10 @@ public class MoveAnimate extends AnimationProcessor {
 			stepPosition += 0.025f;
 			RendererAccessor.map.setActorPosition(actorID, x, y, z);
 		} else {
-			step++;
-			nextstep = step + 1;
+			step--;
+			nextstep = step - 1;
 			
-			if (nextstep < steps.size())
+			if (nextstep >= 0)
 				startNewMove();			
 			else
 				ended = true;	

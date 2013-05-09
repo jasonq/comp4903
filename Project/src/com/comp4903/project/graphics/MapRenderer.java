@@ -388,21 +388,30 @@ public class MapRenderer {
 			tileMap[dx][dy].size = 0;
 		}
 
-		actors.clear();
+		//actors.clear();
 		for (int i = 0; i < m._units.size(); i++)
 		{
-			Actor a = new Actor();
-			a.uID = m._units.get(i).uID;
-			a.tileX = m._units.get(i).position.x;
-			a.tileY = m._units.get(i).position.y;
-			a.type = m._units.get(i).unitType;
-			a.model = a.type.getCode();
+			if (actors.containsKey(m._units.get(i).uID))
+			{
+				Actor a = actors.get(m._units.get(i).uID);
+				a.tileX = m._units.get(i).position.x;
+				a.tileY = m._units.get(i).position.y;
+			} 
+			else
+			{
+				Actor a = new Actor();
+				a.uID = m._units.get(i).uID;
+				a.tileX = m._units.get(i).position.x;
+				a.tileY = m._units.get(i).position.y;
+				a.type = m._units.get(i).unitType;
+				a.model = a.type.getCode();
 			
-			a.model = a.model % 2;
-			a.x = (float)a.tileX * 1.5f;
-			a.z = (float)a.tileY * 0.8660254038f * 2f + (a.tileX % 2) * 0.8660254038f;
-			a.y = 0;
-			actors.put(a.uID, a);
+				a.model = a.model % 2;
+				a.x = (float)a.tileX * 1.5f;
+				a.z = (float)a.tileY * 0.8660254038f * 2f + (a.tileX % 2) * 0.8660254038f;
+				a.y = 0;
+				actors.put(a.uID, a);
+			}
 		}
 		
 		GLRenderer.pauseRender = false;
