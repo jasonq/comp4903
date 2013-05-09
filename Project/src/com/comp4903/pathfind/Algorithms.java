@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.comp4903.project.gameEngine.data.MapData;
+import com.comp4903.project.gameEngine.data.Unit;
 
 import android.graphics.Point;
 
@@ -42,6 +43,42 @@ public class Algorithms {
             	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
             		queue.add(node);
             		marked.add(node);
+            	}
+            }
+        }
+        return steps;
+    }
+    /**
+     * Gets all points surrounding the point within a radius (maxsteps)
+     */
+    public static List<Point> GetUnitPointsBFS(Unit u)
+    {
+    	int maxSteps = u.combatStats.maxMovement;
+        List<BFSNode> queue = new ArrayList<BFSNode>();
+        List<BFSNode> marked = new ArrayList<BFSNode>();
+        List<Point> steps = new ArrayList<Point>();
+        queue.add(new BFSNode(u.position, 0));
+        marked.add(queue.get(0));
+        while (queue.size() > 0)
+        {
+            BFSNode t = queue.get(0);
+            queue.remove(0);
+            if (t.step > maxSteps)
+                continue;
+            steps.add(t.p);
+            List<BFSNode> adjNodes;
+            if(t.p.x % 2 == 0)
+            	adjNodes = evenNodes(t);
+            else
+            	adjNodes = oddNodes(t);
+            
+            for(BFSNode node : adjNodes){
+            	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
+            		Unit un = _map.getUnitAt(node.p);
+            		if(un != null && un.unitGroup == u.unitGroup){
+            			queue.add(node);
+            			marked.add(node);
+            		}
             	}
             }
         }

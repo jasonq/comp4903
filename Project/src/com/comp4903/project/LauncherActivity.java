@@ -74,8 +74,8 @@ public class LauncherActivity extends Activity {
 	
 	public void NetworkTest()
 	{
-		//Networking net = new Networking();
-		//int n;
-		//n=0;
+		Networking net = new Networking();
+		int n;
+		n=0;
 	}
 }

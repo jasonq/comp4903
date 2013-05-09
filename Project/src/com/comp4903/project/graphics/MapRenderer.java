@@ -241,9 +241,13 @@ public class MapRenderer {
 		while (i.hasNext())
 		{
 			a = i.next().getValue();
-			float x = (float)a.tileX * 1.5f;
-			float z = (float)a.tileY * 0.8660254038f * 2f + (a.tileX % 2) * 0.8660254038f;
-			float y = 0;
+			//float x = (float)a.tileX * 1.5f;
+			//float z = (float)a.tileY * 0.8660254038f * 2f + (a.tileX % 2) * 0.8660254038f;
+			//float y = 0;
+			
+			float x = a.x;
+			float y = a.y;
+			float z = a.z;
 			
 			// cheat for now; raise Marvin so his feet are on the ground
 			if (a.model == 0)
@@ -322,6 +326,10 @@ public class MapRenderer {
 			a.type = m._units.get(i).unitType;
 			a.model = a.type.getCode();
 			a.model = a.model % 2;
+			a.uID = m._units.get(i).uID;
+			a.x = (float)a.tileX * 1.5f;
+			a.z = (float)a.tileY * 0.8660254038f * 2f + (a.tileX % 2) * 0.8660254038f;
+			a.y = 0;
 				
 			actors.put(i, a);
 		}
@@ -369,7 +377,9 @@ public class MapRenderer {
 	private class Actor {
 		int model;
 		UnitType type;
+		int uID;
 		int tileX;
 		int tileY;
+		float x, y, z;
 	}
 }

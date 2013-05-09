@@ -16,6 +16,7 @@ import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 
+
 import com.comp4903.project.gameEngine.enums.GameState;
 
 import com.comp4903.project.gameEngine.engine.GameEngine;
@@ -179,12 +180,19 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					//pickControlledUnit = false;
 					//mRenderer.setSelectedHUD((int)e.getY(), touchMenu);	
 					//HANDLE DECISIONS
+
 					//handleTouchEvent(x,y);
 					handleTouchEvent(x,y,pickPoint);
 
 					//Unit u = mapData._units.get(0);
 					//if (currentUnit != null)
 					//GameEngine.moveUnit(currentUnit, pickPoint);
+
+					//handleTouchEvent((int)e.getX(),(int)e.getY());
+					
+					//Unit u = mapData._units.get(0);
+					//if (u != null)
+						//GameEngine.moveUnit(u, pickPoint);
 
 				}
 			}			
