@@ -114,7 +114,14 @@ public class MaterialLibrary {
 		
 		String path = "textures/";
 		
-		path += textures.get(i).filename;
+		String filename = textures.get(i).filename;
+		
+		if (filename.startsWith("assets//"))
+		{
+			filename = "models/" + filename.substring(8);
+		}
+		
+		path += filename; //textures.get(i).filename;
 		
 		Bitmap bitmap = null;	
 		try {

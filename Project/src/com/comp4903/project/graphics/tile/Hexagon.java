@@ -123,8 +123,16 @@ public class Hexagon {
 			
 		if (cpick)
 			computePick(transformMatrix, projectionMatrix);
-	
 		
+	}
+	
+	public void drawModel(GL10 gl, float[] viewMatrix, float dx, float dy, float dz, int set, int typ)
+	{
+		if (tileDefinitions[set].tiles[typ].model != null)
+		{
+			tileDefinitions[set].tiles[typ].model.SetPosition(dx, dy - 1, dz);
+			tileDefinitions[set].tiles[typ].model.display(gl, viewMatrix);
+		}
 	}
 	
 	private void computePick(float[] transformMatrix, float[]projectionMatrix)
@@ -200,6 +208,39 @@ public class Hexagon {
 		return r;
 	}
 	
-	 
+	public static int getDirection(Point p1, Point p2)
+	{
+		int d = -1;
+		
+		if ((p1.x % 2) == 0)
+		{
+			if ((p2.x == p1.x - 1) && (p2.y == p1.y - 1))
+					d = 0;
+			if ((p2.x == p1.x) && (p2.y == p1.y - 1))
+					d = 1;
+			if ((p2.x == p1.x + 1) && (p2.y == p1.y - 1))
+					d = 2;
+			if ((p2.x == p1.x + 1) && (p2.y == p1.y))
+					d = 3;
+			if ((p2.x == p1.x) && (p2.y == p1.y + 1))
+					d = 4;
+			if ((p2.x == p1.x - 1) && (p2.y == p1.y))
+					d = 5;
+		} else {
+			if ((p2.x == p1.x - 1) && (p2.y == p1.y))
+					d = 0;
+			if ((p2.x == p1.x) && (p2.y == p1.y - 1))
+					d = 1;
+			if ((p2.x == p1.x + 1) && (p2.y == p1.y))
+					d = 2;
+			if ((p2.x == p1.x + 1) && (p2.y == p1.y + 1))
+					d = 3;
+			if ((p2.x == p1.x) && (p2.y == p1.y + 1))
+					d = 4;
+			if ((p2.x == p1.x - 1) && (p2.y == p1.y + 1))
+					d = 5;
+		}
+		return d;
+	}	 
 		
 }

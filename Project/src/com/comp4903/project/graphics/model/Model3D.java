@@ -330,7 +330,12 @@ public class Model3D {
 					gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, m.Diffuse, 0);
 					gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, m.Specular, 0);
 					gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, colorBlack, 0);
-					
+					if (m.texture != -1)
+					{
+						gl.glBindTexture(GL10.GL_TEXTURE_2D, MaterialLibrary.texturenames[m.texture]);
+					} else {
+						gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
+					}
 				}
 				//gl.glDrawArrays(GL10.GL_TRIANGLES, 0, components[c].numVertices / 3);
 				gl.glDrawElements(GL10.GL_TRIANGLES, components[c].numTriangles[i] * 3,

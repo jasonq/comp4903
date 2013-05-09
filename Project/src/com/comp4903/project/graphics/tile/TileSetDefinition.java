@@ -7,6 +7,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.comp4903.project.graphics.model.MaterialLibrary;
+import com.comp4903.project.graphics.model.Model3D;
+import com.comp4903.project.graphics.model.ModelLoader;
 import com.comp4903.project.graphics.model.Texture;
 
 import android.content.Context;
@@ -26,11 +28,13 @@ public class TileSetDefinition {
 	
 	String ns = "";
 	
+	Context context;
+	
 	public TileSetDefinition(String f, Context c)
 	{
 		fileName = f;
 		AssetManager am = c.getAssets();
-		
+		context = c;
 		numberOfTiles = 0;
 		
 		try {
@@ -95,6 +99,7 @@ public class TileSetDefinition {
 	public void processTileTag(XmlPullParser parser) throws XmlPullParserException, IOException
 	{
 		tiles[numberOfTiles] = new Tile(parser.getAttributeValue(ns, "name"));
+		tiles[numberOfTiles].model = null;
 		while (parser.next() != XmlPullParser.END_TAG)
 		{
 			if (parser.getEventType() != XmlPullParser.START_TAG)
@@ -103,7 +108,10 @@ public class TileSetDefinition {
 			String name = parser.getName();
 			
 			if (name.equals("def:base"))
-				processBaseTag(parser);			
+				processBaseTag(parser);		
+			
+			if (name.equals("def:model"))
+				processModelTag(parser);
 			
 		}
 		numberOfTiles++;
@@ -158,6 +166,25 @@ public class TileSetDefinition {
 				readUV(parser, 5);
 			}
 		}
+	}
+	
+	public void processModelTag(XmlPullParser parser) throws XmlPullParserException, IOException
+	{
+		tiles[numberOfTiles].model = new Model3D();
+		
+		AssetManager am = context.getAssets();
+		
+		//while (parser.next() != XmlPullParser.END_TAG)
+		//{
+			//if (parser.getEventType() != XmlPullParser.START_TAG)
+			//	continue;
+			
+			String filename = "models/" + parser.nextText().replaceAll("\\s", "");
+			
+			InputStream buf = null;
+			buf = am.open(filename);			
+			ModelLoader.load(buf, tiles[numberOfTiles].model);
+		//}
 	}
 	
 	public void readUV(XmlPullParser parser, int p) throws XmlPullParserException, IOException

@@ -1,5 +1,8 @@
 package com.comp4903.project.graphics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
@@ -141,9 +144,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			Log.d("TAG", "Single Tap Detected ...");
 			boolean touchMenu = mRenderer.checkHUD(x, y);
 			gl = RendererAccessor.map.gl;
+			
 			Point pickPoint = mRenderer.pick(x, y);
 
-			if(pickPoint.x == -1 & pickPoint.y == -1 && !touchMenu){
+			if(pickPoint.x == -1 && pickPoint.y == -1 && !touchMenu){
 
 				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 				pickControlledUnit = false;
@@ -181,8 +185,19 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					handleTouchEvent(x,y,pickPoint);
 
 					//Unit u = mapData._units.get(0);
-					//if (currentUnit != null)
-					//GameEngine.moveUnit(currentUnit, pickPoint);
+					/*if (currentUnit != null)
+					{
+						List<Point> q = new ArrayList<Point>();
+						Point t = new Point(0,0);
+						q.add(t);
+						Point o = new Point(5,5);
+						q.add(o);
+						//RendererAccessor.moveAnimation(currentUnit,
+						//		PathFind.UnitToPoint(currentUnit, pickPoint));
+						RendererAccessor.moveAnimation(currentUnit,q);
+								
+					    GameEngine.moveUnit(currentUnit, pickPoint);
+					}*/
 
 					//handleTouchEvent((int)e.getX(),(int)e.getY());
 					
