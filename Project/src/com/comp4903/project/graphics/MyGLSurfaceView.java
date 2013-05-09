@@ -224,6 +224,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					RendererAccessor.update(mapData);
 					finishMoving = true;
 				}
+				else{
+					ResetGUI();
+				}
 				//ResetGUI();
 				
 			}
