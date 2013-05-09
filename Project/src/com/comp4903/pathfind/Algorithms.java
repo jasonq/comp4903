@@ -75,7 +75,10 @@ public class Algorithms {
             for(BFSNode node : adjNodes){
             	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
             		Unit un = _map.getUnitAt(node.p);
-            		if(un != null && un.unitGroup == u.unitGroup){
+            		if(un == null){
+            			queue.add(node);
+            			marked.add(node);
+            		} else if (un.unitGroup == u.unitGroup){
             			queue.add(node);
             			marked.add(node);
             		}
