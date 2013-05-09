@@ -351,10 +351,18 @@ public class MapRenderer {
 			tileMap[dx][dy].state = 0;
 			tileMap[dx][dy].size = 0;
 		}
-		
+
+		actors.clear();
 		for (int i = 0; i < m._units.size(); i++)
 		{
-			
+			Actor a = new Actor();
+			a.tileX = m._units.get(i).position.x;
+			a.tileY = m._units.get(i).position.y;
+			a.type = m._units.get(i).unitType;
+			a.model = a.type.getCode();
+			a.model = a.model % 2;
+				
+			actors.put(i, a);
 		}
 		
 		GLRenderer.pauseRender = false;

@@ -7,11 +7,14 @@ import com.comp4903.project.graphics.GLRenderer;
 import com.comp4903.project.graphics.MyGLSurfaceView;
 
 import android.app.Activity;
+import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Window;
 
 import com.comp4903.project.gameEngine.data.MapData;
+import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.factory.*;
 import com.comp4903.project.network.Networking;
 
@@ -44,13 +47,12 @@ public class LauncherActivity extends Activity {
 		} catch (IOException e) {}
 
 		PathFind.initialize(mapData);
+		GameEngine.Initialize(mapData);
 		
 		GLSurfaceView view = new MyGLSurfaceView(this, mapData);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(view);
-		
 		NetworkTest();
-		
 	}
 
 	private boolean loadContent(){

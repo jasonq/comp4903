@@ -10,6 +10,7 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.GUI.HUD;
+import com.comp4903.project.GUI.MainMenu;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.GameState;
@@ -43,7 +44,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	public static Point selectedTile = new Point(0,0);
 	public static boolean isRenderingNow = false;
 	public static boolean pauseRender = false;
-	public static GameState state = GameState.Game_Screen;
+	public static GameState state = GameState.Main_Menu;
 	
 	public boolean showmenu = false;
 	
@@ -70,6 +71,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 10.0f };
 	
 	public HUD headsUpDisplay;
+	public MainMenu mm;
 	public GL10 myGL;
 	public Unit character = null;
 	public boolean update= false;
@@ -116,6 +118,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		//hex = new Hexagon(gl, context);
 		headsUpDisplay = new HUD(context, GLwidth, GLheight);
 		headsUpDisplay.initialBoxTexture(gl);
+		
+		mm = new MainMenu(context,GLwidth,GLheight);
+		mm.loadMenuTexture(gl);
 		
 		MaterialLibrary.init(gl, context);
 		
@@ -200,7 +205,13 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 	public void drawMainMenu(GL10 gl)
 	{
-		
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);			
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+		headsUpDisplay.SwithToOrtho(gl);
+		//headsUpDisplay.drawHUD(gl);
+		mm.drawMainMenu(gl);
+		headsUpDisplay.SwitchToPerspective(gl);
+		gl.glEnable(GL10.GL_DEPTH_TEST);
 	}
 	
 	public void drawNetworkMenu(GL10 gl)
@@ -228,10 +239,10 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			
 		//draw(gl);
 		
-		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
-		gl.glDisable(GL10.GL_DEPTH_TEST);
+		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);		
 		headsUpDisplay.SwithToOrtho(gl);
 		headsUpDisplay.drawHUD(gl);
+		//mm.drawMainMenu(gl);
 		headsUpDisplay.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
@@ -240,6 +251,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			update = false;
 		}
 		//headsUpDisplay.updateStatPanel(gl, character);
+		
+		
 	}
 	
 	// Test routine to draw the models
@@ -273,6 +286,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		headsUpDisplay = new HUD(context, width, height);
 		headsUpDisplay.initialBoxTexture(gl);
 	
+		mm = new MainMenu(context,GLwidth,GLheight);
+		mm.loadMenuTexture(gl);
+
 	} 
 	
 	// processes a scaling request ( which is interpreted as moving the camera closer
@@ -386,9 +402,22 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		}
 	}
 	
+	
+	public int setSelectMainMenu(int x, int y){
+		
+		if(!mm.checkPressingMenu(x, y)){
+			mm.selected = -1;
+			return -1;
+		}else{
+			int result = mm.checkListItem(y);
+			mm.selected = result;
+			return result;
+		}
+		
+	}
+	
 	public void updateHUDPanel(Unit abc){
 		character = abc;
 		update = true;
-		
 	}
 }

@@ -5,10 +5,10 @@ import android.graphics.Point;
 
 public class AStarNode
 {
-    private Point p;
-    private AStarNode parent;
-    private int g;
-    private int f;
+    public Point p;
+    public AStarNode parent;
+    public int g;
+    public int f;
     
     /**
      * Constructor
@@ -21,19 +21,4 @@ public class AStarNode
     {
         this.p = p; this.parent = parent; this.g = g; this.f = f;
     }
-    
-    /************************/
-    /**   Getter Methods   **/
-    /************************/
-    public Point getP() { return p; }
-    public AStarNode getParent() { return parent; }
-    public int getG() { return g; }
-    public int getF() { return f; }
-    /************************/
-    /**   Setter Methods   **/
-    /************************/
-    public void setP(Point p) { this.p = p; }
-    public void setParent(AStarNode p) { parent = p; }
-    public void setG(int i) { g = i; }
-    public void setF(int i) { f = i; }
 }
