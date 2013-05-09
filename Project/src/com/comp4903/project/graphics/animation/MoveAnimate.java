@@ -102,7 +102,7 @@ public class MoveAnimate extends AnimationProcessor {
 			return false;
 		}
 		
-		if (stepPosition < 1.0f)
+		if (stepPosition < 0.975f)
 		{
 			x += xStep;
 			y += yStep;
