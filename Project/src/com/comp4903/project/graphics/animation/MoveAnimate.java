@@ -8,7 +8,7 @@ import com.comp4903.project.gameEngine.data.Unit;
 
 public class MoveAnimate extends AnimationProcessor {
 
-	private Actor actor_;
+	//private Actor actor_;
 	private List<Point> steps;
 	
 	private float stepPosition;
@@ -16,7 +16,7 @@ public class MoveAnimate extends AnimationProcessor {
 	
 	public void init(Unit u, List<Point> steps)
 	{
-		unit_ = Unit;
+		//unit_ = Unit;
 	}
 	
 	public boolean process() {
