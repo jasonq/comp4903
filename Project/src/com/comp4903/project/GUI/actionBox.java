@@ -21,7 +21,7 @@ public class actionBox extends UI{
 		command = new Square[5];
 		pressedCommand = new Square[5];
 		int boxHeight = height/2;
-		int boxWidth = width * 3 / 16;
+		int boxWidth = width  / 17 ;
 		box = new Square(width/20 - 10, height/10- 10,boxWidth + 20,boxHeight + 20);
 		
 		int bHeight = boxHeight/command.length;
