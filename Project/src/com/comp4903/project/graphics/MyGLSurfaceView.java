@@ -15,11 +15,10 @@ import android.view.GestureDetector;
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
-<<<<<<< HEAD
+
 import com.comp4903.project.gameEngine.enums.GameState;
-=======
+
 import com.comp4903.project.gameEngine.engine.GameEngine;
->>>>>>> 8b335e21bcb18ad11cbdb88c067bd9df78cd7a72
 import com.comp4903.project.graphics.GLRenderer;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -33,7 +32,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	private boolean pickControlledUnit = false;
 	private boolean pickEnemyUnit = false;
 	private boolean pickEmpty = false;
-
+	private Unit currentUnit = null;
 	private int decision = -1;
 	private GestureDetector gDetect;
 
@@ -120,7 +119,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			return true;
 		}
 	}
-	
+
 	public class GestureDetection extends GestureDetector.SimpleOnGestureListener {
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
@@ -139,14 +138,15 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}
 			return true;
 		}
-		
+
 		public void handle_Game_Screen(int x, int y){
+
 			Log.d("TAG", "Single Tap Detected ...");
 			boolean touchMenu = mRenderer.checkHUD(x, y);
 			gl = RendererAccessor.map.gl;
 			Point pickPoint = mRenderer.pick(x, y);
 
-			if(pickPoint.x == -1 & pickPoint.y == -1){
+			if(pickPoint.x == -1 & pickPoint.y == -1 && !touchMenu){
 
 				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 				pickControlledUnit = false;
@@ -158,60 +158,72 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			mapData._tileSelected = pickPoint;
 			Unit pickUnit = mapData.getUnitAt(pickPoint);
 			if(pickUnit != null){
-
+				//it is picking unittt
 				pickControlledUnit = true;
 				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 				PathFind.DisplayUnitMoveBox(mapData.getUnitAt(pickPoint));
 				mRenderer.updateHUDPanel(pickUnit);
+				currentUnit = pickUnit;
 				//Log.d("TAG", "Change unit ...");
 			}else{
 				if(pickControlledUnit && touchMenu){
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 					decision = mRenderer.setSelectedHUD(y, touchMenu);
-
-				}else{
+					if(decision == 4 || decision == 5 || decision == -1){
+						mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
+						pickControlledUnit = false;
+						mRenderer.setSelectedHUD((int)y, false);	
+					}
+				}else if (pickControlledUnit && !touchMenu){
 					//mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 					//pickControlledUnit = false;
 					//mRenderer.setSelectedHUD((int)e.getY(), touchMenu);	
 					//HANDLE DECISIONS
-<<<<<<< HEAD
-					handleTouchEvent(x,y);
-=======
-					//handleTouchEvent((int)e.getX(),(int)e.getY());
+					//handleTouchEvent(x,y);
+					handleTouchEvent(x,y,pickPoint);
 
-					
-					Unit u = mapData._units.get(0);
-					if (u != null)
-						GameEngine.moveUnit(u, pickPoint);
->>>>>>> 8b335e21bcb18ad11cbdb88c067bd9df78cd7a72
+					//Unit u = mapData._units.get(0);
+					//if (currentUnit != null)
+					//GameEngine.moveUnit(currentUnit, pickPoint);
+
 				}
 			}			
 
 			requestRender();
 		}
-		
-		
+
+
 		public void handle_Main_Menu(int x , int y){
 			int result = mRenderer.setSelectMainMenu(x, y);
 			int a = 2;
 			if(result != -1){
 				if(result == 0)
 					GLRenderer.state = GameState.Game_Screen;
-				
+
 			}
 		}
 	}
 
-	public void handleTouchEvent(int x , int y){
+	public void handleTouchEvent(int x , int y, Point p){
 		switch(decision){
 		case 0:
 			//moving to the selected tilte
 			//maintain the menu showing
-			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 			/*
 			 * if pick the wrong tilte 
 			 * 
 			 */
+			//if(currentUnit != null)
+			//GameEngine.moveUnit(currentUnit,p);
+			Unit u = mapData._units.get(0);
+			if (currentUnit != null){
+				GameEngine.moveUnit(currentUnit, p);
+				pickControlledUnit = false;
+				decision = -1;
+				mRenderer.setSelectedHUD(y, false);
+				PathFind.DisplayUnitMoveBox(currentUnit);
+			}
 			break;
 		case 1:
 			//Attacking enemy
@@ -226,13 +238,13 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			//Using abilities
 			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 			break;
-		case 4:
+			/*case 4:
 		case 5:
 		case -1:
 			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 			pickControlledUnit = false;
 			mRenderer.setSelectedHUD((int)y, false);	
-			break;
+			break;*/
 		}
 	}
 
