@@ -23,17 +23,18 @@ public abstract class AnimationProcessor {
 		switch (d)
 		{
 		case 0:
-			return 0.7853981634f;
+			return 4.112388898f;			
 		case 1:
-			return 1.570796327f;
+			return 3.326990817f;
 		case 2:
-			return 2.35619449f;
+			return 1.95619449f;
 		case 3:
-			return 3.926990817f;
+			return 1.170796327f;
+			
 		case 4:
-			return 4.712388898f;
+			return -0.1f; //0.0853981634f;
 		case 5:
-			return 5.497787144f;
+			return 5.197787144f;
 		default:
 			return 0f;
 		}
