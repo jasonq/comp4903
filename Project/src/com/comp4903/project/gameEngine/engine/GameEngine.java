@@ -2,6 +2,7 @@ package com.comp4903.project.gameEngine.engine;
 
 import android.graphics.Point;
 
+import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.SkillType;
@@ -18,10 +19,11 @@ public class GameEngine {
 			return false;
 		if (!mapData.inMap(point))
 			return false;
+		RendererAccessor.moveAnimation(u, PathFind.UnitToPoint(u, point));
 		u.position = point;
 		System.out.println("Moved:" + point.x + ", " + point.y);
-		System.out.println("Unit at:" + u.position.x + ", " + u.position.y);
-		RendererAccessor.map.update(mapData);
+		System.out.println("Unit at:" + u.position.x + ", " + u.position.y);		
+		RendererAccessor.update(mapData);
 		return true;
 	}
 	
