@@ -173,10 +173,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}else{
 				if(pickControlledUnit && touchMenu && finishMoving){
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-					
+					//PathFind.DisplayUnitMoveBox(currentUnit);
 					decision = mRenderer.setSelectedHUD(y, touchMenu);
 					if(decision == 3 || decision == 4 || decision == -1){
-						ResetGUI();
+							ResetGUI();
 					}
 				}else if (pickControlledUnit && !touchMenu && !finishMoving){
 					handleTouchEvent(x,y,pickPoint);
@@ -217,8 +217,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			if (currentUnit != null){
 				if(mapData._movementBox.contains(p)){
 					GameEngine.moveUnit(currentUnit, p);
-					PathFind.DisplayUnitMoveBox(currentUnit);
+					
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+					//PathFind.DisplayUnitMoveBox(currentUnit);
 					mapData.clearBoxes();
 					RendererAccessor.update(mapData);
 					finishMoving = true;
@@ -260,6 +261,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		mapData.clearBoxes();
 		RendererAccessor.update(mapData);
 		finishMoving = false;
+		mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 		
 	}
 
