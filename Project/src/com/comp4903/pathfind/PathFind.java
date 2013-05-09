@@ -32,7 +32,14 @@ public class PathFind {
 		_map.clearBoxes();
 		
 		_map._movementBox = l;
-		RendererAccessor.map.update(_map);
+		RendererAccessor.update(_map);
+	}
+	
+	public static void DisplayUnitAttackBox(Unit u){
+		List<Point> units = Algorithms.GetUnitAttackBFS(u);
+		_map.clearBoxes();
+		_map._attackBox = units;
+		RendererAccessor.update(_map);
 	}
 	
 	public static List<Point> UnitToPoint(Unit u, Point p){
