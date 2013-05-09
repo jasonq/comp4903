@@ -11,6 +11,17 @@
 		</def:base>		
 	</def:tile>
 	
+	<def:tile name="attackable">
+	    <def:base>
+	    	<def:point1 u="0.33"	v="0.035"/>
+			<def:point2 u="0.33"	v="0.035"/>
+			<def:point3 u="0.33"	v="0.035"/>
+			<def:point4 u="0.33"	v="0.035"/>
+			<def:point5 u="0.33"	v="0.035"/>
+			<def:point6 u="0.33"	v="0.035"/>	
+	    </def:base>
+	</def:tile>
+	
 	<def:tile name="arrow.up">
 	    <def:base>
 	    	<def:point1 u="0.315"	v="0.061"/>

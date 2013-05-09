@@ -227,15 +227,17 @@ public class MapRenderer {
 					Matrix.setIdentityM(modelMatrix, 0);					
 					Matrix.multiplyMM(modelViewMatrix, 0, modelMatrix, 0, viewMatrix, 0);
 					Matrix.translateM(modelViewMatrix, 0, dx, dy, dz);
+					
 					if (tileMap[x][y].state == 0)
 						Matrix.scaleM(modelViewMatrix, 0, tileMap[x][y].size, tileMap[x][y].size, tileMap[x][y].size);
+					
 					if (tileMap[x][y].state == 1)
 					{
-						tileMap[x][y].size += 0.15f;
-						float sz = tileMap[x][y].size + 0.5f;
-						if (sz > 1.5f)
-							sz -= (sz- 1.5f);
-						if (tileMap[x][y].size > 2.0f)
+						tileMap[x][y].size += 0.02f;
+						float sz = tileMap[x][y].size + 0.7f;
+						if (sz > 1.3f)
+							sz = 1.3f - (sz- 1.3f);
+						if (tileMap[x][y].size > 1.2f)
 							tileMap[x][y].size = 0;
 						
 						Matrix.scaleM(modelViewMatrix, 0, sz, sz, sz);
