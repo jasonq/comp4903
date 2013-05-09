@@ -42,6 +42,9 @@
 			<def:point5 u="0.5"	v="0.5"/>
 			<def:point6 u="0.5"	v="0.5"/>
 		</def:base>
+		<def:model>
+		    building.gmodel
+		</def:model>
 	</def:tile>
 	
 </def:tileset>
