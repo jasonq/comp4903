@@ -32,6 +32,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	private boolean pickControlledUnit = false;
 	private boolean pickEnemyUnit = false;
 	private boolean pickEmpty = false;
+	private boolean finishMoving = false;
+	
 	private Unit currentUnit = null;
 	private int decision = -1;
 	private GestureDetector gDetect;
@@ -161,27 +163,25 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			if(pickUnit != null){
 				//it is picking unittt
 				pickControlledUnit = true;
-				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 				PathFind.DisplayUnitMoveBox(mapData.getUnitAt(pickPoint));
 				mRenderer.updateHUDPanel(pickUnit);
 				currentUnit = pickUnit;
+				decision = -2;
+				finishMoving = false;
 				//Log.d("TAG", "Change unit ...");
 			}else{
-				if(pickControlledUnit && touchMenu){
+				if(pickControlledUnit && touchMenu && finishMoving){
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+					
 					decision = mRenderer.setSelectedHUD(y, touchMenu);
-					if(decision == 4 || decision == 5 || decision == -1){
-						mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
-						pickControlledUnit = false;
-						mRenderer.setSelectedHUD((int)y, false);	
+					if(decision == 3 || decision == 4 || decision == -1){
+						ResetGUI();
 					}
-				}else if (pickControlledUnit && !touchMenu){
+				}else if (pickControlledUnit && !touchMenu && !finishMoving){
 					handleTouchEvent(x,y,pickPoint);
 				}else{
-					mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
-					mapData.clearBoxes();
-					pickControlledUnit = false;
-					decision = -1;
+					ResetGUI();
 				}
 			}			
 
@@ -202,12 +202,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 	public void handleTouchEvent(int x , int y, Point p){
 		switch(decision){
-		case 0:
+		case -2:
 			//moving to the selected tilte
 			//maintain the menu showing
 			//
-
-			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
+			//mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 			/*
 			 * if pick the wrong tilte 
 			 * 
@@ -219,15 +218,17 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				if(mapData._movementBox.contains(p)){
 					GameEngine.moveUnit(currentUnit, p);
 					PathFind.DisplayUnitMoveBox(currentUnit);
+					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+					mapData.clearBoxes();
+					RendererAccessor.update(mapData);
+					finishMoving = true;
 				}
-				pickControlledUnit = false;
-				decision = -1;
-				mRenderer.setSelectedHUD(y, false);
-				mapData.clearBoxes();
-				RendererAccessor.update(mapData);
-				//RendererAccessor.update(mapData);
-
+				//ResetGUI();
+				
 			}
+			break;
+		case 0:
+			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 			break;
 		case 1:
 			//Attacking enemy
@@ -238,11 +239,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			//Using items
 			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 			break;
-		case 3:
+		/*case 3:
 			//Using abilities
 			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 			break;
-			/*case 4:
+			case 4:
 		case 5:
 		case -1:
 			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
@@ -250,6 +251,16 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			mRenderer.setSelectedHUD((int)y, false);	
 			break;*/
 		}
+	}
+	
+	public void ResetGUI(){
+		pickControlledUnit = false;
+		decision = -1;
+		mRenderer.setSelectedHUD(1, false);
+		mapData.clearBoxes();
+		RendererAccessor.update(mapData);
+		finishMoving = false;
+		
 	}
 
 

@@ -18,21 +18,25 @@ public class actionBox extends UI{
 	public actionBox(Context c, int w, int h) {
 		super(c,w,h);
 		menuSelected = -1;
-		command = new Square[6];
-		pressedCommand = new Square[6];
-		box = new Square(width/20 - 10, height/10- 10,width/4 + 20,(height*3)/4 + 20);
+		command = new Square[5];
+		pressedCommand = new Square[5];
+		int boxHeight = height/2;
+		int boxWidth = width * 3 / 16;
+		box = new Square(width/20 - 10, height/10- 10,boxWidth + 20,boxHeight + 20);
 		
-		int bHeight = height/8;
+		int bHeight = boxHeight/command.length;
 		int nHeight = height/10;
+		
+		int bWidth = boxWidth;
 		for(int i = 0; i < command.length;i++){
-			command[i] = new Square(width/20, nHeight, width/4, bHeight );
-			pressedCommand[i] = new Square(width/20, nHeight, width/4,bHeight );
+			command[i] = new Square(width/20, nHeight,bWidth, bHeight );
+			pressedCommand[i] = new Square(width/20, nHeight, bWidth,bHeight );
 			nHeight += bHeight;
 		}
 		xTop = width/20;
 		yTop = height/10;
-		xBot = xTop + (width/4);
-		yBot = yTop + ((height * 3) /4);
+		xBot = xTop + boxWidth;
+		yBot = yTop + boxHeight;
 	}
 
 	public void loadUITexture(GL10 gl,Resources r, int id){
@@ -41,12 +45,9 @@ public class actionBox extends UI{
 		int width = commandT.getWidth();
 		int height = commandT.getHeight()/6;
 		for(int i = 0; i < command.length; i++){
-			//command[i] = new Square();
-			//Bitmap temp = BitmapFactory.decodeResource(context.getResources(), R.drawable.unpressed_button);
 			Bitmap temp = Bitmap.createBitmap(commandT,
-					0 , i * height, width, height);
+					0 , (i + 1) * height, width, height);
 			command[i].loadGLTexture(gl, context, temp);
-			//commandT.recycle();
 			temp.recycle();
 		}
 		commandT.recycle();
@@ -55,10 +56,8 @@ public class actionBox extends UI{
 		width = pCommand.getWidth();
 		height = pCommand.getHeight()/6;
 		for(int i = 0; i < pressedCommand.length; i++){
-			//pressedCommand[i] = new Square();
-			//Bitmap temp = BitmapFactory.decodeResource(context.getResources(), R.drawable.button);
 			Bitmap temp = Bitmap.createBitmap(pCommand,
-					0 , i * height, width, height);
+					0 , (i + 1) * height, width, height);
 			pressedCommand[i].loadGLTexture(gl, context, temp);
 			temp.recycle();
 		}		
@@ -69,8 +68,7 @@ public class actionBox extends UI{
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
 		box.draw(gl);
-		for(int i = 0; i < command.length; i++){
-			
+		for(int i = 0; i < command.length; i++){	
 			if(menuSelected == i){
 				pressedCommand[i].draw(gl);
 			}else
