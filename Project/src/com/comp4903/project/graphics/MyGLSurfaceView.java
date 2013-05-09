@@ -11,14 +11,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.GestureDetector;
-
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
-
-
 import com.comp4903.project.gameEngine.enums.GameState;
-
 import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.graphics.GLRenderer;
 
