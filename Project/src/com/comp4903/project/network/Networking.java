@@ -15,10 +15,10 @@ public class Networking {
 	
 	public Networking()
 	{
-		try {
-			client = new Socket("Host", 24778);
+		/*try {
+			client = new Socket("Host", 4345);
 		} catch (IOException e)
-		{}
+		{}*/
 		
 		IP = getLocalIpAddress();
 	}
