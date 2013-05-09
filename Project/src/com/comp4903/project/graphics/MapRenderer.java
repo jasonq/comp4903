@@ -210,11 +210,14 @@ public class MapRenderer {
 				float dy = 0.01f;
 				float dz = (float)y * 0.8660254038f * 2 + (x % 2) * 0.8660254038f;
 				
-				if (tileMap[x][y].size < 1.0f)
-					tileMap[x][y].size += 0.15f;
-				else
-					tileMap[x][y].size = 1.0f;
-				
+				if (tileMap[x][y].state == 0)
+				{
+					if (tileMap[x][y].size < 1.0f)
+						tileMap[x][y].size += 0.15f;
+					else
+						tileMap[x][y].size = 1.0f;
+				}
+												
 				if ((dx > eyeX - 16) &&
 						(dz > eyeZ - 16) &&
 						(dx < eyeX + 16) &&
@@ -224,7 +227,19 @@ public class MapRenderer {
 					Matrix.setIdentityM(modelMatrix, 0);					
 					Matrix.multiplyMM(modelViewMatrix, 0, modelMatrix, 0, viewMatrix, 0);
 					Matrix.translateM(modelViewMatrix, 0, dx, dy, dz);
-					Matrix.scaleM(modelViewMatrix, 0, tileMap[x][y].size, tileMap[x][y].size, tileMap[x][y].size);
+					if (tileMap[x][y].state == 0)
+						Matrix.scaleM(modelViewMatrix, 0, tileMap[x][y].size, tileMap[x][y].size, tileMap[x][y].size);
+					if (tileMap[x][y].state == 1)
+					{
+						tileMap[x][y].size += 0.15f;
+						float sz = tileMap[x][y].size + 0.5f;
+						if (sz > 1.5f)
+							sz -= (sz- 1.5f);
+						if (tileMap[x][y].size > 2.0f)
+							tileMap[x][y].size = 0;
+						
+						Matrix.scaleM(modelViewMatrix, 0, sz, sz, sz);
+					}
 					gl.glMatrixMode(GL10.GL_MODELVIEW);
 					gl.glLoadMatrixf(modelViewMatrix, 0);
 				
@@ -385,6 +400,14 @@ public class MapRenderer {
 			int dx = m._movementBox.get(i).x;
 			int dy = m._movementBox.get(i).y;
 			tileMap[dx][dy].state = 0;
+			tileMap[dx][dy].size = 0;
+		}
+		
+		for (int i = 0; i < m._attackBox.size(); i++)
+		{
+			int dx = m._attackBox.get(i).x;
+			int dy = m._attackBox.get(i).y;
+			tileMap[dx][dy].state = 1;
 			tileMap[dx][dy].size = 0;
 		}
 

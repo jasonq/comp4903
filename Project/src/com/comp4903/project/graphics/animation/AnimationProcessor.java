@@ -29,8 +29,7 @@ public abstract class AnimationProcessor {
 		case 2:
 			return 1.95619449f;
 		case 3:
-			return 1.170796327f;
-			
+			return 1.170796327f;			
 		case 4:
 			return -0.1f; //0.0853981634f;
 		case 5:
