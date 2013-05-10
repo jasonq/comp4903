@@ -32,6 +32,17 @@ public class Unit {
 		InitializeCombatStats();
 	}
 	
+	public Unit(UnitType type, UnitGroup group, Point pos, WeaponType weapon, ArmourType armour){
+		uID = id++;
+		unitType = type;
+		unitGroup = group;
+		position = pos;
+		this.weapon = weapon;
+		this.armour = armour;
+		active = true;
+		InitializeCombatStats();
+	}
+	
 	public void InitializeCombatStats(){
 		UnitStats stats = GameStats.getUnitStats(unitType);
 		ArmourStats armourStats = GameStats.getArmourStats(armour);

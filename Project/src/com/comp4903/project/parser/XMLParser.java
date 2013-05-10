@@ -399,9 +399,11 @@ public class XMLParser {
 			if (parser.getName().equals("Unit")) {
 				int x = Integer.parseInt(parser.getAttributeValue(null, "x"));
 				int y = Integer.parseInt(parser.getAttributeValue(null, "y"));
-				UnitType t = TypeFinder.findUnitType(parser.nextText());
-				System.out.println("Unit: " + x + ", " + y + ", " + t);
-				data._units.add(new Unit(t, currGroup, new Point(x,y)));
+				WeaponType weapon = TypeFinder.findWeaponType(parser.getAttributeValue(null, "weapon"));
+				ArmourType armour = TypeFinder.findArmourType(parser.getAttributeValue(null,"armour"));
+				UnitType unitType = TypeFinder.findUnitType(parser.nextText());
+				System.out.println("Unit: " + x + ", " + y + ", " + unitType + "W: " + weapon + "A: " + armour);
+				data._units.add(new Unit(unitType, currGroup, new Point(x,y), weapon, armour));
 			}
 			else {
 				parser.nextText();
