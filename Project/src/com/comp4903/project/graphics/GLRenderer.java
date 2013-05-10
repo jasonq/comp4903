@@ -9,6 +9,8 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
+
+import com.comp4903.project.GUI.GLText;
 import com.comp4903.project.GUI.HUD;
 import com.comp4903.project.GUI.MainMenu;
 import com.comp4903.project.gameEngine.data.MapData;
@@ -77,6 +79,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	public boolean update= false;
 	private MapData mapData;
 	
+	private GLText glText;    
+	
 	/*	GLRENDERER
 	 * 
 	 * Constructor, need to provide app context for access to
@@ -114,13 +118,16 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glFrontFace(GL10.GL_CW);		
 		gl.glEnable(GL10.GL_CULL_FACE); 
 		gl.glCullFace(GL10.GL_BACK);
-		
+		glText = new GLText( gl, context.getAssets() );
+		glText.load( "Roboto-Regular.ttf", 14, 2, 2 );
 		//hex = new Hexagon(gl, context);
-		headsUpDisplay = new HUD(context, GLwidth, GLheight);
+		headsUpDisplay = new HUD(context, GLwidth, GLheight,glText);
 		headsUpDisplay.initialBoxTexture(gl);
 		
 		mm = new MainMenu(context,GLwidth,GLheight);
 		mm.loadMenuTexture(gl);
+		
+		
 		
 		MaterialLibrary.init(gl, context);
 		
@@ -242,14 +249,27 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);		
 		headsUpDisplay.SwithToOrtho(gl);
 		headsUpDisplay.drawHUD(gl);
+		//gl.glDisable(GL10.GL_DEPTH_TEST);
+		//gl.glEnable( GL10.GL_TEXTURE_2D );              // Enable Texture Mapping
+		/*gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
+		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
+		
+		glText.begin( 1.0f, 1.0f, 1.0f, 1.0f );         // Begin Text Rendering (Set Color WHITE)
+		//glText.setScale(2.0f);
+		glText.draw( "Test String :)", 0, 0 );          // Draw Test String
+		glText.draw( "Line 1", 50, 50 );                // Draw Test String
+		glText.draw( "Line 2", 100, 100 );              // Draw Test String
+		glText.end();                                   // End Text Rendering
+		
+		gl.glDisable( GL10.GL_BLEND );                  // Disable Alpha Blend*/
 		//mm.drawMainMenu(gl);
 		headsUpDisplay.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
-		if(update){
-			headsUpDisplay.updateStatPanel(gl, character);
-			update = false;
-		}
+		//if(update){
+			//headsUpDisplay.updateStatPanel(gl, character);
+			//update = false;
+		//}
 		//headsUpDisplay.updateStatPanel(gl, character);
 		
 		
@@ -283,7 +303,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glMatrixMode(GL10.GL_PROJECTION);	
 		gl.glLoadMatrixf(projectionMatrix, 0);
 		
-		headsUpDisplay = new HUD(context, width, height);
+		headsUpDisplay = new HUD(context, width, height,glText);
 		headsUpDisplay.initialBoxTexture(gl);
 	
 		mm = new MainMenu(context,GLwidth,GLheight);
@@ -414,10 +434,12 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			return result;
 		}
 		
+		
 	}
 	
 	public void updateHUDPanel(Unit abc){
 		character = abc;
 		update = true;
+		headsUpDisplay.updateStatPanel( abc);
 	}
 }

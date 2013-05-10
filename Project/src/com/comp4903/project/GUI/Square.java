@@ -58,7 +58,13 @@ public class Square {
 		textureBuffer.put(texture);
 		textureBuffer.position(0);
 	}
-	
+	public void UpdateVertices(int x, int y, int width, int height){
+		float abc[] = this.decodeSize(x, y, width, height);
+		this.vertices = abc;
+		vertexBuffer.clear();
+		vertexBuffer.put(vertices);
+		vertexBuffer.position(0);
+	}
 	public Square(int x, int y, int width,int height) {
 		float abc[] = this.decodeSize(x, y, width, height);
 		this.vertices = abc;
@@ -109,8 +115,7 @@ public class Square {
 //		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 		
 		// Use Android GLUtils to specify a two-dimensional texture image from our bitmap 
-		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-		
+		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);	
 		// Clean up
 		bitmap.recycle();
 	}

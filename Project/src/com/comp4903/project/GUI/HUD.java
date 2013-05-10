@@ -25,23 +25,20 @@ public class HUD {
 	public int width,height;
 	public actionBox action;
 	public characterBox character;
-	public Glyphs glyph;
-	public String[] actionCommand = {"Attack","ability","items","view Stats","cancel"};
-	public Square[] squareCommand;
-	
+	public Glyphs glyph;	
 	public boolean showAction = false;
 	public boolean showStat = false;
 	public boolean showAbility = false;
 	public boolean showAttack = false;
 	
-	public HUD(Context c, int w, int h){
+	public HUD(Context c, int w, int h,GLText glt){
 		context = c;		
 		width = w;
 		height = h;
 		glyph = new Glyphs(BitmapFactory.decodeResource(context.getResources(), R.drawable.glyphs_black));
 		action = new actionBox(context,width,height);
 		Unit abc = null;
-		character = new characterBox(context,width,height,abc);
+		character = new characterBox(context,width,height,abc, glt);
 	}
 	
 	public void updateHUD(boolean showAction, boolean showStat, boolean showAbility, boolean showAttack){
@@ -50,21 +47,7 @@ public class HUD {
 		this.showAbility = showAbility;
 		this.showAttack = showAttack;
 	}
-	public void getCommandSquare(GL10 gl){
-		//these 2 lines are important
-		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		squareCommand = new Square[5];
-		for(int i = 0; i < 5; i++){
 
-			String s = actionCommand[i];
-			Bitmap bb = glyph.getString(this.actionCommand[i]);
-			squareCommand[i] = new Square();
-			squareCommand[i].loadGLTexture(gl, context, bb);
-			bb.recycle();
-
-		}
-	}
 	public void initialBoxTexture(GL10 gl){
 		action.loadUITexture(gl, context.getResources(), R.drawable.menu);
 		character.loadUITexture(gl, context.getResources(), R.drawable.statpanel);
@@ -89,7 +72,7 @@ public class HUD {
 		gl.glMatrixMode(gl.GL_PROJECTION); // Select Projection
 		gl.glPushMatrix(); // Push The Matrix
 		gl.glLoadIdentity(); // Reset The Matrix
-		gl.glOrthof( 0, width , height  , 0, -1, 1 ); // Select Ortho Mode
+		gl.glOrthof( 0, width , height  , 0, 1, -1 ); // Select Ortho Mode
 		gl.glMatrixMode(gl.GL_MODELVIEW); // Select Modelview Matrix
 		gl.glPushMatrix(); // Push The Matrix
 		gl.glLoadIdentity(); // Reset The Matrix
@@ -105,10 +88,11 @@ public class HUD {
 		gl.glPopMatrix();
 	}
 	
-	public void updateStatPanel(GL10 gl, Unit abc){
+	public void updateStatPanel( Unit abc){
 		//character = new characterBox(context,width,height,abc);
 		character.setUnit(abc);
-		character.loadUITexture(gl, context.getResources(), R.drawable.statpanel);
+		character.setText();
+		//character.loadUITexture(gl, context.getResources(), R.drawable.statpanel);
 	}
 
 

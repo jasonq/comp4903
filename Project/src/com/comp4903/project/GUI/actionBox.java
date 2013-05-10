@@ -18,48 +18,51 @@ public class actionBox extends UI{
 	public actionBox(Context c, int w, int h) {
 		super(c,w,h);
 		menuSelected = -1;
-		command = new Square[5];
-		pressedCommand = new Square[5];
-		int boxHeight = height/2;
-		int boxWidth = width  / 17 ;
-		box = new Square(width/20 - 10, height/10- 10,boxWidth + 20,boxHeight + 20);
+		command = new Square[4];
+		pressedCommand = new Square[4];
+		int boxHeight = height / 2;
+		int boxWidth = width  / 15 ;
+		
+		int x = width* 19/20;
+		int y = height/10;
+		//box = new Square(width/20 - 10, height/10- 10,boxWidth + 20,boxHeight + 20);
 		
 		int bHeight = boxHeight/command.length;
 		int nHeight = height/10;
 		
 		int bWidth = boxWidth;
 		for(int i = 0; i < command.length;i++){
-			command[i] = new Square(width/20, nHeight,bWidth, bHeight );
-			pressedCommand[i] = new Square(width/20, nHeight, bWidth,bHeight );
+			command[i] = new Square(x, nHeight,bWidth, bHeight );
+			pressedCommand[i] = new Square(x, nHeight, bWidth,bHeight );
 			nHeight += bHeight;
 		}
-		xTop = width/20;
-		yTop = height/10;
+		xTop = x;
+		yTop = y;
 		xBot = xTop + boxWidth;
 		yBot = yTop + boxHeight;
 	}
 
 	public void loadUITexture(GL10 gl,Resources r, int id){
 		super.loadUITexture(gl, r, id);
-		Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.command_button);
+		Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.icons);
 		int width = commandT.getWidth();
-		int height = commandT.getHeight()/6;
+		int height = commandT.getHeight()/command.length;
 		for(int i = 0; i < command.length; i++){
 			Bitmap temp = Bitmap.createBitmap(commandT,
-					0 , (i + 1) * height, width, height);
+					0 , i * height, width, height);
 			command[i].loadGLTexture(gl, context, temp);
-			temp.recycle();
+			//temp.recycle();
 		}
 		commandT.recycle();
 		
-		Bitmap pCommand =  BitmapFactory.decodeResource(r, R.drawable.pressed_command_button);
+		Bitmap pCommand =  BitmapFactory.decodeResource(r, R.drawable.icons);
 		width = pCommand.getWidth();
-		height = pCommand.getHeight()/6;
+		height = pCommand.getHeight()/command.length;
 		for(int i = 0; i < pressedCommand.length; i++){
 			Bitmap temp = Bitmap.createBitmap(pCommand,
-					0 , (i + 1) * height, width, height);
+					0 , i * height, width, height);
 			pressedCommand[i].loadGLTexture(gl, context, temp);
-			temp.recycle();
+			//temp.recycle();
 		}		
 		pCommand.recycle();
 	}
@@ -67,7 +70,7 @@ public class actionBox extends UI{
 		gl.glLoadIdentity();
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
-		box.draw(gl);
+		//box.draw(gl);
 		for(int i = 0; i < command.length; i++){	
 			if(menuSelected == i){
 				pressedCommand[i].draw(gl);
