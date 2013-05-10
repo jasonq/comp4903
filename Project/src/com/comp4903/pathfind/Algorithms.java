@@ -236,6 +236,65 @@ public class Algorithms {
         return result;
     }
     
+    public static List<Point> GetMovePathAStar(Unit movingUnit, Point end)
+    {
+    	Point start = movingUnit.position;
+        List<AStarNode> openList = new ArrayList<AStarNode>();
+        List<AStarNode> closedList = new ArrayList<AStarNode>();
+        List<Point> result = new ArrayList<Point>();
+        AStarNode cur = null;
+        AStarNode startNode = new AStarNode(start, null, 0, heuristic(start, end));
+        openList.add(startNode);
+        boolean endFound = false;
+        while (openList.size() > 0)
+        {
+            cur = GetLowestFScore(openList);
+            if (cur.p.equals(end))
+            {
+                endFound = true;
+                break;
+            }
+            if (cur == null)
+                return new ArrayList<Point>();
+            openList.remove(cur);
+            closedList.add(cur);
+            List<AStarNode> neighbor; 
+            if(cur.p.x % 2 == 0)
+            	neighbor = evenConnections(cur, end);
+            else
+            	neighbor = oddConnections(cur, end);
+            for (AStarNode con : neighbor)
+            {
+            	AStarNode check = ListHasAStarNode(closedList, con);
+            	Unit un = _map.getUnitAt(con.p);
+        		if(un != null && un.unitGroup != movingUnit.unitGroup){
+        			continue;
+        		}
+                if (!_map.isOpen(con.p) || check != null)
+                    continue;
+                else if (check == null)
+                    openList.add(con);
+                else if (check != null && con.g < check.g)
+                {
+                    check.parent = cur;
+                    check.g = con.g;
+                    check.f = con.f;
+                }
+
+            }
+        }
+        if (endFound)
+        {
+            AStarNode endNode = cur;
+            while (cur.parent != null)
+            {
+                result.add(cur.p);
+                cur = cur.parent;
+            }
+        }
+        return result;
+    }
+    
     /**
      * Checks if the list (l) has the node (cur) and sets the comparison node if it returns true
      */
