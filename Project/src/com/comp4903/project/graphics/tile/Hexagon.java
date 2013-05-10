@@ -8,6 +8,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.graphics.GLRenderer;
+import com.comp4903.project.graphics.RendererAccessor;
 import com.comp4903.project.graphics.model.MaterialLibrary;
 import com.comp4903.project.graphics.model.Texture;
 
@@ -21,12 +22,16 @@ import android.opengl.Matrix;
 public class Hexagon {
 	
 	private Context context;
+	private GL10 gl;
 
 	public Point[][] screenCoords = new Point[5000][7];
 	public int screenCoordCount;
 	
 	private float[] vec = new float[4];
 	private float[] resultVec = new float[4];
+	private float[] modelMatrix = new float[16];
+	private float[] modelViewMatrix = new float[16];
+	private float[] viewMatrix = new float[16];
 	
 	private float vertices[];
 	
@@ -121,8 +126,8 @@ public class Hexagon {
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);		
 			
-		if (cpick)
-			computePick(transformMatrix, projectionMatrix);
+		/*if (cpick)
+			computePick(transformMatrix, projectionMatrix);*/
 		
 	}
 	
@@ -165,10 +170,39 @@ public class Hexagon {
 	// Given two screen co-ordinates, will return
 	// a Point, containing the x and y map co-ordinates selected.
 	public Point pick(float x, float y)
-	{
+	{	
+		float w = (float)GLRenderer.GLwidth / 2f;
+		float h = (float)GLRenderer.GLheight / 2f;
 		
-		GLRenderer.pauseRender = true;
-		while (GLRenderer.isRenderingNow);
+		screenCoordCount = 0;
+		for (int l = 0; l < 16; l++)
+			viewMatrix[l] = GLRenderer.viewMatrix[l];
+		
+		for (int tx = 0; tx < RendererAccessor.map.mapWidth; tx++)
+		{
+			for (int ty = 0; ty < RendererAccessor.map.mapHeight; ty++)
+			{				
+				float dx = (float)tx * 1.5f;
+				float dy = 0;
+				float dz = (float)ty * 0.8660254038f * 2 + (tx % 2) * 0.8660254038f;
+												
+				if ((dx > GLRenderer.viewX - 16) &&
+					(dz > GLRenderer.viewZ - 16) &&
+					(dx < GLRenderer.viewX + 16) &&
+					(dz < GLRenderer.viewZ + 8))
+				{
+					screenCoords[screenCoordCount][6].x = tx;
+					screenCoords[screenCoordCount][6].y = ty;
+				
+					// set up the model-view matrix for this hexagon
+					Matrix.setIdentityM(modelMatrix, 0);				
+					Matrix.multiplyMM(modelViewMatrix, 0, modelMatrix, 0, viewMatrix, 0);
+					Matrix.translateM(modelViewMatrix, 0, dx, dy, dz);
+					
+					computePick(modelViewMatrix, GLRenderer.projectionMatrix);					
+				}
+			}
+		}		
 		
 		Point r = new Point(-1, -1);
 		Point[] pnts;
@@ -201,9 +235,7 @@ public class Hexagon {
 				r.x = (int)(screenCoords[m][6].x);
 				r.y = (int)(screenCoords[m][6].y);
 			}
-		}
-
-		GLRenderer.pauseRender = false;
+		}		
 		
 		return r;
 	}

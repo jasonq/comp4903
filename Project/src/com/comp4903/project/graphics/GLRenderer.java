@@ -50,17 +50,17 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 	public boolean showmenu = false;
 	
-	private float viewX, viewY, viewZ; // co-ordinate of the location we are looking at
+	public static float viewX; // co-ordinate of the location we are looking at
+	public static float viewY;
+	public static float viewZ;
 	private float eyeX, eyeY, eyeZ; // location of camera
 	private float distance; // distance of camera
 	private float viewAngle; // angle of camera
 	
-	// this is how we are supposed to do matrices in OpenGL ES
-	// (as far as I can tell)
 	private float[] modelMatrix = new float[16];
-	private float[] viewMatrix = new float[16];
-	private float[] modelViewMatrix = new float[16]; // combined model+view, needed for openGL
-	private float[] projectionMatrix = new float[16];
+	public static float[] viewMatrix = new float[16];
+	public static float[] modelViewMatrix = new float[16]; // combined model+view, needed for openGL
+	public static float[] projectionMatrix = new float[16];
 	
 	private Context context;
 	

@@ -34,8 +34,8 @@ public class MapRenderer {
 	private Context context;
 	
 	// map statistics
-	private int mapWidth;
-	private int mapHeight;
+	public int mapWidth;
+	public int mapHeight;
 	
 	// map data
 	private Hex tileMap[][];
@@ -162,7 +162,7 @@ public class MapRenderer {
 	 */
 	private void basePass()
 	{
-		hex.screenCoordCount = 0;
+		//hex.screenCoordCount = 0;
 				
 		for (int x = 0; x < mapWidth; x++)
 		{
@@ -181,8 +181,8 @@ public class MapRenderer {
 					(dx < eyeX + 16) &&
 					(dz < eyeZ + 8))
 				{
-					hex.screenCoords[hex.screenCoordCount][6].x = x;
-					hex.screenCoords[hex.screenCoordCount][6].y = y;
+					//hex.screenCoords[hex.screenCoordCount][6].x = x;
+					//hex.screenCoords[hex.screenCoordCount][6].y = y;
 				
 					// set up the model-view matrix for this hexagon
 					Matrix.setIdentityM(modelMatrix, 0);				
