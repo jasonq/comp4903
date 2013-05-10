@@ -15,6 +15,7 @@ import com.comp4903.project.graphics.tile.Hexagon;
 public class MoveAnimate extends AnimationProcessor {
 
 	private int actorID;
+	private Actor actor_;
 	private List<Point> steps;
 	
 	private float stepPosition;
@@ -33,6 +34,7 @@ public class MoveAnimate extends AnimationProcessor {
 	public void init(Unit u, List<Point> s)
 	{
 		actorID = u.uID;
+		actor_ = RendererAccessor.map.getActor(actorID);
 		step = s.size();
 		nextstep = step - 1;
 		
@@ -63,7 +65,7 @@ public class MoveAnimate extends AnimationProcessor {
 		
 		float a = angleFromDirection(d);
 		
-		RendererAccessor.map.setActorRotation(actorID, a);
+		actor_.setYrotate(a);
 		
 		Point p;
 		
@@ -75,7 +77,7 @@ public class MoveAnimate extends AnimationProcessor {
 		x = (float)p.x * 1.5f;
 		z = (float)p.y * 0.8660254038f * 2f + (p.x % 2) * 0.8660254038f;
 		y = 0;
-		RendererAccessor.map.setActorPosition(actorID, x, y, z);
+		actor_.setPosition(x, y, z);
 				
 		p = steps.get(nextstep);
 		
@@ -108,7 +110,7 @@ public class MoveAnimate extends AnimationProcessor {
 			y += yStep;
 			z += zStep;
 			stepPosition += 0.025f;
-			RendererAccessor.map.setActorPosition(actorID, x, y, z);
+			actor_.setPosition(x, y, z);
 		} else {
 			step--;
 			nextstep = step - 1;

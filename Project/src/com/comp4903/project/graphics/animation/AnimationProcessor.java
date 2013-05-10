@@ -1,5 +1,7 @@
 package com.comp4903.project.graphics.animation;
 
+import android.graphics.Point;
+
 /*	ANIMATIONPROCESSOR - base class to define generic animations
  *  such as walking and attacking
  * 
@@ -37,5 +39,20 @@ public abstract class AnimationProcessor {
 		default:
 			return 0f;
 		}
+	}
+	
+	/*	ANGLEFROMPOINTS - given two points in world space, computes the angle
+	 * 
+	 */
+	public float angleFromPoints(float fromX, float fromY, float toX, float toY)
+	{
+		float result = 0;
+				
+		float xdiff = toX - fromX;
+		float ydiff = toY - fromY;
+		
+		result = (float)Math.atan2((double)ydiff, (double)xdiff);
+		
+		return result;
 	}
 }

@@ -12,6 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.UnitType;
+import com.comp4903.project.graphics.animation.Actor;
 import com.comp4903.project.graphics.animation.AnimationEngine;
 import com.comp4903.project.graphics.animation.MoveAnimate;
 import com.comp4903.project.graphics.model.Model3D;
@@ -264,13 +265,14 @@ public class MapRenderer {
 		while (i.hasNext())
 		{
 			a = i.next().getValue();
+			int mdl = a.getModel();
 						
-			float x = a.x;
-			float y = a.y;
-			float z = a.z;
+			float x = a.getX();
+			float y = a.getY();
+			float z = a.getZ();
 			
 			// cheat for now; raise Marvin so his feet are on the ground
-			if (a.model == 0)
+			if (mdl == 0)
 			{
 				y = 0.6f;
 			}
@@ -281,10 +283,10 @@ public class MapRenderer {
 			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, diffuseLight, 0);
 			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPosition, 0);
 			
-			models[a.model].SetPosition(x, y, z);
-			models[a.model].ResetOrientation();
-			models[a.model].YRotate(a.yRotate);
-			models[a.model].display(gl, viewMatrix);
+			models[mdl].SetPosition(x, y, z);
+			models[mdl].ResetOrientation();
+			models[mdl].YRotate(a.getYrotate());
+			models[mdl].display(gl, viewMatrix);
 			
 			gl.glDisable(GL10.GL_LIGHTING);
 			
@@ -370,18 +372,16 @@ public class MapRenderer {
 		actors.clear();
 		for (int i = 0; i < m._units.size(); i++)
 		{
-			Actor a = new Actor();
-			a.tileX = m._units.get(i).position.x;
-			a.tileY = m._units.get(i).position.y;
-			a.type = m._units.get(i).unitType;
-			a.model = a.type.getCode();
-			a.model = a.model % 2;
-			a.uID = m._units.get(i).uID;
-			a.x = (float)a.tileX * 1.5f;
-			a.z = (float)a.tileY * 0.8660254038f * 2f + (a.tileX % 2) * 0.8660254038f;
-			a.y = 0;
-				
-			actors.put(i, a);
+			Actor a = new Actor(m._units.get(i).uID);
+			
+			a.setTilePosition(m._units.get(i).position);				
+			a.setType(m._units.get(i).unitType);
+			
+			a.setPosition( (float)m._units.get(i).position.x * 1.5f,
+					       0,
+					       (float)m._units.get(i).position.y * 0.8660254038f * 2f 
+					       + (m._units.get(i).position.x % 2) * 0.8660254038f);
+			actors.put(a.getID(), a);
 		}
 	}
 	
@@ -421,23 +421,20 @@ public class MapRenderer {
 			if (actors.containsKey(m._units.get(i).uID))
 			{
 				Actor a = actors.get(m._units.get(i).uID);
-				a.tileX = m._units.get(i).position.x;
-				a.tileY = m._units.get(i).position.y;
+				a.setTilePosition(m._units.get(i).position);				
 			} 
 			else
 			{
-				Actor a = new Actor();
-				a.uID = m._units.get(i).uID;
-				a.tileX = m._units.get(i).position.x;
-				a.tileY = m._units.get(i).position.y;
-				a.type = m._units.get(i).unitType;
-				a.model = a.type.getCode();
-			
-				a.model = a.model % 2;
-				a.x = (float)a.tileX * 1.5f;
-				a.z = (float)a.tileY * 0.8660254038f * 2f + (a.tileX % 2) * 0.8660254038f;
-				a.y = 0;
-				actors.put(a.uID, a);
+				Actor a = new Actor(m._units.get(i).uID);
+				
+				a.setTilePosition(m._units.get(i).position);				
+				a.setType(m._units.get(i).unitType);
+				
+				a.setPosition( (float)m._units.get(i).position.x * 1.5f,
+						       0,
+						       (float)m._units.get(i).position.y * 0.8660254038f * 2f 
+						       + (m._units.get(i).position.x % 2) * 0.8660254038f);
+				actors.put(a.getID(), a);
 			}
 		}
 		
@@ -454,33 +451,11 @@ public class MapRenderer {
 		animator.start("move");
 	}
 	
-	/*	SETACTORROTATION - used to update a unit's direction.  Used for
-	 *  animation
-	 *  
-	 *  	actorID		The unit's id
-	 *  	r			the new rotation in radians
-	 * 
-	 */
-	public void setActorRotation(int actorID, float r)
+	public Actor getActor(int id)
 	{
-		actors.get(actorID).yRotate = r;
+		return actors.get(id);
 	}
-	
-	/*	SETACTORPOSITION - used to update a unit's position.  Used for
-	 *  animation.  This has nothing to do with which tile the unit is on,
-	 *  and is used primarly to depict the unit moving between tiles
-	 *  
-	 *  	actorID		The unit's id
-	 *  	x, y, z		the new position in 3D world space
-	 * 
-	 */
-	public void setActorPosition(int actorID, float x, float y, float z)
-	{
-		actors.get(actorID).x = x;
-		actors.get(actorID).y = y;
-		actors.get(actorID).z = z;
-	}
-	
+		
 	/*	HEX - represents a single tile on the map, storing information about
 	 *  texture, current highlighted status and other info.
 	 * 
@@ -491,22 +466,5 @@ public class MapRenderer {
 		float size = 0f;
 	}
 
-	/*	ACTOR - used to store the graphical aspects of a unit, such as 3D orientation,
-	 *  position and other data as required by the renderer.
-	 * 
-	 */
-	private class Actor {
-		int model;
-		UnitType type;
-		int uID;
-		int tileX;
-		int tileY;
-		float x, y, z;
-		float xRotate, yRotate, zRotate;
-		
-		public Actor()
-		{
-			xRotate = 0f; yRotate = 0f; zRotate = 0f;
-		}
-	}
+	
 }
