@@ -76,6 +76,7 @@ public class MapRenderer {
 	public MapRenderer(GL10 g, Context c)
 	{
 		gl = g;
+		
 		context = c;
 		hex = new Hexagon(gl, context);
 		hex.readTileData();

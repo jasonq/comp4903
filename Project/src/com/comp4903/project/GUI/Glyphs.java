@@ -64,7 +64,7 @@ public class Glyphs {
 					0 + (i * width), bitmap.getHeight()/2, width, height));
 		}
 		Log.d(TAG, "Numbers initialised");
-
+		bitmap.recycle();
 		// TODO - 4th row for punctuation
 	}
 
@@ -88,44 +88,23 @@ public class Glyphs {
 		}
 	}
 
-	public Bitmap mergeBitmap(Bitmap fr, Bitmap sc) 
-	{ 
-
-		Bitmap comboBitmap; 
-
-		int width, height; 
-
-		width = fr.getWidth() + sc.getWidth(); 
-		height = fr.getHeight(); 
-
-		comboBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888 ); 
-
-		Canvas comboImage = new Canvas(comboBitmap); 
-		Paint transPainter = new Paint();
-		transPainter.setColor(Color.WHITE);
-
-		comboImage.drawBitmap(fr, 0f, 0f, transPainter); 
-		comboImage.drawBitmap(sc, fr.getWidth() , 0, transPainter); 
-		//comboBitmap.eraseColor(0);
-		return comboBitmap;
-
-	}
-
-	public Bitmap getString(String s){
-		Bitmap c =  glyphs.get(s.charAt(0));
-		for (int i = 1; i < s.length(); i++) {
-
-			Character ch = s.charAt(i);
+	public Bitmap getBitmapLongString(String text){
+		int num = text.length();
+		Bitmap comBoBitmap;
+		int swidth = num * width;
+		comBoBitmap = Bitmap.createBitmap(swidth, height, Bitmap.Config.ARGB_8888 ); 
+		Canvas comboImage = new Canvas(comBoBitmap); 
+		
+		for (int i = 0; i < text.length(); i++) {
+			Character ch = text.charAt(i);
 			if (glyphs.get(ch) != null) {
-				Bitmap temp = glyphs.get(ch);
-				//Bitmap tempc = c;
-				Bitmap tempc = mergeBitmap(c, temp);
-				c = Bitmap.createBitmap(tempc);
-				//c = temp;
+				comboImage.drawBitmap(glyphs.get(ch), (i * width), 0, null);
 			}
 		}
-		return c;
+		return comBoBitmap;
+		
 	}
+	
 
 
 }

@@ -18,7 +18,10 @@ import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.GameState;
+import com.comp4903.project.gameEngine.enums.SkillType;
+import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.engine.GameEngine;
+import com.comp4903.project.gameEngine.engine.SkillEngine;
 import com.comp4903.project.graphics.GLRenderer;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -33,11 +36,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	private boolean pickEnemyUnit = false;
 	private boolean pickEmpty = false;
 	private boolean finishMoving = false;
-	
+
 	private Unit currentUnit = null;
 	private int decision = -1;
 	private GestureDetector gDetect;
-
+	public int tx,ty;
 	private MapData mapData = null;
 
 	public MyGLSurfaceView(Context context, MapData md) {
@@ -145,12 +148,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 			Log.d("TAG", "Single Tap Detected ...");
 			boolean touchMenu = mRenderer.checkHUD(x, y);
-			gl = RendererAccessor.map.gl;
-
+			
 			Point pickPoint = mRenderer.pick(x, y);
-
 			if(pickPoint.x == -1 && pickPoint.y == -1 && !touchMenu){
-
 				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 				pickControlledUnit = false;
 				mRenderer.setSelectedHUD(y, false);
@@ -158,31 +158,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				//return false;
 			}
 
-			mapData._tileSelected = pickPoint;
 			Unit pickUnit = mapData.getUnitAt(pickPoint);
 			if(pickUnit != null){
-				//it is picking unittt
-				
-				pickControlledUnit = true;
-				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
-				PathFind.DisplayUnitMoveBox(mapData.getUnitAt(pickPoint));
-				mRenderer.updateHUDPanel(pickUnit);
-				currentUnit = pickUnit;
-				decision = -2;
-				finishMoving = false;
-				
-				//Log.d("TAG", "Change unit ...");
+				handlePickUnit(pickUnit);
 			}else{
-				if(pickControlledUnit && touchMenu && finishMoving){
-					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-					//PathFind.DisplayUnitMoveBox(currentUnit);
-					decision = mRenderer.setSelectedHUD(y, touchMenu);
-					handleTouchEvent(x,y,pickPoint);
-				}else if (pickControlledUnit && !touchMenu && !finishMoving){
-					handleTouchEvent(x,y,pickPoint);
-				}else{
-					ResetGUI();
-				}
+				handlePickEmpty(x,y,pickPoint,touchMenu);
 			}			
 
 			requestRender();
@@ -198,76 +178,92 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 			}
 		}
-	}
-
-	public void handleTouchEvent(int x , int y, Point p){
-		switch(decision){
-		case -2:
-			//moving to the selected tilte
-			//maintain the menu showing
-			//
-			//mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-			/*
-			 * if pick the wrong tilte 
-			 * 
-			 */
-			//if(currentUnit != null)
-			//GameEngine.moveUnit(currentUnit,p);
-			Unit u = mapData._units.get(0);
-			if (currentUnit != null){
+		
+		public void handlePickEmpty(int x, int y,Point p,boolean touchMenu){
+			if(pickControlledUnit && !finishMoving){
 				if(mapData._movementBox.contains(p)){
 					GameEngine.moveUnit(currentUnit, p);
-					
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 					//PathFind.DisplayUnitMoveBox(currentUnit);
 					mapData.clearBoxes();
 					RendererAccessor.update(mapData);
 					finishMoving = true;
+					
 				}
-				else{
-					ResetGUI();
-				}
-				//ResetGUI();
-				
+			}else if(pickControlledUnit && finishMoving && touchMenu){
+				decision = mRenderer.setSelectedHUD(y, touchMenu);
+				handleTouchEvent(x,y,p);
 			}
-			break;
-		case 0:
-			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-			PathFind.DisplayUnitAttackBox(currentUnit);
-			break;
-		case 1:
-			//Attacking enemy
-			//maintain the menu showing
-			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-			break;
-		case 2:
-			//Using items
-			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-			break;
-		/*case 3:
-			//Using abilities
-			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-			break;
-			case 4:
-		case 5:
-		case -1:
-			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
-			pickControlledUnit = false;
-			mRenderer.setSelectedHUD((int)y, false);	
-			break;*/
 		}
-	}
-	
-	public void ResetGUI(){
-		pickControlledUnit = false;
-		decision = -1;
-		mRenderer.setSelectedHUD(1, false);
-		mapData.clearBoxes();
-		RendererAccessor.update(mapData);
-		finishMoving = false;
-		mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
-		
-	}
+		public void handlePickUnit(Unit p){
+			currentUnit = p;
+			pickControlledUnit = true;
+			decision = -2;//ready to move
+			PathFind.DisplayUnitMoveBox(currentUnit);
+			mRenderer.updateHUDPanel(currentUnit);
+			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
+			finishMoving = false;
+			
+		}
+
+		public void handleTouchEvent(int x , int y, Point p){
+			switch(decision){
+			case -2:
+				
+				if (currentUnit != null){
+					if(mapData._movementBox.contains(p)){
+						GameEngine.moveUnit(currentUnit, p);
+					
+						mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+						//PathFind.DisplayUnitMoveBox(currentUnit);
+						
+						mapData.clearBoxes();
+						RendererAccessor.update(mapData);
+						finishMoving = true;
+					}
+					else{
+						ResetGUI();
+					}
+					//ResetGUI();
+					if (mapData._attackBox.contains(p)){
+						GameEngine.useSkill(currentUnit, mapData.getUnitAt(p), SkillType.Attack);
+						mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+						
+						mapData.clearBoxes();
+						finishMoving = true;
+					}
+				}
+				break;
+			case 0:
+				//mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+				//PathFind.DisplayUnitAttackBox(currentUnit);
+				break;
+			case 1:
+				//Attacking enemy
+				//maintain the menu showing
+				//mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+				PathFind.DisplayUnitAttackBox(currentUnit);
+				break;
+			case 2:
+				//Using items
+				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+				break;
 
 
+			}
+		}
+
+		public void ResetGUI(){
+			pickControlledUnit = false;
+			decision = -1;
+			mRenderer.setSelectedHUD(1, false);
+			mapData.clearBoxes();
+			RendererAccessor.update(mapData);
+			finishMoving = false;
+			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
+
+		}
+
+	}
 }
