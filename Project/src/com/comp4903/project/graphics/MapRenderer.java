@@ -234,10 +234,10 @@ public class MapRenderer {
 					if (tileMap[x][y].state == 1)
 					{
 						tileMap[x][y].size += 0.02f;
-						float sz = tileMap[x][y].size + 0.7f;
-						if (sz > 1.3f)
-							sz = 1.3f - (sz- 1.3f);
-						if (tileMap[x][y].size > 1.2f)
+						float sz = tileMap[x][y].size + 0.8f;
+						if (sz > 1.2f)
+							sz = 1.2f - (sz- 1.2f);
+						if (tileMap[x][y].size > 0.8f)
 							tileMap[x][y].size = 0;
 						
 						Matrix.scaleM(modelViewMatrix, 0, sz, sz, sz);
@@ -364,6 +364,8 @@ public class MapRenderer {
 				tileMap[x][y].tile = m._tileTypes[x][y].getCode();
 				tileMap[x][y].state = -1;
 			}
+		
+		tileMap[4][4].state = 1;
 		
 		actors.clear();
 		for (int i = 0; i < m._units.size(); i++)
