@@ -38,7 +38,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	private Unit currentUnit = null;
 	private int decision = -1;
 	private GestureDetector gDetect;
-
+	public int tx,ty;
 	private MapData mapData = null;
 
 	public MyGLSurfaceView(Context context, MapData md) {
@@ -148,7 +148,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			boolean touchMenu = mRenderer.checkHUD(x, y);
 			
 			Point pickPoint = mRenderer.pick(x, y);
-			if(pickPoint.x == -1 && pickPoint.y == -1 ){
+			if(pickPoint.x == -1 && pickPoint.y == -1 && !touchMenu){
 				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 				pickControlledUnit = false;
 				mRenderer.setSelectedHUD(y, false);
@@ -160,7 +160,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			if(pickUnit != null){
 				handlePickUnit(pickUnit);
 			}else{
-				handlePickEmpty(x,y,pickPoint);
+				handlePickEmpty(x,y,pickPoint,touchMenu);
 			}			
 
 			requestRender();
@@ -177,7 +177,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}
 		}
 		
-		public void handlePickEmpty(int x, int y,Point p){
+		public void handlePickEmpty(int x, int y,Point p,boolean touchMenu){
 			if(pickControlledUnit && !finishMoving){
 				if(mapData._movementBox.contains(p)){
 					GameEngine.moveUnit(currentUnit, p);
@@ -188,11 +188,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					finishMoving = true;
 					
 				}
-				else{
-					ResetGUI();
-				}
-			}else if(pickControlledUnit && finishMoving){
-				ResetGUI();
+			}else if(pickControlledUnit && finishMoving && touchMenu){
+				decision = mRenderer.setSelectedHUD(y, touchMenu);
+				handleTouchEvent(x,y,p);
 			}
 		}
 		public void handlePickUnit(Unit p){
