@@ -44,7 +44,7 @@
 	</TileGroup>
 	
 	<Units group="Player One">
-	    <Unit x="0" y="2" weapon="Shotgun" armour="Medium Armour">Storm Trooper</Unit>
+	    <Unit x="0" y="2" weapon="Automatic Rifle" armour="Medium Armour">Storm Trooper</Unit>
 	</Units>
 	
 	<Units group="Player Two">

@@ -20,6 +20,7 @@ public class Unit {
 	private List<Status> status;
 	public UnitData combatStats;
 	public boolean active;
+	public boolean alive;
 	
 	public Unit(UnitType type, UnitGroup group, Point pos){
 		uID = id++;
@@ -29,6 +30,7 @@ public class Unit {
 		weapon = WeaponType.None;
 		armour = ArmourType.None;
 		active = true;
+		alive = true;
 		InitializeCombatStats();
 	}
 	
@@ -40,6 +42,7 @@ public class Unit {
 		this.weapon = weapon;
 		this.armour = armour;
 		active = true;
+		alive = true;
 		InitializeCombatStats();
 	}
 	

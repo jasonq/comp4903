@@ -394,6 +394,7 @@ public class XMLParser {
 	
 	private static MapData parseUnitGroup(MapData data, XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
 		UnitGroup currGroup = TypeFinder.findUnitGroup(parser.getAttributeValue(null, "group"));
+		data._groupList.add(currGroup);
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
 			Log.d(TAG, "parse Unit tag " + parser.getName());
 			if (parser.getName().equals("Unit")) {

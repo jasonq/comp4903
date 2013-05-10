@@ -18,8 +18,10 @@ import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.GameState;
+import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.engine.GameEngine;
+import com.comp4903.project.gameEngine.engine.SkillEngine;
 import com.comp4903.project.graphics.GLRenderer;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -223,7 +225,13 @@ public class MyGLSurfaceView extends GLSurfaceView {
 						ResetGUI();
 					}
 					//ResetGUI();
-
+					if (mapData._attackBox.contains(p)){
+						GameEngine.useSkill(currentUnit, mapData.getUnitAt(p), SkillType.Attack);
+						mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+						
+						mapData.clearBoxes();
+						finishMoving = true;
+					}
 				}
 				break;
 			case 0:

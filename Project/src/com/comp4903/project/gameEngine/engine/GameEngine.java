@@ -13,7 +13,6 @@ public class GameEngine {
 	public static void Initialize(MapData data) { mapData = data; }
 	
 	public static boolean moveUnit(Unit unit, Point point){
-		System.out.println("Moving to:" + point.x + ", " + point.y);
 		Unit u = mapData.getUnitAt(unit.position);
 		if (u == null)
 			return false;
@@ -21,10 +20,22 @@ public class GameEngine {
 			return false;
 		RendererAccessor.moveAnimation(u, PathFind.UnitToPoint(u, point));
 		u.position = point;
-		System.out.println("Moved:" + point.x + ", " + point.y);
-		System.out.println("Unit at:" + u.position.x + ", " + u.position.y);		
+		System.out.println(u.unitType.name() + u.uID + " Move to " + point.x + ", " + point.y);	
 		RendererAccessor.update(mapData);
 		return true;
+	}
+	
+	public static void endTurn(){
+		int index = mapData._groupList.indexOf(mapData._activeGroup);
+		if (index >= (mapData._groupList.size() - 1))
+			index = 0;
+		mapData._activeGroup = mapData._groupList.get(index);
+		for (Unit u : mapData._units){
+			if (u.unitGroup == mapData._activeGroup)
+				u.active = true;
+			else
+				u.active = false;
+		}
 	}
 	
 	public static boolean useSkill(Unit source, Unit target, SkillType skill){
@@ -32,6 +43,7 @@ public class GameEngine {
 		Unit unitTwo = mapData.getUnitAt(target.position);
 		switch (skill){
 			case Attack:
+				SkillEngine.Attack(unitOne, unitTwo);
 				break;
 			case Defence:
 				break;
