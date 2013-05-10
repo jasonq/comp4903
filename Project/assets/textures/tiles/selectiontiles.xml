@@ -2,13 +2,24 @@
 
 	<def:tile name="reachable">		
 		<def:base>
-			<def:point1 u="0.04"	v="0.175"/>
-			<def:point2 u="0.062"	v="0.12"/>
-			<def:point3 u="0.118"	v="0.12"/>
-			<def:point4 u="0.145"	v="0.175"/>
-			<def:point5 u="0.118"	v="0.235"/>
-			<def:point6 u="0.062"	v="0.235"/>		
+			<def:point1 u="0.17"	v="0.18"/>
+			<def:point2 u="0.17"	v="0.18"/>
+			<def:point3 u="0.17"	v="0.18"/>
+			<def:point4 u="0.17"	v="0.18"/>
+			<def:point5 u="0.17"	v="0.18"/>
+			<def:point6 u="0.17"	v="0.18"/>		
 		</def:base>		
+	</def:tile>
+	
+	<def:tile name="attackable">
+	    <def:base>
+			<def:point1 u="0.02"	v="0.02"/>
+			<def:point2 u="0.02"	v="0.02"/>
+			<def:point3 u="0.02"	v="0.02"/>
+			<def:point4 u="0.02"	v="0.02"/>
+			<def:point5 u="0.02"	v="0.02"/>
+			<def:point6 u="0.02"	v="0.02"/>		
+		</def:base>	
 	</def:tile>
 	
 	<def:tile name="arrow.up">
@@ -75,6 +86,17 @@
 			<def:point5 u="0.33"	v="0.105"/>
 			<def:point6 u="0.31"	v="0.06"/>	
 	    </def:base>
+	</def:tile>
+	
+	<def:tile name="bozo">
+	    <def:base>
+			<def:point1 u="0.04"	v="0.175"/>
+			<def:point2 u="0.062"	v="0.12"/>
+			<def:point3 u="0.118"	v="0.12"/>
+			<def:point4 u="0.145"	v="0.175"/>
+			<def:point5 u="0.118"	v="0.235"/>
+			<def:point6 u="0.062"	v="0.235"/>		
+		</def:base>	
 	</def:tile>
 	
 </def:tileset>
