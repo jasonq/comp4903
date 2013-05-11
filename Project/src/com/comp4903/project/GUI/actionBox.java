@@ -50,7 +50,9 @@ public class actionBox extends UI{
 		for(int i = 0; i < command.length; i++){
 			Bitmap temp = Bitmap.createBitmap(commandT,
 					0 , i * height, width, height);
-			command[i].loadGLTexture(gl, context, temp);
+			Bitmap scale = Bitmap.createScaledBitmap(temp, 512, 512, false);
+			command[i].loadGLTexture(gl, context, scale);
+			temp.recycle();
 			//temp.recycle();
 		}
 		commandT.recycle();
@@ -61,8 +63,9 @@ public class actionBox extends UI{
 		for(int i = 0; i < pressedCommand.length; i++){
 			Bitmap temp = Bitmap.createBitmap(pCommand,
 					0 , i * height, width, height);
-			pressedCommand[i].loadGLTexture(gl, context, temp);
-			//temp.recycle();
+			Bitmap scale = Bitmap.createScaledBitmap(temp, 512, 512, false);
+			pressedCommand[i].loadGLTexture(gl, context, scale);
+			temp.recycle();
 		}		
 		pCommand.recycle();
 	}

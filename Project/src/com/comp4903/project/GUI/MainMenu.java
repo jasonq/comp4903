@@ -52,13 +52,15 @@ public class MainMenu {
 			//Bitmap temp = BitmapFactory.decodeResource(context.getResources(), R.drawable.unpressed_button);
 			Bitmap temp = Bitmap.createBitmap(button,
 					0 , i * height, width, height);
-			menu_Item[i].loadGLTexture(gl, context, temp);
+			Bitmap scale = Bitmap.createScaledBitmap(temp, 512, 512, false);
+			menu_Item[i].loadGLTexture(gl, context, scale);
 			//commandT.recycle();
 			temp.recycle();
 			
 			Bitmap temp2 = Bitmap.createBitmap(button2,
 					0 , i * height, width, height);
-			pressed_menu_Item[i].loadGLTexture(gl, context, temp2);
+			Bitmap scale2 = Bitmap.createScaledBitmap(temp2, 512, 512, false);
+			pressed_menu_Item[i].loadGLTexture(gl, context, scale2);
 			temp2.recycle();
 			
 		}
