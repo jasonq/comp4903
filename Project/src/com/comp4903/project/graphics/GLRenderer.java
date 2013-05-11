@@ -50,17 +50,17 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 	public boolean showmenu = false;
 	
-	private float viewX, viewY, viewZ; // co-ordinate of the location we are looking at
+	public static float viewX; // co-ordinate of the location we are looking at
+	public static float viewY;
+	public static float viewZ;
 	private float eyeX, eyeY, eyeZ; // location of camera
 	private float distance; // distance of camera
 	private float viewAngle; // angle of camera
 	
-	// this is how we are supposed to do matrices in OpenGL ES
-	// (as far as I can tell)
 	private float[] modelMatrix = new float[16];
-	private float[] viewMatrix = new float[16];
-	private float[] modelViewMatrix = new float[16]; // combined model+view, needed for openGL
-	private float[] projectionMatrix = new float[16];
+	public static float[] viewMatrix = new float[16];
+	public static float[] modelViewMatrix = new float[16]; // combined model+view, needed for openGL
+	public static float[] projectionMatrix = new float[16];
 	
 	private Context context;
 	
@@ -250,16 +250,14 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		headsUpDisplay.SwithToOrtho(gl);
 		headsUpDisplay.drawHUD(gl);
 		//gl.glDisable(GL10.GL_DEPTH_TEST);
-		//gl.glEnable( GL10.GL_TEXTURE_2D );              // Enable Texture Mapping
-		/*gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
-		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
 		
-		glText.begin( 1.0f, 1.0f, 1.0f, 1.0f );         // Begin Text Rendering (Set Color WHITE)
-		//glText.setScale(2.0f);
-		glText.draw( "Test String :)", 0, 0 );          // Draw Test String
-		glText.draw( "Line 1", 50, 50 );                // Draw Test String
-		glText.draw( "Line 2", 100, 100 );              // Draw Test String
-		glText.end();                                   // End Text Rendering
+		//gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
+		//gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
+		
+		//glText.begin( 1.0f, 1.0f, 1.0f, 1.0f );         // Begin Text Rendering (Set Color WHITE)
+		//glText.setScale(4.0f);
+		//glText.draw( "Attack!", 300, 200 );          // Draw Test String
+		//glText.end();                                   // End Text Rendering
 		
 		gl.glDisable( GL10.GL_BLEND );                  // Disable Alpha Blend*/
 		//mm.drawMainMenu(gl);

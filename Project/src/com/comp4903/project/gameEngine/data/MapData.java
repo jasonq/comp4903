@@ -16,6 +16,7 @@ public class MapData {
 	public List<Point> _movementBox;	// Movement box of the currently selected box
 	public List<Point> _attackBox;		// Attack box of the currently selected box
 	
+	public List<UnitGroup> _groupList;  // List of group on the map
 	public UnitGroup _activeGroup; 		// group that currently making action
 	
 	public List<Unit> _units;
@@ -25,6 +26,7 @@ public class MapData {
 		_movementBox = new ArrayList<Point>();
 		_attackBox = new ArrayList<Point>();
 		_units = new ArrayList<Unit>();
+		_groupList = new ArrayList<UnitGroup>();
 		_activeGroup = UnitGroup.PlayerOne;
 		_numRows = rows;
 		_numColumns = columns;
