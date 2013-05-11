@@ -32,4 +32,9 @@ public class RendererAccessor {
 			map.moveAnimation(u, steps);
 		}
 		
+		public static void attackAnimation(Unit u, Unit u2)
+		{
+			map.attackAnimation(u, u2);
+		}
+		
 }

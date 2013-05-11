@@ -17,23 +17,27 @@ public class GenericAttack extends AnimationProcessor {
 		
 	public void init(Unit attacker, Unit attackee)
 	{
+		r = new Random();
 		actorID = attacker.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
 		
 		Actor victim = RendererAccessor.map.getActor(attackee.uID);
 		
-		float angle = angleFromPoints(actor_.getX(), actor_.getY(),
-									  victim.getX(), victim.getY());
+		//float angle = angleFromPoints(actor_.getX(), actor_.getY(),
+									  //victim.getX(), victim.getY());
 		
-		actor_.setYrotate(angle);
-		victim.setYrotate(angle + 3.141593f);
+		//actor_.setYrotate(angle);
+		//victim.setYrotate(angle + 3.141593f);
 	}
 	
 	@Override
-	public boolean process() {
+	public boolean iteration() {
+		
+		if (time % 3 == 0) {
 
-		actor_.setZrotate(r.nextFloat() * 0.06f - 0.03f);
-		actor_.setXrotate(r.nextFloat() * 0.06f - 0.03f);
+			actor_.setZrotate(r.nextFloat() * 0.10f - 0.05f);
+			actor_.setXrotate(r.nextFloat() * 0.10f - 0.05f);
+		}
 		
 		time++;
 		
@@ -42,6 +46,7 @@ public class GenericAttack extends AnimationProcessor {
 			actor_.setZrotate(0);
 			actor_.setXrotate(0);
 			ended = true;
+			return true;
 		}
 		
 		return false;

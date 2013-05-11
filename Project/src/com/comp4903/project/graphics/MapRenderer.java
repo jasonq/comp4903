@@ -14,6 +14,7 @@ import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.UnitType;
 import com.comp4903.project.graphics.animation.Actor;
 import com.comp4903.project.graphics.animation.AnimationEngine;
+import com.comp4903.project.graphics.animation.GenericAttack;
 import com.comp4903.project.graphics.animation.MoveAnimate;
 import com.comp4903.project.graphics.model.Model3D;
 import com.comp4903.project.graphics.model.ModelLoader;
@@ -62,9 +63,9 @@ public class MapRenderer {
 	// 3D model data
 	private Model3D[] models;
 		
-	private float[] ambientLight = { 0.4f, 0.4f, 0.4f, 1 };
+	private float[] ambientLight = { 0.6f, 0.6f, 0.6f, 1 };
 	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
-	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 10.0f };
+	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 0.0f };
 	
 	AnimationEngine animator;
 	
@@ -148,13 +149,21 @@ public class MapRenderer {
 		eyeZ = eZ;
 				
 		// execute one iteration of all active animations
-		animator.execute();
+		animator.execute();		
+		
+		gl.glEnable(GL10.GL_LIGHTING);
+		gl.glEnable(GL10.GL_LIGHT0);
+		gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, ambientLight, 0);
+		gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, diffuseLight, 0);
+		gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPosition, 0);
 		
 		// execute the rendering passes
 		basePass();				// flat tiles
 		selectionPass();		// selection effects
 		actorPass();			// 3D units
 		tileModelPass();		// 3D tiles
+		
+		gl.glDisable(GL10.GL_LIGHTING);
 	}
 	
 	/* BASEPASS - clears the tile states and draws the base hexagon shaped floor tiles
@@ -278,18 +287,20 @@ public class MapRenderer {
 				y = 0.6f;
 			}
 			
-			gl.glEnable(GL10.GL_LIGHTING);
+			/*gl.glEnable(GL10.GL_LIGHTING);
 			gl.glEnable(GL10.GL_LIGHT0);
 			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, ambientLight, 0);
 			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, diffuseLight, 0);
 			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPosition, 0);
-			
+			*/
 			models[mdl].SetPosition(x, y, z);
 			models[mdl].ResetOrientation();
 			models[mdl].YRotate(a.getYrotate());
+			models[mdl].XRotate(a.getXrotate());
+			models[mdl].ZRotate(a.getZrotate());
 			models[mdl].display(gl, viewMatrix);
 			
-			gl.glDisable(GL10.GL_LIGHTING);
+			//gl.glDisable(GL10.GL_LIGHTING);
 			
 		}
 	}
@@ -450,6 +461,16 @@ public class MapRenderer {
 		
 		animator.add("move", m);
 		animator.start("move");
+	}
+	
+	public void attackAnimation(Unit u, Unit u2)
+	{
+		GenericAttack m = new GenericAttack();
+		
+		m.init(u, u2);
+		
+		animator.add("attack", m);
+		animator.start("attack");
 	}
 	
 	public Actor getActor(int id)

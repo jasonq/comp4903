@@ -13,7 +13,21 @@ public abstract class AnimationProcessor {
 	boolean ended = false;
 	String name;
 	
-	public abstract boolean process();
+	public abstract boolean iteration();
+	
+	public boolean process()
+	{
+		if (!started)
+			return false;
+		if (delay > 0)
+		{
+			delay--;
+			return false;
+		}
+		iteration();	
+		
+		return true;
+	}
 	
 	/*	ANGLEFROMDIRECTION - given a direction (0 - 5, representing
 	 *  the 6 sides of a hexagon starting from northwest), returns

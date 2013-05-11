@@ -199,6 +199,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			currentUnit = p;
 			pickControlledUnit = true;
 			decision = -2;//ready to move
+			RendererAccessor.attackAnimation(currentUnit, currentUnit);
 			PathFind.DisplayUnitMoveBox(currentUnit);
 			mRenderer.updateHUDPanel(currentUnit);
 			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);

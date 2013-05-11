@@ -94,15 +94,7 @@ public class MoveAnimate extends AnimationProcessor {
 	/*	PROCESS - processes one iteration of the animation.  Returns true
 	 *  when the animation is complete, false otherwise
 	 */
-	public boolean process() {
-		
-		if (!started)
-			return false;
-		if (delay > 0)
-		{
-			delay--;
-			return false;
-		}
+	public boolean iteration() {		
 		
 		if (stepPosition < 0.975f)
 		{
