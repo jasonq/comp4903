@@ -409,8 +409,14 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		return this.headsUpDisplay.checkTouchingMenu(x, y);
 	}
 	
-	public int setSelectedHUD(int y,boolean flag){
-		if(flag){
+	/*
+	 * return value from 1 to 3 to indicate which button is pressed
+	 * 1- Attack button
+	 * 2- Ability button
+	 * 3- Wait button
+	 */
+	public int setSelectedHUD(int x , int y){
+		/*if(flag){
 			this.headsUpDisplay.action.pressed = true; 
 			int result = this.headsUpDisplay.action.checkListItem(y);
 			this.headsUpDisplay.action.menuSelected =  result;
@@ -419,7 +425,11 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			this.headsUpDisplay.action.pressed = false;
 			this.headsUpDisplay.action.menuSelected = -1;
 			return -1;
-		}
+		}*/
+		
+		int result = headsUpDisplay.action.checkPressingBox(x, y);
+		headsUpDisplay.action.menuSelected = result;
+		return result;
 	}
 	
 	

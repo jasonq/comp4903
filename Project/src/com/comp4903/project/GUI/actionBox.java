@@ -66,24 +66,39 @@ public class actionBox extends UI{
 		}		
 		pCommand.recycle();
 	}
-	public void draw(GL10 gl){
+	public void draw(GL10 gl,boolean showCancel){
 		gl.glLoadIdentity();
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
 		//box.draw(gl);
-		for(int i = 0; i < command.length; i++){	
-			if(menuSelected == i){
-				pressedCommand[i].draw(gl);
-			}else
-				command[i].draw(gl);
+		
+		if(showCancel){
+			//if(menuSelected == 0)
+				//pressedCommand[0].draw(gl);
+			//else
+				command[0].draw(gl);
+		}else{
+			for(int i = 1; i < command.length; i++){	
+				if(menuSelected == i){
+					pressedCommand[i].draw(gl);
+				}else
+					command[i].draw(gl);
 			//gl.glTranslatef(0.0f,dis,0);
+			}
 		}
 		gl.glDisable( GL10.GL_BLEND );                  // Disable Alpha Blend
 	}
-	public int checkListItem(float y){
+	public int checkPressingBox(int x, int y){
 		int pad = (yBot - yTop)/command.length;
-		return ((int)y-yTop) / pad  ;
+		int newYTop = yTop + pad;
+		if( x >= xTop && x <= xBot && y >= newYTop && y <= yBot)
+			return (((int)y -newYTop) / pad) + 1  ;
+		else
+			return -1;
 	}
 	
+	public boolean checkPressingCancel(int X, int Y){
+		return (X >= xTop && X <= xBot && Y >= yTop && Y <= ((yBot - yTop)/ command.length));
+	}
 
 }

@@ -29,11 +29,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 
 	private float pickx,picky;
-
 	private boolean pickControlledUnit = false;
 	private boolean pickEnemyUnit = false;
 	private boolean pickEmpty = false;
 	private boolean finishMoving = false;
+	private UnitGroup controlGroup = UnitGroup.PlayerOne;
+	private UnitGroup enemyGroup = UnitGroup.PlayerTwo;
 
 	private Unit currentUnit = null;
 	private int decision = -1;
@@ -83,25 +84,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				//invalidate();
 
 			}
-
-			requestRender();
 			break;
-			//PICKING
-			//case MotionEvent.ACTION_DOWN:
-
-			/* return an int to decide which action taking
-			 * 0- Move
-			 * 1- Attack
-			 * 2- Items
-			 * 3- Ability
-			 * 4- Wait
-			 * 5- Cancel
-			 */
-			//if(touchMenu && pickControlledUnit)
-			//decision = this.mRenderer.setSelectedHUD((int)e.getY(), touchMenu);
-
-			//requestRender();
-			//break;
 		}
 		mPreviousX = x;
 		mPreviousY = y;
@@ -141,32 +124,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}
 			return true;
 		}
-
-		public void handle_Game_Screen(int x, int y){
-
-			Log.d("TAG", "Single Tap Detected ...");
-			boolean touchMenu = mRenderer.checkHUD(x, y);
-			
-			Point pickPoint = mRenderer.pick(x, y);
-			if(pickPoint.x == -1 && pickPoint.y == -1 && !touchMenu){
-				mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
-				pickControlledUnit = false;
-				mRenderer.setSelectedHUD(y, false);
-				return;
-				//return false;
-			}
-
-			Unit pickUnit = mapData.getUnitAt(pickPoint);
-			if(pickUnit != null){
-				handlePickUnit(pickUnit);
-			}else{
-				handlePickEmpty(x,y,pickPoint,touchMenu);
-			}			
-
-			requestRender();
-		}
-
-
+		/*
+		 * Hanlde touch event when we are in main menu state
+		 */
 		public void handle_Main_Menu(int x , int y){
 			int result = mRenderer.setSelectMainMenu(x, y);
 			int a = 2;
@@ -176,83 +136,165 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 			}
 		}
-		
-		public void handlePickEmpty(int x, int y,Point p,boolean touchMenu){
-			if(pickControlledUnit && !finishMoving){
-				if(mapData._movementBox.contains(p)){
-					GameEngine.moveUnit(currentUnit, p);
-					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-					//PathFind.DisplayUnitMoveBox(currentUnit);
-					mapData.clearBoxes();
-					RendererAccessor.update(mapData);
-					finishMoving = true;
-					
+		/*
+		 * Handle touch event when we are in game screen state
+		 */
+		public void handle_Game_Screen(int x, int y){
+
+			Log.d("TAG", "Single Tap Detected ...");
+			int touchMenu = mRenderer.setSelectedHUD(x, y);
+			boolean pressCancel = mRenderer.headsUpDisplay.action.checkPressingCancel(x, y);
+			Point pickPoint = mRenderer.pick(x, y);
+			//check if out of bounce
+			if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu== -1 && !pressCancel){
+				ResetGUI();
+				return;
+			}		
+			Unit pickUnit = mapData.getUnitAt(pickPoint);
+			if(pickUnit != null){
+				if(pickUnit.unitGroup == controlGroup){
+					handleControlledUnit(pickUnit);
 				}
-			}else if(pickControlledUnit && finishMoving && touchMenu){
-				decision = mRenderer.setSelectedHUD(y, touchMenu);
-				handleTouchEvent(x,y,p);
+				//handle if we pick enemy unit
+				else if (pickUnit.unitGroup == enemyGroup){
+					handleEnemyUnint(pickUnit);
+				}
+			
+			}else{
+				handlePickEmpty(x,y,pickPoint,touchMenu);
+			}			
+		}
+		
+		
+		/*
+		 * handle when picking our own unit
+		 * IF current unit is not null which we have picked 
+		 * 		IF the unit is the same as current unit Hence we are tapping on the same location
+		 * 			set the finish moving is true which is stay at the same location
+		 * 			enable and disable hud
+		 * 			clear the movement box transfer to choosing action phase
+		 * 
+		 * ELSE IF current is null, havent picked yet
+		 * 		handle picking new unit
+		 */
+		public void handleControlledUnit(Unit pickUnit){
+			if(currentUnit != null){
+				if(currentUnit.uID == pickUnit.uID){
+					finishMoving = true;//finish moving for the currentunit
+					mapData.clearBoxes();//clear the movement box
+					RendererAccessor.update(mapData);//update mapdata
+					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);//update hud disable cancel button
+					return;
+				}
+			}else{
+				handlePickUnit(pickUnit);
 			}
 		}
-		public void handlePickUnit(Unit p){
-			currentUnit = p;
-			pickControlledUnit = true;
-			decision = -2;//ready to move
-			PathFind.DisplayUnitMoveBox(currentUnit);
-			mRenderer.updateHUDPanel(currentUnit);
-			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
-			finishMoving = false;
-			
-		}
+		
+		
+		/*
+		 * if we arent controlling any
+		 * 		- show enemy stats and movement box
+		 * if we are controlling any unit AND  our unit has move AND  the decision is either ATTACK or ABILITY
+		 * 		- we EXECUTE THEM!!!!
+		 */
+		public void handleEnemyUnint(Unit pickUnit){
+			if(currentUnit == null && !pickControlledUnit){
+				//display data of enemy unit
+				PathFind.DisplayUnitMoveBox(pickUnit);
+				mRenderer.updateHUDPanel(pickUnit);
+				mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
+			}else if(currentUnit != null && pickControlledUnit && finishMoving && (decision == 1 || decision == 2)){
+				if(decision == 1){
+					ResetGUI();
+					Log.d("Debug", "I ATTACK YOUUUU");
+				}else if(decision == 2){
+					ResetGUI();
+					Log.d("Debug", "FEEL MY ULTIMATE WRATH");
+				}
 
-		public void handleTouchEvent(int x , int y, Point p){
-			switch(decision){
-			case -2:
-				
-				if (currentUnit != null){
+			}
+		}
+		
+		
+		/*
+		 * handle when picking empty tilte
+		 * if we are controlling unit
+		 * 		-if the unit hasnt moved
+		 * 			if the user press cancel on top right
+		 * 				cancel the current selected unit and return, below logic will be ignored
+		 * 			-moving the unit
+		 * 			-disable and enable some of the hud
+		 * 			
+		 * 		 else if the unit has moved
+		 * 			-if we press anything inside the menu
+		 * 				- if the decision is attack
+		 * 					 showing attack boxes
+		 * 				- if the decision is ability
+		 * 					 showing skills boxes
+		 * 				- if the decision is wait
+		 * 					 yield the turn
+		 * 	
+		 */
+		public void handlePickEmpty(int x, int y,Point p,int touchMenu){
+			boolean pressCancel = mRenderer.headsUpDisplay.action.checkPressingCancel(x, y);
+			if(pickControlledUnit){
+				if(finishMoving){
+					if(touchMenu != -1){
+						//select either attack, ability,
+						decision = mRenderer.setSelectedHUD(x,y);
+						if(decision == 1){//if attack we show the attack range
+							mRenderer.headsUpDisplay.updateHUD(true, true, false, false);//maintain the HUD
+							PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
+						}else if(decision == 3){//if cancel or wait we disable the HUD
+							//more on this later
+							//currentUnit.active = false;
+							ResetGUI();
+						}			
+					}
+				}else{
+					//if cancel the movement action
+					if(pressCancel){
+						ResetGUI();
+						return;
+					}
 					if(mapData._movementBox.contains(p)){
 						GameEngine.moveUnit(currentUnit, p);
-					
 						mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 						//PathFind.DisplayUnitMoveBox(currentUnit);
-						
 						mapData.clearBoxes();
 						RendererAccessor.update(mapData);
 						finishMoving = true;
-					}
-					else{
-						ResetGUI();
-					}
-					//ResetGUI();
 
+					}
 				}
-				break;
-			case 0:
-				//mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-				//PathFind.DisplayUnitAttackBox(currentUnit);
-				break;
-			case 1:
-				//Attacking enemy
-				//maintain the menu showing
-				//mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-				PathFind.DisplayUnitAttackBox(currentUnit);
-				break;
-			case 2:
-				//Using items
-				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-				break;
-
-
 			}
 		}
+		/*
+		 * handle when pick a new unit, new controlled unit
+		 * enable hud
+		 * showing the path of movement
+		 */
+		public void handlePickUnit(Unit p){
+			if(p.active){
+				currentUnit = p;
+				pickControlledUnit = true;
+				PathFind.DisplayUnitMoveBox(currentUnit);
+				mRenderer.updateHUDPanel(currentUnit);
+				mRenderer.headsUpDisplay.updateHUD(true, false, true, false);
+				finishMoving = false;
+			}
 
+		}
+		//reset the GUI, boolean value etc
 		public void ResetGUI(){
 			pickControlledUnit = false;
 			decision = -1;
-			mRenderer.setSelectedHUD(1, false);
+			mRenderer.headsUpDisplay.action.menuSelected = -1;
 			mapData.clearBoxes();
 			RendererAccessor.update(mapData);
 			finishMoving = false;
+			currentUnit = null;
 			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 
 		}

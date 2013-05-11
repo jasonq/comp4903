@@ -25,26 +25,25 @@ public class HUD {
 	public int width,height;
 	public actionBox action;
 	public characterBox character;
-	public Glyphs glyph;	
+
 	public boolean showAction = false;
 	public boolean showStat = false;
-	public boolean showAbility = false;
+	public boolean showCancel = false;
 	public boolean showAttack = false;
 	
 	public HUD(Context c, int w, int h,GLText glt){
 		context = c;		
 		width = w;
 		height = h;
-		glyph = new Glyphs(BitmapFactory.decodeResource(context.getResources(), R.drawable.glyphs_black));
 		action = new actionBox(context,width,height);
 		Unit abc = null;
 		character = new characterBox(context,width,height,abc, glt);
 	}
 	
-	public void updateHUD(boolean showAction, boolean showStat, boolean showAbility, boolean showAttack){
+	public void updateHUD(boolean showAction, boolean showStat, boolean showCancel, boolean showAttack){
 		this.showAction = showAction;
 		this.showStat = showStat;
-		this.showAbility = showAbility;
+		this.showCancel = showCancel;
 		this.showAttack = showAttack;
 	}
 
@@ -55,7 +54,7 @@ public class HUD {
 
 	public void drawHUD(GL10 gl){
 		if(showAction)
-			action.draw(gl);		
+			action.draw(gl,showCancel);		
 		if(showStat)
 			character.draw(gl);
 	}

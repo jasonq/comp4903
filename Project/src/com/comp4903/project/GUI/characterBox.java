@@ -19,7 +19,6 @@ public class characterBox extends UI {
 	public Square RedBar,BlueBar,Avatar;
 	public String atkVal, defVal, roundVal, nameVal, classVal,hpVal, enVal;
 	public int currentHp, totalHp, currentE, totalE;
-	public Glyphs glyph;
 	public Unit unit;
 	public GLText GLT;
 	public int x,y,bWidth, bHeight;
