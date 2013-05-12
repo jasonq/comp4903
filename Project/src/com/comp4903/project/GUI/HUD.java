@@ -25,7 +25,10 @@ public class HUD {
 	public int width,height;
 	public actionBox action;
 	public characterBox character;
-
+	
+	private Square giveUpTurn;
+	private int Gx,Gy,Gw,Gh;
+	
 	public boolean showAction = false;
 	public boolean showStat = false;
 	public boolean showCancel = false;
@@ -38,6 +41,11 @@ public class HUD {
 		action = new actionBox(context,width,height);
 		Unit abc = null;
 		character = new characterBox(context,width,height,abc, glt);
+		Gx = width/30;
+		Gy = height*9/10;
+		Gw = width  / 20 ;
+		Gh =  height/ 10;
+		giveUpTurn = new Square(Gx,Gy,Gw,Gh);
 	}
 	
 	public void updateHUD(boolean showAction, boolean showStat, boolean showCancel, boolean showAttack){
@@ -50,9 +58,17 @@ public class HUD {
 	public void initialBoxTexture(GL10 gl){
 		action.loadUITexture(gl, context.getResources(), R.drawable.menu);
 		character.loadUITexture(gl, context.getResources(), R.drawable.statpanel);
+		
+		Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.check);
+		giveUpTurn.loadGLTexture(gl, context, bm);
 	}
 
 	public void drawHUD(GL10 gl){
+		gl.glLoadIdentity();
+		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
+		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
+		giveUpTurn.draw(gl);
+		gl.glDisable(GL10.GL_BLEND);
 		if(showAction)
 			action.draw(gl,showCancel);		
 		if(showStat)
@@ -93,6 +109,9 @@ public class HUD {
 		character.setText();
 		//character.loadUITexture(gl, context.getResources(), R.drawable.statpanel);
 	}
-
+	
+	public boolean checkPressingEndTurn(int x , int y){
+		return (x >= Gx && x <= (Gx + Gw) && y >= Gy && y <= (Gy + Gh));
+	}
 
 }

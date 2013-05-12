@@ -13,6 +13,7 @@ public class actionBox extends UI{
 
 	private Square[] command;
 	private Square[] pressedCommand;
+	
 	public int menuSelected ;
 	public boolean pressed = false;
 	public actionBox(Context c, int w, int h) {
@@ -40,6 +41,8 @@ public class actionBox extends UI{
 		yTop = y;
 		xBot = xTop + boxWidth;
 		yBot = yTop + boxHeight;
+		
+		
 	}
 
 	public void loadUITexture(GL10 gl,Resources r, int id){

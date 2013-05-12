@@ -18,6 +18,7 @@ import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.GameState;
+import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.graphics.GLRenderer;
@@ -202,10 +203,15 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			if(currentUnit == null && !pickControlledUnit){
 				//display data of enemy unit
 				PathFind.DisplayUnitMoveBox(pickUnit);
+				//update mapdata
 				mRenderer.updateHUDPanel(pickUnit);
 				mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 			}else if(currentUnit != null && pickControlledUnit && finishMoving && (decision == 1 || decision == 2)){
 				if(decision == 1){
+					//ResetGUI();
+					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack);
+					RendererAccessor.attackAnimation( currentUnit, pickUnit);
+					RendererAccessor.update(mapData);
 					ResetGUI();
 					Log.d("Debug", "I ATTACK YOUUUU");
 				}else if(decision == 2){
@@ -268,6 +274,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 					}
 				}
+			}else{
+				ResetGUI();
 			}
 		}
 		/*

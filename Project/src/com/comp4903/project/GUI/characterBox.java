@@ -58,7 +58,7 @@ public class characterBox extends UI {
 			classVal = nameVal;
 			hpVal = "" + stat.currentHealth;
 			enVal = "" + stat.currentEnergy;
-			currentHp = stat.currentHealth- 30;
+			currentHp = stat.currentHealth;
 			totalHp = stat.maxHealth;
 			currentE = stat.currentEnergy;
 			totalE = stat.maxEnergy;
