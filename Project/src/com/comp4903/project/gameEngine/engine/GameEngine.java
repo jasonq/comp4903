@@ -43,9 +43,11 @@ public class GameEngine {
 		Unit unitTwo = mapData.getUnitAt(target.position);
 		switch (skill){
 			case Attack:
+				System.out.println("Attacked");
 				SkillEngine.Attack(unitOne, unitTwo);
 				break;
 			case Defence:
+				
 				break;
 			case ExposeWeakness:
 				break;

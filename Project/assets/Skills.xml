@@ -13,8 +13,10 @@
 	    <Description>Defend and end turn</Description>
 	    <Health>0</Health>
 	    <Energy>0</Energy>
-	    <Target>Enemy</Target>
+	    <Target>Self</Target>
 	    <Range>0</Range>
+	    <Modifier parameter="Duration">1</Modifier>
+	    <Modifier parameter="Armour">1</Modifier>
 	</Ability>
 	<Ability>
 	    <Name>Expose Weakness</Name>

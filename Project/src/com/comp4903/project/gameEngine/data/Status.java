@@ -1,7 +1,9 @@
 package com.comp4903.project.gameEngine.data;
 
+import com.comp4903.project.gameEngine.enums.SkillType;
+
 public class Status {
-	public String name;
+	public SkillType name;
 	public int duration;
 	public int damageHealth;
 	public int damageEnergy;
@@ -13,10 +15,11 @@ public class Status {
 	public int range;
 	public int defence;
 	public int accuracy;
+	public boolean clearAtEndOfTurn;
 	public boolean active;
 	
 	public Status(){
-		duration = 1;
+		duration = 0;
 		damageHealth = 0;
 		damageEnergy = 0;
 		maxHealth = 0;
@@ -28,5 +31,6 @@ public class Status {
 		defence = 0;
 		accuracy = 0;
 		active = true;
+		clearAtEndOfTurn = true;
 	}
 }

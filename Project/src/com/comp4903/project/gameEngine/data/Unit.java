@@ -43,7 +43,13 @@ public class Unit {
 		this.armour = armour;
 		active = true;
 		alive = true;
+		if (weapon != WeaponType.None)
 		InitializeCombatStats();
+	}
+	
+	public void AddStatus(Status s){
+		status.add(s);
+		UpdateCombatStats();
 	}
 	
 	public void InitializeCombatStats(){
@@ -54,6 +60,8 @@ public class Unit {
 		combatStats.maxHealth = stats.health + armourStats.health;
 		combatStats.maxEnergy = stats.energy;
 		combatStats.maxMovement = stats.movement;
+		if (weapon != WeaponType.None)
+			combatStats.hasWeapon = true;
 		combatStats.attack = weaponStats.damage;
 		combatStats.defence = armourStats.defence;
 		combatStats.accuracy = weaponStats.accuracy;
