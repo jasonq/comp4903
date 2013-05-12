@@ -2,6 +2,7 @@ package com.comp4903.project.graphics;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,8 +15,10 @@ import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.UnitType;
 import com.comp4903.project.graphics.animation.Actor;
 import com.comp4903.project.graphics.animation.AnimationEngine;
+import com.comp4903.project.graphics.animation.FloatingText;
 import com.comp4903.project.graphics.animation.GenericAttack;
 import com.comp4903.project.graphics.animation.MoveAnimate;
+import com.comp4903.project.graphics.animation.ReceiveAttack;
 import com.comp4903.project.graphics.model.Model3D;
 import com.comp4903.project.graphics.model.ModelLoader;
 import com.comp4903.project.graphics.tile.Hexagon;
@@ -46,8 +49,8 @@ public class MapRenderer {
 	private float[] resultVec = new float[4];
 	
 	// standard 3d matrices
-	private float[] viewMatrix;
-	private float[] projectionMatrix;
+	public float[] viewMatrix;
+	public float[] projectionMatrix;
 	private float[] modelMatrix = new float[16];
 	private float[] modelViewMatrix = new float[16];
 	private float eyeX, eyeY, eyeZ;
@@ -65,9 +68,9 @@ public class MapRenderer {
 		
 	private float[] ambientLight = { 0.6f, 0.6f, 0.6f, 1 };
 	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
-	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 0.0f };
+	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 0.0f };	
 	
-	AnimationEngine animator;
+	private ArrayList<FloatingText> floatingText_;
 	
 	/*	CONSTRUCTOR - sets up data structures
 	 * 
@@ -82,7 +85,9 @@ public class MapRenderer {
 		hex = new Hexagon(gl, context);
 		hex.readTileData();
 		actors = new HashMap<Integer, Actor>();
-		animator = new AnimationEngine(gl, context);
+		AnimationEngine.init(gl, context);
+		floatingText_ = new ArrayList<FloatingText>();
+		FloatingText.init(gl, context);
 	}
 	
 	/*	LOADMODELS - loads and initializes the 3D model data
@@ -99,7 +104,7 @@ public class MapRenderer {
 			try {
 				InputStream buf = null;
 				if (t == 0)
-					buf = am.open("models/testmodel.mdl");
+					buf = am.open("models/marvin.gmodel");
 				else
 					buf = am.open("models/soldier.gmodel");
 				ModelLoader.load(buf, models[t]);
@@ -149,7 +154,7 @@ public class MapRenderer {
 		eyeZ = eZ;
 				
 		// execute one iteration of all active animations
-		animator.execute();		
+		AnimationEngine.execute();		
 		
 		gl.glEnable(GL10.GL_LIGHTING);
 		gl.glEnable(GL10.GL_LIGHT0);
@@ -164,6 +169,61 @@ public class MapRenderer {
 		tileModelPass();		// 3D tiles
 		
 		gl.glDisable(GL10.GL_LIGHTING);
+		
+		floatingTextPass(); 	// floating text, do last so it is overlayed over map
+		
+	}
+	
+	private void floatingTextPass()
+	{
+		SwithToOrtho(gl);
+		
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+		
+		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
+		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
+		
+		FloatingText.font.begin( 1.0f, 1.0f, 1.0f, 1.0f );         // Begin Text Rendering (Set Color WHITE)
+		FloatingText.font.setScale(2.0f);
+		
+		for (int i = 0; i < floatingText_.size(); i++)
+			floatingText_.get(i).draw();
+		
+		FloatingText.font.end();                                   // End Text Rendering
+		
+		gl.glDisable( GL10.GL_BLEND );                  // Disable Alpha Blend*/
+		
+		SwitchToPerspective(gl);
+		gl.glEnable(GL10.GL_DEPTH_TEST);
+	}
+	
+	public void addFloatingText(int x, int y, int mx, int my, int l, String n, String c)
+	{
+		FloatingText f = new FloatingText(x,y,mx,my,l,n,c);
+		
+		for (int i = 0; i < floatingText_.size(); i++)
+		{
+			if (!floatingText_.get(i).active)
+				floatingText_.remove(i);
+		}
+		floatingText_.add(f);
+	}
+	
+	public void SwithToOrtho(GL10 gl){		
+		gl.glMatrixMode(gl.GL_PROJECTION); // Select Projection
+		gl.glPushMatrix(); // Push The Matrix
+		gl.glLoadIdentity(); // Reset The Matrix
+		gl.glOrthof( 0, GLRenderer.GLwidth , GLRenderer.GLheight  , 0, 1, -1 ); // Select Ortho Mode
+		gl.glMatrixMode(gl.GL_MODELVIEW); // Select Modelview Matrix
+		gl.glPushMatrix(); // Push The Matrix
+		gl.glLoadIdentity(); // Reset The Matrix		
+	}
+
+	public void SwitchToPerspective(GL10 gl){
+		gl.glMatrixMode( gl.GL_PROJECTION ); // Select Projection
+		gl.glPopMatrix();		
+		gl.glMatrixMode( gl.GL_MODELVIEW ); // Select Modelview		
+		gl.glPopMatrix();
 	}
 	
 	/* BASEPASS - clears the tile states and draws the base hexagon shaped floor tiles
@@ -279,14 +339,8 @@ public class MapRenderer {
 						
 			float x = a.getX();
 			float y = a.getY();
-			float z = a.getZ();
-			
-			// cheat for now; raise Marvin so his feet are on the ground
-			if (mdl == 0)
-			{
-				y = 0.6f;
-			}
-			
+			float z = a.getZ();			
+								
 			/*gl.glEnable(GL10.GL_LIGHTING);
 			gl.glEnable(GL10.GL_LIGHT0);
 			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, ambientLight, 0);
@@ -295,10 +349,10 @@ public class MapRenderer {
 			*/
 			models[mdl].SetPosition(x, y, z);
 			models[mdl].ResetOrientation();
-			models[mdl].YRotate(a.getYrotate());
 			models[mdl].XRotate(a.getXrotate());
+			models[mdl].YRotate(a.getYrotate());			
 			models[mdl].ZRotate(a.getZrotate());
-			models[mdl].display(gl, viewMatrix);
+			a.display(gl, viewMatrix, models[mdl]);
 			
 			//gl.glDisable(GL10.GL_LIGHTING);
 			
@@ -378,9 +432,7 @@ public class MapRenderer {
 				tileMap[x][y].tile = m._tileTypes[x][y].getCode();
 				tileMap[x][y].state = -1;
 			}
-		
-		tileMap[4][4].state = 1;
-		
+				
 		actors.clear();
 		for (int i = 0; i < m._units.size(); i++)
 		{
@@ -459,18 +511,22 @@ public class MapRenderer {
 		
 		m.init(u, steps);
 		
-		animator.add("move", m);
-		animator.start("move");
+		AnimationEngine.add("move", m);
+		AnimationEngine.start("move");
 	}
 	
 	public void attackAnimation(Unit u, Unit u2)
 	{
 		GenericAttack m = new GenericAttack();
+		ReceiveAttack r = new ReceiveAttack();
 		
 		m.init(u, u2);
+		r.init(u,  u2);
 		
-		animator.add("attack", m);
-		animator.start("attack");
+		AnimationEngine.add("Attack", m);
+		AnimationEngine.add("Receiver", r);
+		AnimationEngine.start("Attack");
+		AnimationEngine.start("Receiver");
 	}
 	
 	public Actor getActor(int id)

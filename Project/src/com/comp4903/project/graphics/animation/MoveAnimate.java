@@ -40,6 +40,11 @@ public class MoveAnimate extends AnimationProcessor {
 		
 		startPosition = u.position;
 		
+		actor_.animation = 0;
+		actor_.speed = 0;
+		actor_.time = 0;
+		
+		
 		if (step <= 0)
 		   ended = true;
 		steps = s;
@@ -96,6 +101,8 @@ public class MoveAnimate extends AnimationProcessor {
 	 */
 	public boolean iteration() {		
 		
+		//actor_.speed = 0.3f;
+		
 		if (stepPosition < 0.975f)
 		{
 			x += xStep;
@@ -110,10 +117,20 @@ public class MoveAnimate extends AnimationProcessor {
 			if (nextstep >= 0)
 				startNewMove();			
 			else
-				ended = true;	
+			{
+				ended = true;
+				actor_.speed = 0;
+				actor_.animation = -1;
+			}
 		}
 		
 		return ended;
+	}
+
+	@Override
+	public boolean signal(int value) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	

@@ -14,6 +14,7 @@ public abstract class AnimationProcessor {
 	String name;
 	
 	public abstract boolean iteration();
+	public abstract boolean signal(int value);
 	
 	public boolean process()
 	{

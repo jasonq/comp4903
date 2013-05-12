@@ -17,8 +17,12 @@ public class Model3D {
 	private float[] orientation = new float[16];
 	private float[] position = new float[4];
 	private float[] scale = new float[4];
+	private float[] tempMatrix = new float[16];
 	
 	private float[] colorBlack = { 0f, 0f, 0f, 0f };
+	
+	private Animation[] animations_;
+	private int numberOfAnimations;
 	
 	public Model3D()
 	{
@@ -108,8 +112,9 @@ public class Model3D {
 	{
 		for (int c = 0; c < numComponents; c++)
 		{
-			for (int i = 0; i < 16; i++)
-				components[c].orientation[i] = components[c].neutralOrientation[i];
+			//for (int i = 0; i < 16; i++)
+			//	components[c].orientation[i] = components[c].neutralOrientation[i];
+			Matrix.setIdentityM(components[c].orientation, 0);
 			components[c].Xrotate = 0;
 			components[c].Yrotate = 0;
 			components[c].Zrotate = 0;
@@ -247,9 +252,9 @@ public class Model3D {
 		{
 			m = clist[t];
 			Matrix.translateM(transformed, 0, worldtransformed, 0, 
-					  components[m].translation[0],
-					  components[m].translation[1],
-					  components[m].translation[2]);
+					  components[m].initialTranslation[0],
+					  components[m].initialTranslation[1],
+					  components[m].initialTranslation[2]);
 
 			Matrix.multiplyMM(result, 0, transformed,  0, components[m].orientation, 0);
 
@@ -257,27 +262,7 @@ public class Model3D {
 				worldtransformed[i] = result[i];
 		}
 		
-		/*Matrix.setIdentityM(worldtransformed, 0);
 		
-		while (components[m].parent != -1)
-		{	
-			Matrix.translateM(transformed, 0, components[m].orientation, 0, 
-											  components[m].translation[0],
-											  components[m].translation[1],
-											  components[m].translation[2]);
-			
-			Matrix.multiplyMM(result, 0, worldtransformed,  0, world, 0);
-			
-			for (int i = 0; i < 16; i++)
-				worldtransformed[i] = result[i];
-			m = components[m].parent;
-		}
-		
-		Matrix.multiplyMM(result, 0, worldtransformed, 0, world, 0);
-
-		for (int i = 0; i < 16; i++)
-			worldtransformed[i] = result[i];*/
-
 		return worldtransformed;
 
 	}
@@ -288,10 +273,48 @@ public class Model3D {
 		numComponents = components.length;
 	}
 	
-	public void display(GL10 gl, float[] viewMatrix)
+	public void setNumberOfAnimations(int a) { 
+		numberOfAnimations = a;
+		animations_ = new Animation[a];
+	}
+	
+	public int getNumberOfAnimations() { return numberOfAnimations; }
+	
+	public void setAnimationName(int a, String n) { animations_[a].name = n; }
+	public String getAnimationName(int a) { return animations_[a].name; }
+	
+	public void setAnimationFrameTranslation(int a, int f, Vector3 v)
+	{
+		animations_[a].setTranslation(f, v);
+	}
+	
+	public Vector3 getAnimationFrameTranslation(int a, int f)
+	{
+		return animations_[a].getTranslation(f);
+	}
+	
+	public void setSignal(int a, int f, int s) { animations_[a].setSignal(f,  s); }
+	public int getSignal(int a, int f) { return animations_[a].getSignal(f); }
+	
+	public int getNumberOfComponents() { return numComponents; }
+	public void newAnimation(int a) { animations_[a] = new Animation(numComponents); }
+	
+	public void setComponentFrameOrientation(int a, int c, int f, float[] m)
+	{
+		animations_[a].setComponentFrameOrientation(c, f, m);
+	}
+	
+	public void display (GL10 gl, float[] viewMatrix)
+	{
+		display(gl, viewMatrix, -1, 0f);
+	}
+	
+	public void display(GL10 gl, float[] viewMatrix, int animation, float time)
 	{
 		float[] world = computeWorldTransform();
 		float[] modelViewMatrix = new float[16];
+		
+		setPose(animation, time);
 		
 		Matrix.multiplyMM(modelViewMatrix, 0, viewMatrix, 0, world, 0);		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -347,6 +370,29 @@ public class Model3D {
 			gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
 			
 			gl.glDisable(GL10.GL_CULL_FACE);	
+		}
+	}
+	
+	void setPose(int animation, float time)
+	{
+		if (animation == -1)
+		{
+			recallNeutralPose();
+			return;
+		}
+		
+		int frame1 = (int)Math.floor((double)time);
+		int frame2 = (int)Math.ceil((double)time);
+		
+		float percent = time - frame1;
+		
+		for (int c = 0; c < numComponents; c++)
+		{
+			float[] matrix1 = animations_[animation].getComponentOrientation(c, frame1);
+			float[] matrix2 = animations_[animation].getComponentOrientation(c, frame2);
+			for (int i = 0; i < 16; i++) {
+				components[c].orientation[i] = (matrix2[i] - matrix1[i]) * percent + matrix1[i];
+			}
 		}
 	}
 	

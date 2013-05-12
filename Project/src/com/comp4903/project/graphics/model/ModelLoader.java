@@ -22,6 +22,7 @@ public class ModelLoader {
 	public static final int GMDL = 0x4C444D47;
 	public static final int MTRL = 0x4C52544D;
 	public static final int CPNT = 0x544E5043;
+	public static final int ANIM = 0x4d494e41;
 	
 	private static Model3D model;
 	private static DataInputStream fs;
@@ -57,6 +58,8 @@ public class ModelLoader {
 			case CPNT:
 				loadComponents();
 				break;
+			case ANIM:
+				loadAnimations();
 			default:
 				done = true;
 			}
@@ -383,5 +386,42 @@ public class ModelLoader {
 		col[3] = readFloat();		
 		
 		return col;
+	}
+	
+	private static void loadAnimations()
+	{
+		int animCount = readInt();
+		model.setNumberOfAnimations(animCount);
+		
+		for (int a = 0; a < animCount; a++)
+		{
+			model.newAnimation(a);
+			String a_name = readString();
+			model.setAnimationName(a, a_name);
+			
+			for (int p = 0; p < 120; p++)
+			{
+				Vector3 t = new Vector3(readFloatArray(3));
+				model.setAnimationFrameTranslation(a, p, t);
+				
+				int s = readInt();
+				model.setSignal(a, p, s);
+			}
+		}
+		
+		int numberOfComponents = model.getNumberOfComponents();
+		
+		for (int c = 0; c < numberOfComponents; c++)
+		{
+			for (int a = 0; a < animCount; a++)
+			{				
+				for (int f = 0; f < 120; f++)
+				{
+					float[] matrix = readMatrix();
+					model.setComponentFrameOrientation(a, c, f, matrix);
+				}
+			}
+		}
+		
 	}
 }

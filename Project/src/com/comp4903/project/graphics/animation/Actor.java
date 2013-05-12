@@ -1,8 +1,12 @@
 package com.comp4903.project.graphics.animation;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import android.graphics.Point;
+import android.opengl.Matrix;
 
 import com.comp4903.project.gameEngine.enums.UnitType;
+import com.comp4903.project.graphics.model.Model3D;
 
 /*	ACTOR - used to store the graphical aspects of a unit, such as 3D orientation,
  *  position and other data as required by the renderer and animation system
@@ -17,11 +21,19 @@ public class Actor {
 	int tileY;
 	float x, y, z;
 	float xRotate, yRotate, zRotate;
+	float[] orientation = new float[16];
+	public int animation;
+	public float time;
+	public float speed;
 	
 	public Actor(int i)
 	{
 		uID = i;
 		xRotate = 0f; yRotate = 0f; zRotate = 0f;
+		Matrix.setIdentityM(orientation, 0);
+		animation = -1;
+		time = 0;
+		speed = 0;
 	}
 	
 	public void setPosition(float xp, float yp, float zp)
@@ -62,5 +74,14 @@ public class Actor {
 	{ 
 		type = t; 
 		model = type.getCode() % 2; 
+	}
+	
+	public void display(GL10 gl, float[] viewMatrix, Model3D m)
+	{
+		m.display(gl,  viewMatrix, animation, time);
+		
+		time += speed;
+		if (time > 23)
+			time = 3;
 	}
 }

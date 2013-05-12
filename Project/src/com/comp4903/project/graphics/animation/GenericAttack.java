@@ -23,11 +23,11 @@ public class GenericAttack extends AnimationProcessor {
 		
 		Actor victim = RendererAccessor.map.getActor(attackee.uID);
 		
-		//float angle = angleFromPoints(actor_.getX(), actor_.getY(),
-									  //victim.getX(), victim.getY());
+		float angle = angleFromPoints(actor_.getX(), actor_.getZ(),
+									  victim.getX(), victim.getZ());
 		
-		//actor_.setYrotate(angle);
-		//victim.setYrotate(angle + 3.141593f);
+		actor_.setYrotate(-angle + 3.141593f / 2f);
+		victim.setYrotate(-angle + 3.141593f / 2f + 3.141593f);
 	}
 	
 	@Override
@@ -46,9 +46,16 @@ public class GenericAttack extends AnimationProcessor {
 			actor_.setZrotate(0);
 			actor_.setXrotate(0);
 			ended = true;
+			AnimationEngine.signal("Receiver", 1);
 			return true;
 		}
 		
+		return false;
+	}
+
+	@Override
+	public boolean signal(int value) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
