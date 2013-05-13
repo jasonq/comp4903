@@ -23,6 +23,7 @@ public class characterBox extends UI {
 	public GLText GLT;
 	public int x,y,bWidth, bHeight;
 	public float scale;
+	public Square[] avatar = new Square[3];
 	public characterBox(Context c, int w, int h,Unit u,GLText g) {
 		super(c,w,h);
 		currentHp = 500;
@@ -92,14 +93,27 @@ public class characterBox extends UI {
 		BlueBar.loadGLTexture(gl, context, temp1 );
 		temp1.recycle();
 		hp.recycle();
-
-		Bitmap ava = BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_launcher);
-		Avatar = new Square();
-		Avatar.loadGLTexture(gl, context, ava );
-
-
+		
+		loadAvatar(gl, context);
 	}
-
+	
+	public void loadAvatar(GL10 gl, Context c){
+		Bitmap ava = BitmapFactory.decodeResource(c.getResources(), R.drawable.avatar);
+		int bmWidth = ava.getWidth();
+		int bmHeight = ava.getHeight();
+		int aWidth = bmWidth / 3;
+		
+		for(int i = 0; i < avatar.length; i++){
+			avatar[i] = new Square();
+			Bitmap temp = Bitmap.createBitmap(ava,
+					i * aWidth , 0, aWidth, bmHeight);
+			Bitmap scale = Bitmap.createScaledBitmap(temp, 256, 256, false);
+			avatar[i].loadGLTexture(gl, context, scale);
+			temp.recycle();
+			//temp.recycle();
+		}
+		ava.recycle();
+	}
 	public void draw(GL10 gl){
 		gl.glLoadIdentity();
 		box.draw(gl);
@@ -172,8 +186,8 @@ public class characterBox extends UI {
 			xLocation = x +  (bWidth * 5 )/ 100;
 			yLocation = y + (bHeight * 5 )/ 100;
 			
-			Avatar.UpdateVertices(xLocation, yLocation, (bWidth * 30) / 100, (bHeight * 65) / 100);
-			Avatar.draw(gl);
+			avatar[unit.unitType.getCode()].UpdateVertices(xLocation, yLocation, (bWidth * 30) / 100, (bHeight * 65) / 100);
+			avatar[unit.unitType.getCode()].draw(gl);
 			
 			
 			//Avatar.draw(gl);
