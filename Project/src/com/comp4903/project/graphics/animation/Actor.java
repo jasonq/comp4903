@@ -26,6 +26,7 @@ public class Actor {
 	public float time;
 	public float speed;
 	public float previousZ, lastZ;
+	public boolean remove = false;
 	
 	public Actor(int i)
 	{

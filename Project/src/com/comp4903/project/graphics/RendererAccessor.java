@@ -42,7 +42,12 @@ public class RendererAccessor {
 		
 		public static void attackAnimation(Unit u, Unit u2, String[] whatever)
 		{
-			map.attackAnimation(u, u2);
+			map.attackAnimation(u, u2, whatever);
+		}
+		
+		public static void deathAnimation(Unit u)
+		{
+			map.deathAnimation(u);
 		}
 		
 		/*	FLOATINGTEXT - will summon floating text to appear over the game screen

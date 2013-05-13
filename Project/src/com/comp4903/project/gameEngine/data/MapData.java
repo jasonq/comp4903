@@ -3,6 +3,8 @@ package com.comp4903.project.gameEngine.data;
 import android.graphics.Point;
 
 import com.comp4903.project.gameEngine.enums.*;
+import com.comp4903.project.graphics.RendererAccessor;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -70,6 +72,8 @@ public class MapData {
 		for (Unit u: _units){
 			if (u.combatStats.currentHealth > 0)
 				temp.add(u);
+			else
+				RendererAccessor.map.deathAnimation(u);
 		}
 		_units.clear();
 		_units = temp;

@@ -17,6 +17,7 @@ import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.gameEngine.enums.UnitType;
 import com.comp4903.project.graphics.animation.Actor;
 import com.comp4903.project.graphics.animation.AnimationEngine;
+import com.comp4903.project.graphics.animation.DeathAnimation;
 import com.comp4903.project.graphics.animation.FloatingIcon;
 import com.comp4903.project.graphics.animation.FloatingText;
 import com.comp4903.project.graphics.animation.GenericAttack;
@@ -170,7 +171,8 @@ public class MapRenderer {
 		eyeZ = eZ;
 				
 		// execute one iteration of all active animations
-		AnimationEngine.execute();		
+		AnimationEngine.execute();	
+		removeUnusedActors();
 		
 		gl.glEnable(GL10.GL_LIGHTING);
 		gl.glEnable(GL10.GL_LIGHT0);
@@ -492,8 +494,8 @@ public class MapRenderer {
 			int dy = m._attackBox.get(i).y;
 			tileMap[dx][dy].state = 1;
 			tileMap[dx][dy].size = 0;
-		}
-
+		}		
+		
 		//actors.clear();
 		for (int i = 0; i < m._units.size(); i++)
 		{
@@ -520,6 +522,27 @@ public class MapRenderer {
 		//GLRenderer.pauseRender = false;
 	}
 	
+	public void removeUnusedActors()
+	{
+		Actor a;
+		Iterator<Entry<Integer, Actor>> i = actors.entrySet().iterator();
+		
+		List<Integer> removeList = new ArrayList<Integer>();
+		
+		while (i.hasNext())
+		{
+			a = i.next().getValue();
+			if (a.remove)
+			{
+				
+				removeList.add(a.getID());
+			}
+		}
+		
+		for (int q = 0; q < removeList.size(); q++)
+			actors.remove(removeList.get(q));
+	}
+	
 	public void moveAnimation(Unit u, List<Point> steps)
 	{
 		MoveAnimate m = new MoveAnimate();
@@ -530,18 +553,26 @@ public class MapRenderer {
 		AnimationEngine.start("move");
 	}
 	
-	public void attackAnimation(Unit u, Unit u2)
+	public void attackAnimation(Unit u, Unit u2, String[] messages)
 	{
 		GenericAttack m = new GenericAttack();
 		ReceiveAttack r = new ReceiveAttack();
 		
 		m.init(u, u2);
-		r.init(u,  u2);
+		r.init(u,  u2, messages);
 		
 		AnimationEngine.add("Attack", m);
 		AnimationEngine.add("Receiver", r);
 		AnimationEngine.start("Attack");
 		AnimationEngine.start("Receiver");
+	}
+	
+	public void deathAnimation(Unit u) {
+		DeathAnimation d = new DeathAnimation();
+		d.init(u);
+		AnimationEngine.add("Death" + u.uID, d);
+		AnimationEngine.start("Death" + u.uID);
+		
 	}
 	
 	public Actor getActor(int id)
@@ -558,6 +589,8 @@ public class MapRenderer {
 		int state;
 		float size = 0f;
 	}
+
+	
 
 	
 }
