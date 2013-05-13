@@ -122,6 +122,39 @@ public class Algorithms {
         return units;
     }
     
+    public static List<Point> GetUnitFriendBFS(Unit u, int range)
+    {
+    	List<BFSNode> queue = new ArrayList<BFSNode>();
+        List<BFSNode> marked = new ArrayList<BFSNode>();
+        List<Point> units = new ArrayList<Point>();
+        queue.add(new BFSNode(u.position, 0));
+        marked.add(queue.get(0));
+        while (queue.size() > 0)
+        {
+            BFSNode t = queue.get(0);
+            queue.remove(0);
+            if (t.step > range)
+                continue;
+            Unit un = _map.getUnitAt(t.p);
+            if(un != null && un.unitGroup == u.unitGroup){
+            	units.add(t.p);
+            }
+            List<BFSNode> adjNodes;
+            if(t.p.x % 2 == 0)
+            	adjNodes = evenNodes(t);
+            else
+            	adjNodes = oddNodes(t);
+            
+            for(BFSNode node : adjNodes){
+            	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
+            		queue.add(node);
+            		marked.add(node);
+            	}
+            }
+        }
+        return units;
+    }
+    
     /**
      * Checks if the list (l) has the node (n)
      */

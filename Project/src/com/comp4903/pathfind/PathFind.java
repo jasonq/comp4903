@@ -35,6 +35,7 @@ public class PathFind {
 		RendererAccessor.update(_map);
 	}
 	
+	//display list of points to atk
 	public static void DisplayUnitAttackBox(Unit u){
 		List<Point> units = Algorithms.GetUnitAttackBFS(u);
 		_map.clearBoxes();
@@ -42,11 +43,31 @@ public class PathFind {
 		RendererAccessor.update(_map);
 	}
 	
+	//display list of points to cast friendly spells
+	public static void DisplayUnitFriendBox(Unit u, int range){
+		List<Point> units = Algorithms.GetUnitFriendBFS(u, range);
+		_map.clearBoxes();
+		//_map._friendBox = units;
+		RendererAccessor.update(_map);
+	}
+	
+	//returns list of points between unit & point
 	public static List<Point> UnitToPoint(Unit u, Point p){
 		return Algorithms.GetMovePathAStar(u, p);
 	}
 	
+	//returns closest open point to atking unit between atkingUnit and defUnit 
 	public static Point TractorBeam(Unit atkUnit, Unit defUnit){
 		return Algorithms.GetTractorPoint(atkUnit, defUnit);
+	}
+	
+	//returns distance between points
+	public static int Distance(Point p1, Point p2){
+		float du = p2.x - p1.x;
+		float dv = (p2.y + p2.x / 2) - (p1.y + p1.x /2);
+		if((du >= 0 && dv >= 0) || (dv < 0 && dv < 0)) 
+			return (int)Math.max(du, Math.abs(dv));
+		else
+			return (int)Math.abs(du);
 	}
 }
