@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UnitList>
+	<Unit>
+	    <Name>Sword Master</Name>
+	    <Health>150</Health>
+	    <Energy>0</Energy>
+	    <Attack>0</Attack>
+	    <Defence>0</Defence>
+	    <Movement>6</Movement>
+	    <WeaponLimit>
+	        <Weapon>Sword</Weapon>
+	    </WeaponLimit>
+	    <ArmourLimit>
+	        <Armour>Heavy Armour</Armour>
+	    </ArmourLimit>
+	    <SkillList>
+	        <Skill level="1">Attack</Skill>
+	        <Skill level="1">Defence</Skill>
+	    </SkillList>
+	</Unit>
+	<Unit>
+	    <Name>Sniper</Name>
+	    <Health>80</Health>
+	    <Energy>50</Energy>
+	    <Attack>0</Attack>
+	    <Defence>0</Defence>
+	    <Movement>3</Movement>
+	    <WeaponLimit>
+	        <Weapon>Sniper Rifle</Weapon>
+	    </WeaponLimit>
+	    <ArmourLimit>
+	        <Armour>Light Armour</Armour>
+	    </ArmourLimit>
+	    <SkillList>
+	        <Skill level="1">Attack</Skill>
+	        <Skill level="1">Head Shot</Skill>
+	    </SkillList>
+	</Unit>
+	<Unit>
+	    <Name>Medic</Name>
+	    <Health>110</Health>
+	    <Energy>75</Energy>
+	    <Attack>0</Attack>
+	    <Defence>0</Defence>
+	    <Movement>4</Movement>
+	    <WeaponLimit>
+	        <Weapon>Automatic Rifle</Weapon>
+	    </WeaponLimit>
+	    <ArmourLimit>
+	        <Armour>Medium Armour</Armour>
+	    </ArmourLimit>
+	    <SkillList>
+	        <Skill level="1">Attack</Skill>
+	        <Skill level="1">Heal</Skill>
+	    </SkillList>
+	</Unit>
+</UnitList>

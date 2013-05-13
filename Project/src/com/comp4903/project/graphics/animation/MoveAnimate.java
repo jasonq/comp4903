@@ -25,6 +25,7 @@ public class MoveAnimate extends AnimationProcessor {
 	private float xStep, yStep, zStep;
 	private float x, y, z;
 	private Point startPosition = new Point();
+	private float stepLength, distTravelled;
 	
 	/*	INIT - initializes and starts move
 	 * 		u		Unit to move
@@ -39,6 +40,7 @@ public class MoveAnimate extends AnimationProcessor {
 		nextstep = step - 1;
 		
 		startPosition = u.position;
+		
 		
 		actor_.animation = 0;
 		actor_.speed = 0;
@@ -62,6 +64,7 @@ public class MoveAnimate extends AnimationProcessor {
 	 */
 	private void startNewMove()
 	{
+		distTravelled = 0;
 		int d = 0;
 		if (step == steps.size())
 			d = Hexagon.getDirection(startPosition, steps.get(nextstep));
@@ -90,9 +93,12 @@ public class MoveAnimate extends AnimationProcessor {
 		float z2 = (float)p.y * 0.8660254038f * 2f + (p.x % 2) * 0.8660254038f;
 		float y2 = 0;
 		
-		xStep = (x2 - x) / 40f;
-		yStep = (y2 - y) / 40f;
-		zStep = (z2 - z) / 40f;
+		stepLength = (float)Math.sqrt((x2-x) * (x2-x) + (y2-y)*(y2-y) + (z2-z)*(z2-z));
+		if (stepLength == 0)
+			stepLength = 0.000001f;
+		xStep = (x2 - x) / stepLength; // * RendererAccessor.map.models[actor_.model].scale[0];
+		yStep = (y2 - y) / stepLength; // * RendererAccessor.map.models[actor_.model].scale[1];;
+		zStep = (z2 - z) / stepLength; // * RendererAccessor.map.models[actor_.model].scale[2];;
 		stepPosition = 0f;
 	}
 	
@@ -101,16 +107,24 @@ public class MoveAnimate extends AnimationProcessor {
 	 */
 	public boolean iteration() {		
 		
-		//actor_.speed = 0.3f;
+		actor_.speed = 0.3f;
 		
-		if (stepPosition < 0.975f)
+		if (distTravelled < stepLength)
 		{
-			x += xStep;
-			y += yStep;
-			z += zStep;
-			stepPosition += 0.025f;
+			float lasttime = actor_.time - actor_.speed;
+			if (lasttime < 0)
+				lasttime = 0;
+			float travel = actor_.lastZ - actor_.previousZ;
+			x += xStep * travel;
+			y += yStep * travel;
+			z += zStep * travel;
+			
+			distTravelled += travel;
+			
 			actor_.setPosition(x, y, z);
-		} else {
+		} 
+		else 
+		{					
 			step--;
 			nextstep = step - 1;
 			
@@ -124,7 +138,7 @@ public class MoveAnimate extends AnimationProcessor {
 			}
 		}
 		
-		return ended;
+		return false;
 	}
 
 	@Override
@@ -134,5 +148,4 @@ public class MoveAnimate extends AnimationProcessor {
 	}
 	
 	
-
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SkillList>
+	<Ability>
+	    <Name>Attack</Name>
+	    <Description>Attack target unit</Description>
+	    <Health>0</Health>
+	    <Energy>0</Energy>
+	    <Target>Enemy</Target>
+	    <Range>0</Range>
+	</Ability>
+	<Ability>
+	    <Name>Defend</Name>
+	    <Description>Defend and end turn</Description>
+	    <Health>0</Health>
+	    <Energy>0</Energy>
+	    <Target>Self</Target>
+	    <Range>0</Range>
+	    <Modifier parameter="Duration">1</Modifier>
+	    <Modifier parameter="Armour">5</Modifier>
+	</Ability>
+	<Ability>
+	    <Name>Headshot</Name>
+	    <Description>Decrease target unit's accuracy by %accuracy% for %duration% turns. Has a %chance% percent chance to instantly kill the target.</Description>
+	    <Health>0</Health>
+	    <Energy>40</Energy>
+	    <Target>Enemy</Target>
+	    <Range>3</Range>
+	    <Modifier parameter="Accuracy">20</Modifier>
+	    <Modifier parameter="Duration">1</Modifier>
+	    <Modifier parameter="Chance">10</Modifier>
+	</Ability>
+	<Ability>
+	    <Name>Heal</Name>
+	    <Description>Heals the targeted unit by %health%.</Description>
+	    <Health>25</Health>
+	    <Energy>25</Energy>
+	    <Target>Ally</Target>
+	    <Range>2</Range>
+	</Ability>
+</SkillList>

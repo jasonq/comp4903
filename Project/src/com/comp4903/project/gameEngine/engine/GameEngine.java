@@ -34,40 +34,36 @@ public class GameEngine {
 				if (SkillEngine.Attack(unitOne, unitTwo)){
 					mapData.RemoveDeadUnit();
 					RendererAccessor.update(mapData);
-					if (inActive) source.active = false;
+					//if (inActive) source.active = false;
 					return true;
 				}
 				break;
-			case Defence:
+			case Defend:
 				System.out.println("Defend");
 				if (SkillEngine.Defend(source)){
-					if (inActive) source.active = false;
+					//if (inActive) source.active = false;
 					return true;
 				}
 				break;
-			case ExposeWeakness:
-				System.out.println("To be implemented");
-				break;
-			case StimPack:
-				System.out.println("To be implemented");
-				break;
-			case Cripple:
-				System.out.println("To be implemented");
-				break;
-			case DrainingGrenade:
-				System.out.println("To be implemented");
-				break;
-			case EnergyVoid:
-				System.out.println("To be implemented");
-				break;
 			case Headshot:
-				System.out.println("To be implemented");
+				System.out.println("Headshot");
 				break;
-			case Disable:
-				System.out.println("To be implemented");
+			case Heal:
+				System.out.println("Heal");
 				break;
-			case DoubleTime:
-				System.out.println("To be implemented");
+			case ExposeWeakness: //not in use
+				break;
+			case StimPack: //not in use
+				break;
+			case Cripple: //not in use
+				break;
+			case DrainingGrenade: //not in use
+				break;
+			case EnergyVoid: //not in use
+				break;
+			case Disable: //not in use
+				break;
+			case DoubleTime: //not in us
 				break;
 			case Flamethrower:
 				System.out.println("To be implemented");

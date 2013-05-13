@@ -44,10 +44,11 @@
 	</TileGroup>
 	
 	<Units group="Player One">
-	    <Unit x="0" y="2" weapon="Automatic Rifle" armour="Medium Armour">Storm Trooper</Unit>
+	    <Unit x="0" y="2" weapon="Sword" armour="Heavy Armour">Sword Master</Unit>
 	</Units>
 	
 	<Units group="Player Two">
 	    <Unit x="7" y="2" weapon="Sniper Rifle" armour="Light Armour">Sniper</Unit>
+	    <Unit x="7" y="3" weapon="Automatic Rifle" armour="Medium Armour">Sniper</Unit>
 	</Units>
 </Map>
