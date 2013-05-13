@@ -44,9 +44,9 @@ public class PathFind {
 	
 	public static List<Point> UnitToPoint(Unit u, Point p){
 		return Algorithms.GetMovePathAStar(u, p);
-		//List<Point> l = Algorithms.GetPathAStar(u.position, p);
-		//_map.clearBoxes();
-		//_map._movementBox = l;
-		//RendererAccessor.map.update(_map);
+	}
+	
+	public static Point TractorBeam(Unit atkUnit, Unit defUnit){
+		return Algorithms.GetTractorPoint(atkUnit, defUnit);
 	}
 }

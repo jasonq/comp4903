@@ -294,6 +294,72 @@ public class Algorithms {
         }
         return result;
     }
+
+    /**
+     * 
+     * @param movingUnit
+     * @param end
+     * @return
+     */
+    public static Point GetTractorPoint(Unit atkUnit, Unit defUnit)
+    {
+    	Point start = atkUnit.position;
+    	Point end = defUnit.position;
+        List<AStarNode> openList = new ArrayList<AStarNode>();
+        List<AStarNode> closedList = new ArrayList<AStarNode>();
+        List<Point> result = new ArrayList<Point>();
+        AStarNode cur = null;
+        AStarNode startNode = new AStarNode(start, null, 0, heuristic(start, end));
+        openList.add(startNode);
+        boolean endFound = false;
+        while (openList.size() > 0)
+        {
+            cur = GetLowestFScore(openList);
+            if (cur.p.equals(end))
+            {
+                endFound = true;
+                break;
+            }
+            if (cur == null)
+                return null;
+            openList.remove(cur);
+            closedList.add(cur);
+            List<AStarNode> neighbor; 
+            if(cur.p.x % 2 == 0)
+            	neighbor = evenConnections(cur, end);
+            else
+            	neighbor = oddConnections(cur, end);
+            for (AStarNode con : neighbor)
+            {
+            	AStarNode check = ListHasAStarNode(closedList, con);
+            	Unit un = _map.getUnitAt(con.p);
+        		if (check != null)
+                    continue;
+                else if (check == null)
+                    openList.add(con);
+                else if (check != null && con.g < check.g)
+                {
+                    check.parent = cur;
+                    check.g = con.g;
+                    check.f = con.f;
+                }
+
+            }
+        }
+        if (endFound)
+        {
+            AStarNode endNode = cur;
+            while (cur.parent != null)
+            {
+                if(_map.isOpen(cur.p)){
+                	return cur.p;
+                }
+                cur = cur.parent;
+            }
+        }
+        return null;
+    }
+    
     
     /**
      * Checks if the list (l) has the node (cur) and sets the comparison node if it returns true
