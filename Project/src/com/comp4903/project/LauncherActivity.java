@@ -7,6 +7,7 @@ import com.comp4903.project.graphics.GLRenderer;
 import com.comp4903.project.graphics.MyGLSurfaceView;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class LauncherActivity extends Activity {
 	// Main entry point beyond the constructor
 
 	MapData mapData = null;
+	Context context;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class LauncherActivity extends Activity {
 				
 		boolean loaded = loadContent();
 		InputStream in;
+		context = this;
 		
 		Networking.IP = "undefined";
 		
@@ -79,12 +82,14 @@ public class LauncherActivity extends Activity {
 	
 	private void startNetworking()
 	{
+		
 		Thread netThread = new Thread()
-		{
+		{			
 			public void run(){
-				NetworkAccessor.net = new Networking();
+				NetworkAccessor.net = new Networking(context);
 			}			
 		};
+		
 		
 		netThread.start();
 	}
