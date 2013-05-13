@@ -46,24 +46,29 @@ public class GameEngine {
 				System.out.println("Attacked");
 				SkillEngine.Attack(unitOne, unitTwo);
 				break;
-			case Defence:
-				
-				break;
-			case ExposeWeakness:
-				break;
-			case StimPack:
-				break;
-			case Cripple:
-				break;
-			case DrainingGrenade:
-				break;
-			case EnergyVoid:
+			case Defend:
+				System.out.println("Defend");
+				//SkillEngine.Defend(unitOne);
 				break;
 			case Headshot:
+				System.out.println("Headshot");
 				break;
-			case Disable:
+			case Heal:
+				System.out.println("Heal");
 				break;
-			case DoubleTime:
+			case ExposeWeakness: //not in use
+				break;
+			case StimPack: //not in use
+				break;
+			case Cripple: //not in use
+				break;
+			case DrainingGrenade: //not in use
+				break;
+			case EnergyVoid: //not in use
+				break;
+			case Disable: //not in use
+				break;
+			case DoubleTime: //not in us
 				break;
 			case Flamethrower:
 				break;

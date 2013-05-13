@@ -27,6 +27,10 @@ public class TypeFinder {
 			return UnitType.Sniper;
 		else if (in.equals("storm trooper"))
 			return UnitType.StormTrooper;
+		else if (in.equals("sword master"))
+			return UnitType.SwordMaster;
+		else if (in.equals("medic"))
+			return UnitType.Medic;
 		else
 			return UnitType.None;
 	}
@@ -43,6 +47,8 @@ public class TypeFinder {
 			return WeaponType.SniperRifle;
 		else if (in.equals("shotgun"))
 			return WeaponType.Shotgun;
+		else if (in.equals("sword"))
+			return WeaponType.Sword;
 		else
 			return WeaponType.None;
 	}
