@@ -36,6 +36,7 @@ public class characterBox extends UI {
 
 		x = width/40;
 		y = height/30;
+		
 		bWidth = width/3;
 		bHeight = height  / 4;
 
@@ -56,8 +57,8 @@ public class characterBox extends UI {
 			roundVal = "" + stat.round;
 			nameVal = "" + GameStats.getUnitStats(unit.unitType).name;
 			classVal = nameVal;
-			hpVal = "" + stat.currentHealth;
-			enVal = "" + stat.currentEnergy;
+			hpVal = ""  + stat.currentHealth + "/" + stat.maxHealth;
+			enVal = "" + stat.currentEnergy + "/" + stat.maxEnergy;
 			currentHp = stat.currentHealth;
 			totalHp = stat.maxHealth;
 			currentE = stat.currentEnergy;
@@ -108,54 +109,81 @@ public class characterBox extends UI {
 			gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
 
 			int xLocation = x + (bWidth * 15 / 100);
-			int yLocation = y + (bHeight * 10/ 100);//((height * 3 )/ 4) + (height/40);
-
-			int gap = (int)(bHeight * 5  / 100 + GLT.getHeight());//(height/40);
-
+			int yLocation = y + (bHeight * 75 / 100);//((height * 3 )/ 4) + (height/40);
+			
+			//int gap = (int)(bHeight * 5  / 100 + GLT.getHeight());//(height/40);
+			int gap = bWidth *  20 / 100;
 			GLT.begin( 1.0f, 1.0f, 1.0f, 1.0f );    
 			//set location and load texture  the attack value	
+			//float ratioText = GLT.getHeight()/ (bHeight * 15/100);
+			//GLT.setScale(1.0f, ratioText);
+			
 			GLT.draw(atkVal, xLocation, yLocation);
-			yLocation +=  gap;//increament y
-
+			//yLocation +=  gap;//increament y
+			xLocation += gap;
 			//set location and load texture the defense value
 			GLT.draw(defVal, xLocation, yLocation);
-			yLocation +=  gap;
-
+			//yLocation +=  gap;
+			xLocation += gap;
 			//set location and load texture  number of round
 			GLT.draw(roundVal, xLocation, yLocation);
-			yLocation +=   gap;
-
+			//yLocation +=   gap;
+			xLocation += gap;
 			//move x and y to write the name
-			xLocation = x +  (bWidth * 35 / 100);
-			yLocation = y + (bHeight * 10/ 100);
+			//xLocation = x +  (bWidth * 35 / 100);
+			//yLocation = y + (bHeight * 10/ 100);
+			
+			xLocation = x +  (bWidth * 65 / 100);
+			yLocation = y + (bHeight * 5/ 100);
 			//set location and load texture  of name
 			GLT.draw(nameVal, xLocation, yLocation);
-			yLocation +=    gap;
+			//yLocation +=    gap;
 
 			//set location and load texture of class
-			GLT.draw(classVal, xLocation, yLocation);
-			yLocation +=   gap;
+			//GLT.draw(classVal, xLocation, yLocation);
+			//yLocation +=   gap;
+			
+			
 			GLT.end(); 
 
+		
+			
 			float hpRatio = (float)currentHp/totalHp;
 			float eRatio = (float)currentE / totalE;
-			int eWidth = (int)((bWidth * 3 / 10) * eRatio);
-			int hpWidth = (int)((bWidth * 30 / 100) * hpRatio);
+			
+			int eWidth = (int)((bWidth * 55 / 100) * eRatio);
+			int hpWidth = (int)((bWidth * 55 / 100) * hpRatio);
 			int barHeight = bHeight * 15 / 100;
+			
+			xLocation = x + (bWidth * 40/ 100);
+			yLocation = y + (bHeight * 25 / 100);
+			
+			int Tx = xLocation;
+			int Ty = yLocation;
 			RedBar.UpdateVertices(xLocation, yLocation, hpWidth, barHeight);
-			yLocation += barHeight + (bHeight * 5 / 100);
-			BlueBar.UpdateVertices(xLocation, yLocation, eWidth, barHeight);
+			
+			yLocation += ((bHeight * 20) / 100);
+			BlueBar.UpdateVertices(xLocation, yLocation, eWidth, barHeight + 2);
+			
+			int Ty2 = yLocation;
 			RedBar.draw(gl);
 			BlueBar.draw(gl);
 			
-			xLocation = x +  (bWidth * 70 )/ 100;
+			xLocation = x +  (bWidth * 5 )/ 100;
 			yLocation = y + (bHeight * 5 )/ 100;
-			Avatar.UpdateVertices(xLocation, yLocation, (bWidth * 25) / 100, (bHeight * 75) / 100);
+			
+			Avatar.UpdateVertices(xLocation, yLocation, (bWidth * 30) / 100, (bHeight * 65) / 100);
 			Avatar.draw(gl);
+			
+			
 			//Avatar.draw(gl);
 			//HP.drawText(gl);
 			//Energy.drawText(gl);
 			// disable texture + alpha
+			GLT.begin(1.0f, 1.0f, 1.0f,1.0f);
+			GLT.draw(hpVal, Tx + 5, Ty);
+			GLT.draw(enVal, Tx + 5, Ty2);
+			GLT.end();
 			gl.glDisable( GL10.GL_BLEND );                // Disable Alpha Blend
 			//gl.glDisable( GL10.GL_TEXTURE_2D ); 
 		}

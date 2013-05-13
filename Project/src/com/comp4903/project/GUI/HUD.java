@@ -57,7 +57,7 @@ public class HUD {
 
 	public void initialBoxTexture(GL10 gl){
 		action.loadUITexture(gl, context.getResources(), R.drawable.menu);
-		character.loadUITexture(gl, context.getResources(), R.drawable.statpanel);
+		character.loadUITexture(gl, context.getResources(), R.drawable.statpanel_v2);
 		
 		Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.check);
 		giveUpTurn.loadGLTexture(gl, context, bm);
