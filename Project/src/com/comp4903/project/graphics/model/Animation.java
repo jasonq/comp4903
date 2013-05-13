@@ -38,12 +38,18 @@ public class Animation {
 		return components[c].frames[f].orientation;
 	}
 	
-	public void setComponentFrameOrientation(int c, int f, float[] m)
+	public float[] getComponentTranslation(int c, int f)
+	{
+		return components[c].frames[f].translation;
+	}
+	
+	public void setComponentFrame(int c, int f, float[] m, float[] v)
 	{
 		//for (int i = 0; i < 16; i++)
 		//	components[c].frames[f].orientation[i] = m[i];
 		
 		components[c].frames[f].orientation = m;
+		components[c].frames[f].translation = v;
 	}
 	
 	public class FrameSequence
@@ -60,6 +66,7 @@ public class Animation {
 	public class Frame 
 	{
 		float[] orientation = new float[16];
+		float[] translation = new float[4];
 		
 	}
 }

@@ -16,6 +16,7 @@ import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.factory.*;
+import com.comp4903.project.network.NetworkAccessor;
 import com.comp4903.project.network.Networking;
 
 import com.comp4903.pathfind.PathFind;
@@ -36,10 +37,12 @@ public class LauncherActivity extends Activity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
+		super.onCreate(savedInstanceState);		
+				
 		boolean loaded = loadContent();
 		InputStream in;
+		
+		Networking.IP = "undefined";
 		
 		try {
 			in = getResources().getAssets().open("MapTwo.xml");
@@ -52,7 +55,9 @@ public class LauncherActivity extends Activity {
 		GLSurfaceView view = new MyGLSurfaceView(this, mapData);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(view);
-		NetworkTest();
+		
+		startNetworking();
+		
 	}
 
 	private boolean loadContent(){
@@ -70,12 +75,20 @@ public class LauncherActivity extends Activity {
 			return false;
 		}
 		return true;
+	}	
+	
+	private void startNetworking()
+	{
+		Thread netThread = new Thread()
+		{
+			public void run(){
+				NetworkAccessor.net = new Networking();
+			}			
+		};
+		
+		netThread.start();
 	}
 	
-	public void NetworkTest()
-	{
-		Networking net = new Networking();
-		int n;
-		n=0;
-	}
+	
+	
 }

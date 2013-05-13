@@ -16,7 +16,7 @@ public class Model3D {
 	
 	private float[] orientation = new float[16];
 	private float[] position = new float[4];
-	private float[] scale = new float[4];
+	public float[] scale = new float[4];
 	private float[] tempMatrix = new float[16];
 	
 	private float[] colorBlack = { 0f, 0f, 0f, 0f };
@@ -115,10 +115,14 @@ public class Model3D {
 			//for (int i = 0; i < 16; i++)
 			//	components[c].orientation[i] = components[c].neutralOrientation[i];
 			Matrix.setIdentityM(components[c].orientation, 0);
+			
 			components[c].Xrotate = 0;
 			components[c].Yrotate = 0;
 			components[c].Zrotate = 0;
 		}
+		components[0].translation[0] = 0;
+		components[0].translation[1] = 0;
+		components[0].translation[2] = 0;
 	}
 	
 	public void YRotate(float angle)
@@ -135,6 +139,22 @@ public class Model3D {
 		
 		for (int i = 0; i < 16; i++)
 			orientation[i] = temp[i];
+	}
+	
+	public void YRotateComponent(int c, float angle)
+	{
+		float[] yAxis = { 0, 0, 0, 0 };
+		yAxis[0] = components[c].orientation[1];
+		yAxis[1] = components[c].orientation[5];
+		yAxis[2] = components[c].orientation[9];	
+
+		float[] rotation = matrixAngleAroundAxis(angle, yAxis);
+		float[] temp = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+				
+		Matrix.multiplyMM(temp, 0, rotation, 0, components[c].orientation, 0);
+		
+		for (int i = 0; i < 16; i++)
+			components[c].orientation[i] = temp[i];
 	}
 
 	public void XRotate(float angle)
@@ -197,7 +217,7 @@ public class Model3D {
 	}
 
 	// computes the objects world transform
-	public float[] computeWorldTransform()
+	public float[] computeWorldTransform(float[] adjust)
 	{
 		float[] w = new float[16]; //{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		float[] t = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -210,8 +230,11 @@ public class Model3D {
 		
 		
 		Matrix.setIdentityM(t, 0);
-		Matrix.translateM(t, 0, position[0], position[1], position[2]);
-		Matrix.multiplyMM(w, 0, t, 0, orientation, 0);		
+		Matrix.translateM(t, 0, position[0] + adjust[0], 
+								position[1] + adjust[1], 
+								position[2] );
+		Matrix.multiplyMM(w, 0, t, 0, components[0].orientation, 0);
+		//Matrix.multiplyMM(w, 0, t, 0, orientation, 0);
 		Matrix.scaleM(w, 0, scale[0], scale[1], scale[2]);		
 		
 		//Matrix.translateM(r, 0, orientation, 0, position[0], position[1], position[2]);
@@ -245,8 +268,8 @@ public class Model3D {
 		}
 		
 		
-		world = computeWorldTransform();
-		worldtransformed = computeWorldTransform();
+		world = computeWorldTransform(components[0].translation);
+		worldtransformed = computeWorldTransform(components[0].translation);
 
 		for (int t = count - 1; t >= 0; t--)
 		{
@@ -256,12 +279,11 @@ public class Model3D {
 					  components[m].initialTranslation[1],
 					  components[m].initialTranslation[2]);
 
-			Matrix.multiplyMM(result, 0, transformed,  0, components[m].orientation, 0);
-
+			Matrix.multiplyMM(result, 0, transformed,  0, components[m].orientation, 0);			
+			
 			for (int i = 0; i < 16; i++)
 				worldtransformed[i] = result[i];
-		}
-		
+		}		
 		
 		return worldtransformed;
 
@@ -299,9 +321,9 @@ public class Model3D {
 	public int getNumberOfComponents() { return numComponents; }
 	public void newAnimation(int a) { animations_[a] = new Animation(numComponents); }
 	
-	public void setComponentFrameOrientation(int a, int c, int f, float[] m)
+	public void setComponentFrame(int a, int c, int f, float[] m, float[] v)
 	{
-		animations_[a].setComponentFrameOrientation(c, f, m);
+		animations_[a].setComponentFrame(c, f, m, v);
 	}
 	
 	public void display (GL10 gl, float[] viewMatrix)
@@ -311,10 +333,10 @@ public class Model3D {
 	
 	public void display(GL10 gl, float[] viewMatrix, int animation, float time)
 	{
-		float[] world = computeWorldTransform();
+		float[] world = computeWorldTransform(components[0].translation);
 		float[] modelViewMatrix = new float[16];
 		
-		setPose(animation, time);
+		//setPose(animation, time);
 		
 		Matrix.multiplyMM(modelViewMatrix, 0, viewMatrix, 0, world, 0);		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -373,12 +395,12 @@ public class Model3D {
 		}
 	}
 	
-	void setPose(int animation, float time)
+	public float setPose(int animation, float time)
 	{
 		if (animation == -1)
 		{
 			recallNeutralPose();
-			return;
+			return 0f;
 		}
 		
 		int frame1 = (int)Math.floor((double)time);
@@ -390,10 +412,20 @@ public class Model3D {
 		{
 			float[] matrix1 = animations_[animation].getComponentOrientation(c, frame1);
 			float[] matrix2 = animations_[animation].getComponentOrientation(c, frame2);
+			
 			for (int i = 0; i < 16; i++) {
 				components[c].orientation[i] = (matrix2[i] - matrix1[i]) * percent + matrix1[i];
 			}
 		}
+		
+		float[] trans1 = animations_[animation].getComponentTranslation(0, frame1);
+		float[] trans2 = animations_[animation].getComponentTranslation(0, frame2);
+		for (int i = 0; i < 3; i++) {
+			components[0].translation[i] = ((trans2[i] - trans1[i]) * percent + trans1[i]) * scale[i];
+		}
+		
+		return components[0].translation[2];
+		
 	}
 	
 }

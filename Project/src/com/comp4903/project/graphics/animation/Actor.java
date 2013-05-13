@@ -25,6 +25,7 @@ public class Actor {
 	public int animation;
 	public float time;
 	public float speed;
+	public float previousZ, lastZ;
 	
 	public Actor(int i)
 	{
@@ -34,6 +35,8 @@ public class Actor {
 		animation = -1;
 		time = 0;
 		speed = 0;
+		previousZ = 0;
+		lastZ = 0;
 	}
 	
 	public void setPosition(float xp, float yp, float zp)
@@ -78,10 +81,15 @@ public class Actor {
 	
 	public void display(GL10 gl, float[] viewMatrix, Model3D m)
 	{
-		m.display(gl,  viewMatrix, animation, time);
+		previousZ = lastZ;
+		lastZ = m.setPose(animation, time);		
 		
+		m.YRotateComponent(0, yRotate);
+		m.display(gl, viewMatrix, animation, time);
+				
 		time += speed;
-		if (time > 23)
-			time = 3;
+		if (time > 120)
+			time = 10;
+		
 	}
 }
