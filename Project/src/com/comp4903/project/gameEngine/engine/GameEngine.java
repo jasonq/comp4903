@@ -25,6 +25,55 @@ public class GameEngine {
 		return true;
 	}
 	
+	public static boolean useSkill(Unit source, Unit target, SkillType skill, boolean inActive){
+		Unit unitOne = mapData.getUnitAt(source.position);
+		Unit unitTwo = mapData.getUnitAt(target.position);
+		switch (skill){
+			case Attack:
+				System.out.println("Attacking");
+				if (SkillEngine.Attack(unitOne, unitTwo)){
+					mapData.RemoveDeadUnit();
+					RendererAccessor.update(mapData);
+					//if (inActive) source.active = false;
+					return true;
+				}
+				break;
+			case Defend:
+				System.out.println("Defend");
+				if (SkillEngine.Defend(source)){
+					//if (inActive) source.active = false;
+					return true;
+				}
+				break;
+			case Headshot:
+				System.out.println("Headshot");
+				break;
+			case Heal:
+				System.out.println("Heal");
+				break;
+			case ExposeWeakness: //not in use
+				break;
+			case StimPack: //not in use
+				break;
+			case Cripple: //not in use
+				break;
+			case DrainingGrenade: //not in use
+				break;
+			case EnergyVoid: //not in use
+				break;
+			case Disable: //not in use
+				break;
+			case DoubleTime: //not in us
+				break;
+			case Flamethrower:
+				System.out.println("To be implemented");
+				break;
+			default:
+				return false;
+		}
+		return false;
+	}
+	
 	public static void endTurn(){
 		int index = mapData._groupList.indexOf(mapData._activeGroup);
 		if (index >= (mapData._groupList.size() - 1))
@@ -38,38 +87,7 @@ public class GameEngine {
 		}
 	}
 	
-	public static boolean useSkill(Unit source, Unit target, SkillType skill){
-		Unit unitOne = mapData.getUnitAt(source.position);
-		Unit unitTwo = mapData.getUnitAt(target.position);
-		switch (skill){
-			case Attack:
-				System.out.println("Attacked");
-				SkillEngine.Attack(unitOne, unitTwo);
-				break;
-			case Defence:
-				
-				break;
-			case ExposeWeakness:
-				break;
-			case StimPack:
-				break;
-			case Cripple:
-				break;
-			case DrainingGrenade:
-				break;
-			case EnergyVoid:
-				break;
-			case Headshot:
-				break;
-			case Disable:
-				break;
-			case DoubleTime:
-				break;
-			case Flamethrower:
-				break;
-			default:
-				return false;
-		}
-		return true;
+	public static void clearBuffs(boolean begin){
+		mapData._units.clear();
 	}
 }

@@ -209,8 +209,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}else if(currentUnit != null && pickControlledUnit && finishMoving && (decision == 1 || decision == 2)){
 				if(decision == 1){
 					//ResetGUI();
-					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack);
-					RendererAccessor.attackAnimation( currentUnit, pickUnit);
+					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack, true);
 					RendererAccessor.update(mapData);
 					ResetGUI();
 					Log.d("Debug", "I ATTACK YOUUUU");

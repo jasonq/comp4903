@@ -40,7 +40,7 @@ public class RendererAccessor {
 			map.moveAnimation(u, steps);
 		}
 		
-		public static void attackAnimation(Unit u, Unit u2)
+		public static void attackAnimation(Unit u, Unit u2, String[] whatever)
 		{
 			map.attackAnimation(u, u2);
 		}

@@ -66,13 +66,13 @@ public class LauncherActivity extends Activity {
 	private boolean loadContent(){
 		InputStream in;
 		try {
-			in = getResources().getAssets().open("Weapons.xml");
+			in = getResources().getAssets().open("Weapons2.xml");
 			GameStats.InitializeWeaponData(in);
-			in = getResources().getAssets().open("Skills.xml");
+			in = getResources().getAssets().open("Skills2.xml");
 			GameStats.InitializeSkillData(in);
 			in = getResources().getAssets().open("Armour.xml");
 			GameStats.InitializeArmourData(in);
-			in = getResources().getAssets().open("Units.xml");
+			in = getResources().getAssets().open("Units2.xml");
 			GameStats.InitializeUnitData(in);
 		} catch (IOException e) {
 			return false;

@@ -65,6 +65,16 @@ public class MapData {
 		return null;
 	}
 	
+	public void RemoveDeadUnit(){
+		List<Unit> temp = new ArrayList<Unit>();
+		for (Unit u: _units){
+			if (u.combatStats.currentHealth > 0)
+				temp.add(u);
+		}
+		_units.clear();
+		_units = temp;
+	}
+	
 	public int NumberOfRows(){
 		return _numRows;
 	}
