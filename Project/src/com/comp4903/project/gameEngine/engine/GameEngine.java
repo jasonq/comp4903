@@ -25,6 +25,59 @@ public class GameEngine {
 		return true;
 	}
 	
+	public static boolean useSkill(Unit source, Unit target, SkillType skill, boolean inActive){
+		Unit unitOne = mapData.getUnitAt(source.position);
+		Unit unitTwo = mapData.getUnitAt(target.position);
+		switch (skill){
+			case Attack:
+				System.out.println("Attacking");
+				if (SkillEngine.Attack(unitOne, unitTwo)){
+					mapData.RemoveDeadUnit();
+					RendererAccessor.update(mapData);
+					if (inActive) source.active = false;
+					return true;
+				}
+				break;
+			case Defence:
+				System.out.println("Defend");
+				if (SkillEngine.Defend(source)){
+					if (inActive) source.active = false;
+					return true;
+				}
+				break;
+			case ExposeWeakness:
+				System.out.println("To be implemented");
+				break;
+			case StimPack:
+				System.out.println("To be implemented");
+				break;
+			case Cripple:
+				System.out.println("To be implemented");
+				break;
+			case DrainingGrenade:
+				System.out.println("To be implemented");
+				break;
+			case EnergyVoid:
+				System.out.println("To be implemented");
+				break;
+			case Headshot:
+				System.out.println("To be implemented");
+				break;
+			case Disable:
+				System.out.println("To be implemented");
+				break;
+			case DoubleTime:
+				System.out.println("To be implemented");
+				break;
+			case Flamethrower:
+				System.out.println("To be implemented");
+				break;
+			default:
+				return false;
+		}
+		return false;
+	}
+	
 	public static void endTurn(){
 		int index = mapData._groupList.indexOf(mapData._activeGroup);
 		if (index >= (mapData._groupList.size() - 1))
@@ -38,38 +91,7 @@ public class GameEngine {
 		}
 	}
 	
-	public static boolean useSkill(Unit source, Unit target, SkillType skill){
-		Unit unitOne = mapData.getUnitAt(source.position);
-		Unit unitTwo = mapData.getUnitAt(target.position);
-		switch (skill){
-			case Attack:
-				System.out.println("Attacked");
-				SkillEngine.Attack(unitOne, unitTwo);
-				break;
-			case Defence:
-				
-				break;
-			case ExposeWeakness:
-				break;
-			case StimPack:
-				break;
-			case Cripple:
-				break;
-			case DrainingGrenade:
-				break;
-			case EnergyVoid:
-				break;
-			case Headshot:
-				break;
-			case Disable:
-				break;
-			case DoubleTime:
-				break;
-			case Flamethrower:
-				break;
-			default:
-				return false;
-		}
-		return true;
+	public static void clearBuffs(boolean begin){
+		mapData._units.clear();
 	}
 }
