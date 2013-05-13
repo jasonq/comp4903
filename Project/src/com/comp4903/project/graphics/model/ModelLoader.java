@@ -199,7 +199,9 @@ public class ModelLoader {
 		result.minX = readFloat();
 		result.maxX = readFloat();
 		result.minZ = readFloat();
-		result.maxZ = readFloat();		
+		result.maxZ = readFloat();	
+		
+		readInt();
 		
 		return result;
 	}
@@ -401,8 +403,8 @@ public class ModelLoader {
 			
 			for (int p = 0; p < 120; p++)
 			{
-				Vector3 t = new Vector3(readFloatArray(3));
-				model.setAnimationFrameTranslation(a, p, t);
+				//Vector3 t = new Vector3(readFloatArray(3));
+				//model.setAnimationFrameTranslation(a, p, t);
 				
 				int s = readInt();
 				model.setSignal(a, p, s);
@@ -418,7 +420,9 @@ public class ModelLoader {
 				for (int f = 0; f < 120; f++)
 				{
 					float[] matrix = readMatrix();
-					model.setComponentFrameOrientation(a, c, f, matrix);
+					float[] vec = readVector();
+					model.setComponentFrame(a, c, f, matrix, vec);
+					readInt();
 				}
 			}
 		}

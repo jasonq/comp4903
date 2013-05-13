@@ -22,6 +22,8 @@ import com.comp4903.project.graphics.animation.ReceiveAttack;
 import com.comp4903.project.graphics.model.Model3D;
 import com.comp4903.project.graphics.model.ModelLoader;
 import com.comp4903.project.graphics.tile.Hexagon;
+import com.comp4903.project.network.NetworkAccessor;
+import com.comp4903.project.network.Networking;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -64,7 +66,7 @@ public class MapRenderer {
 	private HashMap<Integer, Actor> actors;
 	
 	// 3D model data
-	private Model3D[] models;
+	public Model3D[] models;
 		
 	private float[] ambientLight = { 0.6f, 0.6f, 0.6f, 1 };
 	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -88,6 +90,14 @@ public class MapRenderer {
 		AnimationEngine.init(gl, context);
 		floatingText_ = new ArrayList<FloatingText>();
 		FloatingText.init(gl, context);
+		
+				
+	}
+	
+	public void networkTest()
+	{
+		if (Networking.IP != null)
+			RendererAccessor.floatingText(20, 20, 0, 0, -1, "bozo", Networking.IP);
 	}
 	
 	/*	LOADMODELS - loads and initializes the 3D model data
@@ -131,6 +141,7 @@ public class MapRenderer {
 		mapWidth = w;
 		mapHeight = h;
 		tileMap = new Hex[w][h];
+		networkTest();
 			
 	}
 	
@@ -349,9 +360,9 @@ public class MapRenderer {
 			*/
 			models[mdl].SetPosition(x, y, z);
 			models[mdl].ResetOrientation();
-			models[mdl].XRotate(a.getXrotate());
-			models[mdl].YRotate(a.getYrotate());			
-			models[mdl].ZRotate(a.getZrotate());
+			//models[mdl].XRotate(a.getXrotate());
+			//models[mdl].YRotateComponent(0, a.getYrotate());			
+			//models[mdl].ZRotate(a.getZrotate());
 			a.display(gl, viewMatrix, models[mdl]);
 			
 			//gl.glDisable(GL10.GL_LIGHTING);
@@ -456,8 +467,8 @@ public class MapRenderer {
 	 */
 	public void update(MapData m)
 	{
-		GLRenderer.pauseRender = true;
-		while (GLRenderer.isRenderingNow);
+		//GLRenderer.pauseRender = true;
+		//while (GLRenderer.isRenderingNow);
 		
 		for (int x = 0; x < mapWidth; x++)
 			for (int y = 0; y < mapHeight; y++)
@@ -502,7 +513,7 @@ public class MapRenderer {
 			}
 		}
 		
-		GLRenderer.pauseRender = false;
+		//GLRenderer.pauseRender = false;
 	}
 	
 	public void moveAnimation(Unit u, List<Point> steps)
