@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.IconType;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -39,9 +40,14 @@ public class RendererAccessor {
 			map.moveAnimation(u, steps);
 		}
 		
-		public static void attackAnimation(Unit u, Unit u2)
+		public static void attackAnimation(Unit u, Unit u2, String[] whatever)
 		{
-			map.attackAnimation(u, u2);
+			map.attackAnimation(u, u2, whatever);
+		}
+		
+		public static void deathAnimation(Unit u)
+		{
+			map.deathAnimation(u);
 		}
 		
 		/*	FLOATINGTEXT - will summon floating text to appear over the game screen
@@ -58,6 +64,10 @@ public class RendererAccessor {
 		public static void floatingText(int x, int y, int mx, int my, int l, String n, String c)
 		{
 			map.addFloatingText(x,y,mx,my,l,n,c);
+		}
+		public static void floatingIcon(int x, int y, int mx, int my, int l, String n, IconType i)
+		{
+			map.addFloatingIcon(x,y,mx,my,l,n,i);
 		}
 		
 		/*	SCREENXYFROMXYZ - takes a 3D world co-ordinate (xyz) and returns the 

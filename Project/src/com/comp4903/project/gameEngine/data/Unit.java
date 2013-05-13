@@ -1,4 +1,5 @@
 package com.comp4903.project.gameEngine.data;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Point;
@@ -20,7 +21,6 @@ public class Unit {
 	private List<Status> status;
 	public UnitData combatStats;
 	public boolean active;
-	public boolean alive;
 	
 	public Unit(UnitType type, UnitGroup group, Point pos){
 		uID = id++;
@@ -30,7 +30,7 @@ public class Unit {
 		weapon = WeaponType.None;
 		armour = ArmourType.None;
 		active = true;
-		alive = true;
+		status = new ArrayList<Status>();
 		InitializeCombatStats();
 	}
 	
@@ -42,14 +42,28 @@ public class Unit {
 		this.weapon = weapon;
 		this.armour = armour;
 		active = true;
-		alive = true;
-		if (weapon != WeaponType.None)
+		status = new ArrayList<Status>();
 		InitializeCombatStats();
 	}
 	
 	public void AddStatus(Status s){
 		status.add(s);
 		UpdateCombatStats();
+	}
+	
+	public void decreaseStatusCounter(boolean endTurn){
+		List<Status> temp = new ArrayList<Status>();
+		for(Status s:status){
+			if (s.clearAtEndOfTurn == endTurn){
+				s.duration --;
+			}
+			if (s.duration <= 0){
+				s.active = false;
+			} else {
+				temp.add(s);
+			}
+		}
+		status = temp;
 	}
 	
 	public void InitializeCombatStats(){
@@ -81,5 +95,19 @@ public class Unit {
 		combatStats.attack = weaponStats.damage;
 		combatStats.defence = armourStats.defence;
 		combatStats.accuracy = weaponStats.accuracy;
+		for (Status s: status){
+			if (s.active){
+				combatStats.maxHealth += s.maxHealth;
+				combatStats.maxEnergy += s.maxEnergy;
+				combatStats.currentHealth -= s.damageHealth;
+				combatStats.currentEnergy -= s.damageEnergy;
+				combatStats.maxMovement += s.movement;
+				combatStats.attack += s.attack;
+				combatStats.round += s.round;
+				combatStats.range += s.range;
+				combatStats.defence += s.defence;
+				combatStats.accuracy += s.accuracy;
+			}
+		}
 	}
 }

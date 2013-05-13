@@ -10,11 +10,15 @@ import java.util.Map.Entry;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.comp4903.project.GUI.HUD;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.gameEngine.enums.UnitType;
 import com.comp4903.project.graphics.animation.Actor;
 import com.comp4903.project.graphics.animation.AnimationEngine;
+import com.comp4903.project.graphics.animation.DeathAnimation;
+import com.comp4903.project.graphics.animation.FloatingIcon;
 import com.comp4903.project.graphics.animation.FloatingText;
 import com.comp4903.project.graphics.animation.GenericAttack;
 import com.comp4903.project.graphics.animation.MoveAnimate;
@@ -73,6 +77,7 @@ public class MapRenderer {
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 0.0f };	
 	
 	private ArrayList<FloatingText> floatingText_;
+	private ArrayList<FloatingIcon> floatingIcons_;
 	
 	/*	CONSTRUCTOR - sets up data structures
 	 * 
@@ -89,8 +94,9 @@ public class MapRenderer {
 		actors = new HashMap<Integer, Actor>();
 		AnimationEngine.init(gl, context);
 		floatingText_ = new ArrayList<FloatingText>();
+		floatingIcons_ = new ArrayList<FloatingIcon>();
 		FloatingText.init(gl, context);
-		
+		FloatingIcon.init(gl, context);
 				
 	}
 	
@@ -165,7 +171,8 @@ public class MapRenderer {
 		eyeZ = eZ;
 				
 		// execute one iteration of all active animations
-		AnimationEngine.execute();		
+		AnimationEngine.execute();	
+		removeUnusedActors();
 		
 		gl.glEnable(GL10.GL_LIGHTING);
 		gl.glEnable(GL10.GL_LIGHT0);
@@ -181,13 +188,13 @@ public class MapRenderer {
 		
 		gl.glDisable(GL10.GL_LIGHTING);
 		
-		floatingTextPass(); 	// floating text, do last so it is overlayed over map
+		floatingPass(); 	// floating text, do last so it is overlayed over map
 		
 	}
 	
-	private void floatingTextPass()
+	private void floatingPass()
 	{
-		SwithToOrtho(gl);
+		HUD.SwithToOrtho(gl);
 		
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		
@@ -202,9 +209,12 @@ public class MapRenderer {
 		
 		FloatingText.font.end();                                   // End Text Rendering
 		
+		for (int i = 0; i < floatingIcons_.size(); i++)
+			floatingIcons_.get(i).draw();
+		
 		gl.glDisable( GL10.GL_BLEND );                  // Disable Alpha Blend*/
 		
-		SwitchToPerspective(gl);
+		HUD.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 	}
 	
@@ -220,22 +230,18 @@ public class MapRenderer {
 		floatingText_.add(f);
 	}
 	
-	public void SwithToOrtho(GL10 gl){		
-		gl.glMatrixMode(gl.GL_PROJECTION); // Select Projection
-		gl.glPushMatrix(); // Push The Matrix
-		gl.glLoadIdentity(); // Reset The Matrix
-		gl.glOrthof( 0, GLRenderer.GLwidth , GLRenderer.GLheight  , 0, 1, -1 ); // Select Ortho Mode
-		gl.glMatrixMode(gl.GL_MODELVIEW); // Select Modelview Matrix
-		gl.glPushMatrix(); // Push The Matrix
-		gl.glLoadIdentity(); // Reset The Matrix		
+	public void addFloatingIcon(int x, int y, int mx, int my, int l, String n, IconType i)
+	{
+		FloatingIcon f = new FloatingIcon(x,y,mx,my,l,n,i);
+		
+		for (int p = 0; p < floatingIcons_.size(); p++)
+		{
+			if (!floatingIcons_.get(p).active)
+				floatingIcons_.remove(p);
+		}
+		floatingIcons_.add(f);
 	}
-
-	public void SwitchToPerspective(GL10 gl){
-		gl.glMatrixMode( gl.GL_PROJECTION ); // Select Projection
-		gl.glPopMatrix();		
-		gl.glMatrixMode( gl.GL_MODELVIEW ); // Select Modelview		
-		gl.glPopMatrix();
-	}
+	
 	
 	/* BASEPASS - clears the tile states and draws the base hexagon shaped floor tiles
 	 * 
@@ -488,8 +494,8 @@ public class MapRenderer {
 			int dy = m._attackBox.get(i).y;
 			tileMap[dx][dy].state = 1;
 			tileMap[dx][dy].size = 0;
-		}
-
+		}		
+		
 		//actors.clear();
 		for (int i = 0; i < m._units.size(); i++)
 		{
@@ -516,6 +522,27 @@ public class MapRenderer {
 		//GLRenderer.pauseRender = false;
 	}
 	
+	public void removeUnusedActors()
+	{
+		Actor a;
+		Iterator<Entry<Integer, Actor>> i = actors.entrySet().iterator();
+		
+		List<Integer> removeList = new ArrayList<Integer>();
+		
+		while (i.hasNext())
+		{
+			a = i.next().getValue();
+			if (a.remove)
+			{
+				
+				removeList.add(a.getID());
+			}
+		}
+		
+		for (int q = 0; q < removeList.size(); q++)
+			actors.remove(removeList.get(q));
+	}
+	
 	public void moveAnimation(Unit u, List<Point> steps)
 	{
 		MoveAnimate m = new MoveAnimate();
@@ -526,18 +553,26 @@ public class MapRenderer {
 		AnimationEngine.start("move");
 	}
 	
-	public void attackAnimation(Unit u, Unit u2)
+	public void attackAnimation(Unit u, Unit u2, String[] messages)
 	{
 		GenericAttack m = new GenericAttack();
 		ReceiveAttack r = new ReceiveAttack();
 		
 		m.init(u, u2);
-		r.init(u,  u2);
+		r.init(u,  u2, messages);
 		
 		AnimationEngine.add("Attack", m);
 		AnimationEngine.add("Receiver", r);
 		AnimationEngine.start("Attack");
 		AnimationEngine.start("Receiver");
+	}
+	
+	public void deathAnimation(Unit u) {
+		DeathAnimation d = new DeathAnimation();
+		d.init(u);
+		AnimationEngine.add("Death" + u.uID, d);
+		AnimationEngine.start("Death" + u.uID);
+		
 	}
 	
 	public Actor getActor(int id)
@@ -554,6 +589,8 @@ public class MapRenderer {
 		int state;
 		float size = 0f;
 	}
+
+	
 
 	
 }
