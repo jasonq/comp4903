@@ -1,26 +1,40 @@
 package com.comp4903.project.network;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
 
 public class Networking {
 
-	String IP;
+	public static String IP = "undefined";
 	
-	Socket client;
-	
+	DatagramSocket netInterface;
+		
 	public Networking()
 	{
-		/*try {
-			client = new Socket("Host", 4345);
+		try {
+			netInterface = new DatagramSocket(4903);
+			
+			IP = getLocalIpAddress();
+			
+			byte[] buffer = new byte[2048];
+			DatagramPacket packet = new DatagramPacket(buffer, 2048);
+			
+			//netInterface.receive(packet);
 		} catch (IOException e)
-		{}*/
+		{
+			int a = 1;
+			
+		}
 		
-		IP = getLocalIpAddress();
+		
+		
 	}
 	
 	private String getLocalIpAddress() {

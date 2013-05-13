@@ -135,7 +135,7 @@ public class Hexagon {
 	{
 		if (tileDefinitions[set].tiles[typ].model != null)
 		{
-			tileDefinitions[set].tiles[typ].model.SetPosition(dx, dy - 1, dz);
+			tileDefinitions[set].tiles[typ].model.SetPosition(dx, dy, dz);
 			tileDefinitions[set].tiles[typ].model.display(gl, viewMatrix);
 		}
 	}

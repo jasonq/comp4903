@@ -44,13 +44,23 @@ public class SkillEngine {
 	public static boolean Defend(Unit source){
 		if (source == null)
 			return false;
-		SkillStats stats = GameStats.getSkillStats(SkillType.Defence);
+		SkillStats stats = GameStats.getSkillStats(SkillType.Defend);
 		Status s = new Status();
-		s.name = SkillType.Defence;
+		s.name = SkillType.Defend;
 		s.defence = stats.getModifier("Armour").intValue();
 		s.duration = stats.getModifier("Duration").intValue();
 		s.clearAtEndOfTurn = false;
 		source.AddStatus(s);
 		return true;
+	}
+	
+	public static boolean HeadShot(Unit source, Unit destination){
+		//empty method
+		return false;
+	}
+	
+	public static boolean Heal(Unit source, Unit destination){
+		//empty method
+		return false;
 	}
 }

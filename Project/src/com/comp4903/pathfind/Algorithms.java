@@ -90,7 +90,7 @@ public class Algorithms {
     
     public static List<Point> GetUnitAttackBFS(Unit u)
     {
-    	int atkRange = 5;//u.combatStats.range;
+    	int atkRange = u.combatStats.range;
     	List<BFSNode> queue = new ArrayList<BFSNode>();
         List<BFSNode> marked = new ArrayList<BFSNode>();
         List<Point> units = new ArrayList<Point>();

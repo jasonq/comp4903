@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WeaponList>
+	<Weapon>
+	    <Name>Automatic Rifle</Name>
+	    <Description>Fast rifle fires at medium range</Description>
+	    <Damage>5</Damage>
+	    <Accuracy>85</Accuracy>
+	    <Rounds>6</Rounds>
+	    <Range>2</Range>
+	</Weapon>
+	<Weapon>
+	    <Name>Sniper Rifle</Name>
+	    <Description>A long range rifle with high accuracy and damage.</Description>
+	    <Damage>35</Damage>
+	    <Accuracy>95</Accuracy>
+	    <Rounds>1</Rounds>
+	    <Range>3</Range>
+	</Weapon>
+	<Weapon>
+	    <Name>Sword</Name>
+	    <Description>A mighty sword that can only be used in meelee range</Description>
+	    <Damage>50</Damage>
+	    <Accuracy>90</Accuracy>
+	    <Rounds>1</Rounds>
+	    <Range>1</Range>
+	</Weapon>
+</WeaponList>

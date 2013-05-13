@@ -33,7 +33,7 @@ public class XMLParser {
 	 * *************************************************/
 	
 	// We don't use namespace
-	private static final String TAG = "";
+	private static final String TAG = "XMLParser";
 	
 	public static Map<WeaponType, WeaponStats> readWeaponInputXML(InputStream in) throws IOException, XmlPullParserException{
 		try{
@@ -68,7 +68,7 @@ public class XMLParser {
 	private static WeaponStats parseWeapon(XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
 		WeaponStats stats = new WeaponStats();  
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "parse Item tag " + parser.getName());
+			//Log.d(TAG, "parse Item tag " + parser.getName());
 			if (parser.getName().equals("Name")) {
 				stats.name = parser.nextText();
 			}
@@ -135,7 +135,7 @@ public class XMLParser {
 	private static SkillStats parseSkill(XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
 		SkillStats stats = new SkillStats();  
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "parse Item tag " + parser.getName());
+			//Log.d(TAG, "parse Item tag " + parser.getName());
 			if (parser.getName().equals("Name")) {
 				stats.name = parser.nextText();
 			}
@@ -202,7 +202,7 @@ public class XMLParser {
 	private static ArmourStats parseArmour(XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
 		ArmourStats stats = new ArmourStats();  
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "parse Item tag " + parser.getName());
+			//Log.d(TAG, "parse Item tag " + parser.getName());
 			if (parser.getName().equals("Name")) {
 				stats.name = parser.nextText();
 			}
@@ -260,7 +260,7 @@ public class XMLParser {
 	private static UnitStats parseUnit(XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
 		UnitStats stats = new UnitStats();  
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "parse Item tag " + parser.getName());
+			//Log.d(TAG, "parse Item tag " + parser.getName());
 			if (parser.getName().equals("Name")) {
 				stats.name = parser.nextText();
 			}
@@ -297,7 +297,7 @@ public class XMLParser {
 	
 	private static void parseWeaponLimit(XmlPullParser parser, UnitStats stats) throws XmlPullParserException, IOException{
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "In-Level: parse weaponLimit tag " + parser.getName());
+			//Log.d(TAG, "In-Level: parse weaponLimit tag " + parser.getName());
 			if (parser.getName().equals("Weapon")){
 				stats.addWeaponLimit(TypeFinder.findWeaponType(parser.nextText()));
 			}
@@ -309,7 +309,7 @@ public class XMLParser {
 	
 	private static void parseArmourLimit(XmlPullParser parser, UnitStats stats) throws XmlPullParserException, IOException{
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "In-Level: parse armourLimit tag " + parser.getName());
+			//Log.d(TAG, "In-Level: parse armourLimit tag " + parser.getName());
 			if (parser.getName().equals("Armour")){
 				stats.addArmourLimit(TypeFinder.findArmourType(parser.nextText()));
 			}
@@ -321,7 +321,7 @@ public class XMLParser {
 	
 	private static void parseSkillList(XmlPullParser parser, UnitStats stats) throws XmlPullParserException, IOException{
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "In-Level: parse skillList tag " + parser.getName());
+			//Log.d(TAG, "In-Level: parse skillList tag " + parser.getName());
 			if (parser.getName().equals("Skill")){
 				stats.addSkillLimit(TypeFinder.findSkillType(parser.nextText()));
 			}
@@ -352,7 +352,7 @@ public class XMLParser {
 		int columns = Integer.parseInt(parser.getAttributeValue(null, "width"));
 		int rows = Integer.parseInt(parser.getAttributeValue(null, "height"));
 
-		Log.d(TAG, "Createing map " + rows + ", " + columns);
+		//Log.d(TAG, "Createing map " + rows + ", " + columns);
 		MapData map = new MapData(rows,columns);
 		TileType temp = TypeFinder.findTileType(parser.getAttributeValue(null, "defaultType"));
 		map.defaultType(temp);
@@ -362,10 +362,10 @@ public class XMLParser {
 			}
 			String name = parser.getName();
 			if(name.equals("TileGroup")){
-				Log.d(TAG, "Tile Group" + parser.getName());
+				//Log.d(TAG, "Tile Group" + parser.getName());
 				map = parseTileGroup(map, parser);
 			} else if (name.equals("Units")) {
-				Log.d(TAG, "Units" + parser.getName());
+				//Log.d(TAG, "Units" + parser.getName());
 				map = parseUnitGroup(map, parser);
 			}
 			else {
@@ -377,12 +377,12 @@ public class XMLParser {
 	
 	private static MapData parseTileGroup(MapData data, XmlPullParser parser) throws NumberFormatException, XmlPullParserException, IOException{
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "parse Tile tag " + parser.getName());
+			//Log.d(TAG, "parse Tile tag " + parser.getName());
 			if (parser.getName().equals("Tile")) {
 				int x = Integer.parseInt(parser.getAttributeValue(null, "x"));
 				int y = Integer.parseInt(parser.getAttributeValue(null, "y"));
 				TileType t = TypeFinder.findTileType(parser.nextText());
-				System.out.println("Tile: " + x + ", " + y + ", " + t);
+				//Log.d(TAG, "Tile: " + x + ", " + y + ", " + t);
 				data._tileTypes[x][y] = t;
 			}
 			else {
@@ -396,14 +396,14 @@ public class XMLParser {
 		UnitGroup currGroup = TypeFinder.findUnitGroup(parser.getAttributeValue(null, "group"));
 		data._groupList.add(currGroup);
 		while (parser.nextTag() == XmlPullParser.START_TAG) {
-			Log.d(TAG, "parse Unit tag " + parser.getName());
+			//Log.d(TAG, "parse Unit tag " + parser.getName());
 			if (parser.getName().equals("Unit")) {
 				int x = Integer.parseInt(parser.getAttributeValue(null, "x"));
 				int y = Integer.parseInt(parser.getAttributeValue(null, "y"));
 				WeaponType weapon = TypeFinder.findWeaponType(parser.getAttributeValue(null, "weapon"));
 				ArmourType armour = TypeFinder.findArmourType(parser.getAttributeValue(null,"armour"));
 				UnitType unitType = TypeFinder.findUnitType(parser.nextText());
-				System.out.println("Unit: " + x + ", " + y + ", " + unitType + "W: " + weapon + "A: " + armour);
+				//Log.d(TAG, "Unit: " + x + ", " + y + ", " + unitType + "W: " + weapon + "A: " + armour);
 				data._units.add(new Unit(unitType, currGroup, new Point(x,y), weapon, armour));
 			}
 			else {
