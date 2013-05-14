@@ -18,6 +18,7 @@ import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.GameState;
+import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.engine.GameEngine;
@@ -154,14 +155,15 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 			//check if out of bounce
 
-			if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu== -1 && !pressCancel && !pressEnd){
-				ResetGUI();
-				return;
-			}		
-			if(pressEnd){//might put condition if this is player turn
+			//if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu == -1 && !pressCancel && !pressEnd){
+			//	ResetGUI();
+			//	return;
+			//}		
+			if(pressEnd && !pickControlledUnit){//might put condition if this is player turn
 				//end turn code goes here
 				System.out.println("End turn pressed");
 				GameEngine.endTurn();
+				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.EndTurn);
 				ResetGUI();
 			}
 			Unit pickUnit = mapData.getUnitAt(pickPoint);
@@ -172,7 +174,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					handleControlledUnit(pickUnit);
 				}
 				//handle if we pick enemy unit
-
 				else {
 
 					handleEnemyUnint(pickUnit);
@@ -225,7 +226,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				//update mapdata
 				mRenderer.updateHUDPanel(pickUnit);
 				mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
-			}else if(currentUnit != null && pickControlledUnit && finishMoving && (decision == 1 || decision == 2)){
+			}else if(currentUnit != null && pickControlledUnit && finishMoving && decision != -1){
 				if(decision == 1){
 					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack, true);
 					RendererAccessor.update(mapData);
@@ -277,9 +278,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 							 */
 							chooseAction = true;
 							decision = mRenderer.setSelectedHUD(x,y);
-							if(decision == 1){//if attack we show the attack range
+							if(decision == 1 || decision == 2){//if attack we show the attack range
 								mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 								PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
+						
 							}else if(decision == 4){//if cancel or wait we disable the HUD
 								//more on this later
 								//currentUnit.active = false;
@@ -290,7 +292,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 						if(pressCancel){
 							chooseAction = false;
 							mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
-							decision = -1;
+							//decision = -1;
 						}
 					}
 				
