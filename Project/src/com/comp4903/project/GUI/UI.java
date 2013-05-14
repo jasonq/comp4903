@@ -25,7 +25,9 @@ public class UI {
 	
 	public void loadUITexture(GL10 gl,Resources r, int id){
 		Bitmap bitmap1 = BitmapFactory.decodeResource(r, id);
-		box.loadGLTexture(gl, context, bitmap1);
+		Bitmap scale = Bitmap.createScaledBitmap(bitmap1, 512, 512, false);
+		box.loadGLTexture(gl, context, scale);
+		bitmap1.recycle();
 		//bitmap1.recycle();
 	}
 	

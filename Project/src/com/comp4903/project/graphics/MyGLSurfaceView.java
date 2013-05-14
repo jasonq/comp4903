@@ -146,17 +146,15 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			int touchMenu = mRenderer.setSelectedHUD(x, y);
 			boolean pressCancel = mRenderer.headsUpDisplay.action.checkPressingCancel(x, y);
 			Point pickPoint = mRenderer.pick(x, y);
-			boolean pressYield = mRenderer.headsUpDisplay.checkPressingEndTurn(x, y);
+			boolean pressEnd = mRenderer.headsUpDisplay.checkPressingEndTurn(x, y);
 			//check if out of bounce
-			if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu== -1 && !pressCancel && !pressYield){
+			if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu== -1 && !pressCancel && !pressEnd){
 				ResetGUI();
 				return;
-			}
-			//pressing endturn
-			if(pressYield && !pickControlledUnit){//may add the turn is current ours{
-				
+			}		
+			if(pressEnd && pickControlledUnit){//might put condition if this is player turn
+				//end turn code goes here
 				ResetGUI();
-				//endturn code goes here
 			}
 			Unit pickUnit = mapData.getUnitAt(pickPoint);
 			if(pickUnit != null){
@@ -216,12 +214,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}else if(currentUnit != null && pickControlledUnit && finishMoving && (decision == 1 || decision == 2)){
 				if(decision == 1){
 					//ResetGUI();
-					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack, true);
+					//GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack);
+					//RendererAccessor.attackAnimation( currentUnit, pickUnit);
 					RendererAccessor.update(mapData);
 					ResetGUI();
 					Log.d("Debug", "I ATTACK YOUUUU");
-				}else if(decision == 3){
-					//skills code go here
+				}else if(decision == 2){
 					ResetGUI();
 					Log.d("Debug", "FEEL MY ULTIMATE WRATH");
 				}
@@ -259,9 +257,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
 						if(decision == 1){//if attack we show the attack range
 							mRenderer.headsUpDisplay.updateHUD(true, true, false, false);//maintain the HUD
 							PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
-						if(decision == 2){
-							
-							//code for defense goes here
 						}else if(decision == 4){//if cancel or wait we disable the HUD
 							//more on this later
 							//currentUnit.active = false;
