@@ -7,6 +7,9 @@ import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
+import com.comp4903.project.gameEngine.factory.GameStats;
+import com.comp4903.project.gameEngine.factory.SkillStats;
+import com.comp4903.project.gameEngine.factory.UnitStats;
 import com.comp4903.project.graphics.RendererAccessor;
 
 public class GameEngine {
@@ -87,9 +90,18 @@ public class GameEngine {
 		return false;
 	}
 	
+	public static boolean canCastSkill(Unit u, SkillType skill){
+		UnitStats uStats = GameStats.getUnitStats(u.unitType);
+		SkillStats sStats = GameStats.getSkillStats(skill);
+		if (uStats.canUseThisSkill(skill) == false) return false;
+		if (u.combatStats.currentEnergy < sStats.energyCost) return false;
+		if (u.combatStats.currentHealth < sStats.healthCost) return false;
+		return true;
+	}
+	
 	public static void endTurn(){
-		int index = mapData._groupList.indexOf(mapData._activeGroup);
-		if (index >= (mapData._groupList.size() - 1))
+		int index = mapData._groupList.indexOf(mapData._activeGroup) + 1;
+		if (index >= mapData._groupList.size())
 			index = 0;
 		UnitGroup previousGroup = mapData._activeGroup;
 		UnitGroup currentGroup = mapData._groupList.get(index);
@@ -97,7 +109,7 @@ public class GameEngine {
 			if (u.unitGroup == previousGroup){
 				u.active = false;
 				u.decreaseStatusCounter(true); // clear buffs from unit
-			} else if (u.unitGroup == previousGroup) {
+			} else if (u.unitGroup == currentGroup) {
 				u.active = true;
 				u.decreaseStatusCounter(false); // clear buffs from unit
 			} else {

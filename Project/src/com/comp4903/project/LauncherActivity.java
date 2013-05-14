@@ -60,7 +60,7 @@ public class LauncherActivity extends Activity {
 		setContentView(view);
 		
 		startNetworking();
-		GameStats.PrintUnitList();
+		GameStats.PrintSkillList();
 		
 	}
 
