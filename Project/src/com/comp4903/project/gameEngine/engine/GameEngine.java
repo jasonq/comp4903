@@ -25,30 +25,25 @@ public class GameEngine {
 		return true;
 	}
 	
-	public static void endTurn(){
-		int index = mapData._groupList.indexOf(mapData._activeGroup);
-		if (index >= (mapData._groupList.size() - 1))
-			index = 0;
-		mapData._activeGroup = mapData._groupList.get(index);
-		for (Unit u : mapData._units){
-			if (u.unitGroup == mapData._activeGroup)
-				u.active = true;
-			else
-				u.active = false;
-		}
-	}
-	
-	public static boolean useSkill(Unit source, Unit target, SkillType skill){
+	public static boolean useSkill(Unit source, Unit target, SkillType skill, boolean inActive){
 		Unit unitOne = mapData.getUnitAt(source.position);
 		Unit unitTwo = mapData.getUnitAt(target.position);
 		switch (skill){
 			case Attack:
-				System.out.println("Attacked");
-				SkillEngine.Attack(unitOne, unitTwo);
+				System.out.println("Attacking");
+				if (SkillEngine.Attack(unitOne, unitTwo)){
+					mapData.RemoveDeadUnit();
+					RendererAccessor.update(mapData);
+					//if (inActive) source.active = false;
+					return true;
+				}
 				break;
 			case Defend:
 				System.out.println("Defend");
-				//SkillEngine.Defend(unitOne);
+				if (SkillEngine.Defend(source)){
+					//if (inActive) source.active = false;
+					return true;
+				}
 				break;
 			case Headshot:
 				System.out.println("Headshot");
@@ -71,10 +66,28 @@ public class GameEngine {
 			case DoubleTime: //not in us
 				break;
 			case Flamethrower:
+				System.out.println("To be implemented");
 				break;
 			default:
 				return false;
 		}
-		return true;
+		return false;
+	}
+	
+	public static void endTurn(){
+		int index = mapData._groupList.indexOf(mapData._activeGroup);
+		if (index >= (mapData._groupList.size() - 1))
+			index = 0;
+		mapData._activeGroup = mapData._groupList.get(index);
+		for (Unit u : mapData._units){
+			if (u.unitGroup == mapData._activeGroup)
+				u.active = true;
+			else
+				u.active = false;
+		}
+	}
+	
+	public static void clearBuffs(boolean begin){
+		mapData._units.clear();
 	}
 }

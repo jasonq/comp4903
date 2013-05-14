@@ -5,6 +5,7 @@ import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.factory.GameStats;
 import com.comp4903.project.gameEngine.factory.SkillStats;
+import com.comp4903.project.graphics.RendererAccessor;
 
 public class SkillEngine {
 	
@@ -34,6 +35,7 @@ public class SkillEngine {
 				System.out.print(s + " ");
 			}
 			System.out.println();
+			RendererAccessor.attackAnimation( source, destination, result);
 			return true;
 		} else {
 			System.out.println("No Weapon");

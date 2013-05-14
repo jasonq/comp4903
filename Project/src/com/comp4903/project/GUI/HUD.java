@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.R;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.graphics.GLRenderer;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -83,19 +84,19 @@ public class HUD {
 			return false;
 	}
 
-	public void SwithToOrtho(GL10 gl){
+	public static void SwithToOrtho(GL10 gl){
 		//gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(gl.GL_PROJECTION); // Select Projection
 		gl.glPushMatrix(); // Push The Matrix
 		gl.glLoadIdentity(); // Reset The Matrix
-		gl.glOrthof( 0, width , height  , 0, 1, -1 ); // Select Ortho Mode
+		gl.glOrthof( 0, GLRenderer.GLwidth , GLRenderer.GLheight  , 0, 1, -1 ); // Select Ortho Mode
 		gl.glMatrixMode(gl.GL_MODELVIEW); // Select Modelview Matrix
 		gl.glPushMatrix(); // Push The Matrix
 		gl.glLoadIdentity(); // Reset The Matrix
 		//gl.glOrthof( 0, width , 0  , height, 0, 0 ); // Select Ortho Mode
 	}
 
-	public void SwitchToPerspective(GL10 gl){
+	public static void SwitchToPerspective(GL10 gl){
 		gl.glMatrixMode( gl.GL_PROJECTION ); // Select Projection
 		gl.glPopMatrix();
 		//gl.glLoadIdentity();

@@ -10,18 +10,30 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+
+import android.content.Context;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
+
 public class Networking {
 
 	public static String IP = "undefined";
 	
 	DatagramSocket netInterface;
+	Context context;
 		
-	public Networking()
+	public Networking(Context c)
 	{
+		context = c;
+		
 		try {
 			netInterface = new DatagramSocket(4903);
 			
-			IP = getLocalIpAddress();
+			 WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+			 DhcpInfo dhcp = wifi.getDhcpInfo();
+			 IP = dhcp.toString();
+			
+			//IP = getLocalIpAddress().getHostAddress().toString();
 			
 			byte[] buffer = new byte[2048];
 			DatagramPacket packet = new DatagramPacket(buffer, 2048);
@@ -37,7 +49,7 @@ public class Networking {
 		
 	}
 	
-	private String getLocalIpAddress() {
+	private InetAddress getLocalIpAddress() {
         try {
             
         	for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
@@ -49,7 +61,7 @@ public class Networking {
                 {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress()) { 
-                    	return inetAddress.getHostAddress().toString(); 
+                    	return inetAddress;                    	
                     }
                 }
             }
