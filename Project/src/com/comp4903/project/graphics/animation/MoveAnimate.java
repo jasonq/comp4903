@@ -7,6 +7,8 @@ import android.graphics.Point;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.graphics.RendererAccessor;
 import com.comp4903.project.graphics.tile.Hexagon;
+import com.comp4903.project.network.NetworkAccessor;
+import com.comp4903.project.network.Networking;
 
 /*	MOVEANIMATE - animation process for moving a unit down a 
  *  path of tiles.
@@ -53,7 +55,10 @@ public class MoveAnimate extends AnimationProcessor {
 		if (nextstep >= 0)
 			startNewMove();			
 		else
-			ended = true;			
+			ended = true;	
+		
+		Networking.timetosend = true;
+		//Networking.send();
 		
 	}
 	
@@ -115,7 +120,7 @@ public class MoveAnimate extends AnimationProcessor {
 				lasttime = 0;
 			float travel = actor_.lastZ - actor_.previousZ;
 			if (actor_.animation == -1)
-				travel = 1;
+				travel = 1f / stepLength;
 			x += xStep * travel;
 			y += yStep * travel;
 			z += zStep * travel;
