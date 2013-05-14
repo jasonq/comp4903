@@ -44,6 +44,7 @@ public class Networking {
 		
 		try {
 			netInterface = new DatagramSocket(4903);
+			netInterface.setSoTimeout(0);
 			//netInterface.setBroadcast(true);
 						
 			 WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -67,11 +68,11 @@ public class Networking {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}*/
-			while (!timetosend)		
+			while (!timetosend)		{}
 				send();
 			
 			//netInterface.receive(packet);
-			//RendererAccessor.floatingText(20, 500, 0, 0, -1, "test", "Received packet.");
+			RendererAccessor.floatingText(20, 500, 0, 0, -1, "test", "Bozo");
 		} catch (IOException e)
 		{
 			int a = 1;

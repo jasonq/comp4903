@@ -60,9 +60,10 @@ public class LauncherActivity extends Activity {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(view);
 		
-		//Networking.staticInitializer(context);
+
 		
-		//startNetworking();
+		GameStats.PrintSkillList();
+
 		
 	}
 

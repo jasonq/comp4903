@@ -12,7 +12,7 @@
     </Armour>
     <Armour>
         <Name>Heavy Armour</Name>
-        <Defence>3</Defence>
+        <Defence>5</Defence>
         <Health>20</Health>
     </Armour>
 </ArmourList>

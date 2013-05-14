@@ -74,6 +74,10 @@ public class UnitStats {
 		return armourList.contains(armour);
 	}
 	
+	public boolean canUseThisSkill(SkillType skill){
+		return skillList.contains(skill);
+	}
+	
 	public List<SkillType> getAvailableSkills(){
 		return skillList;
 	}
