@@ -34,6 +34,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	private boolean pickEnemyUnit = false;
 	private boolean pickEmpty = false;
 	private boolean finishMoving = false;
+	private boolean chooseAction = false;
 	private UnitGroup controlGroup = UnitGroup.PlayerOne;
 	private UnitGroup enemyGroup = UnitGroup.PlayerTwo;
 
@@ -145,33 +146,42 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			Log.d("TAG", "Single Tap Detected ...");
 			int touchMenu = mRenderer.setSelectedHUD(x, y);
 			boolean pressCancel = mRenderer.headsUpDisplay.action.checkPressingCancel(x, y);
+			if(pressCancel)
+				Log.d("Debug","Cancel Pressed");
 			Point pickPoint = mRenderer.pick(x, y);
 			boolean pressEnd = mRenderer.headsUpDisplay.checkPressingEndTurn(x, y);
+
+
 			//check if out of bounce
-			if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu== -1 && !pressCancel && !pressEnd){
-				ResetGUI();
-				return;
-			}		
-			if(pressEnd && pickControlledUnit){//might put condition if this is player turn
+			///if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu== -1 && !pressCancel && !pressEnd){
+				//ResetGUI();
+				//return;
+			//}		
+			if(pressEnd && !pickControlledUnit){//might put condition if this is player turn
 				//end turn code goes here
+				//GameEngine.endTurn();
+				//if(mapData._activeGroup == UnitGroup.PlayerOne)
+					//mapData._activeGroup = UnitGroup.PlayerTwo;
+				//else if(mapData._activeGroup == UnitGroup.PlayerTwo)
+					//mapData._activeGroup = UnitGroup.PlayerOne;
 				ResetGUI();
 			}
 			Unit pickUnit = mapData.getUnitAt(pickPoint);
 			if(pickUnit != null){
-				if(pickUnit.unitGroup == controlGroup){
+				if(pickUnit.unitGroup == mapData._activeGroup){
 					handleControlledUnit(pickUnit);
 				}
 				//handle if we pick enemy unit
-				else if (pickUnit.unitGroup == enemyGroup){
+				else if (pickUnit.unitGroup != mapData._activeGroup){
 					handleEnemyUnint(pickUnit);
 				}
-			
+
 			}else{
-				handlePickEmpty(x,y,pickPoint,touchMenu);
+				handlePickEmpty(x,y,pickPoint,touchMenu,pressCancel);
 			}			
 		}
-		
-		
+
+
 		/*
 		 * handle when picking our own unit
 		 * IF current unit is not null which we have picked 
@@ -196,8 +206,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				handlePickUnit(pickUnit);
 			}
 		}
-		
-		
+
+
 		/*
 		 * if we arent controlling any
 		 * 		- show enemy stats and movement box
@@ -208,6 +218,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			if(currentUnit == null && !pickControlledUnit){
 				//display data of enemy unit
 				PathFind.DisplayUnitMoveBox(pickUnit);
+				String unitType ="" + pickUnit.unitType;
+				Log.d("Debug", "pick unit is" + unitType);
 				//update mapdata
 				mRenderer.updateHUDPanel(pickUnit);
 				mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
@@ -226,8 +238,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 			}
 		}
-		
-		
+
+
 		/*
 		 * handle when picking empty tilte
 		 * if we are controlling unit
@@ -247,25 +259,48 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		 * 					 yield the turn
 		 * 	
 		 */
-		public void handlePickEmpty(int x, int y,Point p,int touchMenu){
-			boolean pressCancel = mRenderer.headsUpDisplay.action.checkPressingCancel(x, y);
+		public void handlePickEmpty(int x, int y,Point p,int touchMenu,boolean pressCancel){
+			//boolean pressCancel = mRenderer.headsUpDisplay.action.checkPressingCancel(x, y);
 			if(pickControlledUnit){
 				if(finishMoving){
-					if(touchMenu != -1){
-						//select either attack, ability,
-						decision = mRenderer.setSelectedHUD(x,y);
-						if(decision == 1){//if attack we show the attack range
-							mRenderer.headsUpDisplay.updateHUD(true, true, false, false);//maintain the HUD
-							PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
-						}else if(decision == 4){//if cancel or wait we disable the HUD
-							//more on this later
-							//currentUnit.active = false;
-							ResetGUI();
-						}			
+					if(!chooseAction){
+						//if(pressCancel && decision )
+						if(touchMenu != -1){
+							//select either attack, ability,
+							/*
+							 * return 1 if pressing attack, 2 if pressing defense, 3 if pressing ability, 4 if pressing wait
+							 */
+							chooseAction = true;
+							decision = mRenderer.setSelectedHUD(x,y);
+							if(decision == 1){//if attack we show the attack range
+								mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
+								PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
+							}else if(decision == 4){//if cancel or wait we disable the HUD
+								//more on this later
+								//currentUnit.active = false;
+								ResetGUI();
+							}			
+						}
+					}else{
+						if(pressCancel){
+							chooseAction = false;
+							mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
+							decision = -1;
+						}
 					}
+				
+
+					// if(pressCancel){
+					//mRenderer.headsUpDisplay.updateHUD(true, true, false, false);//maintain the HUD
+					//mapData.clearBoxes();
+					//RendererAccessor.update(mapData);
+					//decision = -1;
+					//finishMoving = true;
+					//}
 				}else{
 					//if cancel the movement action
 					if(pressCancel){
+						//if(decision == 1)
 						ResetGUI();
 						return;
 					}
@@ -290,6 +325,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		 */
 		public void handlePickUnit(Unit p){
 			if(p.active){
+				String unitType ="" + p.unitType;
+				Log.d("Debug", "pick unit is" + unitType);
 				currentUnit = p;
 				pickControlledUnit = true;
 				PathFind.DisplayUnitMoveBox(currentUnit);
@@ -309,7 +346,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			finishMoving = false;
 			currentUnit = null;
 			mRenderer.headsUpDisplay.updateHUD(false, false, false, true);
-
+			chooseAction = false;
 		}
 
 	}
