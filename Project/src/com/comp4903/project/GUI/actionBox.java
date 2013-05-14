@@ -138,7 +138,7 @@ public class actionBox extends UI{
 		gl.glLoadIdentity();
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
-		box.draw(gl);
+		//box.draw(gl);
 		
 		if(showCancel){
 			if(menuSelected == 0)
