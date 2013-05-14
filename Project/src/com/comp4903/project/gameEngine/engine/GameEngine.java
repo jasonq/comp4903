@@ -6,6 +6,7 @@ import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.SkillType;
+import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.graphics.RendererAccessor;
 
 public class GameEngine {
@@ -40,16 +41,28 @@ public class GameEngine {
 				break;
 			case Defend:
 				System.out.println("Defend");
-				if (SkillEngine.Defend(source)){
+				if (SkillEngine.Defend(unitOne)){
+					RendererAccessor.update(mapData);
 					//if (inActive) source.active = false;
 					return true;
 				}
 				break;
 			case Headshot:
 				System.out.println("Headshot");
+				if (SkillEngine.HeadShot(unitOne, unitTwo)){
+					mapData.RemoveDeadUnit();
+					RendererAccessor.update(mapData);
+					//if (inActive) source.active = false;
+					return true;
+				}
 				break;
 			case Heal:
 				System.out.println("Heal");
+				if (SkillEngine.Heal(unitOne, unitTwo)){
+					RendererAccessor.update(mapData);
+					//if (inActive) source.active = false;
+					return true;
+				}
 				break;
 			case ExposeWeakness: //not in use
 				break;
@@ -78,16 +91,19 @@ public class GameEngine {
 		int index = mapData._groupList.indexOf(mapData._activeGroup);
 		if (index >= (mapData._groupList.size() - 1))
 			index = 0;
-		mapData._activeGroup = mapData._groupList.get(index);
+		UnitGroup previousGroup = mapData._activeGroup;
+		UnitGroup currentGroup = mapData._groupList.get(index);
 		for (Unit u : mapData._units){
-			if (u.unitGroup == mapData._activeGroup)
-				u.active = true;
-			else
+			if (u.unitGroup == previousGroup){
 				u.active = false;
+				u.decreaseStatusCounter(true); // clear buffs from unit
+			} else if (u.unitGroup == previousGroup) {
+				u.active = true;
+				u.decreaseStatusCounter(false); // clear buffs from unit
+			} else {
+				u.active = false;
+			}
 		}
-	}
-	
-	public static void clearBuffs(boolean begin){
-		mapData._units.clear();
+		mapData._activeGroup = currentGroup;
 	}
 }
