@@ -34,7 +34,6 @@ public class characterBox extends UI {
 		RedBar = new Square();
 		BlueBar = new Square();
 		Avatar = new Square();
-
 		x = width/40;
 		y = height/30;
 		

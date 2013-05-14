@@ -146,11 +146,18 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			int touchMenu = mRenderer.setSelectedHUD(x, y);
 			boolean pressCancel = mRenderer.headsUpDisplay.action.checkPressingCancel(x, y);
 			Point pickPoint = mRenderer.pick(x, y);
+			boolean pressYield = mRenderer.headsUpDisplay.checkPressingEndTurn(x, y);
 			//check if out of bounce
-			if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu== -1 && !pressCancel){
+			if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu== -1 && !pressCancel && !pressYield){
 				ResetGUI();
 				return;
-			}		
+			}
+			//pressing endturn
+			if(pressYield && !pickControlledUnit){//may add the turn is current ours{
+				
+				ResetGUI();
+				//endturn code goes here
+			}
 			Unit pickUnit = mapData.getUnitAt(pickPoint);
 			if(pickUnit != null){
 				if(pickUnit.unitGroup == controlGroup){
@@ -214,7 +221,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					RendererAccessor.update(mapData);
 					ResetGUI();
 					Log.d("Debug", "I ATTACK YOUUUU");
-				}else if(decision == 2){
+				}else if(decision == 3){
+					//skills code go here
 					ResetGUI();
 					Log.d("Debug", "FEEL MY ULTIMATE WRATH");
 				}
@@ -252,7 +260,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 						if(decision == 1){//if attack we show the attack range
 							mRenderer.headsUpDisplay.updateHUD(true, true, false, false);//maintain the HUD
 							PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
-						}else if(decision == 3){//if cancel or wait we disable the HUD
+						if(decision == 2){
+							
+							//code for defense goes here
+						}else if(decision == 4){//if cancel or wait we disable the HUD
 							//more on this later
 							//currentUnit.active = false;
 							ResetGUI();
@@ -303,7 +314,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			RendererAccessor.update(mapData);
 			finishMoving = false;
 			currentUnit = null;
-			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
+			mRenderer.headsUpDisplay.updateHUD(false, false, false, true);
 
 		}
 

@@ -32,7 +32,7 @@ public class HUD {
 	public boolean showAction = false;
 	public boolean showStat = false;
 	public boolean showCancel = false;
-	public boolean showAttack = false;
+	public boolean showEnd = true;
 	
 	public HUD(Context c, int w, int h,GLText glt){
 		context = c;		
@@ -48,11 +48,11 @@ public class HUD {
 		giveUpTurn = new Square(Gx,Gy,Gw,Gh);
 	}
 	
-	public void updateHUD(boolean showAction, boolean showStat, boolean showCancel, boolean showAttack){
+	public void updateHUD(boolean showAction, boolean showStat, boolean showCancel, boolean showEnd){
 		this.showAction = showAction;
 		this.showStat = showStat;
 		this.showCancel = showCancel;
-		this.showAttack = showAttack;
+		this.showEnd = showEnd;
 	}
 
 	public void initialBoxTexture(GL10 gl){
@@ -67,7 +67,8 @@ public class HUD {
 		gl.glLoadIdentity();
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
-		giveUpTurn.draw(gl);
+		if(showEnd)
+			giveUpTurn.draw(gl);
 		gl.glDisable(GL10.GL_BLEND);
 		if(showAction)
 			action.draw(gl,showCancel);		
@@ -107,6 +108,7 @@ public class HUD {
 		//character = new characterBox(context,width,height,abc);
 		character.setUnit(abc);
 		character.setText();
+		action.UpdateUnit(abc);
 		//character.loadUITexture(gl, context.getResources(), R.drawable.statpanel);
 	}
 	
