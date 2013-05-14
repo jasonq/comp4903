@@ -41,14 +41,14 @@ public class actionBox extends UI{
 		
 		//box = new Square(width/20 - 10, height/10- 10,boxWidth + 20,boxHeight + 20);
 		
-		int bHeight = (boxHeight/command.length ) * 2 / 3;
-		int bWidth = boxWidth / 2;
+		int bHeight = ((boxHeight/command.length ) * 4 ) /6;
+		int bWidth = boxWidth * 4 / 6;
 		
-		int padX = bWidth/2;
-		int padY = bHeight/ 6;
+		int padX = boxWidth/ 6;
+		int padY = (boxHeight/command.length) / 6;
 		
 		int nHeight = height/10 + padY;
-		box = new Square(xTop, yTop,boxWidth,boxHeight);
+		
 		//cancelBox = new Square(x + padX, y + padY, bWidth, bHeight);
 		//nHeight += (bHeight + padY);
 		//int bWidth = boxWidth;
@@ -70,7 +70,7 @@ public class actionBox extends UI{
 		yTop = y;
 		xBot = xTop + boxWidth;
 		yBot = yTop + boxHeight;
-		
+		box = new Square(xTop, yTop,boxWidth,boxHeight);
 		
 	}
 
@@ -83,13 +83,16 @@ public class actionBox extends UI{
 	
 	public void loadUITexture(GL10 gl,Resources r, int id){
 		super.loadUITexture(gl, r, id);
+		
+		Bitmap bTex = BitmapFactory.decodeResource(r,R.drawable.menu);
+		box.loadGLTexture(gl, context, bTex);
 		Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.command_v2);
 		//Bitmap pCommand =  BitmapFactory.decodeResource(r, R.drawable.unpresseded_new_icon);
 		//initialize cancel box
 		Bitmap cBox =  BitmapFactory.decodeResource(r, R.drawable.cancelbutton);
 		
 		command[0].loadGLTexture(gl, context, Bitmap.createScaledBitmap(cBox, 128, 128, false));
-		pressedCommand[0].loadGLTexture(gl, context, Bitmap.createScaledBitmap(cBox, 128, 128, false));
+		//pressedCommand[0].loadGLTexture(gl, context, Bitmap.createScaledBitmap(cBox, 128, 128, false));
 		
 		//Bitmap unpressed = Bitmap.createBitmap(commandT,0,0,commandT.getWidth()/2, commandT.getHeight()/2);
 		int width = commandT.getWidth()/6;
@@ -138,9 +141,9 @@ public class actionBox extends UI{
 		//box.draw(gl);
 		
 		if(showCancel){
-			//if(menuSelected == 0)
-				//pressedCommand[0].draw(gl);
-			//else
+			if(menuSelected == 0)
+				pressedCommand[0].draw(gl);
+			else
 				command[0].draw(gl);
 		}else{
 			for(int i = 1; i < command.length; i++){	
@@ -172,7 +175,7 @@ public class actionBox extends UI{
 	public int checkPressingBox(int x, int y){
 		int pad = (yBot - yTop)/(command.length);
 		int newYTop = yTop + pad;
-		if( x >= xTop && x <= xBot && y >= newYTop && y <= yBot)
+		if( x >= xTop && x <= xBot && y >= newYTop  && y <= yBot)
 			return (((int)y -newYTop) / pad) + 1  ;
 		else
 			return -1;

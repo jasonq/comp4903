@@ -55,7 +55,7 @@ public class characterBox extends UI {
 			atkVal = "" + stat.attack;
 			defVal = "" + stat.defence;
 			roundVal = "" + stat.round;
-			nameVal = "" + GameStats.getUnitStats(unit.unitType).name;
+			nameVal = "" + unit.unitType;
 			classVal = nameVal;
 			hpVal = ""  + stat.currentHealth + "/" + stat.maxHealth;
 			enVal = "" + stat.currentEnergy + "/" + stat.maxEnergy;

@@ -73,6 +73,10 @@ public class TypeFinder {
 			return SkillType.DoubleTime;
 		else if (in.equals("flamethrower"))
 			return SkillType.Flamethrower;
+		else if (in.equals("attack"))
+			return SkillType.Attack;
+		else if (in.equals("defend"))
+			return SkillType.Defend;
 		else
 			return SkillType.None;
 	}

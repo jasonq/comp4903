@@ -32,9 +32,10 @@
 	<Ability>
 	    <Name>Heal</Name>
 	    <Description>Heals the targeted unit by %health%.</Description>
-	    <Health>25</Health>
+	    <Health>0</Health>
 	    <Energy>25</Energy>
 	    <Target>Ally</Target>
 	    <Range>2</Range>
+	    <Modifier parameter="Heal">25</Modifier>
 	</Ability>
 </SkillList>
