@@ -12,7 +12,7 @@ public class Model3D {
 	public String name;
 	
 	private int numComponents;
-	private Component[] components;
+	public Component[] components;
 	
 	private float[] orientation = new float[16];
 	private float[] position = new float[4];
@@ -234,7 +234,7 @@ public class Model3D {
 								position[1] + adjust[1], 
 								position[2] );
 		Matrix.multiplyMM(w, 0, t, 0, components[0].orientation, 0);
-		//Matrix.multiplyMM(w, 0, t, 0, orientation, 0);
+		//Matrix.multiplyMM(w, 0, s, 0, orientation, 0);
 		Matrix.scaleM(w, 0, scale[0], scale[1], scale[2]);		
 		
 		//Matrix.translateM(r, 0, orientation, 0, position[0], position[1], position[2]);
@@ -428,4 +428,12 @@ public class Model3D {
 		
 	}
 	
+	public int getAnimationIndex(String animationName)
+	{
+		for (int i = 0; i < numberOfAnimations; i++)
+			if (animations_[i].name.compareTo(animationName)==0)
+				return i;
+		
+		return -1;
+	}
 }
