@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.opengl.Matrix;
 
 import com.comp4903.project.gameEngine.enums.UnitType;
+import com.comp4903.project.graphics.RendererAccessor;
 import com.comp4903.project.graphics.model.Model3D;
 
 /*	ACTOR - used to store the graphical aspects of a unit, such as 3D orientation,
@@ -77,7 +78,7 @@ public class Actor {
 	public void setType(UnitType t) 
 	{ 
 		type = t; 
-		model = type.getCode() % 2; 
+		model = type.getCode() % 3; 
 	}
 	
 	public void display(GL10 gl, float[] viewMatrix, Model3D m)
@@ -85,12 +86,37 @@ public class Actor {
 		previousZ = lastZ;
 		lastZ = m.setPose(animation, time);		
 		
-		m.YRotateComponent(0, yRotate);
+		//m.YRotateComponent(0, yRotate);
+		
+		YaxisRotate(m);
+		
 		m.display(gl, viewMatrix, animation, time);
 				
 		time += speed;
-		if (time > 120)
+		if (time >= 119)
 			time = 10;
 		
+	}
+	
+	public void YaxisRotate(Model3D m)
+	{
+		float[] yAxis = { 0, 0, 0, 0 };
+		yAxis[0] = 0;
+		yAxis[1] = 1;
+		yAxis[2] = 0;	
+
+		float[] rotation = m.matrixAngleAroundAxis(yRotate, yAxis[0], yAxis[1], yAxis[2]);
+		float[] temp = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+				
+		Matrix.multiplyMM(temp, 0, rotation, 0, m.components[0].orientation, 0);
+		
+		for (int i = 0; i < 16; i++)
+			m.components[0].orientation[i] = temp[i];
+	}	
+		
+	public void setAnimation(String animationName)
+	{
+		animation = RendererAccessor.map.models[model].getAnimationIndex(animationName);
+		time = 0;
 	}
 }

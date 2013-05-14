@@ -153,26 +153,28 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 
 			//check if out of bounce
-			///if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu== -1 && !pressCancel && !pressEnd){
-				//ResetGUI();
-				//return;
-			//}		
-			if(pressEnd && !pickControlledUnit){//might put condition if this is player turn
+
+			if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu== -1 && !pressCancel && !pressEnd){
+				ResetGUI();
+				return;
+			}		
+			if(pressEnd){//might put condition if this is player turn
 				//end turn code goes here
-				//GameEngine.endTurn();
-				//if(mapData._activeGroup == UnitGroup.PlayerOne)
-					//mapData._activeGroup = UnitGroup.PlayerTwo;
-				//else if(mapData._activeGroup == UnitGroup.PlayerTwo)
-					//mapData._activeGroup = UnitGroup.PlayerOne;
+				System.out.println("End turn pressed");
+				GameEngine.endTurn();
 				ResetGUI();
 			}
 			Unit pickUnit = mapData.getUnitAt(pickPoint);
 			if(pickUnit != null){
+				System.out.println("Active Group:" + mapData._activeGroup);
+
 				if(pickUnit.unitGroup == mapData._activeGroup){
 					handleControlledUnit(pickUnit);
 				}
 				//handle if we pick enemy unit
-				else if (pickUnit.unitGroup != mapData._activeGroup){
+
+				else {
+
 					handleEnemyUnint(pickUnit);
 				}
 
@@ -225,15 +227,18 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 			}else if(currentUnit != null && pickControlledUnit && finishMoving && (decision == 1 || decision == 2)){
 				if(decision == 1){
-					//ResetGUI();
-					//GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack);
-					//RendererAccessor.attackAnimation( currentUnit, pickUnit);
+					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack, true);
 					RendererAccessor.update(mapData);
-					ResetGUI();
 					Log.d("Debug", "I ATTACK YOUUUU");
-				}else if(decision == 2){
 					ResetGUI();
-					Log.d("Debug", "FEEL MY ULTIMATE WRATH");
+				} else if(decision == 2){
+					GameEngine.useSkill(currentUnit, null, SkillType.Defend, true);
+					Log.d("Debug", "I Defend");
+					ResetGUI();
+				} else if(decision == 3){
+					GameEngine.useSkill(currentUnit, pickUnit, SkillType.None, true);
+					Log.d("Debug", "I Use My Skill");
+					ResetGUI();
 				}
 
 			}

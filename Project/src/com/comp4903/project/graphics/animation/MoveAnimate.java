@@ -41,8 +41,7 @@ public class MoveAnimate extends AnimationProcessor {
 		
 		startPosition = u.position;
 		
-		
-		actor_.animation = 0;
+		actor_.setAnimation("walk.cycle");		
 		actor_.speed = 0;
 		actor_.time = 0;
 		
@@ -54,7 +53,7 @@ public class MoveAnimate extends AnimationProcessor {
 		if (nextstep >= 0)
 			startNewMove();			
 		else
-			ended = true;		
+			ended = true;			
 		
 	}
 	
@@ -115,6 +114,8 @@ public class MoveAnimate extends AnimationProcessor {
 			if (lasttime < 0)
 				lasttime = 0;
 			float travel = actor_.lastZ - actor_.previousZ;
+			if (actor_.animation == -1)
+				travel = 1;
 			x += xStep * travel;
 			y += yStep * travel;
 			z += zStep * travel;
@@ -133,8 +134,10 @@ public class MoveAnimate extends AnimationProcessor {
 			else
 			{
 				ended = true;
-				actor_.speed = 0;
-				actor_.animation = -1;
+				actor_.setAnimation("idle1");
+				actor_.speed = 0.03f;
+				actor_.time = 0f;
+				
 			}
 		}
 		

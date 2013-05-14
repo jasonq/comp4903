@@ -49,6 +49,6 @@
 	
 	<Units group="Player Two">
 	    <Unit x="7" y="2" weapon="Sniper Rifle" armour="Light Armour">Sniper</Unit>
-	    <Unit x="7" y="3" weapon="Automatic Rifle" armour="Medium Armour">Sniper</Unit>
+	    <Unit x="7" y="3" weapon="Automatic Rifle" armour="Medium Armour">Medic</Unit>
 	</Units>
 </Map>

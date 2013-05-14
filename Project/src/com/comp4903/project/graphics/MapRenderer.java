@@ -112,16 +112,18 @@ public class MapRenderer {
 	public void loadModels()
 	{
 		AssetManager am = context.getAssets();
-		models = new Model3D[2];
+		models = new Model3D[3];
 		
-		for (int t = 0; t < 2; t++)
+		for (int t = 0; t < 3; t++)
 		{
 			models[t] = new Model3D();
 			try {
 				InputStream buf = null;
 				if (t == 0)
 					buf = am.open("models/marvin.gmodel");
-				else
+				if (t == 1)
+					buf = am.open("models/sniper.gmodel");
+				if (t == 2)
 					buf = am.open("models/soldier.gmodel");
 				ModelLoader.load(buf, models[t]);
 				models[t].SetScale(.08f, .08f, .08f);
@@ -462,6 +464,8 @@ public class MapRenderer {
 					       0,
 					       (float)m._units.get(i).position.y * 0.8660254038f * 2f 
 					       + (m._units.get(i).position.x % 2) * 0.8660254038f);
+			a.setAnimation("idle1");
+			a.time = 0; a.speed = 0.03f;
 			actors.put(a.getID(), a);
 		}
 	}
@@ -515,6 +519,8 @@ public class MapRenderer {
 						       0,
 						       (float)m._units.get(i).position.y * 0.8660254038f * 2f 
 						       + (m._units.get(i).position.x % 2) * 0.8660254038f);
+				a.setAnimation("idle1");
+				a.time = 0; a.speed = 0.01f;
 				actors.put(a.getID(), a);
 			}
 		}
