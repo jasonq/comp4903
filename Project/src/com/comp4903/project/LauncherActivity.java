@@ -3,6 +3,7 @@ package com.comp4903.project;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.comp4903.AI.AIEngine;
 import com.comp4903.project.graphics.GLRenderer;
 import com.comp4903.project.graphics.MyGLSurfaceView;
 
@@ -52,8 +53,10 @@ public class LauncherActivity extends Activity {
 			mapData = MapFactory.generateMapData(in);
 		} catch (IOException e) {}
 
+		AIEngine.Initialize(mapData);
 		PathFind.initialize(mapData);
 		GameEngine.Initialize(mapData);
+		
 		
 		GLSurfaceView view = new MyGLSurfaceView(this, mapData);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
