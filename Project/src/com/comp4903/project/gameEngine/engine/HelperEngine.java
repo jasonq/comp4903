@@ -28,6 +28,8 @@ public class HelperEngine {
 		InitializeRandomGenerator();
 		if (chance >= 100){
 			return true;
+		} else if (chance < 0){
+			return false;
 		} else {
 			if (randomGenerator.nextInt(100) < chance)
 				return true;

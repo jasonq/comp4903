@@ -55,35 +55,39 @@ public class GameEngine {
 		switch (skill){
 			case Attack:
 				System.out.println("Attacking");
+				if (canCastSkill(unitOne, SkillType.Attack))
 				if (SkillEngine.Attack(unitOne, unitTwo)){
 					mapData.RemoveDeadUnit();
 					RendererAccessor.update(mapData);
-					//if (inActive) source.active = false;
+					if (inActive) source.active = false;
 					return true;
 				}
 				break;
 			case Defend:
 				System.out.println("Defend");
+				if (canCastSkill(unitOne, SkillType.Defend))
 				if (SkillEngine.Defend(unitOne)){
 					RendererAccessor.update(mapData);
-					//if (inActive) source.active = false;
+					if (inActive) source.active = false;
 					return true;
 				}
 				break;
 			case Headshot:
 				System.out.println("Headshot");
+				if (canCastSkill(unitOne, SkillType.Headshot))
 				if (SkillEngine.HeadShot(unitOne, unitTwo)){
 					mapData.RemoveDeadUnit();
 					RendererAccessor.update(mapData);
-					//if (inActive) source.active = false;
+					if (inActive) source.active = false;
 					return true;
 				}
 				break;
 			case Heal:
 				System.out.println("Heal");
+				if (canCastSkill(unitOne, SkillType.Heal))
 				if (SkillEngine.Heal(unitOne, unitTwo)){
 					RendererAccessor.update(mapData);
-					//if (inActive) source.active = false;
+					if (inActive) source.active = false;
 					return true;
 				}
 				break;

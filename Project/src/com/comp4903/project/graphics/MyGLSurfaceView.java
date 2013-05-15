@@ -17,6 +17,7 @@ import android.view.GestureDetector;
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.ColorType;
 import com.comp4903.project.gameEngine.enums.GameState;
 import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.gameEngine.enums.SkillType;
@@ -225,13 +226,21 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 					SkillStats stats = new SkillStats();
 					if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Headshot)){
-						stats = GameStats.getSkillStats(SkillType.Headshot);
-						PathFind.DisplayUnitEnemyBox(currentUnit, stats.range);
-						System.out.println("Find HeadShot");
+						if(GameEngine.canCastSkill(currentUnit, SkillType.Headshot)){
+							stats = GameStats.getSkillStats(SkillType.Headshot);
+							PathFind.DisplayUnitEnemyBox(currentUnit, stats.range);
+							System.out.println("Find HeadShot");
+						} else {
+							RendererAccessor.floatingText(300, 170, 0, -1, 100, ColorType.Blue, "n", "Not Enough Energy");
+						}
 					} else if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
-						stats = GameStats.getSkillStats(SkillType.Heal);
-						PathFind.DisplayUnitFriendBox(currentUnit, stats.range);
-						System.out.println("Find Heal");
+						if (GameEngine.canCastSkill(currentUnit, SkillType.Heal)){
+							stats = GameStats.getSkillStats(SkillType.Heal);
+							PathFind.DisplayUnitFriendBox(currentUnit, stats.range);
+							System.out.println("Find Heal");
+						} else {
+							RendererAccessor.floatingText(300, 170, 0, -1, 100, ColorType.Blue, "n", "Not Enough Energy");
+						}
 					} else {
 						System.out.println("Find Nothing");
 					}//show the attack range
