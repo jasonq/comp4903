@@ -329,6 +329,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				mRenderer.headsUpDisplay.updateHUD(true, false, true, false);
 				finishMoving = false;
 			}else{
+				mRenderer.updateHUDPanel(p);
 				mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 			}
 
