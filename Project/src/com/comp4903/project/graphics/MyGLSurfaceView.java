@@ -299,6 +299,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			if(pickControlledUnit && !finishMoving){
 				if(mapData._movementBox.contains(p)){
 					GameEngine.moveUnit(currentUnit, p);
+					mRenderer.updateHUDPanel(currentUnit);
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 					//PathFind.DisplayUnitMoveBox(currentUnit);
 					mapData.clearBoxes();

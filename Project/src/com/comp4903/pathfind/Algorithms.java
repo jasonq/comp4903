@@ -49,6 +49,38 @@ public class Algorithms {
         return steps;
     }
     /**
+     * Gets all nodes surrounding the point within a radius (maxsteps)
+     */
+    public static List<BFSNode> GetNodesBFS(Point p, int maxSteps)
+    {
+        List<BFSNode> queue = new ArrayList<BFSNode>();
+        List<BFSNode> marked = new ArrayList<BFSNode>();
+        List<BFSNode> steps = new ArrayList<BFSNode>();
+        queue.add(new BFSNode(p, 0));
+        marked.add(queue.get(0));
+        while (queue.size() > 0)
+        {
+            BFSNode t = queue.get(0);
+            queue.remove(0);
+            if (t.step > maxSteps)
+                continue;
+            steps.add(t);
+            List<BFSNode> adjNodes;
+            if(t.p.x % 2 == 0)
+            	adjNodes = evenNodes(t);
+            else
+            	adjNodes = oddNodes(t);
+            
+            for(BFSNode node : adjNodes){
+            	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
+            		queue.add(node);
+            		marked.add(node);
+            	}
+            }
+        }
+        return steps;
+    }
+    /**
      * Gets all points surrounding the point within a radius (maxsteps)
      */
     public static List<Point> GetUnitPointsBFS(Unit u)
@@ -101,6 +133,39 @@ public class Algorithms {
             BFSNode t = queue.get(0);
             queue.remove(0);
             if (t.step > atkRange)
+                continue;
+            Unit un = _map.getUnitAt(t.p);
+            if(un != null && un.unitGroup != u.unitGroup){
+            	units.add(t.p);
+            }
+            List<BFSNode> adjNodes;
+            if(t.p.x % 2 == 0)
+            	adjNodes = evenNodes(t);
+            else
+            	adjNodes = oddNodes(t);
+            
+            for(BFSNode node : adjNodes){
+            	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
+            		queue.add(node);
+            		marked.add(node);
+            	}
+            }
+        }
+        return units;
+    }
+    
+    public static List<Point> GetUnitEnemyBFS(Unit u, int range)
+    {
+    	List<BFSNode> queue = new ArrayList<BFSNode>();
+        List<BFSNode> marked = new ArrayList<BFSNode>();
+        List<Point> units = new ArrayList<Point>();
+        queue.add(new BFSNode(u.position, 0));
+        marked.add(queue.get(0));
+        while (queue.size() > 0)
+        {
+            BFSNode t = queue.get(0);
+            queue.remove(0);
+            if (t.step > range)
                 continue;
             Unit un = _map.getUnitAt(t.p);
             if(un != null && un.unitGroup != u.unitGroup){
@@ -269,6 +334,7 @@ public class Algorithms {
         return result;
     }
     
+    //list of points ordered from moving unit start to end
     public static List<Point> GetMovePathAStar(Unit movingUnit, Point end)
     {
     	Point start = movingUnit.position;

@@ -4,6 +4,7 @@ import android.graphics.Point;
 
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
+import com.comp4903.project.gameEngine.data.Status;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
@@ -24,7 +25,10 @@ public class GameEngine {
 			return false;
 		RendererAccessor.moveAnimation(u, PathFind.UnitToPoint(u, point));
 		u.position = point;
-		System.out.println(u.unitType.name() + u.uID + " Move to " + point.x + ", " + point.y);	
+		Status s = new Status(mapData._tileTypes[point.x][point.y]);
+		u.tileStatus = s;
+		u.UpdateCombatStats();
+		System.out.println(u.unitType.name() + u.uID + " Move to " + point.x + ", " + point.y);
 		RendererAccessor.update(mapData);
 		return true;
 	}
@@ -108,14 +112,15 @@ public class GameEngine {
 		for (Unit u : mapData._units){
 			if (u.unitGroup == previousGroup){
 				u.active = false;
-				u.decreaseStatusCounter(true); // clear buffs from unit
+				u.resolveStatus(true); // clear buffs from unit
 			} else if (u.unitGroup == currentGroup) {
 				u.active = true;
-				u.decreaseStatusCounter(false); // clear buffs from unit
+				u.resolveStatus(false); // clear buffs from unit
 			} else {
 				u.active = false;
 			}
 		}
 		mapData._activeGroup = currentGroup;
+		mapData.RemoveDeadUnit();
 	}
 }
