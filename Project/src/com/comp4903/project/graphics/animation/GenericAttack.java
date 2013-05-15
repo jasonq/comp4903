@@ -19,6 +19,9 @@ public class GenericAttack extends AnimationProcessor {
 	public void init(Unit attacker, Unit attackee)
 	{
 		r = new Random();
+		
+		foreground = true;
+		
 		actorID = attacker.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
 		

@@ -1,5 +1,7 @@
 package com.comp4903.project.gameEngine.engine;
 
+import java.util.List;
+
 import android.graphics.Point;
 
 import com.comp4903.pathfind.PathFind;
@@ -23,7 +25,16 @@ public class GameEngine {
 			return false;
 		if (!mapData.inMap(point))
 			return false;
-		RendererAccessor.moveAnimation(u, PathFind.UnitToPoint(u, point));
+		return moveUnit(unit, point, PathFind.UnitToPoint(u, point));
+	}
+	
+	public static boolean moveUnit(Unit unit, Point point, List<Point> p){
+		Unit u = mapData.getUnitAt(unit.position);
+		if (u == null)
+			return false;
+		if (!mapData.inMap(point))
+			return false;
+		RendererAccessor.moveAnimation(u, p);
 		u.position = point;
 		Status s = new Status(mapData._tileTypes[point.x][point.y]);
 		u.tileStatus = s;
@@ -31,6 +42,7 @@ public class GameEngine {
 		System.out.println(u.unitType.name() + u.uID + " Move to " + point.x + ", " + point.y);
 		RendererAccessor.update(mapData);
 		return true;
+		
 	}
 	
 	public static boolean useSkill(Unit source, Unit target, SkillType skill, boolean inActive){

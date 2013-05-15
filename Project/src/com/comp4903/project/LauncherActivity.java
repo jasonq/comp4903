@@ -66,7 +66,7 @@ public class LauncherActivity extends Activity {
 		
 
 		
-		GameStats.PrintSkillList();
+		GameStats.PrintUnitList();
 
 		
 	}

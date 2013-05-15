@@ -36,6 +36,8 @@ public class MoveAnimate extends AnimationProcessor {
 	 */
 	public void init(Unit u, List<Point> s)
 	{
+		foreground = true;
+		
 		actorID = u.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
 		step = s.size();

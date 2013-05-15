@@ -16,6 +16,7 @@ public class DeathAnimation extends AnimationProcessor {
 	{
 		actorID = u.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
+		foreground = true;
 	}
 	
 	@Override

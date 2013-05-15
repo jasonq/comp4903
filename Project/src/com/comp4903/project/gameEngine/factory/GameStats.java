@@ -144,6 +144,9 @@ public class GameStats {
 			System.out.println("Rifle Use: " + stats.canUseThisWeapon(WeaponType.Rifle));
 			System.out.println("Medium Armour Use: " + stats.canUseThisArmour(ArmourType.MediumArmour));
 			System.out.println("SkillList: " + stats.getAvailableSkills().size());
+			for (SkillType s: stats.getAvailableSkills()){
+				System.out.println("Skill:" + s);
+			}
 			System.out.println();
 		}
 	}

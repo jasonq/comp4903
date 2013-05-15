@@ -24,7 +24,6 @@ import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.factory.GameStats;
 import com.comp4903.project.gameEngine.factory.SkillStats;
-import com.comp4903.project.gameEngine.factory.UnitStats;
 import com.comp4903.project.graphics.GLRenderer;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -217,13 +216,24 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					chooseAction = true;
 				}else if(decision == 2){//defending
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
-					//PathFind(currentUnit);//show the attack range
+					SkillStats stats = GameStats.getSkillStats(SkillType.Defend);
+					PathFind.DisplayUnitFriendBox(currentUnit, stats.range);
+
 					chooseAction = true;
 				}else if(decision == 3){//call skills
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
-					//SkillStats stats = GameStats.getSkillStats(
-						//	GameStats.getUnitStats(currentUnit.unitType).getAvailableSkills().get(2));
-					PathFind.DisplayUnitEnemyBox(currentUnit, 3);//show the attack range
+					SkillStats stats = new SkillStats();
+					if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Headshot)){
+						stats = GameStats.getSkillStats(SkillType.Headshot);
+						PathFind.DisplayUnitEnemyBox(currentUnit, stats.range);
+						System.out.println("Find HeadShot");
+					} else if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+						stats = GameStats.getSkillStats(SkillType.Heal);
+						PathFind.DisplayUnitFriendBox(currentUnit, stats.range);
+						System.out.println("Find Heal");
+					} else {
+						System.out.println("Find Nothing");
+					}//show the attack range
 					chooseAction = true;
 				}else if(decision == 4){		
 					currentUnit.active = false;
