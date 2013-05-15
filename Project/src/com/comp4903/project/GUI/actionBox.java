@@ -87,7 +87,7 @@ public class actionBox extends UI{
 		
 		Bitmap bTex = BitmapFactory.decodeResource(r,R.drawable.menu);
 		box.loadGLTexture(gl, context, bTex);
-		Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.command_v2);
+		Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.better);
 		//Bitmap pCommand =  BitmapFactory.decodeResource(r, R.drawable.unpresseded_new_icon);
 		//initialize cancel box
 		Bitmap cBox =  BitmapFactory.decodeResource(r, R.drawable.cancelbutton);

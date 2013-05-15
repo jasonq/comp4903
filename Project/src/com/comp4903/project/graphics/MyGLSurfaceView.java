@@ -149,8 +149,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			boolean pressCancel = mRenderer.headsUpDisplay.action.checkPressingCancel(x, y);
 			
 			if(pressCancel)
-				Log.d("Debug","Cancel Pressed");
-			
+				Log.d("Debug","Cancel Pressed");	
 			Point pickPoint = mRenderer.pick(x, y);
 			boolean pressEnd = mRenderer.headsUpDisplay.checkPressingEndTurn(x, y);
 
@@ -166,8 +165,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				System.out.println("End turn pressed");
 				GameEngine.endTurn();
 				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.EndTurn);
-				ResetGUI();
+				ResetGUI();			
 			}
+			
 			Unit pickUnit = mapData.getUnitAt(pickPoint);
 			
 			if(handleClickBox(touchMenu,pressCancel))
@@ -175,7 +175,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			
 			if(pickUnit != null){
 				System.out.println("Active Group:" + mapData._activeGroup);
-
 				if(pickUnit.unitGroup == mapData._activeGroup){
 					handleControlledUnit(pickUnit);
 				}
@@ -202,11 +201,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 					PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
 					chooseAction = true;
-				}else if(decision == 2){
+				}else if(decision == 2){//defending
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 					PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
 					chooseAction = true;
-				}else if(decision == 3){
+				}else if(decision == 3){//call skills
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 					PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
 					chooseAction = true;
