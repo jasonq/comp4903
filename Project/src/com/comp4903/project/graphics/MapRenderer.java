@@ -13,6 +13,7 @@ import javax.microedition.khronos.opengles.GL10;
 import com.comp4903.project.GUI.HUD;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.ColorType;
 import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.gameEngine.enums.UnitType;
 import com.comp4903.project.graphics.animation.Actor;
@@ -103,7 +104,7 @@ public class MapRenderer {
 	public void networkTest()
 	{
 		if (Networking.IP != null)
-			RendererAccessor.floatingText(20, 20, 0, 0, -1, "bozo", Networking.IP);
+			RendererAccessor.floatingText(20, 20, 0, 0, -1, ColorType.White, "bozo", Networking.IP);
 	}
 	
 	/*	LOADMODELS - loads and initializes the 3D model data
@@ -133,11 +134,11 @@ public class MapRenderer {
 			} catch (IOException e)
 			{ }			
 		}
-		models[0].SetPosition(21,1,21);		
+		models[0].SetPosition(0,0,0);		
 		//models[1].YRotate(1.6f);
 		//models[1].XRotate(1.57f);
-		models[1].SetScale(1, 1, 1);
-		models[1].SetPosition(26, 0, 23);
+		//models[1].SetScale(.08f, .08f, .08f);
+		models[1].SetPosition(0, 0, 0);
 	}
 	
 	/*	INIT - Used to initialize, or re-initialize the map
@@ -203,13 +204,12 @@ public class MapRenderer {
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
 		
-		FloatingText.font.begin( 1.0f, 1.0f, 1.0f, 1.0f );         // Begin Text Rendering (Set Color WHITE)
-		FloatingText.font.setScale(2.0f);
+		
 		
 		for (int i = 0; i < floatingText_.size(); i++)
 			floatingText_.get(i).draw();
 		
-		FloatingText.font.end();                                   // End Text Rendering
+		
 		
 		for (int i = 0; i < floatingIcons_.size(); i++)
 			floatingIcons_.get(i).draw();
@@ -220,9 +220,9 @@ public class MapRenderer {
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 	}
 	
-	public void addFloatingText(int x, int y, int mx, int my, int l, String n, String c)
+	public void addFloatingText(int x, int y, int mx, int my, int l, ColorType col, String n, String c)
 	{
-		FloatingText f = new FloatingText(x,y,mx,my,l,n,c);
+		FloatingText f = new FloatingText(x,y,mx,my,l,col, n,c);
 		
 		for (int i = 0; i < floatingText_.size(); i++)
 		{

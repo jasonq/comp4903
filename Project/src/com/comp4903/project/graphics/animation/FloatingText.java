@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.comp4903.project.GUI.GLText;
+import com.comp4903.project.gameEngine.enums.ColorType;
 
 public class FloatingText {
 
@@ -18,9 +19,10 @@ public class FloatingText {
 	int x, y;
 	int xMovement, yMovement;
 	int lifetime;
+	float[] color;
 	public boolean active;
 	
-	public FloatingText(int x1, int y1, int mx, int my, int l, String n, String c)
+	public FloatingText(int x1, int y1, int mx, int my, int l, ColorType col, String n, String c)
 	{
 		content = c;
 		name = n;
@@ -30,6 +32,7 @@ public class FloatingText {
 		yMovement = my;
 		lifetime = l;
 		active = true;
+		color = col.getAsFloats();
 		
 	}
 	
@@ -37,6 +40,10 @@ public class FloatingText {
 	{
 		if (active)
 		{
+			
+			font.begin(color[0], color[1], color[2], color[3] );         // Begin Text Rendering (Set Color WHITE)
+			font.setScale(2.0f);
+			
 			font.draw( content, x, y );          // Draw Test String
 			if ((delay % 10) == 0) {
 				x += xMovement;
@@ -45,6 +52,8 @@ public class FloatingText {
 				if (lifetime == 0)
 					active = false;
 			}
+			
+			font.end();
 		}
 	}
 	

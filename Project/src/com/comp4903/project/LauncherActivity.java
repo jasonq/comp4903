@@ -45,7 +45,8 @@ public class LauncherActivity extends Activity {
 		InputStream in;
 		context = this;
 		
-		Networking.IP = "undefined";
+		//Networking.staticInitializer();		
+		startNetworking();
 		
 		try {
 			in = getResources().getAssets().open("MapTwo.xml");
@@ -60,8 +61,10 @@ public class LauncherActivity extends Activity {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(view);
 		
-		startNetworking();
+
+		
 		GameStats.PrintSkillList();
+
 		
 	}
 
@@ -88,7 +91,8 @@ public class LauncherActivity extends Activity {
 		Thread netThread = new Thread()
 		{			
 			public void run(){
-				NetworkAccessor.net = new Networking(context);
+				//NetworkAccessor.net = new Networking(context);
+				Networking.staticInitializer(context);
 			}			
 		};
 		

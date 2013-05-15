@@ -3,6 +3,7 @@ package com.comp4903.project.graphics.animation;
 import android.graphics.Point;
 
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.ColorType;
 import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.graphics.RendererAccessor;
 
@@ -32,7 +33,7 @@ public class ReceiveAttack extends AnimationProcessor {
 		if (count == 0)
 		{
 			Point p = RendererAccessor.ScreenXYfromXYZ(actor_.getX(), actor_.getY() + 2, actor_.getZ());
-			RendererAccessor.floatingText(p.x-40, p.y, 0, -2, 100, "bozo", messages_[m++]);
+			RendererAccessor.floatingText(p.x-40, p.y, 0, -2, 100, ColorType.Red, "bozo", messages_[m++]);
 			count = 20;
 		}
 		if (m == messages_.length)

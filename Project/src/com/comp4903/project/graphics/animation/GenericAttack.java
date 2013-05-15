@@ -12,6 +12,7 @@ public class GenericAttack extends AnimationProcessor {
 	private int actorID;
 	private Actor actor_;
 	private Random r;
+	private boolean signalled;
 	
 	private int time = 0;
 		
@@ -28,25 +29,35 @@ public class GenericAttack extends AnimationProcessor {
 		
 		actor_.setYrotate(-angle + 3.141593f / 2f);
 		victim.setYrotate(-angle + 3.141593f / 2f + 3.141593f);
+		
+		actor_.setAnimation("attack.basic");		
+		actor_.speed = 0.05f;
+		actor_.time = 3;
+		
+		signalled = false;
 	}
 	
 	@Override
 	public boolean iteration() {
-		
-		if (time % 3 == 0) {
-
-			actor_.setZrotate(r.nextFloat() * 0.10f - 0.05f);
-			actor_.setXrotate(r.nextFloat() * 0.10f - 0.05f);
+			
+		if (signalled)
+		{
+			if ((actor_.time > 45) || (actor_.animation == -1))
+			{
+				actor_.setAnimation("idle1");
+				ended = true;
+				actor_.time = 0;
+				actor_.speed = 0.03f;
+			}
+			return false;
 		}
 		
-		time++;
-		
-		if (time > 30)
+		if ((actor_.time > 16) || (actor_.animation == -1))
 		{
 			actor_.setZrotate(0);
-			actor_.setXrotate(0);
-			ended = true;
+			actor_.setXrotate(0);			
 			AnimationEngine.signal("Receiver", 1);
+			signalled = true;
 			return true;
 		}
 		
