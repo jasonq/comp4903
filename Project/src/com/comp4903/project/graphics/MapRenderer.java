@@ -74,11 +74,15 @@ public class MapRenderer {
 	public Model3D[] models;
 		
 	private float[] ambientLight = { 0.6f, 0.6f, 0.6f, 1 };
+	private float[] tileColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 0.0f };	
 	
 	private ArrayList<FloatingText> floatingText_;
 	private ArrayList<FloatingIcon> floatingIcons_;
+	
+	private ColorType _attackBoxColor;
+	private ColorType _movementBoxColor;
 	
 	/*	CONSTRUCTOR - sets up data structures
 	 * 
@@ -138,7 +142,7 @@ public class MapRenderer {
 		//models[1].YRotate(1.6f);
 		//models[1].XRotate(1.57f);
 		//models[1].SetScale(.08f, .08f, .08f);
-		models[1].SetPosition(0, 0, 0);
+		models[2].SetScale(.75f, .75f, .75f);
 	}
 	
 	/*	INIT - Used to initialize, or re-initialize the map
@@ -291,8 +295,8 @@ public class MapRenderer {
 	private void selectionPass()
 	{
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);	
+				
 		for (int x = 0; x < mapWidth; x++)
 			for (int y = 0; y < mapHeight; y++)
 			{
@@ -337,11 +341,16 @@ public class MapRenderer {
 				
 					if (tileMap[x][y].state != -1)
 					{
+						if (tileMap[x][y].state == 0)
+							_movementBoxColor.getAsFloats(tileColor);
+						if (tileMap[x][y].state == 1)
+							_attackBoxColor.getAsFloats(tileColor);
+						gl.glColor4f(0, 1, 0, 1);
 						hex.draw(gl, modelViewMatrix, projectionMatrix, 0, tileMap[x][y].state, false);
 					}
 				}
 			}
-		gl.glDisable(GL10.GL_BLEND);
+		gl.glDisable(GL10.GL_BLEND);		
 	}
 	
 	/*	ACTORPASS - displays the 3D models associated with the units
@@ -479,6 +488,9 @@ public class MapRenderer {
 	{
 		//GLRenderer.pauseRender = true;
 		//while (GLRenderer.isRenderingNow);
+		
+		_attackBoxColor = m._attackBoxColor;
+		_movementBoxColor = m._movementBoxColor;
 		
 		for (int x = 0; x < mapWidth; x++)
 			for (int y = 0; y < mapHeight; y++)

@@ -34,10 +34,13 @@ public class Hexagon {
 	private float[] viewMatrix = new float[16];
 	
 	private float vertices[];
+	private float colors[];
 	
 	private TileSetDefinition[] tileDefinitions = new TileSetDefinition[10];
 		
 	private FloatBuffer vertexBuffer;
+	private FloatBuffer colorBuffer;
+	private FloatBuffer defaultColorBuffer;
 		
 	/* CONSTRUCTOR - sets up default shape for the hexagons, and
 	 * initializes the vertex and index buffers	 * 
@@ -64,11 +67,21 @@ public class Hexagon {
 			vertices[i * 3 + 2] -= B;
 		}
 		
+		colors = new float[6 * 3];
+		for (int i = 0; i < 6 * 3; i++)
+			colors[i] = 1.0f;
+		
 		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
 		vbb.order(ByteOrder.nativeOrder());
 		vertexBuffer = vbb.asFloatBuffer();
 		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);		
+		vertexBuffer.position(0);	
+		
+		vbb = ByteBuffer.allocateDirect(6 * 3 * 4);
+		vbb.order(ByteOrder.nativeOrder());
+		colorBuffer = vbb.asFloatBuffer();
+		colorBuffer.put(colors);
+		colorBuffer.position(0);	
 		
 		for (int i = 0; i < 5000; i++)
 			for (int p = 0; p < 7; p++)
@@ -116,9 +129,11 @@ public class Hexagon {
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, MaterialLibrary.texturenames[tex]);
 	
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		//gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);		
+		//gl.glVertexPointer(3, GL10.GL_FLOAT, 0, colorBuffer);	
 		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, tileDefinitions[set].tiles[typ].UV);
 
 		gl.glDrawArrays(GL10.GL_TRIANGLE_FAN, 0, vertices.length / 3);

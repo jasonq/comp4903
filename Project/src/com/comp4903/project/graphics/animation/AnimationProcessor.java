@@ -11,6 +11,7 @@ public abstract class AnimationProcessor {
 	int delay;
 	boolean started = false;
 	boolean ended = false;
+	boolean foreground = false;
 	String name;
 	
 	public abstract boolean iteration();

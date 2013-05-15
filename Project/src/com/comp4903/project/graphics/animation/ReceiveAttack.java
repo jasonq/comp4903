@@ -18,6 +18,7 @@ public class ReceiveAttack extends AnimationProcessor {
 	
 	public void init(Unit attacker, Unit attackee, String[] messages)
 	{
+		foreground = true;
 		actorID = attackee.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
 		messages_ = messages;

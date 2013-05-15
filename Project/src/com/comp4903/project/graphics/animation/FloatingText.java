@@ -19,7 +19,7 @@ public class FloatingText {
 	int x, y;
 	int xMovement, yMovement;
 	int lifetime;
-	float[] color;
+	float[] color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	public boolean active;
 	
 	public FloatingText(int x1, int y1, int mx, int my, int l, ColorType col, String n, String c)
@@ -32,7 +32,7 @@ public class FloatingText {
 		yMovement = my;
 		lifetime = l;
 		active = true;
-		color = col.getAsFloats();
+		col.getAsFloats(color);
 		
 	}
 	
