@@ -22,6 +22,9 @@ import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.engine.GameEngine;
+import com.comp4903.project.gameEngine.factory.GameStats;
+import com.comp4903.project.gameEngine.factory.SkillStats;
+import com.comp4903.project.gameEngine.factory.UnitStats;
 import com.comp4903.project.graphics.GLRenderer;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -88,6 +91,17 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 			}
 			break;
+		case MotionEvent.ACTION_DOWN:
+			
+			if(GLRenderer.state == GameState.Game_Screen){
+				mRenderer.setSelectedHUD((int)x, (int)y);
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+			if(GLRenderer.state == GameState.Game_Screen){
+				mRenderer.setSelectedHUD(10000, 10000);
+			}
+			break;
 		}
 		mPreviousX = x;
 		mPreviousY = y;
@@ -149,8 +163,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			boolean pressCancel = mRenderer.headsUpDisplay.action.checkPressingCancel(x, y);
 			
 			if(pressCancel)
-				Log.d("Debug","Cancel Pressed");
-			
+				Log.d("Debug","Cancel Pressed");	
 			Point pickPoint = mRenderer.pick(x, y);
 			boolean pressEnd = mRenderer.headsUpDisplay.checkPressingEndTurn(x, y);
 
@@ -166,8 +179,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				System.out.println("End turn pressed");
 				GameEngine.endTurn();
 				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.EndTurn);
-				ResetGUI();
+				ResetGUI();			
 			}
+			
 			Unit pickUnit = mapData.getUnitAt(pickPoint);
 			
 			if(handleClickBox(touchMenu,pressCancel))
@@ -175,7 +189,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			
 			if(pickUnit != null){
 				System.out.println("Active Group:" + mapData._activeGroup);
-
 				if(pickUnit.unitGroup == mapData._activeGroup){
 					handleControlledUnit(pickUnit);
 				}
@@ -202,16 +215,26 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 					PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
 					chooseAction = true;
-				}else if(decision == 2){
+				}else if(decision == 2){//defending
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 					PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
 					chooseAction = true;
-				}else if(decision == 3){
+				}else if(decision == 3){//call skills
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
-					PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
+					SkillStats stats = new SkillStats();
+					if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Headshot)){
+						stats = GameStats.getSkillStats(SkillType.Headshot);
+						System.out.println("Find HeadShot");
+					} else if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+						stats = GameStats.getSkillStats(SkillType.Heal);
+						System.out.println("Find Heal");
+					} else {
+						System.out.println("Find Nothing");
+					}
+					PathFind.DisplayUnitEnemyBox(currentUnit, stats.range);//show the attack range
 					chooseAction = true;
 				}else if(decision == 4){		
-					
+					currentUnit.active = false;
 					ResetGUI();
 				}
 				
@@ -221,6 +244,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				chooseAction = false;
 				decision = -1;
 				mRenderer.headsUpDisplay.action.menuSelected = -1;
+				mapData.clearBoxes();
+				RendererAccessor.update(mapData);
 				return true;
 			}else if (pickControlledUnit && pressCancel && !finishMoving){
 				ResetGUI();
@@ -271,8 +296,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				mRenderer.updateHUDPanel(pickUnit);
 				mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 			}else if(currentUnit != null && pickControlledUnit && finishMoving && decision != -1){
-				if(decision == 1){
+				if(decision == 1 && mapData._attackBox.contains(pickUnit.position)){
 					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack, true);
+					//currentUnit.active = false;
 					RendererAccessor.update(mapData);
 					Log.d("Debug", "I ATTACK YOUUUU");
 					ResetGUI();
@@ -297,6 +323,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			if(pickControlledUnit && !finishMoving){
 				if(mapData._movementBox.contains(p)){
 					GameEngine.moveUnit(currentUnit, p);
+					mRenderer.updateHUDPanel(currentUnit);
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 					//PathFind.DisplayUnitMoveBox(currentUnit);
 					mapData.clearBoxes();
@@ -305,6 +332,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					
 				}else
 					ResetGUI();
+			}else if(!pickControlledUnit){
+				ResetGUI();
 			}
 		}
 		/*
@@ -313,6 +342,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		 * showing the path of movement
 		 */
 		public void handlePickUnit(Unit p){
+			PrintStat(1,true,p);
 			if(p.active){
 				String unitType ="" + p.unitType;
 				Log.d("Debug", "pick unit is" + unitType);
@@ -322,6 +352,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				mRenderer.updateHUDPanel(currentUnit);
 				mRenderer.headsUpDisplay.updateHUD(true, false, true, false);
 				finishMoving = false;
+			}else{
+				mRenderer.updateHUDPanel(p);
+				mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 			}
 
 		}
@@ -338,15 +371,16 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			RendererAccessor.update(mapData);
 		}
 		
-		public void PrintStat(int touchMenu, boolean pressCancel){
+		public void PrintStat(int touchMenu, boolean pressCancel,Unit u){
 			
 			Log.d("Debug", "----------------------------");
-			Log.d("Debug", "pickControlledUnit is: " + pickControlledUnit);
-			Log.d("Debug", "decision is: " + decision);
-			Log.d("Debug", "chooseAction is: " + chooseAction);
-			Log.d("Debug", "finishMoving is: " + finishMoving);
-			Log.d("Debug", "is it touching menu?: " + touchMenu);
-			Log.d("Debug", "is it pressing cancel?: " + pressCancel);
+			//Log.d("Debug", "pickControlledUnit is: " + pickControlledUnit);
+			//Log.d("Debug", "decision is: " + decision);
+			//Log.d("Debug", "chooseAction is: " + chooseAction);
+			//Log.d("Debug", "finishMoving is: " + finishMoving);
+			//Log.d("Debug", "is it touching menu?: " + touchMenu);
+			//Log.d("Debug", "is it pressing cancel?: " + pressCancel);
+			Log.d("Debug", "is Unit active?: " + u.active);
 			
 		}
 

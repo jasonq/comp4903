@@ -19,6 +19,7 @@ public class Unit {
 	public WeaponType weapon;
 	public ArmourType armour;
 	private List<Status> status;
+	public Status tileStatus;
 	public UnitData combatStats;
 	public boolean active;
 	
@@ -29,6 +30,7 @@ public class Unit {
 		position = pos;
 		weapon = WeaponType.None;
 		armour = ArmourType.None;
+		tileStatus = new Status(TileType.None);
 		active = true;
 		status = new ArrayList<Status>();
 		InitializeCombatStats();
@@ -41,9 +43,14 @@ public class Unit {
 		position = pos;
 		this.weapon = weapon;
 		this.armour = armour;
+		tileStatus = new Status(TileType.None);
 		active = true;
 		status = new ArrayList<Status>();
 		InitializeCombatStats();
+	}
+	
+	public UnitStats getUnitStats(){
+		return GameStats.getUnitStats(unitType);
 	}
 	
 	public void AddStatus(Status s){
@@ -51,11 +58,13 @@ public class Unit {
 		UpdateCombatStats();
 	}
 	
-	public void decreaseStatusCounter(boolean endTurn){
+	public void resolveStatus(boolean endTurn){
 		List<Status> temp = new ArrayList<Status>();
 		for(Status s:status){
-			if (s.clearAtEndOfTurn == endTurn){
+			if (s.resolveAtEndOfTurn == endTurn){
 				s.duration --;
+				combatStats.currentHealth -= s.damageHealth;
+				combatStats.fixHealthAndEnergy();
 			}
 			if (s.duration <= 0){
 				s.active = false;
@@ -63,6 +72,13 @@ public class Unit {
 				temp.add(s);
 			}
 		}
+		if (tileStatus.resolveAtEndOfTurn == endTurn){
+			System.out.println("Heal at end of turn");
+			combatStats.currentHealth -= tileStatus.damageHealth;
+			combatStats.currentEnergy -= tileStatus.damageEnergy;
+			combatStats.fixHealthAndEnergy();
+		}
+		UpdateCombatStats();
 		status = temp;
 	}
 	
@@ -95,12 +111,12 @@ public class Unit {
 		combatStats.attack = weaponStats.damage;
 		combatStats.defence = armourStats.defence;
 		combatStats.accuracy = weaponStats.accuracy;
+		combatStats.round = weaponStats.rounds;
+		combatStats.range = weaponStats.range;
 		for (Status s: status){
 			if (s.active){
 				combatStats.maxHealth += s.maxHealth;
 				combatStats.maxEnergy += s.maxEnergy;
-				combatStats.currentHealth -= s.damageHealth;
-				combatStats.currentEnergy -= s.damageEnergy;
 				combatStats.maxMovement += s.movement;
 				combatStats.attack += s.attack;
 				combatStats.round += s.round;
@@ -109,5 +125,26 @@ public class Unit {
 				combatStats.accuracy += s.accuracy;
 			}
 		}
+		if (tileStatus.active){
+			combatStats.maxHealth += tileStatus.maxHealth;
+			combatStats.maxEnergy += tileStatus.maxEnergy;
+			combatStats.maxMovement += tileStatus.movement;
+			combatStats.attack += tileStatus.attack;
+			combatStats.round += tileStatus.round;
+			combatStats.range += tileStatus.range;
+			combatStats.defence += tileStatus.defence;
+			combatStats.accuracy += tileStatus.accuracy;
+		}
+	}
+	
+	public void displayCombatStats(){
+		System.out.println("Unit: " + this.uID);
+		System.out.println("Health: " + combatStats.currentHealth);
+		System.out.println("Energy: " + combatStats.currentEnergy);
+		System.out.println("Attack: " + combatStats.attack);
+		System.out.println("Defence: " + combatStats.defence);
+		System.out.println("Movement: " + combatStats.maxMovement);
+		System.out.println("Round: " + combatStats.round);
+		System.out.println("Accuracy: " + combatStats.accuracy);
 	}
 }

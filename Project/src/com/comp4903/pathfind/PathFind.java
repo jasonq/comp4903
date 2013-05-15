@@ -40,6 +40,16 @@ public class PathFind {
 		List<Point> units = Algorithms.GetUnitAttackBFS(u);
 		_map.clearBoxes();
 		_map._attackBox = units;
+		//_map.attackBoxColor = red;
+		RendererAccessor.update(_map);
+	}
+	
+	//display list of points to cast damaging spells
+	public static void DisplayUnitEnemyBox(Unit u, int range){
+		List<Point> units = Algorithms.GetUnitEnemyBFS(u, range);
+		_map.clearBoxes();
+		_map._attackBox = units;
+		//_map._attackBoxColor = red;
 		RendererAccessor.update(_map);
 	}
 	
@@ -47,11 +57,12 @@ public class PathFind {
 	public static void DisplayUnitFriendBox(Unit u, int range){
 		List<Point> units = Algorithms.GetUnitFriendBFS(u, range);
 		_map.clearBoxes();
-		//_map._friendBox = units;
+		_map._attackBox = units;
+		//_map.attackBoxColor = green;
 		RendererAccessor.update(_map);
 	}
 	
-	//returns list of points between unit & point
+	//returns list of points between unit & point, starting at unit point and ending at end point
 	public static List<Point> UnitToPoint(Unit u, Point p){
 		return Algorithms.GetMovePathAStar(u, p);
 	}
