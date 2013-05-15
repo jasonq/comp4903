@@ -217,7 +217,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					chooseAction = true;
 				}else if(decision == 2){//defending
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
-					PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
+					//PathFind(currentUnit);//show the attack range
 					chooseAction = true;
 				}else if(decision == 3){//call skills
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
@@ -260,6 +260,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		public void handleControlledUnit(Unit pickUnit){
 			if(currentUnit != null){
 				if(currentUnit.uID == pickUnit.uID){
+					if(finishMoving &&  chooseAction && decision == 2){
+						GameEngine.useSkill(currentUnit, null, SkillType.Defend, true);
+						Log.d("Debug", "I Defend");
+						ResetGUI();
+						return;
+					}
 					finishMoving = true;//finish moving for the currentunit
 					mapData.clearBoxes();//clear the movement box
 					RendererAccessor.update(mapData);//update mapdata
@@ -294,10 +300,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					RendererAccessor.update(mapData);
 					Log.d("Debug", "I ATTACK YOUUUU");
 					ResetGUI();
-				} else if(decision == 2){
+				/*} else if(decision == 2){
 					GameEngine.useSkill(currentUnit, null, SkillType.Defend, true);
 					Log.d("Debug", "I Defend");
-					ResetGUI();
+					ResetGUI();*/
 				} else if(decision == 3){
 					GameEngine.useSkill(currentUnit, pickUnit, SkillType.None, true);
 					Log.d("Debug", "I Use My Skill");
