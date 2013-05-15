@@ -63,10 +63,6 @@ public class LauncherActivity extends Activity {
 		GLSurfaceView view = new MyGLSurfaceView(this, mapData);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(view);
-		
-
-		
-		GameStats.PrintUnitList();
 
 		
 	}

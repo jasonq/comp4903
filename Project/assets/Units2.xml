@@ -3,7 +3,7 @@
 	<Unit>
 	    <Name>Sword Master</Name>
 	    <Health>150</Health>
-	    <Energy>0</Energy>
+	    <Energy>40</Energy>
 	    <Attack>0</Attack>
 	    <Defence>0</Defence>
 	    <Movement>6</Movement>
