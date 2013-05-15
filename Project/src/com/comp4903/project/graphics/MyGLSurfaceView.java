@@ -218,7 +218,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 					SkillStats stats = GameStats.getSkillStats(SkillType.Defend);
 					PathFind.DisplayUnitFriendBox(currentUnit, stats.range);
-
 					chooseAction = true;
 				}else if(decision == 3){//call skills
 					
@@ -377,6 +376,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				finishMoving = false;
 			}else{
 				mRenderer.updateHUDPanel(p);
+				mapData.clearBoxes();
+				RendererAccessor.update(mapData);
 				mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 			}
 
