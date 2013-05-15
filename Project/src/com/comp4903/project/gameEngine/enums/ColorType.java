@@ -19,9 +19,8 @@ public enum ColorType {
 			return code;
 		}
 		
-		public float[] getAsFloats()
-		{
-			float[] r = new float[4];
+		public void getAsFloats(float[] r)
+		{			
 			r[0] = (code >> 16) & 0x0FF;
 			r[1] = (code >> 8) & 0x0FF;
 			r[2] = (code) & 0x0FF;
@@ -29,9 +28,7 @@ public enum ColorType {
 			
 			r[0] = r[0] / 255.0f;
 			r[1] = r[1] / 255.0f;
-			r[2] = r[2] / 255.0f;
-			
-			return r;
+			r[2] = r[2] / 255.0f;			
 			
 		}
 	

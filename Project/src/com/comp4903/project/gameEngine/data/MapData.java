@@ -17,6 +17,9 @@ public class MapData {
 	public Point _tileSelected;			// Currently Selected Tile
 	public List<Point> _movementBox;	// Movement box of the currently selected box
 	public List<Point> _attackBox;		// Attack box of the currently selected box
+
+	public ColorType _attackBoxColor;
+	public ColorType _movementBoxColor;
 	
 	public List<UnitGroup> _groupList;  // List of group on the map
 	public UnitGroup _activeGroup; 		// group that currently making action
@@ -33,6 +36,9 @@ public class MapData {
 		_numRows = rows;
 		_numColumns = columns;
 		_tileTypes = new TileType[_numColumns][_numRows];
+		
+		_attackBoxColor = ColorType.Red;
+		_movementBoxColor = ColorType.Blue;
 	}
 	
 	public void defaultType(TileType type){

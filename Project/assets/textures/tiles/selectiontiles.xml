@@ -1,14 +1,14 @@
 <def:tileset name="set.selection" map="SelectionTiles.png">
 
-	<def:tile name="reachable">		
+	<def:tile name="reachable" color="specify">		
 		<def:base>
-			<def:point1 u="0.17"	v="0.18"/>
-			<def:point2 u="0.17"	v="0.18"/>
-			<def:point3 u="0.17"	v="0.18"/>
-			<def:point4 u="0.17"	v="0.18"/>
-			<def:point5 u="0.17"	v="0.18"/>
-			<def:point6 u="0.17"	v="0.18"/>		
-		</def:base>		
+			<def:point1 u="0.4"	v="0.17"/>
+			<def:point2 u="0.4"	v="0.17"/>	
+			<def:point3 u="0.4"	v="0.17"/>
+			<def:point4 u="0.4"	v="0.17"/>
+			<def:point5 u="0.4"	v="0.17"/>
+			<def:point6 u="0.4"	v="0.17"/>
+		</def:base>			
 	</def:tile>
 	
 	<def:tile name="attackable">
@@ -97,6 +97,17 @@
 			<def:point5 u="0.118"	v="0.235"/>
 			<def:point6 u="0.062"	v="0.235"/>		
 		</def:base>	
+	</def:tile>
+	
+	<def:tile name="oldreachable">		
+		<def:base>
+			<def:point1 u="0.17"	v="0.18"/>
+			<def:point2 u="0.17"	v="0.18"/>
+			<def:point3 u="0.17"	v="0.18"/>
+			<def:point4 u="0.17"	v="0.18"/>
+			<def:point5 u="0.17"	v="0.18"/>
+			<def:point6 u="0.17"	v="0.18"/>		
+		</def:base>		
 	</def:tile>
 	
 </def:tileset>

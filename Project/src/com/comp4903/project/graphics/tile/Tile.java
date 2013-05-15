@@ -11,10 +11,12 @@ public class Tile {
 	String name;
 	int textureMap;
 	Model3D model = null;
+	float[] color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	boolean useColor = false;
 	
 	public Tile(String n)
 	{
-		name = n;
+		name = n;		
 	}
 	
 }

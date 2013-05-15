@@ -81,4 +81,20 @@ public class AnimationEngine {
 				a.signal(value);		
 		}
 	}
+	
+	/*	NOFOREGROUNDANIMATIONS - checks to see if there are any executing
+	 *  animations that are meant to run in the foreground
+	 */
+	public static boolean noForegroundAnimations()
+	{
+		Iterator<Entry<String, AnimationProcessor>> i = animations_.entrySet().iterator();
+		while (i.hasNext())
+		{
+			AnimationProcessor a = i.next().getValue();
+			if ((!a.ended) && (a.foreground))
+				return false;
+		}
+		
+		return true;
+	}
 }
