@@ -33,6 +33,7 @@
 	    </ArmourLimit>
 	    <SkillList>
 	        <Skill level="1">Attack</Skill>
+	        <Skill level="1">Defence</Skill>
 	        <Skill level="1">Head Shot</Skill>
 	    </SkillList>
 	</Unit>
@@ -51,6 +52,7 @@
 	    </ArmourLimit>
 	    <SkillList>
 	        <Skill level="1">Attack</Skill>
+	        <Skill level="1">Defence</Skill>
 	        <Skill level="1">Heal</Skill>
 	    </SkillList>
 	</Unit>

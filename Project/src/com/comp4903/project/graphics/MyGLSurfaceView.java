@@ -22,6 +22,9 @@ import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.engine.GameEngine;
+import com.comp4903.project.gameEngine.factory.GameStats;
+import com.comp4903.project.gameEngine.factory.SkillStats;
+import com.comp4903.project.gameEngine.factory.UnitStats;
 import com.comp4903.project.graphics.GLRenderer;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -207,7 +210,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					chooseAction = true;
 				}else if(decision == 3){//call skills
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
-					PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
+					//SkillStats stats = GameStats.getSkillStats(
+						//	GameStats.getUnitStats(currentUnit.unitType).getAvailableSkills().get(2));
+					PathFind.DisplayUnitEnemyBox(currentUnit, 3);//show the attack range
 					chooseAction = true;
 				}else if(decision == 4){		
 					currentUnit.active = false;
