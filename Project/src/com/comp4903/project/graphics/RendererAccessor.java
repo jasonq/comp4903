@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.ColorType;
 import com.comp4903.project.gameEngine.enums.IconType;
 
 import android.content.Context;
@@ -58,12 +59,13 @@ public class RendererAccessor {
 		 *  mx		Movement in the x direction (0 for stationary text)
 		 *  my		Movement in y 
 		 *  l		lifetime of text (-1 = unlimited lifetime)
+		 *  col		text color, must be of ColorType
 		 *  n		name of text (this does not get displayed, can be null)
 		 *  c		content - the text message to display
 		 */
-		public static void floatingText(int x, int y, int mx, int my, int l, String n, String c)
+		public static void floatingText(int x, int y, int mx, int my, int l, ColorType col, String n, String c)
 		{
-			map.addFloatingText(x,y,mx,my,l,n,c);
+			map.addFloatingText(x,y,mx,my,l,col,n,c);
 		}
 		public static void floatingIcon(int x, int y, int mx, int my, int l, String n, IconType i)
 		{
