@@ -91,6 +91,17 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 			}
 			break;
+		case MotionEvent.ACTION_DOWN:
+			
+			if(GLRenderer.state == GameState.Game_Screen){
+				mRenderer.setSelectedHUD((int)x, (int)y);
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+			if(GLRenderer.state == GameState.Game_Screen){
+				mRenderer.setSelectedHUD(10000, 10000);
+			}
+			break;
 		}
 		mPreviousX = x;
 		mPreviousY = y;
