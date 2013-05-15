@@ -210,9 +210,17 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					chooseAction = true;
 				}else if(decision == 3){//call skills
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
-					//SkillStats stats = GameStats.getSkillStats(
-						//	GameStats.getUnitStats(currentUnit.unitType).getAvailableSkills().get(2));
-					PathFind.DisplayUnitEnemyBox(currentUnit, 3);//show the attack range
+					SkillStats stats = new SkillStats();
+					if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Headshot)){
+						stats = GameStats.getSkillStats(SkillType.Headshot);
+						System.out.println("Find HeadShot");
+					} else if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+						stats = GameStats.getSkillStats(SkillType.Heal);
+						System.out.println("Find Heal");
+					} else {
+						System.out.println("Find Nothing");
+					}
+					PathFind.DisplayUnitEnemyBox(currentUnit, stats.range);//show the attack range
 					chooseAction = true;
 				}else if(decision == 4){		
 					currentUnit.active = false;

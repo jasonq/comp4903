@@ -49,6 +49,10 @@ public class Unit {
 		InitializeCombatStats();
 	}
 	
+	public UnitStats getUnitStats(){
+		return GameStats.getUnitStats(unitType);
+	}
+	
 	public void AddStatus(Status s){
 		status.add(s);
 		UpdateCombatStats();
