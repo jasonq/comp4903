@@ -15,7 +15,7 @@ public class Model3D {
 	public Component[] components;
 	
 	private float[] orientation = new float[16];
-	private float[] position = new float[4];
+	public float[] position = new float[4];
 	public float[] scale = new float[4];
 	private float[] tempMatrix = new float[16];
 	
@@ -23,6 +23,8 @@ public class Model3D {
 	
 	private Animation[] animations_;
 	private int numberOfAnimations;
+	
+	boolean walking;
 	
 	public Model3D()
 	{
@@ -35,6 +37,7 @@ public class Model3D {
 		scale[2] = 1.0f;
 		scale[3] = 1.0f;
 		Matrix.setIdentityM(orientation, 0);
+		walking = false;
 	}
 	
 	public void SetOrientation(float[] vm)
@@ -223,18 +226,25 @@ public class Model3D {
 		float[] t = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		float[] r = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		float[] s = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+				
+		float multiplier = 0;
 		
-		//Matrix.setIdentityM(s, 0);
-		//Matrix.scaleM(s, 0, scale[0], scale[1], scale[2]);
-		
-		
+		if (walking)
+			multiplier = 0;
+		else 
+			multiplier = 1f;
 		
 		Matrix.setIdentityM(t, 0);
-		Matrix.translateM(t, 0, position[0] + adjust[0], 
-								position[1] + adjust[1], 
+		Matrix.translateM(t, 0, position[0], 
+								position[1], 
 								position[2] );
-		Matrix.multiplyMM(w, 0, t, 0, components[0].orientation, 0);
-		//Matrix.multiplyMM(w, 0, s, 0, orientation, 0);
+		
+		Matrix.multiplyMM(w, 0, t, 0, components[0].orientation, 0);	
+		
+		Matrix.translateM(w, 0, adjust[0], 
+				adjust[1], 
+				adjust[2] * multiplier);
+		
 		Matrix.scaleM(w, 0, scale[0], scale[1], scale[2]);		
 		
 		//Matrix.translateM(r, 0, orientation, 0, position[0], position[1], position[2]);
@@ -333,6 +343,13 @@ public class Model3D {
 	
 	public void display(GL10 gl, float[] viewMatrix, int animation, float time)
 	{
+		walking = false;
+		if (animation != -1)
+		{
+			if (animations_[animation].name.startsWith("walk", 0))
+				walking = true;
+		}
+		
 		float[] world = computeWorldTransform(components[0].translation);
 		float[] modelViewMatrix = new float[16];
 		

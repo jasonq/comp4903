@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+import com.comp4903.project.gameEngine.enums.ColorType;
 import com.comp4903.project.graphics.RendererAccessor;
 
 
@@ -55,6 +56,8 @@ public class Networking {
 		    byte[] quads = new byte[4];
 		    for (int k = 0; k < 4; k++)
 		      quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+		    //broadcastAddress = InetAddress.getByName("142.232.165.79");
+		    
 		    broadcastIP =  InetAddress.getByAddress(quads).toString();
 		    broadcastAddress =  InetAddress.getByAddress(quads);
 			sendInterface = new DatagramSocket(4904);
@@ -72,11 +75,13 @@ public class Networking {
 				send();
 			
 			//netInterface.receive(packet);
-			RendererAccessor.floatingText(20, 200, 0, 0, -1, "test", "Bozo");
+			RendererAccessor.floatingText(20, 500, 0, 0, -1, ColorType.White, "test", "Bozo");
+			
 		} catch (IOException e)
 		{
 			int a = 1;
-			RendererAccessor.floatingText(20, 200, 0, 0, -1, "test", "Exception");
+			RendererAccessor.floatingText(20, 500, 0, 0, -1, ColorType.Green, "test", "Exception");
+
 			
 		}
 		
@@ -110,7 +115,9 @@ public class Networking {
 			
 			try {
 				netInterface.receive(packet);
-				RendererAccessor.floatingText(20, 200, 0, 0, -1, "test", "Received packet.");
+
+				RendererAccessor.floatingText(20, 500, 0, 0, -1, ColorType.White, "test", "Received packet.");
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
