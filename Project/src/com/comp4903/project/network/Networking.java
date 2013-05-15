@@ -76,10 +76,12 @@ public class Networking {
 			
 			//netInterface.receive(packet);
 			RendererAccessor.floatingText(20, 500, 0, 0, -1, ColorType.White, "test", "Bozo");
+			
 		} catch (IOException e)
 		{
 			int a = 1;
 			RendererAccessor.floatingText(20, 500, 0, 0, -1, ColorType.Green, "test", "Exception");
+
 			
 		}
 		
@@ -113,7 +115,9 @@ public class Networking {
 			
 			try {
 				netInterface.receive(packet);
+
 				RendererAccessor.floatingText(20, 500, 0, 0, -1, ColorType.White, "test", "Received packet.");
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
