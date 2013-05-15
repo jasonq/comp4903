@@ -85,7 +85,7 @@ public class GameEngine {
 			case Heal:
 				System.out.println("Heal");
 				if (canCastSkill(unitOne, SkillType.Heal))
-				if (SkillEngine.Heal(unitOne, unitTwo)){
+				if (SkillEngine.Heal(unitOne, unitTwo)){					
 					RendererAccessor.update(mapData);
 					if (inActive) source.active = false;
 					return true;

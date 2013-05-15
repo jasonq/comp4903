@@ -40,8 +40,7 @@ public class Hexagon {
 		
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer colorBuffer;
-	private FloatBuffer defaultColorBuffer;
-		
+			
 	/* CONSTRUCTOR - sets up default shape for the hexagons, and
 	 * initializes the vertex and index buffers	 * 
 	 */
@@ -69,7 +68,7 @@ public class Hexagon {
 		
 		colors = new float[6 * 3];
 		for (int i = 0; i < 6 * 3; i++)
-			colors[i] = 1.0f;
+			colors[i] = 0.5f;
 		
 		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
 		vbb.order(ByteOrder.nativeOrder());
@@ -77,7 +76,7 @@ public class Hexagon {
 		vertexBuffer.put(vertices);
 		vertexBuffer.position(0);	
 		
-		vbb = ByteBuffer.allocateDirect(6 * 3 * 4);
+		vbb = ByteBuffer.allocateDirect(colors.length * 4);
 		vbb.order(ByteOrder.nativeOrder());
 		colorBuffer = vbb.asFloatBuffer();
 		colorBuffer.put(colors);
@@ -114,6 +113,19 @@ public class Hexagon {
 		}
 	}
 	
+	public void setColor(float[] c)
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			colors[i * 3 ] =c[0];
+			colors[i * 3 + 1] = c[1];
+			colors[i*3+2] = c[2];
+		}
+		
+		colorBuffer.put(colors);
+		colorBuffer.position(0);
+	}
+	
 	/*	DRAW - draws a hexagon with the specified texture
 	 * 
 	 * 	gl					OpenGL device
@@ -123,22 +135,31 @@ public class Hexagon {
 	 *  typ					texture index
 	 * 
 	 */
-	public void draw(GL10 gl, float[] transformMatrix, float[] projectionMatrix, int set, int typ, boolean cpick)
+	public void draw(GL10 gl, float[] transformMatrix, float[] projectionMatrix, int set, int typ, boolean usecolor)
 	{		
 		int tex = tileDefinitions[set].textureMap;
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, MaterialLibrary.texturenames[tex]);
 	
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		//gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-
-		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);		
-		//gl.glVertexPointer(3, GL10.GL_FLOAT, 0, colorBuffer);	
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, tileDefinitions[set].tiles[typ].UV);
+		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+		
+		if (usecolor)
+		{
+			gl.glDisable(GL10.GL_COLOR_MATERIAL);
+			gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+			gl.glColorPointer(3, GL10.GL_FLOAT, 0, colorBuffer);	
+		} //else
+		//{
+			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, tileDefinitions[set].tiles[typ].UV);
+		//}
+					
+		//gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, tileDefinitions[set].tiles[typ].UV);
 
 		gl.glDrawArrays(GL10.GL_TRIANGLE_FAN, 0, vertices.length / 3);
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);		
 			
 		/*if (cpick)

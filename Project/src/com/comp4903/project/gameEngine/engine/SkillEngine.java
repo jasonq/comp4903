@@ -117,7 +117,7 @@ public class SkillEngine {
 		
 		destination.combatStats.currentHealth += stats.getModifier("Heal");
 		destination.combatStats.fixHealthAndEnergy();
-		
+		RendererAccessor.healthAnimation(destination ,""+ stats.getModifier("Heal").intValue());
 		//empty method
 		return false;
 	}
