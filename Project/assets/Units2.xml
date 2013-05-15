@@ -16,6 +16,7 @@
 	    <SkillList>
 	        <Skill level="1">Attack</Skill>
 	        <Skill level="1">Defend</Skill>
+	        <Skill level="1">Grab</Skill>
 	    </SkillList>
 	</Unit>
 	<Unit>

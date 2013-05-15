@@ -72,6 +72,8 @@ public class MapData {
 	}
 	
 	public Unit getUnitAt(Point p){
+		if (p == null)
+			return null;
 		for (Unit u : _units){
 			if (u.position.equals(p))
 				return u;

@@ -79,6 +79,8 @@ public class TypeFinder {
 			return SkillType.Defend;
 		else if (in.equals("heal"))
 			return SkillType.Heal;
+		else if (in.equals("grab"))
+			return SkillType.Grab;
 		else
 			return SkillType.None;
 	}

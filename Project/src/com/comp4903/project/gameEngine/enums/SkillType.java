@@ -4,16 +4,17 @@ public enum SkillType {
 	None(-1),
 	Attack(0),
 	Defend(1),
-	Headshot(2),
-	Heal(3),
-	ExposeWeakness(4), //not in use
-	StimPack(5), //not in use
-	Cripple(6), //not in use
-	DrainingGrenade(7), //not in use
-	EnergyVoid(8), //not in use
-	Disable(9), //not in use
-	DoubleTime(10), //not in use
-	Flamethrower(11); //not in use
+	Grab(2),
+	Headshot(3),
+	Heal(4),
+	ExposeWeakness(5), //not in use
+	StimPack(6), //not in use
+	Cripple(7), //not in use
+	DrainingGrenade(8), //not in use
+	EnergyVoid(9), //not in use
+	Disable(10), //not in use
+	DoubleTime(11), //not in use
+	Flamethrower(12); //not in use
 	
 	private int code;
 	
