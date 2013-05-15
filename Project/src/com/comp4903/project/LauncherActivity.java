@@ -50,6 +50,7 @@ public class LauncherActivity extends Activity {
 		try {
 			in = getResources().getAssets().open("MapTwo.xml");
 			mapData = MapFactory.generateMapData(in);
+			mapData.InitializeTileStatus();
 		} catch (IOException e) {}
 
 		PathFind.initialize(mapData);
