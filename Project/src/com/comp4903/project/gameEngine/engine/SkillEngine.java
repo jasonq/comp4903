@@ -23,6 +23,7 @@ public class SkillEngine {
 		//Skill cost, used in all skills
 		source.combatStats.currentHealth -= stats.healthCost;
 		source.combatStats.currentEnergy -= stats.energyCost;
+		source.combatStats.fixHealthAndEnergy();
 		
 		int round = source.combatStats.round;
 		String[] result = new String[round];
@@ -40,12 +41,17 @@ public class SkillEngine {
 				result[i] = "Miss";
 			}
 		}
+		destination.combatStats.fixHealthAndEnergy();
+		RendererAccessor.attackAnimation( source, destination, result);
+		
+		/* Log */
 		System.out.print("Damage from " + source.uID + " to " + destination.uID + ":");
 		for (String s : result){
 			System.out.print(s + " ");
 		}
 		System.out.println();
-		RendererAccessor.attackAnimation( source, destination, result);
+		/* Log */
+		
 		return true;
 	}
 	
@@ -59,13 +65,14 @@ public class SkillEngine {
 		//Skill cost, used in all skills
 		source.combatStats.currentHealth -= stats.healthCost;
 		source.combatStats.currentEnergy -= stats.energyCost;
+		source.combatStats.fixHealthAndEnergy();
 		
 		// Applying Status effect of skill
 		Status s = new Status();
 		s.name = SkillType.Defend;
 		s.defence = stats.getModifier("Armour").intValue();
 		s.duration = stats.getModifier("Duration").intValue();
-		s.clearAtEndOfTurn = false;
+		s.resolveAtEndOfTurn = false;
 		source.AddStatus(s);
 		return true;
 	}
@@ -80,6 +87,7 @@ public class SkillEngine {
 		//Skill cost, used in all skills
 		source.combatStats.currentHealth -= stats.healthCost;
 		source.combatStats.currentEnergy -= stats.energyCost;
+		source.combatStats.fixHealthAndEnergy();
 		
 		if (HelperEngine.doesHit(stats.getModifier("Chance").intValue())){
 			destination.combatStats.currentHealth = 0;
@@ -88,7 +96,7 @@ public class SkillEngine {
 			s.name = SkillType.Headshot;
 			s.accuracy = -stats.getModifier("Accuracy").intValue();
 			s.duration = stats.getModifier("Duration").intValue();
-			s.clearAtEndOfTurn = true;
+			s.resolveAtEndOfTurn = true;
 		}
 		return true;
 	}
@@ -103,10 +111,11 @@ public class SkillEngine {
 		//Skill cost, used in all skills
 		source.combatStats.currentHealth -= stats.healthCost;
 		source.combatStats.currentEnergy -= stats.energyCost;
+		source.combatStats.fixHealthAndEnergy();
 		
 		destination.combatStats.currentHealth += stats.getModifier("Heal");
-		if (destination.combatStats.currentHealth > destination.combatStats.maxHealth)
-			destination.combatStats.currentHealth = destination.combatStats.maxHealth;
+		destination.combatStats.fixHealthAndEnergy();
+		
 		//empty method
 		return false;
 	}

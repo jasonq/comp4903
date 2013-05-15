@@ -43,6 +43,12 @@ public class MapData {
 		}
 	}
 	
+	public void InitializeTileStatus(){
+		for (Unit u: _units){
+			u.tileStatus = new Status(_tileTypes[u.position.x][u.position.y]);
+		}
+	}
+	
 	public boolean inMap(Point p){
 		return (p.x < _numColumns && p.y < _numRows
 				&& p.x >= 0 && p.y >= 0);

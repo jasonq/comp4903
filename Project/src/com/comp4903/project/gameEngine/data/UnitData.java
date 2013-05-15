@@ -27,4 +27,15 @@ public class UnitData {
 		round = -1;
 		hasWeapon = false;
 	}
+	
+	public void fixHealthAndEnergy(){
+		if (currentHealth > maxHealth)
+			currentHealth = maxHealth;
+		if (currentEnergy > maxEnergy)
+			currentEnergy = maxEnergy;
+		if (currentHealth < 0)
+			currentHealth = 0;
+		if (currentEnergy < 0)
+			currentEnergy = 0;
+	}
 }
