@@ -18,7 +18,8 @@ public class actionBox extends UI{
 	private Square[] pressedskillBox;
 	//private Square cancelBox;
 	private Unit unit;
-	
+	//private int cX,cY;
+	private int bHeight, bWidth;
 	public int menuSelected ;
 	public boolean pressed = false;
 	public actionBox(Context c, int w, int h) {
@@ -41,8 +42,8 @@ public class actionBox extends UI{
 		
 		//box = new Square(width/20 - 10, height/10- 10,boxWidth + 20,boxHeight + 20);
 		
-		int bHeight = ((boxHeight/command.length ) * 4 ) /6;
-		int bWidth = boxWidth * 4 / 6;
+		 bHeight = ((boxHeight/command.length ) * 4 ) /6;
+		 bWidth = boxWidth * 4 / 6;
 		
 		int padX = boxWidth/ 6;
 		int padY = (boxHeight/command.length) / 6;
@@ -182,7 +183,7 @@ public class actionBox extends UI{
 	}
 	
 	public boolean checkPressingCancel(int X, int Y){
-		return (X >= xTop && X <= xBot && Y >= yTop && Y <= ((yBot - yTop)/ command.length));
+		return (X >= xTop && X <= xBot && Y >= yTop && Y <= (yTop + bHeight));
 	}
 	
 	

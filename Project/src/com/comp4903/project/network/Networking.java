@@ -72,11 +72,11 @@ public class Networking {
 				send();
 			
 			//netInterface.receive(packet);
-			RendererAccessor.floatingText(20, 500, 0, 0, -1, "test", "Bozo");
+			RendererAccessor.floatingText(20, 200, 0, 0, -1, "test", "Bozo");
 		} catch (IOException e)
 		{
 			int a = 1;
-			RendererAccessor.floatingText(20, 500, 0, 0, -1, "test", "Exception");
+			RendererAccessor.floatingText(20, 200, 0, 0, -1, "test", "Exception");
 			
 		}
 		
@@ -110,7 +110,7 @@ public class Networking {
 			
 			try {
 				netInterface.receive(packet);
-				RendererAccessor.floatingText(20, 500, 0, 0, -1, "test", "Received packet.");
+				RendererAccessor.floatingText(20, 200, 0, 0, -1, "test", "Received packet.");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
