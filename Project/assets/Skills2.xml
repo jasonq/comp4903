@@ -16,7 +16,16 @@
 	    <Target>Self</Target>
 	    <Range>0</Range>
 	    <Modifier parameter="Duration">1</Modifier>
-	    <Modifier parameter="Armour">5</Modifier>
+	    <Modifier parameter="Armour">3</Modifier>
+	</Ability>
+	<Ability>
+	    <Name>Grab</Name>
+	    <Description>Decrease target unit's accuracy by %accuracy% for %duration% turns. Has a %chance% percent chance to instantly kill the target.</Description>
+	    <Health>0</Health>
+	    <Energy>40</Energy>
+	    <Target>Enemy</Target>
+	    <Range>3</Range>
+	    <Modifier parameter="Damage">10</Modifier>
 	</Ability>
 	<Ability>
 	    <Name>Headshot</Name>

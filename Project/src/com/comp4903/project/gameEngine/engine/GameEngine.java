@@ -46,8 +46,12 @@ public class GameEngine {
 	}
 	
 	public static boolean useSkill(Unit source, Unit target, SkillType skill, boolean inActive){
-		Unit unitOne = mapData.getUnitAt(source.position);
-		Unit unitTwo = mapData.getUnitAt(target.position);
+		Unit unitOne = null;
+		Unit unitTwo = null;
+		if (source != null)
+			unitOne = mapData.getUnitAt(source.position);
+		if (target != null)
+			unitTwo = mapData.getUnitAt(target.position);
 		switch (skill){
 			case Attack:
 				System.out.println("Attacking");
