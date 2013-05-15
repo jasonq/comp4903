@@ -221,6 +221,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 					chooseAction = true;
 				}else if(decision == 3){//call skills
+					
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 					SkillStats stats = new SkillStats();
 					if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Headshot)){
@@ -234,6 +235,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					} else {
 						System.out.println("Find Nothing");
 					}//show the attack range
+					
 					chooseAction = true;
 				}else if(decision == 4){		
 					currentUnit.active = false;
@@ -281,7 +283,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					RendererAccessor.update(mapData);//update mapdata
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);//update hud disable cancel button
 					return;
-				}
+				}//else{
+					//if(decision == )
+				//}
+				
 			}else{
 				handlePickUnit(pickUnit);
 			}
@@ -314,8 +319,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					GameEngine.useSkill(currentUnit, null, SkillType.Defend, true);
 					Log.d("Debug", "I Defend");
 					ResetGUI();*/
-				} else if(decision == 3){
-					GameEngine.useSkill(currentUnit, pickUnit, SkillType.None, true);
+				} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position)){
+					
+					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Headshot, true);
 					Log.d("Debug", "I Use My Skill");
 					ResetGUI();
 				}
