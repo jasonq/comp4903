@@ -16,7 +16,7 @@ public class Component {
 	
 	public float[] orientation = new float[16];
 	float[] neutralOrientation = new float[16];
-	float[] translation = new float[4];
+	public float[] translation = new float[4];
 	float[] initialTranslation = new float[4];
 	
 	Constraint constraints;

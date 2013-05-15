@@ -18,8 +18,8 @@ public class FloatingIcon {
 	public boolean active;
 	int delay = 20;
 	
-	static int[] width = new int[5];
-	static int[] height = new int[5];
+	static int[] width = new int[50];
+	static int[] height = new int[50];
 	
 	public static Context context;
 	public static GL10 gl;
@@ -43,7 +43,9 @@ public class FloatingIcon {
 		gl = g;
 		context = c;
 		
-		loadImage(0, R.drawable.shield, 64, 64);
+		loadImage(IconType.Defense.getCode(), R.drawable.shield, 64, 64);
+		loadImage(IconType.EndTurn.getCode(), R.drawable.end, 250, 70);
+		loadImage(IconType.StartTurn.getCode(), R.drawable.end, 250, 70);
 		
 	}
 	

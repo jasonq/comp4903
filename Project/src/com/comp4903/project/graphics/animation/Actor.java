@@ -86,8 +86,6 @@ public class Actor {
 		previousZ = lastZ;
 		lastZ = m.setPose(animation, time);		
 		
-		//m.YRotateComponent(0, yRotate);
-		
 		YaxisRotate(m);
 		
 		m.display(gl, viewMatrix, animation, time);
@@ -101,6 +99,7 @@ public class Actor {
 	public void YaxisRotate(Model3D m)
 	{
 		float[] yAxis = { 0, 0, 0, 0 };
+		
 		yAxis[0] = 0;
 		yAxis[1] = 1;
 		yAxis[2] = 0;	
@@ -112,6 +111,7 @@ public class Actor {
 		
 		for (int i = 0; i < 16; i++)
 			m.components[0].orientation[i] = temp[i];
+		
 	}	
 		
 	public void setAnimation(String animationName)
