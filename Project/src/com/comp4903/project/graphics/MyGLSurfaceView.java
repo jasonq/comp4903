@@ -277,15 +277,28 @@ public class MyGLSurfaceView extends GLSurfaceView {
 						Log.d("Debug", "I Defend");
 						ResetGUI();
 						return;
+					}else if(finishMoving && chooseAction && decision == 3 &&
+							 currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+						GameEngine.useSkill(currentUnit, currentUnit, SkillType.Heal, true);
+						Log.d("Debug", "I heal myself");
+						ResetGUI();
+						return;
 					}
 					finishMoving = true;//finish moving for the currentunit
 					mapData.clearBoxes();//clear the movement box
 					RendererAccessor.update(mapData);//update mapdata
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);//update hud disable cancel button
 					return;
-				}//else{
-					//if(decision == )
-				//}
+				}else{
+					if(decision == 3 &&  currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+						GameEngine.useSkill(currentUnit, pickUnit, SkillType.Heal, true);
+						Log.d("Debug", "I Heal my comrades");
+						ResetGUI();
+						//return;
+					}
+						
+					
+				}
 				
 			}else{
 				handlePickUnit(pickUnit);
@@ -315,11 +328,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					RendererAccessor.update(mapData);
 					Log.d("Debug", "I ATTACK YOUUUU");
 					ResetGUI();
-				/*} else if(decision == 2){
-					GameEngine.useSkill(currentUnit, null, SkillType.Defend, true);
-					Log.d("Debug", "I Defend");
-					ResetGUI();*/
-				} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position)){
+				} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
 					
 					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Headshot, true);
 					Log.d("Debug", "I Use My Skill");
