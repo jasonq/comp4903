@@ -17,6 +17,7 @@ import android.view.GestureDetector;
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.ColorType;
 import com.comp4903.project.gameEngine.enums.GameState;
 import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.gameEngine.enums.SkillType;
@@ -24,7 +25,6 @@ import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.factory.GameStats;
 import com.comp4903.project.gameEngine.factory.SkillStats;
-import com.comp4903.project.gameEngine.factory.UnitStats;
 import com.comp4903.project.graphics.GLRenderer;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -217,21 +217,33 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					chooseAction = true;
 				}else if(decision == 2){//defending
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
-					PathFind.DisplayUnitAttackBox(currentUnit);//show the attack range
+					SkillStats stats = GameStats.getSkillStats(SkillType.Defend);
+					PathFind.DisplayUnitFriendBox(currentUnit, stats.range);
 					chooseAction = true;
 				}else if(decision == 3){//call skills
+					
 					mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 					SkillStats stats = new SkillStats();
 					if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Headshot)){
-						stats = GameStats.getSkillStats(SkillType.Headshot);
-						System.out.println("Find HeadShot");
+						if(GameEngine.canCastSkill(currentUnit, SkillType.Headshot)){
+							stats = GameStats.getSkillStats(SkillType.Headshot);
+							PathFind.DisplayUnitEnemyBox(currentUnit, stats.range);
+							System.out.println("Find HeadShot");
+						} else {
+							RendererAccessor.floatingText(300, 170, 0, -1, 100, ColorType.Blue, "n", "Not Enough Energy");
+						}
 					} else if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
-						stats = GameStats.getSkillStats(SkillType.Heal);
-						System.out.println("Find Heal");
+						if (GameEngine.canCastSkill(currentUnit, SkillType.Heal)){
+							stats = GameStats.getSkillStats(SkillType.Heal);
+							PathFind.DisplayUnitFriendBox(currentUnit, stats.range);
+							System.out.println("Find Heal");
+						} else {
+							RendererAccessor.floatingText(300, 170, 0, -1, 100, ColorType.Blue, "n", "Not Enough Energy");
+						}
 					} else {
 						System.out.println("Find Nothing");
-					}
-					PathFind.DisplayUnitEnemyBox(currentUnit, stats.range);//show the attack range
+					}//show the attack range
+					
 					chooseAction = true;
 				}else if(decision == 4){		
 					currentUnit.active = false;
@@ -268,12 +280,34 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		public void handleControlledUnit(Unit pickUnit){
 			if(currentUnit != null){
 				if(currentUnit.uID == pickUnit.uID){
+					if(finishMoving &&  chooseAction && decision == 2){
+						GameEngine.useSkill(currentUnit, null, SkillType.Defend, true);
+						Log.d("Debug", "I Defend");
+						ResetGUI();
+						return;
+					}else if(finishMoving && chooseAction && decision == 3 &&
+							 currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+						GameEngine.useSkill(currentUnit, currentUnit, SkillType.Heal, true);
+						Log.d("Debug", "I heal myself");
+						ResetGUI();
+						return;
+					}
 					finishMoving = true;//finish moving for the currentunit
 					mapData.clearBoxes();//clear the movement box
 					RendererAccessor.update(mapData);//update mapdata
 					mRenderer.headsUpDisplay.updateHUD(true, true, false, false);//update hud disable cancel button
 					return;
+				}else{
+					if(decision == 3 &&  currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+						GameEngine.useSkill(currentUnit, pickUnit, SkillType.Heal, true);
+						Log.d("Debug", "I Heal my comrades");
+						ResetGUI();
+						//return;
+					}
+						
+					
 				}
+				
 			}else{
 				handlePickUnit(pickUnit);
 			}
@@ -302,12 +336,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					RendererAccessor.update(mapData);
 					Log.d("Debug", "I ATTACK YOUUUU");
 					ResetGUI();
-				} else if(decision == 2){
-					GameEngine.useSkill(currentUnit, null, SkillType.Defend, true);
-					Log.d("Debug", "I Defend");
-					ResetGUI();
-				} else if(decision == 3){
-					GameEngine.useSkill(currentUnit, pickUnit, SkillType.None, true);
+				} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+					
+					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Headshot, true);
 					Log.d("Debug", "I Use My Skill");
 					ResetGUI();
 				}
@@ -354,6 +385,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				finishMoving = false;
 			}else{
 				mRenderer.updateHUDPanel(p);
+				mapData.clearBoxes();
+				RendererAccessor.update(mapData);
 				mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 			}
 

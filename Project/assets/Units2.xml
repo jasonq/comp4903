@@ -3,7 +3,7 @@
 	<Unit>
 	    <Name>Sword Master</Name>
 	    <Health>150</Health>
-	    <Energy>0</Energy>
+	    <Energy>40</Energy>
 	    <Attack>0</Attack>
 	    <Defence>0</Defence>
 	    <Movement>6</Movement>
@@ -15,7 +15,8 @@
 	    </ArmourLimit>
 	    <SkillList>
 	        <Skill level="1">Attack</Skill>
-	        <Skill level="1">Defence</Skill>
+	        <Skill level="1">Defend</Skill>
+	        <Skill level="1">Grab</Skill>
 	    </SkillList>
 	</Unit>
 	<Unit>
@@ -33,8 +34,8 @@
 	    </ArmourLimit>
 	    <SkillList>
 	        <Skill level="1">Attack</Skill>
-	        <Skill level="1">Defence</Skill>
-	        <Skill level="1">Head Shot</Skill>
+	        <Skill level="1">Defend</Skill>
+	        <Skill level="1">Headshot</Skill>
 	    </SkillList>
 	</Unit>
 	<Unit>
@@ -52,7 +53,7 @@
 	    </ArmourLimit>
 	    <SkillList>
 	        <Skill level="1">Attack</Skill>
-	        <Skill level="1">Defence</Skill>
+	        <Skill level="1">Defend</Skill>
 	        <Skill level="1">Heal</Skill>
 	    </SkillList>
 	</Unit>

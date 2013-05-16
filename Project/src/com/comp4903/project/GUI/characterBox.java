@@ -17,7 +17,7 @@ public class characterBox extends UI {
 
 
 	public Square RedBar,BlueBar,Avatar;
-	public String atkVal, defVal, roundVal, nameVal, classVal,hpVal, enVal;
+	public String atkVal, defVal, roundVal, nameVal, classVal,hpVal, enVal,Acc;
 	public int currentHp, totalHp, currentE, totalE;
 	public Unit unit;
 	public GLText GLT;
@@ -62,6 +62,7 @@ public class characterBox extends UI {
 			currentHp = stat.currentHealth;
 			totalHp = stat.maxHealth;
 			currentE = stat.currentEnergy;
+			Acc = "" + stat.accuracy + "%";
 			totalE = stat.maxEnergy;
 
 		}
@@ -142,6 +143,7 @@ public class characterBox extends UI {
 			GLT.draw(roundVal, xLocation, yLocation);
 			//yLocation +=   gap;
 			xLocation += gap;
+			GLT.draw(Acc, xLocation, yLocation);
 			//move x and y to write the name
 			//xLocation = x +  (bWidth * 35 / 100);
 			//yLocation = y + (bHeight * 10/ 100);

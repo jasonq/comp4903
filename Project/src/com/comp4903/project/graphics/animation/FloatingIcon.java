@@ -24,7 +24,7 @@ public class FloatingIcon {
 	public static Context context;
 	public static GL10 gl;
 	
-	static Square[] images_ = new Square[5];
+	static Square[] images_ = new Square[50];
 	
 	public FloatingIcon(int x1, int y1, int mx, int my, int l, String n, IconType i)
 	{
@@ -44,8 +44,11 @@ public class FloatingIcon {
 		context = c;
 		
 		loadImage(IconType.Defense.getCode(), R.drawable.shield, 64, 64);
-		loadImage(IconType.EndTurn.getCode(), R.drawable.end, 250, 70);
-		loadImage(IconType.StartTurn.getCode(), R.drawable.end, 250, 70);
+		loadImage(IconType.EndTurn.getCode(), R.drawable.end, 256, 64);
+		loadImage(IconType.StartTurn.getCode(), R.drawable.start, 256, 64);
+		loadImage(IconType.Health1.getCode(), R.drawable.plus1, 16, 16);
+		loadImage(IconType.Health2.getCode(), R.drawable.plus2, 32, 32);
+		loadImage(IconType.Health3.getCode(), R.drawable.plus3, 64, 64);
 		
 	}
 	

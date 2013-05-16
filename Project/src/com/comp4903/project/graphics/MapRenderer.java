@@ -22,6 +22,7 @@ import com.comp4903.project.graphics.animation.DeathAnimation;
 import com.comp4903.project.graphics.animation.FloatingIcon;
 import com.comp4903.project.graphics.animation.FloatingText;
 import com.comp4903.project.graphics.animation.GenericAttack;
+import com.comp4903.project.graphics.animation.HealthAnimation;
 import com.comp4903.project.graphics.animation.MoveAnimate;
 import com.comp4903.project.graphics.animation.ReceiveAttack;
 import com.comp4903.project.graphics.model.Model3D;
@@ -124,11 +125,11 @@ public class MapRenderer {
 			models[t] = new Model3D();
 			try {
 				InputStream buf = null;
-				if (t == 0)
+				if (t == 2)
 					buf = am.open("models/marvin.gmodel");
 				if (t == 1)
 					buf = am.open("models/sniper.gmodel");
-				if (t == 2)
+				if (t == 0)
 					buf = am.open("models/soldier.gmodel");
 				ModelLoader.load(buf, models[t]);
 				models[t].SetScale(.08f, .08f, .08f);
@@ -138,11 +139,8 @@ public class MapRenderer {
 			} catch (IOException e)
 			{ }			
 		}
-		models[0].SetPosition(0,0,0);		
-		//models[1].YRotate(1.6f);
-		//models[1].XRotate(1.57f);
-		//models[1].SetScale(.08f, .08f, .08f);
-		models[2].SetScale(.75f, .75f, .75f);
+		
+		models[0].SetScale(.75f, .75f, .75f);
 	}
 	
 	/*	INIT - Used to initialize, or re-initialize the map
@@ -194,7 +192,7 @@ public class MapRenderer {
 		tileModelPass();		// 3D tiles
 		
 		gl.glDisable(GL10.GL_LIGHTING);
-		
+				
 		floatingPass(); 	// floating text, do last so it is overlayed over map
 		
 	}
@@ -283,7 +281,7 @@ public class MapRenderer {
 					gl.glMatrixMode(GL10.GL_MODELVIEW);
 					gl.glLoadMatrixf(modelViewMatrix, 0);
 				
-					hex.draw(gl, modelViewMatrix, projectionMatrix, 1, tileMap[x][y].tile, true);
+					hex.draw(gl, modelViewMatrix, projectionMatrix, 1, tileMap[x][y].tile, false);
 				}
 			}
 		}
@@ -295,8 +293,8 @@ public class MapRenderer {
 	private void selectionPass()
 	{
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);	
-				
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);					
+		
 		for (int x = 0; x < mapWidth; x++)
 			for (int y = 0; y < mapHeight; y++)
 			{
@@ -345,12 +343,12 @@ public class MapRenderer {
 							_movementBoxColor.getAsFloats(tileColor);
 						if (tileMap[x][y].state == 1)
 							_attackBoxColor.getAsFloats(tileColor);
-						gl.glColor4f(0, 1, 0, 1);
-						hex.draw(gl, modelViewMatrix, projectionMatrix, 0, tileMap[x][y].state, false);
+						hex.setColor(tileColor);
+						hex.draw(gl, modelViewMatrix, projectionMatrix, 0, tileMap[x][y].state, true);
 					}
 				}
 			}
-		gl.glDisable(GL10.GL_BLEND);		
+		gl.glDisable(GL10.GL_BLEND);			
 	}
 	
 	/*	ACTORPASS - displays the 3D models associated with the units
@@ -591,6 +589,14 @@ public class MapRenderer {
 		AnimationEngine.add("Death" + u.uID, d);
 		AnimationEngine.start("Death" + u.uID);
 		
+	}
+	
+	public static void healthAnimation(Unit u, String val)
+	{
+		HealthAnimation h = new HealthAnimation();
+		h.init(u,  val);
+		AnimationEngine.add("Health" + u.uID, h);
+		AnimationEngine.start("Health" + u.uID);
 	}
 	
 	public Actor getActor(int id)

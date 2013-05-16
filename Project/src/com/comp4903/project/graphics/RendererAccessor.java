@@ -51,6 +51,11 @@ public class RendererAccessor {
 			map.deathAnimation(u);
 		}
 		
+		public static void healthAnimation(Unit u, String val)
+		{
+			map.healthAnimation(u, val);
+		}
+		
 		/*	FLOATINGTEXT - will summon floating text to appear over the game screen
 		 *  at any time.  Parameters:
 		 * 

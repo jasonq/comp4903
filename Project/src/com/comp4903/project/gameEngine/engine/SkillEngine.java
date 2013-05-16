@@ -91,12 +91,14 @@ public class SkillEngine {
 		
 		if (HelperEngine.doesHit(stats.getModifier("Chance").intValue())){
 			destination.combatStats.currentHealth = 0;
+			destination.combatStats.fixHealthAndEnergy();
 		} else {
 			Status s = new Status();
 			s.name = SkillType.Headshot;
 			s.accuracy = -stats.getModifier("Accuracy").intValue();
 			s.duration = stats.getModifier("Duration").intValue();
 			s.resolveAtEndOfTurn = true;
+			destination.AddStatus(s);
 		}
 		return true;
 	}
@@ -115,7 +117,7 @@ public class SkillEngine {
 		
 		destination.combatStats.currentHealth += stats.getModifier("Heal");
 		destination.combatStats.fixHealthAndEnergy();
-		
+		RendererAccessor.healthAnimation(destination ,""+ stats.getModifier("Heal").intValue());
 		//empty method
 		return false;
 	}

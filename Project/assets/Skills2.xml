@@ -16,24 +16,33 @@
 	    <Target>Self</Target>
 	    <Range>0</Range>
 	    <Modifier parameter="Duration">1</Modifier>
-	    <Modifier parameter="Armour">5</Modifier>
+	    <Modifier parameter="Armour">2</Modifier>
+	</Ability>
+	<Ability>
+	    <Name>Grab</Name>
+	    <Description>Decrease target unit's accuracy by %accuracy% for %duration% turns. Has a %chance% percent chance to instantly kill the target.</Description>
+	    <Health>0</Health>
+	    <Energy>20</Energy>
+	    <Target>Enemy</Target>
+	    <Range>3</Range>
+	    <Modifier parameter="Damage">10</Modifier>
 	</Ability>
 	<Ability>
 	    <Name>Headshot</Name>
 	    <Description>Decrease target unit's accuracy by %accuracy% for %duration% turns. Has a %chance% percent chance to instantly kill the target.</Description>
 	    <Health>0</Health>
-	    <Energy>40</Energy>
+	    <Energy>5</Energy>
 	    <Target>Enemy</Target>
 	    <Range>3</Range>
 	    <Modifier parameter="Accuracy">20</Modifier>
-	    <Modifier parameter="Duration">1</Modifier>
-	    <Modifier parameter="Chance">10</Modifier>
+	    <Modifier parameter="Duration">2</Modifier>
+	    <Modifier parameter="Chance">30</Modifier>
 	</Ability>
 	<Ability>
 	    <Name>Heal</Name>
 	    <Description>Heals the targeted unit by %health%.</Description>
 	    <Health>0</Health>
-	    <Energy>25</Energy>
+	    <Energy>15</Energy>
 	    <Target>Ally</Target>
 	    <Range>2</Range>
 	    <Modifier parameter="Heal">25</Modifier>

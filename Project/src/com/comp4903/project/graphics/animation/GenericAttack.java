@@ -45,7 +45,7 @@ public class GenericAttack extends AnimationProcessor {
 			
 		if (signalled)
 		{
-			if ((actor_.time > 45) || (actor_.animation == -1))
+			if ((actor_.time > 25) || (actor_.animation == -1))
 			{
 				actor_.setAnimation("idle1");
 				ended = true;

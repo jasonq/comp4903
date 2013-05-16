@@ -4,7 +4,10 @@ public enum IconType {
 	None(-1),
 	Defense(0),	
 	EndTurn(1),
-	StartTurn(2);
+	StartTurn(2),
+	Health1(3),
+	Health2(4),
+	Health3(5);
 	
 	private int code;
 	
