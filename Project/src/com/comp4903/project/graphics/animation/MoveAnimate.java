@@ -59,6 +59,8 @@ public class MoveAnimate extends AnimationProcessor {
 		else
 			ended = true;	
 		
+		Networking.sendBuffer.reset();
+		Networking.sendBuffer.append("Unit: " + u.uID + " moves to: " + s.get(0).x + ", " + s.get(0).y);
 		Networking.timetosend = true;
 		//Networking.send();
 		
