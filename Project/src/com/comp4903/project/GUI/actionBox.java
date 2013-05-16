@@ -25,8 +25,8 @@ public class actionBox extends UI{
 	public actionBox(Context c, int w, int h) {
 		super(c,w,h);
 		menuSelected = -1;
-		command = new Square[5];
-		pressedCommand = new Square[5];
+		command = new Square[4];
+		pressedCommand = new Square[4];
 		
 		skillBox = new Square[3];
 		pressedskillBox = new Square[3];
@@ -87,7 +87,7 @@ public class actionBox extends UI{
 		
 		Bitmap bTex = BitmapFactory.decodeResource(r,R.drawable.menu);
 		box.loadGLTexture(gl, context, bTex);
-		Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.better);
+		Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.better2);
 		//Bitmap pCommand =  BitmapFactory.decodeResource(r, R.drawable.unpresseded_new_icon);
 		//initialize cancel box
 		Bitmap cBox =  BitmapFactory.decodeResource(r, R.drawable.cancelbutton);

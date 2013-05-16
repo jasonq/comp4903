@@ -27,9 +27,12 @@ public class HUD {
 	public actionBox action;
 	public characterBox character;
 	
-	private Square giveUpTurn;
-	private int Gx,Gy,Gw,Gh;
+	public Square giveUpTurn;
+	public Square pgiveUpTurn;
 	
+	public Square check;
+	
+	private int Gx,Gy,Gw,Gh;
 	public boolean showAction = false;
 	public boolean showStat = false;
 	public boolean showCancel = false;
@@ -43,10 +46,12 @@ public class HUD {
 		Unit abc = null;
 		character = new characterBox(context,width,height,abc, glt);
 		Gx = width/30;
-		Gy = height*9/10;
-		Gw = width  / 20 ;
-		Gh =  height/ 10;
+		Gy = height*8/10;
+		Gw = width  / 15 ;
+		Gh =  height/ 8;
 		giveUpTurn = new Square(Gx,Gy,Gw,Gh);
+		pgiveUpTurn = new Square(Gx,Gy,Gw,Gh);
+		check = new Square(Gx,Gy,Gw,Gh);
 	}
 	
 	public void updateHUD(boolean showAction, boolean showStat, boolean showCancel, boolean showEnd){
@@ -62,6 +67,13 @@ public class HUD {
 		
 		Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.check);
 		giveUpTurn.loadGLTexture(gl, context, bm);
+		
+		
+		Bitmap bm2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.pressed_check);
+		pgiveUpTurn.loadGLTexture(gl, context, bm2);
+		
+		Bitmap bm3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.check);
+		check.loadGLTexture(gl, context, bm3);
 	}
 
 	public void drawHUD(GL10 gl){
@@ -69,7 +81,7 @@ public class HUD {
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
 		if(showEnd)
-			giveUpTurn.draw(gl);
+			check.draw(gl);
 		gl.glDisable(GL10.GL_BLEND);
 		if(showAction)
 			action.draw(gl,showCancel);		
