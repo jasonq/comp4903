@@ -34,7 +34,7 @@ public class GenericAttack extends AnimationProcessor {
 		victim.setYrotate(-angle + 3.141593f / 2f + 3.141593f);
 		
 		actor_.setAnimation("attack.basic");		
-		actor_.speed = 0.05f;
+		actor_.speed = 0.08f;
 		actor_.time = 3;
 		
 		signalled = false;
@@ -45,7 +45,7 @@ public class GenericAttack extends AnimationProcessor {
 			
 		if (signalled)
 		{
-			if ((actor_.time > 25) || (actor_.animation == -1))
+			if ((actor_.time > 35) || (actor_.animation == -1))
 			{
 				actor_.setAnimation("idle1");
 				ended = true;

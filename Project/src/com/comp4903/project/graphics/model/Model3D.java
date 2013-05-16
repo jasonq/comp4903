@@ -343,6 +343,9 @@ public class Model3D {
 	
 	public void display(GL10 gl, float[] viewMatrix, int animation, float time)
 	{
+		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, colorBlack, 0);
+		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, colorBlack, 0);
+		
 		walking = false;
 		if (animation != -1)
 		{
@@ -351,33 +354,28 @@ public class Model3D {
 		}
 		
 		float[] world = computeWorldTransform(components[0].translation);
-		float[] modelViewMatrix = new float[16];
-		
-		//setPose(animation, time);
-		
+		float[] modelViewMatrix = new float[16];		
+				
 		Matrix.multiplyMM(modelViewMatrix, 0, viewMatrix, 0, world, 0);		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadMatrixf(modelViewMatrix, 0);
 			
 		gl.glFrontFace(GL10.GL_CCW);		
 		gl.glEnable(GL10.GL_CULL_FACE); 
-		gl.glCullFace(GL10.GL_BACK);
-		
-		//gl.glEnable(GL10.GL_COLOR_MATERIAL);
+		gl.glCullFace(GL10.GL_BACK);		
 		
 		for (int c = 0; c < numComponents; c++)		
 		{
 			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			//gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);			
 			gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, components[c].vertexBuffer);
 			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, components[c].texBuffer);
-			gl.glNormalPointer(GL10.GL_FLOAT, 0, components[c].normalBuffer);
-			//gl.glColorPointer(4, GL10.GL_FLOAT, 0, components[c].colorBuffer);
+			gl.glNormalPointer(GL10.GL_FLOAT, 0, components[c].normalBuffer);	
 			
-			world = getComponentWorldTransform(c);
+			world = getComponentWorldTransform(c);			
+			
 			Matrix.multiplyMM(modelViewMatrix, 0, viewMatrix, 0, world, 0);		
 			gl.glMatrixMode(GL10.GL_MODELVIEW);
 			gl.glLoadMatrixf(modelViewMatrix, 0);
@@ -389,27 +387,27 @@ public class Model3D {
 				{
 					Material m = MaterialLibrary.materials.get(materialIndex);
 					gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, m.Ambient, 0);
-					gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, m.Diffuse, 0);
-					gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, m.Specular, 0);
-					gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, colorBlack, 0);
+					gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, m.Diffuse, 0);					
 					if (m.texture != -1)
 					{
 						gl.glBindTexture(GL10.GL_TEXTURE_2D, MaterialLibrary.texturenames[m.texture]);
 					} else {
 						gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
 					}
-				}
-				//gl.glDrawArrays(GL10.GL_TRIANGLES, 0, components[c].numVertices / 3);
+				}				
+				
 				gl.glDrawElements(GL10.GL_TRIANGLES, components[c].numTriangles[i] * 3,
 							  GL10.GL_UNSIGNED_SHORT, components[c].indexBuffer[i]);
 			}
-			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
-			gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
-			
-			gl.glDisable(GL10.GL_CULL_FACE);	
+				
 		}
+		
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+		gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
+		
+		gl.glDisable(GL10.GL_CULL_FACE);
 	}
 	
 	public float setPose(int animation, float time)

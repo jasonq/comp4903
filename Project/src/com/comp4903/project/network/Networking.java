@@ -30,13 +30,24 @@ public class Networking {
 	static DatagramSocket sendInterface;
 	static Context context;
 	
+	public static InetAddress[] playerIPAddresses = new InetAddress[5];
+		
 	public static boolean timetosend = false;
+	
+	private static NetworkMessage message_ = new NetworkMessage();
+	private static NetworkMessage[] history_ = new NetworkMessage[100];
+	public static NetworkMessage sendBuffer = new NetworkMessage();
+	private static int currentTimeStamp = 0;
+	private static int currentPlaceInHistory = 0;
+	
 	
 	public static void staticInitializer(Context c)
 	{
 		IP = "undefined";
 		broadcastIP = "undefined";
 		timetosend = false;
+		currentTimeStamp = 0;
+		currentPlaceInHistory = 0;
 	//}
 	
 	//public Networking(Context c)
@@ -71,16 +82,26 @@ public class Networking {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}*/
-			while (!timetosend)		{Thread.sleep(10);}
-				send();
+			while (true)
+			{
+				if (timetosend)
+				{
+					timetosend = false;
+					sendPacket(sendBuffer.buffer, true);
+				}
+				Thread.sleep(10);
+			}
+			
+			//while (!timetosend)		{Thread.sleep(10);}
+			//	sendPacket(sendBuffer, true);
 			
 			//netInterface.receive(packet);
-			RendererAccessor.floatingText(20, 500, 0, 0, -1, ColorType.White, "test", "Bozo");
+			
 			
 		} catch (IOException e)
 		{
 			int a = 1;
-			RendererAccessor.floatingText(20, 500, 0, 0, -1, ColorType.Green, "test", "Exception");
+			RendererAccessor.floatingText(20, 500, 0, -1, 50, ColorType.Green, "test", "Exception");
 
 			
 		} catch (InterruptedException e) {
@@ -108,6 +129,37 @@ public class Networking {
 		}
 	}
 	
+	public static void sendPacket(byte buffer[], boolean stamp)
+	{
+		createHeader(buffer, stamp);
+		DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
+		packet.setAddress(broadcastAddress);
+		packet.setPort(4903);
+		try {
+			sendInterface.send(packet);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void createHeader(byte buffer[], boolean stamp)
+	{
+		message_.reset();
+		if (stamp)
+			message_.append(currentTimeStamp++);
+		else
+			message_.append(0);
+		
+		for (int m = 0; m < 100; m++)
+		{
+			message_.append(buffer[m]);
+		}
+		
+		
+	}
+	
 	static Thread receiveThread = new Thread()
 	{			
 		public void run(){
@@ -115,16 +167,26 @@ public class Networking {
 			byte[] buffer = new byte[1024];
 			buffer[0] = 10;
 			DatagramPacket packet = new DatagramPacket(buffer, 1024);
+			NetworkMessage receiveMessage_ = new NetworkMessage();
 			
-			try {
-				netInterface.receive(packet);
-
-				RendererAccessor.floatingText(20, 500, 0, 0, -1, ColorType.White, "test", "Received packet.");
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+			while (true) {
+			
+				try {
+					netInterface.receive(packet);
+					
+					receiveMessage_.buffer = packet.getData();
+					
+					receiveMessage_.reset();
+					int tm = receiveMessage_.readInt();
+					String s = receiveMessage_.readString();
+	
+					RendererAccessor.floatingText(20, 500, 0, -1, 100, ColorType.White, "test", s);
+	
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}			
+			}
 		}			
 	};
 	

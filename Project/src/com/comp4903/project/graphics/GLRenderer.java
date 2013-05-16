@@ -238,7 +238,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		eyeZ = (float) ((Math.sin(viewAngle) + Math.cos(viewAngle)) * distance);
 		eyeX += viewX;
 		eyeZ += viewZ;
-		eyeY = distance*(distance / 5f);		
+		eyeY = distance*(distance / 7f);		
 				
 		Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1f, 0f);
 				

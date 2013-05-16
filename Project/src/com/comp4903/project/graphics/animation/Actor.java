@@ -90,7 +90,7 @@ public class Actor {
 		
 		m.display(gl, viewMatrix, animation, time);
 				
-		time += speed;
+		time += speed * 2;
 		if (time >= 119)
 			time = 10;
 		
