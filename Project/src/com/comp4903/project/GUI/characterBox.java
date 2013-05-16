@@ -24,6 +24,7 @@ public class characterBox extends UI {
 	public int x,y,bWidth, bHeight;
 	public float scale;
 	public Square[] avatar = new Square[3];
+	public Square[] buff = new Square[2];
 	public characterBox(Context c, int w, int h,Unit u,GLText g) {
 		super(c,w,h);
 		currentHp = 500;
