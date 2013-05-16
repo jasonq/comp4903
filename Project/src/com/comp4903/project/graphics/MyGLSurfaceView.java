@@ -133,18 +133,4 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			return true;
 		}
 	}
-	private void startNetworking()
-	{
-		
-		Thread netThread = new Thread()
-		{			
-			public void run(){
-				//NetworkAccessor.net = new Networking(context);
-				Networking.staticInitializer(context);
-			}			
-		};
-		
-		
-		netThread.start();
-	}
 }

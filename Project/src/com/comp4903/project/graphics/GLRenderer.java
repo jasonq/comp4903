@@ -62,7 +62,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	public static float[] modelViewMatrix = new float[16]; // combined model+view, needed for openGL
 	public static float[] projectionMatrix = new float[16];
 	
-	private Context context;
+	public Context context;
 	
 	private Hexagon hex; // get rid of this
 	private Model3D[] testmodels;

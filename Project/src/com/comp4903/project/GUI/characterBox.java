@@ -51,7 +51,7 @@ public class characterBox extends UI {
 
 	public void setText(){
 		if(unit != null){
-			UnitData stat = unit.combatStats;	
+			UnitData stat = unit.combatStats;
 			atkVal = "" + stat.attack;
 			defVal = "" + stat.defence;
 			roundVal = "" + stat.round;

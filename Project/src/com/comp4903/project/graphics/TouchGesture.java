@@ -16,6 +16,7 @@ import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.factory.GameStats;
 import com.comp4903.project.gameEngine.factory.SkillStats;
+import com.comp4903.project.network.Networking;
 
 public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	
@@ -64,7 +65,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				GLRenderer.state = GameState.Game_Screen;
 			if(result == 1){
 				GLRenderer.state = GameState.Network_Menu;
-				//startNetworking();
+				startNetworking();
 			}
 		}
 	}
@@ -329,6 +330,21 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		//Log.d("Debug", "is it pressing cancel?: " + pressCancel);
 		Log.d("Debug", "is Unit active?: " + u.active);
 		
+	}
+	
+	private void startNetworking()
+	{
+		
+		Thread netThread = new Thread()
+		{			
+			public void run(){
+				//NetworkAccessor.net = new Networking(context);
+				Networking.staticInitializer(mRenderer.context);
+			}			
+		};
+		
+		
+		netThread.start();
 	}
 
 }
