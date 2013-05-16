@@ -199,7 +199,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			drawMainMenu(gl);
 			break;
 		case Network_Menu:
-			drawNetworkMenu(gl);
+			//drawNetworkMenu(gl);
+			drawGameScreen(gl);
 			break;
 		case Game_Screen:
 			drawGameScreen(gl);

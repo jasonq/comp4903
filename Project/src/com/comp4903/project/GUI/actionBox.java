@@ -25,8 +25,8 @@ public class actionBox extends UI{
 	public actionBox(Context c, int w, int h) {
 		super(c,w,h);
 		menuSelected = -1;
-		command = new Square[5];
-		pressedCommand = new Square[5];
+		command = new Square[4];
+		pressedCommand = new Square[4];
 		
 		skillBox = new Square[3];
 		pressedskillBox = new Square[3];

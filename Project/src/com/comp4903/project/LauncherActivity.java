@@ -47,7 +47,7 @@ public class LauncherActivity extends Activity {
 		context = this;
 		
 		//Networking.staticInitializer();		
-		startNetworking();
+		//startNetworking();
 		
 		try {
 			in = getResources().getAssets().open("MapTwo.xml");
