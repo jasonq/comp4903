@@ -133,7 +133,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			return true;
 		}
 	}
-
 	private void startNetworking()
 	{
 		
