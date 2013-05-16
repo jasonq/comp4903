@@ -130,7 +130,7 @@ public class MapRenderer {
 				if (t == 1)
 					buf = am.open("models/sniper.gmodel");
 				if (t == 0)
-					buf = am.open("models/soldier.gmodel");
+					buf = am.open("models/swordmaster.gmodel");
 				ModelLoader.load(buf, models[t]);
 				models[t].SetScale(.08f, .08f, .08f);
 				models[t].SetPosition(1, 1, 1);
