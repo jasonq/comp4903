@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.graphics.Point;
 
+import com.comp4903.AI.AIEngine;
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Status;
@@ -134,5 +135,6 @@ public class GameEngine {
 		}
 		mapData._activeGroup = currentGroup;
 		mapData.RemoveDeadUnit();
+		AIEngine.startTurn();
 	}
 }
