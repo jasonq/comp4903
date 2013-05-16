@@ -3,14 +3,15 @@ package com.comp4903.AI;
 import java.util.List;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import com.comp4903.pathfind.Algorithms;
 import com.comp4903.pathfind.BFSNode;
 import com.comp4903.project.gameEngine.data.Unit;
 
 public class InfluenceMap {
-	public Influence playerTiles[][];
-	public Influence AiTiles[][];
+	public int playerTiles[][];
+	public int AiTiles[][];
 	int col;
 	int row;
 	
@@ -19,9 +20,19 @@ public class InfluenceMap {
 		row = rows;
 	}
 	
-	public void intializeInfluenceMap(List<Unit> player, List<Unit> ai){
+	public void intializeInfluenceMap(List<Unit> player, List<AIUnitData> ai){
 		playerTiles = getInfluenceMap(player);
-		AiTiles = getInfluenceMap(ai);
+		AiTiles = getInfluenceMapAI(ai);
+		for(int y = 0; y < row; y++){
+			for(int x = 0; x < col; x++){
+				System.out.print(" " + AiTiles[x][y]);
+				if(AiTiles[x][y] < 10)
+					System.out.print(" ");
+				//Log.d("InfluenceMap", "Player " + x + "," + y + " influence: " + playerTiles[x][y]);
+				
+			}
+			System.out.println();
+		}
 	}
 	
 	/**
@@ -29,25 +40,49 @@ public class InfluenceMap {
 	 * @param units list of units (should belong to only one unit group, player/ai)
 	 * @return influence map
 	 */
-	private Influence[][] getInfluenceMap(List<Unit> units){
-		Influence infMap[][] = new Influence[col][row];
+	private int[][] getInfluenceMap(List<Unit> units){
+		int infMap[][] = new int[col][row];
 		for(Unit u : units){
 			Point pos = u.position;
 			List<BFSNode> nodes = Algorithms.GetNodesBFS(u.position, 4);
-			infMap[pos.x][pos.y] = new Influence();
-			infMap[pos.x][pos.y].playerInfluence = u.unitGroup;
-			infMap[pos.x][pos.y].value = 10;
+			if(infMap[pos.x][pos.y] == 0){
+				infMap[pos.x][pos.y] = 10;
+			} else {
+				infMap[pos.x][pos.y] += 10;
+			}
 			for(BFSNode n : nodes){
 				int influence = getInfluenceValue(n);
 				int x = n.p.x;
 				int y = n.p.y;
-				if(infMap[x][y] == null){
-					infMap[x][y] = new Influence();
-					infMap[x][y].playerInfluence = u.unitGroup;
-					infMap[x][y].value = influence;
+				if(infMap[x][y] == 0){
+					infMap[x][y] = influence;
 				} else {
-					if(infMap[x][y].value < influence)
-						infMap[x][y].value = influence;
+					infMap[x][y] += influence;
+				}
+					
+			}
+		}
+		return infMap;
+	}
+	
+	private int[][] getInfluenceMapAI(List<AIUnitData> units){
+		int infMap[][] = new int[col][row];
+		for(AIUnitData u : units){
+			Point pos = u.unit.position;
+			List<BFSNode> nodes = Algorithms.GetNodesBFS(u.unit.position, 4);
+			if(infMap[pos.x][pos.y] == 0){
+				infMap[pos.x][pos.y] = 10;
+			} else {
+				infMap[pos.x][pos.y] += 10;
+			}
+			for(BFSNode n : nodes){
+				int influence = getInfluenceValue(n);
+				int x = n.p.x;
+				int y = n.p.y;
+				if(infMap[x][y] == 0){
+					infMap[x][y] = influence;
+				} else {
+					infMap[x][y] += influence;
 				}
 					
 			}

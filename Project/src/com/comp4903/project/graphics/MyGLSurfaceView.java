@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.GestureDetector;
+
+import com.comp4903.AI.AIEngine;
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
@@ -176,8 +178,11 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			//}		
 			if(pressEnd && !pickControlledUnit){//might put condition if this is player turn
 				//end turn code goes here
-				System.out.println("End turn pressed");
+				//Log.d("MyGLSurfaceView", "End turn pressed");
 				GameEngine.endTurn();
+				if(mapData._activeGroup == UnitGroup.PlayerTwo){ //need check for if singleplayer or multiplayer
+					//AIEngine.startTurn();
+				}
 				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.EndTurn);
 				ResetGUI();			
 			}
@@ -188,7 +193,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				return;
 			
 			if(pickUnit != null){
-				System.out.println("Active Group:" + mapData._activeGroup);
+				//Log.d("MyGLSurfaceView", "Active Group:" + mapData._activeGroup);
 				if(pickUnit.unitGroup == mapData._activeGroup){
 					handleControlledUnit(pickUnit);
 				}
@@ -228,7 +233,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 						if(GameEngine.canCastSkill(currentUnit, SkillType.Headshot)){
 							stats = GameStats.getSkillStats(SkillType.Headshot);
 							PathFind.DisplayUnitEnemyBox(currentUnit, stats.range);
-							System.out.println("Find HeadShot");
+							//Log.d("MyGLSurfaceView","Find HeadShot");
 						} else {
 							RendererAccessor.floatingText(300, 170, 0, -1, 100, ColorType.Blue, "n", "Not Enough Energy");
 						}
@@ -236,12 +241,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
 						if (GameEngine.canCastSkill(currentUnit, SkillType.Heal)){
 							stats = GameStats.getSkillStats(SkillType.Heal);
 							PathFind.DisplayUnitFriendBox(currentUnit, stats.range);
-							System.out.println("Find Heal");
+							//Log.d("MyGLSurfaceView", "Find Heal");
 						} else {
 							RendererAccessor.floatingText(300, 170, 0, -1, 100, ColorType.Blue, "n", "Not Enough Energy");
 						}
 					} else {
-						System.out.println("Find Nothing");
+						//Log.d("MyGLSurfaceView", "Find Nothing");
 					}//show the attack range
 					
 					chooseAction = true;

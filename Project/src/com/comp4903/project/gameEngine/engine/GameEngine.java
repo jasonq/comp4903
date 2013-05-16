@@ -143,6 +143,5 @@ public class GameEngine {
 		}
 		mapData._activeGroup = currentGroup;
 		mapData.RemoveDeadUnit();
-		AIEngine.startTurn();
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
@@ -74,11 +75,10 @@ public class PathFind {
 	
 	//returns distance between points
 	public static int Distance(Point p1, Point p2){
-		float du = p2.x - p1.x;
-		float dv = (p2.y + p2.x / 2) - (p1.y + p1.x /2);
-		if((du >= 0 && dv >= 0) || (dv < 0 && dv < 0)) 
-			return (int)Math.max(du, Math.abs(dv));
-		else
-			return (int)Math.abs(du);
+		int x1 = p1.x;
+		int x2 = p2.x;
+		int y1 = p1.y - (p1.x/2);
+		int y2 = p2.y - (p2.x/2);
+		return (Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs(x1 + y1 - x2 - y2)) / 2;
 	}
 }

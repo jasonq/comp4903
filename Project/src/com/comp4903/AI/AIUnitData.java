@@ -8,7 +8,7 @@ import android.graphics.Point;
 
 import com.comp4903.project.gameEngine.data.Unit;
 
-public class AIUnitData {
+public class AIUnitData implements Comparable<AIUnitData>{
 	Unit unit;
 	public List<EnemyData> unitPriority;
 	
@@ -51,4 +51,13 @@ public class AIUnitData {
 		else
 			return 1;
 	}
+
+	public int compareTo(AIUnitData o) {
+		int selfPriority = unitClassPriority() + curHealthPriority();
+		int oPriority = o.unitClassPriority() + o.curHealthPriority();
+		// TODO Auto-generated method stub
+		return selfPriority - oPriority;
+	}
+	
+	
 }

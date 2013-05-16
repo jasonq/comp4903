@@ -71,7 +71,7 @@ public class Networking {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}*/
-			while (!timetosend)		{}
+			while (!timetosend)		{Thread.sleep(10);}
 				send();
 			
 			//netInterface.receive(packet);
@@ -83,6 +83,9 @@ public class Networking {
 			RendererAccessor.floatingText(20, 500, 0, 0, -1, ColorType.Green, "test", "Exception");
 
 			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		

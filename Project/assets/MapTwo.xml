@@ -1,54 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Map width="9" height="10" defaultType="Plain">
+<Map width="15" height="10" defaultType="Plain">
 	<TileGroup description="Building">
-	    <Tile x="0" y="0">Building</Tile>
-	    <Tile x="0" y="1">Building</Tile>
-	    <Tile x="1" y="0">Building</Tile>
-	    <Tile x="1" y="1">Building</Tile>
-	    <Tile x="2" y="0">Building</Tile>
+	    <Tile x="4" y="0">Building</Tile>
+	    <Tile x="3" y="1">Building</Tile>
+	    <Tile x="4" y="1">Building</Tile>
+	    <Tile x="4" y="2">Building</Tile>
 	    
-	    <Tile x="0" y="7">Building</Tile>
-	    <Tile x="1" y="6">Building</Tile>
-	    <Tile x="1" y="7">Building</Tile>
-	    <Tile x="2" y="7">Building</Tile>
+	    <Tile x="5" y="6">Building</Tile>
+	    <Tile x="5" y="7">Building</Tile>
+	    <Tile x="6" y="7">Building</Tile>
 	    
-	    <Tile x="6" y="0">Building</Tile>
-	    <Tile x="7" y="0">Building</Tile>
-	    <Tile x="8" y="0">Building</Tile>
-	    <Tile x="7" y="1">Building</Tile>
-	    <Tile x="8" y="1">Building</Tile>
+	    <Tile x="10" y="9">Building</Tile>
+	    <Tile x="10" y="8">Building</Tile>
+	    <Tile x="11" y="8">Building</Tile>
+	    <Tile x="10" y="7">Building</Tile>
 	    
-	    <Tile x="6" y="6">Building</Tile>
-	    <Tile x="7" y="6">Building</Tile>
-	    <Tile x="7" y="7">Building</Tile>
-	    <Tile x="8" y="6">Building</Tile>
+	    <Tile x="9" y="2">Building</Tile>
+	    <Tile x="9" y="3">Building</Tile>
+	    <Tile x="8" y="2">Building</Tile>
 	</TileGroup>
 	<TileGroup description="Sandbag">
-	    <Tile x="2" y="2">Sandbag</Tile>
-	    <Tile x="2" y="3">Sandbag</Tile>
-	    <Tile x="2" y="4">Sandbag</Tile>
-	    <Tile x="2" y="5">Sandbag</Tile>
-	    <Tile x="2" y="9">Sandbag</Tile>
-	    
-	    <Tile x="5" y="2">Sandbag</Tile>
-	    <Tile x="5" y="3">Sandbag</Tile>
+	    <Tile x="4" y="3">Sandbag</Tile>
+	    <Tile x="4" y="4">Sandbag</Tile>
 	    <Tile x="5" y="4">Sandbag</Tile>
+	    <Tile x="5" y="2">Sandbag</Tile>
+	    <Tile x="6" y="2">Sandbag</Tile>
 	    <Tile x="5" y="5">Sandbag</Tile>
-	    <Tile x="5" y="9">Sandbag</Tile>
+	    
+	    <Tile x="9" y="4">Sandbag</Tile>
+	    <Tile x="9" y="5">Sandbag</Tile>
+	    <Tile x="10" y="5">Sandbag</Tile>
+	    <Tile x="10" y="6">Sandbag</Tile>
+	    <Tile x="8" y="7">Sandbag</Tile>
+	    <Tile x="9" y="7">Sandbag</Tile>
 	</TileGroup>
 	
 	<TileGroup description="Generator">
-	    <Tile x="3" y="6">Generator</Tile>
-	    <Tile x="4" y="4">Generator</Tile>
-	    <Tile x="4" y="8">Generator</Tile>
+	    <Tile x="7" y="2">Generator</Tile>
+	    <Tile x="7" y="7">Generator</Tile>
 	</TileGroup>
 	
 	<Units group="Player One">
-	    <Unit x="0" y="2" weapon="Sword" armour="Heavy Armour">Sword Master</Unit>
+	    <Unit x="4" y="6" weapon="Sword" armour="Heavy Armour">Sword Master</Unit>
+	    <Unit x="4" y="7" weapon="Sword" armour="Heavy Armour">Sword Master</Unit>
+	    
+	    <Unit x="2" y="5" weapon="Sniper Rifle" armour="Light Armour">Sniper</Unit>
+	    <Unit x="2" y="6" weapon="Automatic Rifle" armour="Heavy Armour">Medic</Unit>
+	    <Unit x="2" y="7" weapon="Sniper Rifle" armour="Light Armour">Sniper</Unit>
+	    
 	</Units>
 	
 	<Units group="Player Two">
-	    <Unit x="7" y="2" weapon="Sniper Rifle" armour="Light Armour">Sniper</Unit>
-	    <Unit x="7" y="3" weapon="Automatic Rifle" armour="Medium Armour">Medic</Unit>
+		<Unit x="10" y="2" weapon="Sword" armour="Heavy Armour">Sword Master</Unit>
+	    <Unit x="10" y="3" weapon="Sword" armour="Heavy Armour">Sword Master</Unit>
+	    
+	    <Unit x="12" y="2" weapon="Sniper Rifle" armour="Light Armour">Sniper</Unit>
+	    <Unit x="12" y="3" weapon="Automatic Rifle" armour="Heavy Armour">Medic</Unit>
+	    <Unit x="12" y="4" weapon="Sniper Rifle" armour="Light Armour">Sniper</Unit>
 	</Units>
 </Map>

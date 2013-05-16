@@ -7,8 +7,9 @@ import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 
 import android.graphics.Point;
+import android.util.Log;
 
-
+//fuck you tony
 public class Algorithms {
 	
 	private static MapData _map;
@@ -220,6 +221,49 @@ public class Algorithms {
         return units;
     }
     
+    public static Point GetAIAttackRangeBFS(Unit source, Unit target)
+    {
+    	List<BFSNode> queue = new ArrayList<BFSNode>();
+        List<BFSNode> marked = new ArrayList<BFSNode>();
+        List<Point> potentialSpace = new ArrayList<Point>();
+        queue.add(new BFSNode(source.position, 0));
+        marked.add(queue.get(0));
+        while (queue.size() > 0)
+        {
+            BFSNode t = queue.get(0);
+            queue.remove(0);
+            if (t.step > source.combatStats.maxMovement)
+                continue;
+            Unit un = _map.getUnitAt(t.p);
+            if(un == null){
+            	potentialSpace.add(t.p);
+            }
+            List<BFSNode> adjNodes;
+            if(t.p.x % 2 == 0)
+            	adjNodes = evenNodes(t);
+            else
+            	adjNodes = oddNodes(t);
+            
+            for(BFSNode node : adjNodes){
+            	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
+            		queue.add(node);
+            		marked.add(node);
+            	}
+            }
+        }
+
+        Point atkPoint = null;
+        int prevRange = Integer.MAX_VALUE;
+        for(Point p: potentialSpace){
+        	int curRange = PathFind.Distance(p, target.position);
+        	if(curRange < prevRange && curRange >= source.combatStats.range){
+        		atkPoint = p;
+        		prevRange = curRange;
+        	}
+        }
+        return atkPoint;
+    }
+    
     /**
      * Checks if the list (l) has the node (n)
      */
@@ -309,22 +353,21 @@ public class Algorithms {
             for (AStarNode con : neighbor)
             {
             	AStarNode check = ListHasAStarNode(closedList, con);
-                if (!_map.isOpen(con.p) || check != null)
-                    continue;
-                else if (check == null)
-                    openList.add(con);
-                else if (check != null && con.g < check.g)
+            	if (check != null && con.g < check.g)
                 {
                     check.parent = cur;
                     check.g = con.g;
                     check.f = con.f;
                 }
+            	else if (!_map.isOpen(con.p) || check != null)
+                    continue;
+                else if (check == null)
+                    openList.add(con);
 
             }
         }
         if (endFound)
         {
-            AStarNode endNode = cur;
             while (cur.parent != null)
             {
                 result.add(cur.p);
@@ -369,24 +412,83 @@ public class Algorithms {
         		if(un != null && un.unitGroup != movingUnit.unitGroup){
         			continue;
         		}
-                if (!_map.isOpen(con.p) || check != null)
-                    continue;
-                else if (check == null)
-                    openList.add(con);
-                else if (check != null && con.g < check.g)
+        		if (check != null && con.g < check.g)
                 {
                     check.parent = cur;
                     check.g = con.g;
                     check.f = con.f;
                 }
-
+        		else if (!_map.isOpen(con.p) || check != null)
+                    continue;
+                else if (check == null)
+                    openList.add(con);
             }
         }
         if (endFound)
         {
-            AStarNode endNode = cur;
             while (cur.parent != null)
             {
+                result.add(cur.p);
+                cur = cur.parent;
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Path from unit to unit, used for ai Attack pathfinding
+     * @param movingUnit
+     * @param end
+     * @return
+     */
+    public static List<Point> GetAttackPathAStar(Unit movingUnit, Unit targetUnit)
+    {
+    	//int atkRange = movingUnit.combatStats.range;
+    	//int moveRange = movingUnit.combatStats.maxMovement;
+    	Point start = movingUnit.position;
+    	Point end = GetAIAttackRangeBFS(movingUnit, targetUnit);
+        List<AStarNode> openList = new ArrayList<AStarNode>();
+        List<AStarNode> closedList = new ArrayList<AStarNode>();
+        List<Point> result = new ArrayList<Point>();
+        AStarNode cur = null;
+        AStarNode startNode = new AStarNode(start, null, 0, heuristic(start, end));
+        openList.add(startNode);
+        boolean endFound = false;
+        while (openList.size() > 0){
+            cur = GetLowestFScore(openList);
+            if (cur.p.equals(end)){
+                endFound = true;
+                break;
+            }
+            if (cur == null)
+                return new ArrayList<Point>();
+            openList.remove(cur);
+            closedList.add(cur);
+            List<AStarNode> neighbor; 
+            if(cur.p.x % 2 == 0)
+            	neighbor = evenConnections(cur, end);
+            else
+            	neighbor = oddConnections(cur, end);
+            for (AStarNode con : neighbor){
+            	AStarNode check = ListHasAStarNode(closedList, con);
+            	Unit un = _map.getUnitAt(con.p);
+            	if(un != null && un.unitGroup != movingUnit.unitGroup){
+        			continue;
+        		}
+            	if (check != null && con.g < check.g)
+                {
+                    check.parent = cur;
+                    check.g = con.g;
+                    check.f = con.f;
+                }
+            	else if (!_map.isOpen(con.p) || check != null)
+                    continue;
+                else if (check == null)
+                    openList.add(con);
+            }
+        }
+        if (endFound){
+            while (cur.parent != null){
                 result.add(cur.p);
                 cur = cur.parent;
             }
@@ -432,27 +534,23 @@ public class Algorithms {
             {
             	AStarNode check = ListHasAStarNode(closedList, con);
             	Unit un = _map.getUnitAt(con.p);
-        		if (check != null)
-                    continue;
-                else if (check == null)
-                    openList.add(con);
-                else if (check != null && con.g < check.g)
+            	if (check != null && con.g < check.g)
                 {
                     check.parent = cur;
                     check.g = con.g;
                     check.f = con.f;
                 }
-
+            	else if (check != null)
+                    continue;
+                else if (check == null)
+                    openList.add(con);
             }
         }
         if (endFound)
         {
-            AStarNode endNode = cur;
-            while (cur.parent != null)
+        	while (cur.parent != null)
             {
-                if(_map.isOpen(cur.p)){
-                	return cur.p;
-                }
+                result.add(cur.p);
                 cur = cur.parent;
             }
         }
