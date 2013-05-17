@@ -13,9 +13,11 @@ public class GameOver {
 	public Square background;
 	public Square player1, player2;
 	public Square back, pressback;
+	
 	public int xTop,yTop,xBot,yBot;
 	public int bWidth,bHeight;
 	public int width,height;
+	
 	public Context context;
 	public UnitGroup winner;
 	public boolean flag = false;

@@ -105,6 +105,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}else if(GLRenderer.state == GameState.Game_Over){
 				if(mRenderer.gov.checkPressingMeu((int)x, (int)y))
 					mRenderer.gov.flag = true;
+			}else if(GLRenderer.state == GameState.Network_Menu){
+				mRenderer.network.selected = mRenderer.network.checkButton((int)x, (int)y);
 			}
 			break;
 		case MotionEvent.ACTION_UP:
@@ -116,6 +118,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}else if(GLRenderer.state == GameState.Game_Over){
 				if(mRenderer.gov.checkPressingMeu((int)x, (int)y))
 					mRenderer.gov.flag = false;
+			}else if(GLRenderer.state == GameState.Network_Menu){
+				mRenderer.network.selected = -1;
 			}
 			break;
 		}

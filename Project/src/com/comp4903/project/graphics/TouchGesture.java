@@ -49,7 +49,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			handle_Main_Menu((int)e.getX(),(int)e.getY());
 			break;
 		case Network_Menu:
-			handle_Game_Screen((int)e.getX(),(int)e.getY());
+			handle_NetWork((int)e.getX(),(int)e.getY());
 			break;
 		case Game_Over:
 			Log.d("Debug","-----------");
@@ -64,6 +64,19 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		return true;
 	}
 	
+	
+	public void handle_NetWork(int x, int y){
+		int r = mRenderer.network.checkButton((int)x, (int)y);
+		if(r != -1){
+			if(r == 1)
+				//handle join\
+				;
+			else if(r == 2)
+				//handle host
+				;
+		}
+		
+	}
 	public void handle_Game_Over(int x, int y){
 		if(mRenderer.gov.checkPressingMeu(x, y))
 			GLRenderer.state = GameState.Main_Menu;
