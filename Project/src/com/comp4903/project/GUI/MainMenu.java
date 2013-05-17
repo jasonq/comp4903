@@ -16,6 +16,7 @@ public class MainMenu {
 	public Context context;
 	public int width,height;
 	public int xTop,yTop,xBot,yBot;
+	
 	public MainMenu(Context c,int w , int h){
 		menu_Item = new Square[3];
 		pressed_menu_Item = new Square[3];

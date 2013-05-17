@@ -35,7 +35,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 	private final GLRenderer mRenderer;
 	private ScaleGestureDetector mScaleDetector;	
 	private Context context;
-	
+
 
 	private boolean pickControlledUnit = false;
 	private boolean finishMoving = false;
@@ -54,7 +54,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		this.context = context;
 		// Set the Renderer for drawing on the GLSurfaceView
 		mRenderer = new GLRenderer(context, md);
-		
+
 		setRenderer(mRenderer);
 		TouchGesture newT = new TouchGesture(mRenderer, md);
 		//gDetect = new GestureDetector(context, new GestureDetection()); 
@@ -79,7 +79,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
 		mScaleDetector.onTouchEvent(e);
 		gDetect.onTouchEvent(e);
-		
+
 		boolean touchMenu = this.mRenderer.checkHUD((int)e.getX(), (int)e.getY());
 		float x = e.getX();
 		float y = e.getY();
@@ -96,14 +96,16 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}
 			break;
 		case MotionEvent.ACTION_DOWN:
-			
+
 			if(GLRenderer.state == GameState.Game_Screen){
 				mRenderer.setSelectedHUD((int)x, (int)y);
 				if( mRenderer.headsUpDisplay.checkPressingEndTurn((int)x,(int)y)){
 					mRenderer.headsUpDisplay.check =mRenderer.headsUpDisplay.pgiveUpTurn;
 				}
+			}else if(GLRenderer.state == GameState.Game_Over){
+				if(mRenderer.gov.checkPressingMeu((int)x, (int)y))
+					mRenderer.gov.flag = true;
 			}
-			
 			break;
 		case MotionEvent.ACTION_UP:
 			if(GLRenderer.state == GameState.Game_Screen){
@@ -111,6 +113,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				if( mRenderer.headsUpDisplay.checkPressingEndTurn((int)x,(int)y)){
 					mRenderer.headsUpDisplay.check =mRenderer.headsUpDisplay.giveUpTurn;
 				}
+			}else if(GLRenderer.state == GameState.Game_Over){
+				if(mRenderer.gov.checkPressingMeu((int)x, (int)y))
+					mRenderer.gov.flag = false;
 			}
 			break;
 		}

@@ -51,8 +51,22 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		case Network_Menu:
 			handle_Game_Screen((int)e.getX(),(int)e.getY());
 			break;
+		case Game_Over:
+			Log.d("Debug","-----------");
+			Log.d("Debug","Game Over state");
+			Log.d("Debug", "xTop = " + mRenderer.gov.xTop + " xBot = " + mRenderer.gov.xBot 
+					+ "yTop = " + mRenderer.gov.yTop + "yBot = " + mRenderer.gov.yBot  );
+			
+			Log.d("Debug", "x = " + e.getX() + " y = " + e.getY()   );
+			handle_Game_Over((int)e.getX(),(int)e.getY());
+			break;
 		}
 		return true;
+	}
+	
+	public void handle_Game_Over(int x, int y){
+		if(mRenderer.gov.checkPressingMeu(x, y))
+			GLRenderer.state = GameState.Main_Menu;
 	}
 	/*
 	 * Hanlde touch event when we are in main menu state
@@ -63,11 +77,16 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		if(result != -1){
 			if(result == 0)
 				GLRenderer.state = GameState.Game_Screen;
-			if(result == 1){
+			else if(result == 1){
 				GLRenderer.state = GameState.Network_Menu;
 				startNetworking();
+			}else if(result == 2){
+				GLRenderer.state = GameState.Game_Over;
+				mRenderer.gov.UpdateWinner(UnitGroup.PlayerOne);
 			}
+			
 		}
+		mRenderer.mm.selected = -1;
 	}
 	/*
 	 * Handle touch event when we are in game screen state
@@ -97,7 +116,11 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			if(mapData._activeGroup == UnitGroup.PlayerTwo){ //need check for if singleplayer or multiplayer
 				//AIEngine.startTurn();
 			}
-			RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.EndTurn);
+			if(mapData._activeGroup == UnitGroup.PlayerOne)
+				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P1);
+			else if(mapData._activeGroup == UnitGroup.PlayerTwo)
+				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P2);
+
 			ResetGUI();			
 		}
 
@@ -296,7 +319,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			pickControlledUnit = true;
 			PathFind.DisplayUnitMoveBox(currentUnit);
 			mRenderer.updateHUDPanel(currentUnit);
-			mRenderer.headsUpDisplay.updateHUD(true, false, true, false);
+			mRenderer.headsUpDisplay.updateHUD(true, true, true, false);
 			finishMoving = false;
 		}else{
 			mRenderer.updateHUDPanel(p);

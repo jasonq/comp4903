@@ -11,6 +11,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 
 import com.comp4903.project.GUI.GLText;
+import com.comp4903.project.GUI.GameOver;
 import com.comp4903.project.GUI.HUD;
 import com.comp4903.project.GUI.MainMenu;
 import com.comp4903.project.gameEngine.data.MapData;
@@ -74,6 +75,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 	public HUD headsUpDisplay;
 	public MainMenu mm;
+	public GameOver gov;
 	public GL10 myGL;
 	public Unit character = null;
 	public boolean update= false;
@@ -127,7 +129,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		mm = new MainMenu(context,GLwidth,GLheight);
 		mm.loadMenuTexture(gl);
 		
-		
+		gov = new GameOver(context,GLwidth,GLheight);
+		gov.loadGameOVerTexture(gl);
 		
 		MaterialLibrary.init(gl, context);
 		
@@ -205,6 +208,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		case Game_Screen:
 			drawGameScreen(gl);
 			break;
+		case Game_Over:
+			drawGameOver(gl);
+			break;
 		}		
 		
 		isRenderingNow = false;
@@ -226,7 +232,16 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	{
 		
 	}
-	
+	public void drawGameOver(GL10 gl){
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);			
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+		headsUpDisplay.SwithToOrtho(gl);
+		//headsUpDisplay.drawHUD(gl);
+		gov.DrawGameOver(gl);
+		headsUpDisplay.SwitchToPerspective(gl);
+		gl.glEnable(GL10.GL_DEPTH_TEST);
+		
+	}
 	public void drawGameScreen(GL10 gl)
 	{
 		// clear the buffer
@@ -307,7 +322,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 		mm = new MainMenu(context,GLwidth,GLheight);
 		mm.loadMenuTexture(gl);
-
+		
+		gov = new GameOver(context,GLwidth,GLheight);
+		gov.loadGameOVerTexture(gl);
 	} 
 	
 	// processes a scaling request ( which is interpreted as moving the camera closer
