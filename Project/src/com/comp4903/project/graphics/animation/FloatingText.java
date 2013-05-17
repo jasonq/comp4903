@@ -15,14 +15,21 @@ public class FloatingText {
 	public static int delay;
 	
 	String content;
-	String name;
+	public String name;
 	int x, y;
 	int xMovement, yMovement;
 	int lifetime;
 	float[] color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	ColorType clr;
 	public boolean active;
 	
 	public FloatingText(int x1, int y1, int mx, int my, int l, ColorType col, String n, String c)
+	{
+		set(x1,y1,mx,my,l,col,n,c);
+		
+	}
+	
+	public void set(int x1, int y1, int mx, int my, int l, ColorType col, String n, String c)
 	{
 		content = c;
 		name = n;
@@ -32,6 +39,7 @@ public class FloatingText {
 		yMovement = my;
 		lifetime = l;
 		active = true;
+		clr = col;
 		col.getAsFloats(color);
 		
 	}

@@ -7,7 +7,6 @@ import android.graphics.Point;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.graphics.RendererAccessor;
 import com.comp4903.project.graphics.tile.Hexagon;
-import com.comp4903.project.network.NetworkAccessor;
 import com.comp4903.project.network.Networking;
 
 /*	MOVEANIMATE - animation process for moving a unit down a 
