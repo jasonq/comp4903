@@ -9,6 +9,7 @@ import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Status;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.ActionType;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.factory.GameStats;
@@ -16,6 +17,7 @@ import com.comp4903.project.gameEngine.factory.SkillStats;
 import com.comp4903.project.gameEngine.factory.UnitStats;
 import com.comp4903.project.gameEngine.networking.Action;
 import com.comp4903.project.graphics.RendererAccessor;
+import com.comp4903.project.network.Networking;
 
 public class GameEngine {
 	public static MapData mapData;
@@ -27,7 +29,17 @@ public class GameEngine {
 			return false;
 		if (!mapData.inMap(point))
 			return false;
-		return moveUnit(unit, point, PathFind.UnitToPoint(u, point));
+		if (moveUnit(unit, point, PathFind.UnitToPoint(u, point))){
+			Action a = new Action();
+			a.action = ActionType.Move;
+			a.uIDOne = u.uID;
+			a.x = point.x;
+			a.y = point.y;
+			Networking.send(a.getActionMessage());
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public static boolean moveUnit(Unit unit, Point point, List<Point> p){

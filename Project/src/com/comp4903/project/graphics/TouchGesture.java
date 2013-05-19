@@ -345,7 +345,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	public void handlePickEmpty(int x, int y,Point p,int touchMenu,boolean pressCancel){
 		if(pickControlledUnit && !finishMoving){
 			if(mapData._movementBox.contains(p)){
-				GameEngine.moveUnit(currentUnit, p, true);
+				GameEngine.moveUnit(currentUnit, p, networking);
 				mRenderer.updateHUDPanel(currentUnit);
 				mRenderer.headsUpDisplay.updateHUD(true, true, false, false);
 				//PathFind.DisplayUnitMoveBox(currentUnit);
