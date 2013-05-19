@@ -9,7 +9,6 @@ import com.comp4903.project.gameEngine.data.Unit;
 import android.graphics.Point;
 import android.util.Log;
 
-//fuck you tony
 public class Algorithms {
 	
 	private static MapData _map;

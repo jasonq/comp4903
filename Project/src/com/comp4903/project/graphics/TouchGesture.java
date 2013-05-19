@@ -1,3 +1,4 @@
+
 package com.comp4903.project.graphics;
 
 import android.graphics.Point;
@@ -5,6 +6,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
+import com.comp4903.AI.AIEngine;
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
@@ -28,6 +30,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	private  MapData  mapData = null;
 	private Unit currentUnit = null;
 	private int decision = -1;
+	private boolean networking = false;
 	
 	public TouchGesture(GLRenderer mgl,MapData md){
 		super();
@@ -43,7 +46,11 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	public boolean onSingleTapConfirmed (MotionEvent e){
 		switch(GLRenderer.state){
 		case Game_Screen:
-			handle_Game_Screen((int)e.getX(),(int)e.getY());
+			//if(networking){
+			if(Networking.playerNumber == mapData._activeGroup.getCode())
+				handle_Game_Screen((int)e.getX(),(int)e.getY());
+			else
+				handle_Waiting((int)e.getX(),(int)e.getY());
 			break;
 		case Main_Menu:
 			handle_Main_Menu((int)e.getX(),(int)e.getY());
@@ -69,13 +76,36 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		int r = mRenderer.network.checkButton((int)x, (int)y);
 		if(r != -1){
 			if(r == 1)
-				//handle join\
-				;
-			else if(r == 2)
-				//handle host
-				;
+				handle_join();				
+			else if (r == 2)
+				handle_host();
+			else if(r == 3)
+				handle_cancel();
+				
+				
 		}
 		
+	}
+	
+	public void handle_cancel(){
+		
+	}
+	public void handle_host()
+	{
+		//Networking.broadcastJoinMode = false;
+		//Networking.broadcastHostMode = true;	
+		networking = true;
+		Networking.playerNumber = 0;
+		GLRenderer.state = GameState.Game_Screen;
+	}
+	
+	public void handle_join()
+	{
+		//Networking.broadcastHostMode = false;
+		//Networking.broadcastJoinMode = true;
+		networking = true;
+		Networking.playerNumber = 1;
+		GLRenderer.state = GameState.Game_Screen;
 	}
 	public void handle_Game_Over(int x, int y){
 		if(mRenderer.gov.checkPressingMeu(x, y))
@@ -88,9 +118,10 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		int result = mRenderer.setSelectMainMenu(x, y);
 		int a = 2;
 		if(result != -1){
-			if(result == 0)
+			if(result == 0){
+				networking = false;
 				GLRenderer.state = GameState.Game_Screen;
-			else if(result == 1){
+			}else if(result == 1){
 				GLRenderer.state = GameState.Network_Menu;
 				startNetworking();
 			}else if(result == 2){
@@ -100,6 +131,15 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			
 		}
 		mRenderer.mm.selected = -1;
+	}
+	
+	public void handle_Waiting(int x, int y){
+		Point pickPoint = mRenderer.pick(x, y);
+		Unit pickUnit = mapData.getUnitAt(pickPoint);
+		if(pickUnit != null){
+			mRenderer.updateHUDPanel(pickUnit);
+			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
+		}
 	}
 	/*
 	 * Handle touch event when we are in game screen state
@@ -122,12 +162,12 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		//	ResetGUI();
 		//	return;
 		//}		
-		if(pressEnd && !pickControlledUnit){//might put condition if this is player turn
+		if(pressEnd && !pickControlledUnit){//might put condition if this is player turn			
 			//end turn code goes here
 			//Log.d("MyGLSurfaceView", "End turn pressed");
 			GameEngine.endTurn(true);
 			if(mapData._activeGroup == UnitGroup.PlayerTwo){ //need check for if singleplayer or multiplayer
-				//AIEngine.startTurn();
+				AIEngine.startTurn();
 			}
 			if(mapData._activeGroup == UnitGroup.PlayerOne)
 				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P1);

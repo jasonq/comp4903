@@ -1,3 +1,4 @@
+
 package com.comp4903.project.graphics;
 
 import java.io.IOException;
@@ -149,7 +150,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		viewX = 20;
 		viewY = 0;
 		viewZ = 20;
-		distance = 7;
+		distance = 8; //7;
 		viewAngle = 0; //1.57f / 2f;
 		
 		//modeltest(gl);
@@ -205,11 +206,10 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		switch (state)
 		{
 		case Main_Menu:
-			drawMainMenu(gl);
+			drawMainMenu(gl);			
 			break;
 		case Network_Menu:
-			drawNetworkMenu(gl);
-			//drawGameScreen(gl);
+			drawNetworkMenu(gl);			
 			break;
 		case Game_Screen:
 			drawGameScreen(gl);
@@ -219,7 +219,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			break;
 		}		
 		
-		isRenderingNow = false;
+		isRenderingNow = false;		
 		
 	}
 	
@@ -227,22 +227,26 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);			
 		gl.glDisable(GL10.GL_DEPTH_TEST);
+		
 		headsUpDisplay.SwithToOrtho(gl);
 		//headsUpDisplay.drawHUD(gl);
 		mm.drawMainMenu(gl);
 		headsUpDisplay.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
+		
+		RendererAccessor.map.floatingPass();
 	}
 	
 	public void drawNetworkMenu(GL10 gl)
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);			
-		gl.glDisable(GL10.GL_DEPTH_TEST);
+		gl.glDisable(GL10.GL_DEPTH_TEST);		
 		headsUpDisplay.SwithToOrtho(gl);
 		//headsUpDisplay.drawHUD(gl);
 		network.DrawNetWorking(gl);
 		headsUpDisplay.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
+		RendererAccessor.map.floatingPass();
 	}
 	public void drawGameOver(GL10 gl){
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);			
@@ -269,7 +273,6 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 				
 		Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1f, 0f);
 				
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		RendererAccessor.map.render(viewMatrix, projectionMatrix, viewX, viewY, viewZ);
 			
 		//draw(gl);
@@ -277,45 +280,15 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);		
 		headsUpDisplay.SwithToOrtho(gl);
 		headsUpDisplay.drawHUD(gl);
-		//gl.glDisable(GL10.GL_DEPTH_TEST);
-		
-		//gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
-		//gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
-		
-		//glText.begin( 1.0f, 1.0f, 1.0f, 1.0f );         // Begin Text Rendering (Set Color WHITE)
-		//glText.setScale(4.0f);
-		//glText.draw( "Attack!", 300, 200 );          // Draw Test String
-		//glText.end();                                   // End Text Rendering
-		
-		gl.glDisable( GL10.GL_BLEND );                  // Disable Alpha Blend*/
-		//mm.drawMainMenu(gl);
+				
 		headsUpDisplay.SwitchToPerspective(gl);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
-		//if(update){
-			//headsUpDisplay.updateStatPanel(gl, character);
-			//update = false;
-		//}
-		//headsUpDisplay.updateStatPanel(gl, character);
+		
 		
 		
 	}
-	
-	// Test routine to draw the models
-	public void draw(GL10 gl)
-	{
 		
-		gl.glEnable(GL10.GL_LIGHTING);
-		gl.glEnable(GL10.GL_LIGHT0);
-		gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, ambientLight, 0);
-		gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, diffuseLight, 0);
-		gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPosition, 0);
-		
-		for (int t = 0; t < 3; t++)
-			testmodels[t].display(gl, viewMatrix);
-		gl.glDisable(GL10.GL_LIGHTING);
-		
-	}
 	
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		
@@ -346,8 +319,10 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	// or farther from the map)
 	// Amount > 1 moves closer
 	// Amount < 1 moves out
+	// I've disabled it for now
 	public void scaleRequest(float amount)
 	{
+		/*
 		if (amount < 1)
 			distance += 0.1f;
 		if (amount > 1)
@@ -357,7 +332,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			distance = 6;
 		
 		if (distance > 10)
-			distance = 10;	
+			distance = 10;
+			*/	
 	}
 	
 	// moves the view camera by an arbitrary amount
@@ -484,3 +460,4 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		headsUpDisplay.updateStatPanel( abc);
 	}
 }
+

@@ -21,7 +21,8 @@ public class ReceiveAttack extends AnimationProcessor {
 		foreground = true;
 		actorID = attackee.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
-		messages_ = messages;
+		messages_ = messages;		
+		
 	}
 	
 	@Override
@@ -29,11 +30,13 @@ public class ReceiveAttack extends AnimationProcessor {
 		
 		if (state == 0)
 			return false;
-		
+				
 		count--;
 		if (count == 0)
 		{
 			Point p = RendererAccessor.ScreenXYfromXYZ(actor_.getX(), actor_.getY() + 2, actor_.getZ());
+			if (p == null)
+				p = new Point(0,0);
 			RendererAccessor.floatingText(p.x-40, p.y, 0, -2, 100, ColorType.Red, "bozo", messages_[m++]);
 			count = 20;
 		}
@@ -47,6 +50,10 @@ public class ReceiveAttack extends AnimationProcessor {
 	public boolean signal(int value) {
 
 		state = 1;
+		
+		actor_.setAnimation("attack.recoil");
+		actor_.speed = 0.2f;
+		actor_.time = 0;	
 		
 		return false;
 	}
