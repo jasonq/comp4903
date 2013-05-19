@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
+import com.comp4903.AI.AIEngine;
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
@@ -127,7 +128,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			//Log.d("MyGLSurfaceView", "End turn pressed");
 			GameEngine.endTurn();
 			if(mapData._activeGroup == UnitGroup.PlayerTwo){ //need check for if singleplayer or multiplayer
-				//AIEngine.startTurn();
+				AIEngine.startTurn();
 			}
 			if(mapData._activeGroup == UnitGroup.PlayerOne)
 				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P1);
