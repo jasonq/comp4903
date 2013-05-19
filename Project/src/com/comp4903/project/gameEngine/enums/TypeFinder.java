@@ -120,4 +120,14 @@ public class TypeFinder {
 		else
 			return UnitGroup.None;
 	}
+	
+	public static ActionType findActionType(String in){
+		in = in.toLowerCase();
+		if (in.equals("attack")){
+			return ActionType.Attack;
+		} else if (in.equals("defend")){
+			return ActionType.Defend;
+		} else
+			return ActionType.None;
+	}
 }

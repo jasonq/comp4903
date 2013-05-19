@@ -81,6 +81,14 @@ public class MapData {
 		return null;
 	}
 	
+	public Unit getUnitByID(int id){
+		for (Unit u: _units){
+			if (u.uID == id)
+				return u;
+		}
+		return null;
+	}
+	
 	public void RemoveDeadUnit(){
 		List<Unit> temp = new ArrayList<Unit>();
 		for (Unit u: _units){

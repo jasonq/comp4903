@@ -14,6 +14,7 @@ import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.factory.GameStats;
 import com.comp4903.project.gameEngine.factory.SkillStats;
 import com.comp4903.project.gameEngine.factory.UnitStats;
+import com.comp4903.project.gameEngine.networking.Action;
 import com.comp4903.project.graphics.RendererAccessor;
 
 public class GameEngine {
@@ -143,5 +144,26 @@ public class GameEngine {
 		}
 		mapData._activeGroup = currentGroup;
 		mapData.RemoveDeadUnit();
+	}
+	
+	/* Networking Supporting Method */
+	public static boolean executeAction(Action action){
+		Unit uOne = mapData.getUnitByID(action.uIDOne);
+		Unit uTwo = mapData.getUnitByID(action.uIDTwo);
+		switch (action.action){
+			case Move:
+				return moveUnit(uOne, new Point(action.x, action.y));
+			case Attack:
+				return SkillEngine.NetVAttack(uOne, uTwo, action);
+			case Defend:
+				return SkillEngine.Defend(uOne);
+			case Headshot:
+				return SkillEngine.NetVAttack(uOne, uTwo, action);
+			case Heal:
+				return SkillEngine.Heal(uOne, uTwo);
+			default:
+				break;
+		}
+		return true;
 	}
 }

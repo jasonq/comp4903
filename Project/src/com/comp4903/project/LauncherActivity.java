@@ -59,7 +59,6 @@ public class LauncherActivity extends Activity {
 		PathFind.initialize(mapData);
 		GameEngine.Initialize(mapData);
 		
-		
 		GLSurfaceView view = new MyGLSurfaceView(this, mapData);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(view);
