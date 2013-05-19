@@ -47,7 +47,7 @@ public class AIEngine {
 		for(AIUnitData ai : AIUnits){
 			attack(ai.unit, PlayerUnits.get(0));
 		}
-		GameEngine.endTurn();
+		GameEngine.endTurn(false);
 	}
 	
 	private static void getUnitData(){
@@ -75,7 +75,7 @@ public class AIEngine {
 			} }
 		}
 		if(PathFind.Distance(source.position, target.position) <= source.combatStats.range){
-			GameEngine.useSkill(source, target, SkillType.Attack, true);
+			GameEngine.useSkill(source, target, SkillType.Attack, true, false);
 			while(!AnimationEngine.noForegroundAnimations()){ try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {

@@ -10,7 +10,7 @@ import com.comp4903.project.graphics.RendererAccessor;
 
 public class SkillEngine {
 	
-	public static boolean Attack(Unit source, Unit destination){
+	public static boolean Attack(Unit source, Unit destination, boolean network){
 		if (source == null || destination == null){
 			System.out.println("Missing source or destination unit");
 			return false;
@@ -89,7 +89,7 @@ public class SkillEngine {
 		return true;
 	}
 	
-	public static boolean Defend(Unit source){
+	public static boolean Defend(Unit source, boolean network){
 		if (source == null){
 			System.out.println("Missing source units");
 			return false;
@@ -111,7 +111,7 @@ public class SkillEngine {
 		return true;
 	}
 	
-	public static boolean HeadShot(Unit source, Unit destination){
+	public static boolean HeadShot(Unit source, Unit destination, boolean network){
 		if (source == null || destination == null){
 			System.out.println("Missing units");
 			return false;
@@ -166,7 +166,7 @@ public class SkillEngine {
 		return true;
 	}
 	
-	public static boolean Heal(Unit source, Unit destination){
+	public static boolean Heal(Unit source, Unit destination, boolean network){
 		if (source == null || destination == null){
 			System.out.println("Missing units");
 			return false;

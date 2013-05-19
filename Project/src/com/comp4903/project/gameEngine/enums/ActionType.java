@@ -7,7 +7,8 @@ public enum ActionType {
 	Grab(2),
 	Headshot(3),
 	Heal(4),
-	Move(5);
+	Move(5),
+	Endturn(6);
 	
 	private int code;
 	

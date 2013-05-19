@@ -127,6 +127,16 @@ public class TypeFinder {
 			return ActionType.Attack;
 		} else if (in.equals("defend")){
 			return ActionType.Defend;
+		} else if (in.equals("grab")){
+			return ActionType.Grab;
+		} else if (in.equals("headshot")){
+			return ActionType.Headshot;
+		} else if (in.equals("heal")){
+			return ActionType.Heal;
+		} else if (in.equals("move")){
+			return ActionType.Move;
+		} else if (in.equals("entturn")){
+			return ActionType.Endturn;
 		} else
 			return ActionType.None;
 	}

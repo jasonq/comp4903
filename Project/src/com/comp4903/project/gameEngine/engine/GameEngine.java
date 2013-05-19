@@ -9,6 +9,7 @@ import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Status;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.ActionType;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.factory.GameStats;
@@ -16,18 +17,29 @@ import com.comp4903.project.gameEngine.factory.SkillStats;
 import com.comp4903.project.gameEngine.factory.UnitStats;
 import com.comp4903.project.gameEngine.networking.Action;
 import com.comp4903.project.graphics.RendererAccessor;
+import com.comp4903.project.network.Networking;
 
 public class GameEngine {
 	public static MapData mapData;
 	public static void Initialize(MapData data) { mapData = data; }
 	
-	public static boolean moveUnit(Unit unit, Point point){
+	public static boolean moveUnit(Unit unit, Point point, boolean network){
 		Unit u = mapData.getUnitAt(unit.position);
 		if (u == null)
 			return false;
 		if (!mapData.inMap(point))
 			return false;
-		return moveUnit(unit, point, PathFind.UnitToPoint(u, point));
+		if (moveUnit(unit, point, PathFind.UnitToPoint(u, point))){
+			Action a = new Action();
+			a.action = ActionType.Move;
+			a.uIDOne = u.uID;
+			a.x = point.x;
+			a.y = point.y;
+			Networking.send(a.getActionMessage());
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public static boolean moveUnit(Unit unit, Point point, List<Point> p){
@@ -47,7 +59,7 @@ public class GameEngine {
 		
 	}
 	
-	public static boolean useSkill(Unit source, Unit target, SkillType skill, boolean inActive){
+	public static boolean useSkill(Unit source, Unit target, SkillType skill, boolean inActive, boolean network){
 		Unit unitOne = null;
 		Unit unitTwo = null;
 		if (source != null)
@@ -58,7 +70,7 @@ public class GameEngine {
 			case Attack:
 				System.out.println("Attacking");
 				if (canCastSkill(unitOne, SkillType.Attack))
-				if (SkillEngine.Attack(unitOne, unitTwo)){
+				if (SkillEngine.Attack(unitOne, unitTwo, network)){
 					mapData.RemoveDeadUnit();
 					RendererAccessor.update(mapData);
 					if (inActive) source.active = false;
@@ -68,7 +80,7 @@ public class GameEngine {
 			case Defend:
 				System.out.println("Defend");
 				if (canCastSkill(unitOne, SkillType.Defend))
-				if (SkillEngine.Defend(unitOne)){
+				if (SkillEngine.Defend(unitOne, true)){
 					RendererAccessor.update(mapData);
 					if (inActive) source.active = false;
 					return true;
@@ -77,7 +89,7 @@ public class GameEngine {
 			case Headshot:
 				System.out.println("Headshot");
 				if (canCastSkill(unitOne, SkillType.Headshot))
-				if (SkillEngine.HeadShot(unitOne, unitTwo)){
+				if (SkillEngine.HeadShot(unitOne, unitTwo, network)){
 					mapData.RemoveDeadUnit();
 					RendererAccessor.update(mapData);
 					if (inActive) source.active = false;
@@ -87,7 +99,7 @@ public class GameEngine {
 			case Heal:
 				System.out.println("Heal");
 				if (canCastSkill(unitOne, SkillType.Heal))
-				if (SkillEngine.Heal(unitOne, unitTwo)){					
+				if (SkillEngine.Heal(unitOne, unitTwo, network)){					
 					RendererAccessor.update(mapData);
 					if (inActive) source.active = false;
 					return true;
@@ -125,7 +137,7 @@ public class GameEngine {
 		return true;
 	}
 	
-	public static void endTurn(){
+	public static void endTurn(boolean network){
 		int index = mapData._groupList.indexOf(mapData._activeGroup) + 1;
 		if (index >= mapData._groupList.size())
 			index = 0;
@@ -144,6 +156,12 @@ public class GameEngine {
 		}
 		mapData._activeGroup = currentGroup;
 		mapData.RemoveDeadUnit();
+		
+		if (network){
+			Action a = new Action();
+			a.action = ActionType.Endturn;
+			Networking.send(a.getActionMessage());
+		}
 	}
 	
 	/* Networking Supporting Method */
@@ -152,15 +170,18 @@ public class GameEngine {
 		Unit uTwo = mapData.getUnitByID(action.uIDTwo);
 		switch (action.action){
 			case Move:
-				return moveUnit(uOne, new Point(action.x, action.y));
+				return moveUnit(uOne, new Point(action.x, action.y), false);
 			case Attack:
 				return SkillEngine.NetVAttack(uOne, uTwo, action);
 			case Defend:
-				return SkillEngine.Defend(uOne);
+				return SkillEngine.Defend(uOne, false);
 			case Headshot:
 				return SkillEngine.NetVHeadShot(uOne, uTwo, action);
 			case Heal:
-				return SkillEngine.Heal(uOne, uTwo);
+				return SkillEngine.Heal(uOne, uTwo, false);
+			case Endturn:
+				endTurn(false);
+				return true;
 			default:
 				break;
 		}
