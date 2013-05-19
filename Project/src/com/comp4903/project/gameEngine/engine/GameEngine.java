@@ -30,14 +30,20 @@ public class GameEngine {
 		if (!mapData.inMap(point))
 			return false;
 		if (moveUnit(unit, point, PathFind.UnitToPoint(u, point))){
-			Action a = new Action();
-			a.action = ActionType.Move;
-			a.uIDOne = u.uID;
-			a.x = point.x;
-			a.y = point.y;
-			Networking.send(a.getActionMessage());
+			System.out.println("Successfully moved");
+			if (network){
+				System.out.println("Creating network message");
+				Action a = new Action();
+				a.action = ActionType.Move;
+				a.uIDOne = u.uID;
+				a.x = point.x;
+				a.y = point.y;
+				Networking.send(a.getActionMessage());
+				System.out.println("Network message sent");
+			}
 			return true;
 		} else {
+			System.out.println("Move Failed?");
 			return false;
 		}
 	}
@@ -56,7 +62,6 @@ public class GameEngine {
 		System.out.println(u.unitType.name() + u.uID + " Move to " + point.x + ", " + point.y);
 		RendererAccessor.update(mapData);
 		return true;
-		
 	}
 	
 	public static boolean useSkill(Unit source, Unit target, SkillType skill, boolean inActive, boolean network){
@@ -156,7 +161,7 @@ public class GameEngine {
 		}
 		mapData._activeGroup = currentGroup;
 		mapData.RemoveDeadUnit();
-		
+		System.out.println("Networking: " + network);
 		if (network){
 			Action a = new Action();
 			a.action = ActionType.Endturn;

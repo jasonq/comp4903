@@ -169,8 +169,8 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			//end turn code goes here
 			//Log.d("MyGLSurfaceView", "End turn pressed");
 
-			GameEngine.endTurn(true);
-			if(mapData._activeGroup == UnitGroup.PlayerTwo && !networking ){ //need check for if singleplayer or multiplayer
+			GameEngine.endTurn(networking);
+			if(mapData._activeGroup == UnitGroup.PlayerTwo && !networking){ //need check for if singleplayer or multiplayer
 
 				//AIEngine.startTurn();
 			}
@@ -178,12 +178,10 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P1);
 			else if(mapData._activeGroup == UnitGroup.PlayerTwo)
 				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P2);
-
 			ResetGUI();			
 		}
 
 		Unit pickUnit = mapData.getUnitAt(pickPoint);
-
 		if(handleClickBox(touchMenu,pressCancel))
 			return;
 

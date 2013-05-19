@@ -31,6 +31,7 @@ public class Action {
 	
 	public NetworkMessage getActionMessage(){
 		NetworkMessage message = new NetworkMessage();
+		System.out.println("Sent message: " + action);
 		message.append("" + action);
 		message.append(uIDOne);
 		message.append(uIDTwo);
