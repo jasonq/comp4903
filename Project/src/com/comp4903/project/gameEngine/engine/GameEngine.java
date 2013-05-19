@@ -158,7 +158,7 @@ public class GameEngine {
 			case Defend:
 				return SkillEngine.Defend(uOne);
 			case Headshot:
-				return SkillEngine.NetVAttack(uOne, uTwo, action);
+				return SkillEngine.NetVHeadShot(uOne, uTwo, action);
 			case Heal:
 				return SkillEngine.Heal(uOne, uTwo);
 			default:
