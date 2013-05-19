@@ -20,7 +20,7 @@ import com.comp4903.project.gameEngine.factory.SkillStats;
 import com.comp4903.project.network.Networking;
 
 public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
-	
+
 	public GLRenderer mRenderer;
 
 	private boolean pickControlledUnit = false;
@@ -30,7 +30,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	private Unit currentUnit = null;
 	private int decision = -1;
 	private boolean networking = false;
-	
+
 	public TouchGesture(GLRenderer mgl,MapData md){
 		super();
 		mRenderer = mgl;
@@ -45,11 +45,14 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	public boolean onSingleTapConfirmed (MotionEvent e){
 		switch(GLRenderer.state){
 		case Game_Screen:
-			//if(networking){
-			if(Networking.playerNumber == mapData._activeGroup.getCode())
+			if(networking){
+				if(Networking.playerNumber == mapData._activeGroup.getCode())
+					handle_Game_Screen((int)e.getX(),(int)e.getY());
+				else
+					handle_Waiting((int)e.getX(),(int)e.getY());
+			}else{
 				handle_Game_Screen((int)e.getX(),(int)e.getY());
-			else
-				handle_Waiting((int)e.getX(),(int)e.getY());
+			}
 			break;
 		case Main_Menu:
 			handle_Main_Menu((int)e.getX(),(int)e.getY());
@@ -62,15 +65,15 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			Log.d("Debug","Game Over state");
 			Log.d("Debug", "xTop = " + mRenderer.gov.xTop + " xBot = " + mRenderer.gov.xBot 
 					+ "yTop = " + mRenderer.gov.yTop + "yBot = " + mRenderer.gov.yBot  );
-			
+
 			Log.d("Debug", "x = " + e.getX() + " y = " + e.getY()   );
 			handle_Game_Over((int)e.getX(),(int)e.getY());
 			break;
 		}
 		return true;
 	}
-	
-	
+
+
 	public void handle_NetWork(int x, int y){
 		int r = mRenderer.network.checkButton((int)x, (int)y);
 		if(r != -1){
@@ -80,14 +83,14 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				handle_host();
 			else if(r == 3)
 				handle_cancel();
-				
-				
+
+
 		}
-		
+
 	}
-	
+
 	public void handle_cancel(){
-		
+
 	}
 	public void handle_host()
 	{
@@ -97,7 +100,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		Networking.playerNumber = 0;
 		GLRenderer.state = GameState.Game_Screen;
 	}
-	
+
 	public void handle_join()
 	{
 		//Networking.broadcastHostMode = false;
@@ -127,11 +130,11 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				GLRenderer.state = GameState.Game_Over;
 				mRenderer.gov.UpdateWinner(UnitGroup.PlayerOne);
 			}
-			
+
 		}
 		mRenderer.mm.selected = -1;
 	}
-	
+
 	public void handle_Waiting(int x, int y){
 		Point pickPoint = mRenderer.pick(x, y);
 		Unit pickUnit = mapData.getUnitAt(pickPoint);
@@ -148,7 +151,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		Log.d("TAG", "Single Tap Detected ...");
 		int touchMenu = mRenderer.setSelectedHUD(x, y);
 		boolean pressCancel = mRenderer.headsUpDisplay.action.checkPressingCancel(x, y);
-		
+
 		if(pressCancel)
 			Log.d("Debug","Cancel Pressed");	
 		Point pickPoint = mRenderer.pick(x, y);
@@ -177,10 +180,10 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		}
 
 		Unit pickUnit = mapData.getUnitAt(pickPoint);
-		
+
 		if(handleClickBox(touchMenu,pressCancel))
 			return;
-		
+
 		if(pickUnit != null){
 			//Log.d("MyGLSurfaceView", "Active Group:" + mapData._activeGroup);
 			if(pickUnit.unitGroup == mapData._activeGroup){
@@ -215,7 +218,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				PathFind.DisplayUnitFriendBox(currentUnit, stats.range);
 				chooseAction = true;
 			}else if(decision == 3){//call skills
-				
+
 				mRenderer.headsUpDisplay.updateHUD(true, true, true, false);//maintain the HUD
 				SkillStats stats = new SkillStats();
 				if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Headshot)){
@@ -237,7 +240,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				} else {
 					//Log.d("MyGLSurfaceView", "Find Nothing");
 				}//show the attack range
-				
+
 				chooseAction = true;
 			}
 			return true;
@@ -276,7 +279,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 					ResetGUI();
 					return;
 				}else if(finishMoving && chooseAction && decision == 3 &&
-						 currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+						currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
 					GameEngine.useSkill(currentUnit, currentUnit, SkillType.Heal, true);
 					Log.d("Debug", "I heal myself");
 					ResetGUI();
@@ -294,10 +297,10 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 					ResetGUI();
 					//return;
 				}
-					
-				
+
+
 			}
-			
+
 		}else{
 			handlePickUnit(pickUnit);
 		}
@@ -327,7 +330,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				Log.d("Debug", "I ATTACK YOUUUU");
 				ResetGUI();
 			} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
-				
+
 				GameEngine.useSkill(currentUnit, pickUnit, SkillType.Headshot, true);
 				Log.d("Debug", "I Use My Skill");
 				ResetGUI();
@@ -350,7 +353,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				mapData.clearBoxes();
 				RendererAccessor.update(mapData);
 				finishMoving = true;
-				
+
 			}else
 				ResetGUI();
 		}else if(!pickControlledUnit){
@@ -393,9 +396,9 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		mapData.clearBoxes();
 		RendererAccessor.update(mapData);
 	}
-	
+
 	public void PrintStat(int touchMenu, boolean pressCancel,Unit u){
-		
+
 		Log.d("Debug", "----------------------------");
 		//Log.d("Debug", "pickControlledUnit is: " + pickControlledUnit);
 		//Log.d("Debug", "decision is: " + decision);
@@ -404,12 +407,12 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		//Log.d("Debug", "is it touching menu?: " + touchMenu);
 		//Log.d("Debug", "is it pressing cancel?: " + pressCancel);
 		Log.d("Debug", "is Unit active?: " + u.active);
-		
+
 	}
-	
+
 	private void startNetworking()
 	{
-		
+
 		Thread netThread = new Thread()
 		{			
 			public void run(){
@@ -417,8 +420,8 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				Networking.staticInitializer(mRenderer.context);
 			}			
 		};
-		
-		
+
+
 		netThread.start();
 	}
 
