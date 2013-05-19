@@ -272,13 +272,13 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		if(currentUnit != null){
 			if(currentUnit.uID == pickUnit.uID){
 				if(finishMoving &&  chooseAction && decision == 2){
-					GameEngine.useSkill(currentUnit, null, SkillType.Defend, true);
+					GameEngine.useSkill(currentUnit, null, SkillType.Defend, true, networking);
 					Log.d("Debug", "I Defend");
 					ResetGUI();
 					return;
 				}else if(finishMoving && chooseAction && decision == 3 &&
 						 currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
-					GameEngine.useSkill(currentUnit, currentUnit, SkillType.Heal, true);
+					GameEngine.useSkill(currentUnit, currentUnit, SkillType.Heal, true, networking);
 					Log.d("Debug", "I heal myself");
 					ResetGUI();
 					return;
@@ -290,7 +290,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				return;
 			}else{
 				if(decision == 3 &&  currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
-					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Heal, true);
+					GameEngine.useSkill(currentUnit, pickUnit, SkillType.Heal, true, networking);
 					Log.d("Debug", "I Heal my comrades");
 					ResetGUI();
 					//return;
@@ -322,14 +322,13 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 		}else if(currentUnit != null && pickControlledUnit && finishMoving && decision != -1){
 			if(decision == 1 && mapData._attackBox.contains(pickUnit.position)){
-				GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack, true);
+				GameEngine.useSkill(currentUnit, pickUnit, SkillType.Attack, true, networking);
 				//currentUnit.active = false;
 				RendererAccessor.update(mapData);
 				Log.d("Debug", "I ATTACK YOUUUU");
 				ResetGUI();
 			} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
-				
-				GameEngine.useSkill(currentUnit, pickUnit, SkillType.Headshot, true);
+				GameEngine.useSkill(currentUnit, pickUnit, SkillType.Headshot, true, networking);
 				Log.d("Debug", "I Use My Skill");
 				ResetGUI();
 			}

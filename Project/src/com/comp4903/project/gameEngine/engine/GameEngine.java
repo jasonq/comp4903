@@ -47,7 +47,7 @@ public class GameEngine {
 		
 	}
 	
-	public static boolean useSkill(Unit source, Unit target, SkillType skill, boolean inActive){
+	public static boolean useSkill(Unit source, Unit target, SkillType skill, boolean inActive, boolean network){
 		Unit unitOne = null;
 		Unit unitTwo = null;
 		if (source != null)
@@ -58,7 +58,7 @@ public class GameEngine {
 			case Attack:
 				System.out.println("Attacking");
 				if (canCastSkill(unitOne, SkillType.Attack))
-				if (SkillEngine.Attack(unitOne, unitTwo, true)){
+				if (SkillEngine.Attack(unitOne, unitTwo, network)){
 					mapData.RemoveDeadUnit();
 					RendererAccessor.update(mapData);
 					if (inActive) source.active = false;
@@ -77,7 +77,7 @@ public class GameEngine {
 			case Headshot:
 				System.out.println("Headshot");
 				if (canCastSkill(unitOne, SkillType.Headshot))
-				if (SkillEngine.HeadShot(unitOne, unitTwo, true)){
+				if (SkillEngine.HeadShot(unitOne, unitTwo, network)){
 					mapData.RemoveDeadUnit();
 					RendererAccessor.update(mapData);
 					if (inActive) source.active = false;
@@ -87,7 +87,7 @@ public class GameEngine {
 			case Heal:
 				System.out.println("Heal");
 				if (canCastSkill(unitOne, SkillType.Heal))
-				if (SkillEngine.Heal(unitOne, unitTwo, true)){					
+				if (SkillEngine.Heal(unitOne, unitTwo, network)){					
 					RendererAccessor.update(mapData);
 					if (inActive) source.active = false;
 					return true;
