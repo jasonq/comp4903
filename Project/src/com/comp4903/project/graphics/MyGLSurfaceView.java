@@ -54,8 +54,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		this.context = context;
 		// Set the Renderer for drawing on the GLSurfaceView
 		mRenderer = new GLRenderer(context, md);
-
 		setRenderer(mRenderer);
+		
 		TouchGesture newT = new TouchGesture(mRenderer, md);
 		//gDetect = new GestureDetector(context, new GestureDetection()); 
 		gDetect = new GestureDetector(context, newT); 

@@ -28,6 +28,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	private  MapData  mapData = null;
 	private Unit currentUnit = null;
 	private int decision = -1;
+	boolean watch = false;
 	
 	public TouchGesture(GLRenderer mgl,MapData md){
 		super();
@@ -43,7 +44,11 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	public boolean onSingleTapConfirmed (MotionEvent e){
 		switch(GLRenderer.state){
 		case Game_Screen:
-			handle_Game_Screen((int)e.getX(),(int)e.getY());
+			
+			//if(!watch)
+				handle_Game_Screen((int)e.getX(),(int)e.getY());
+			//else
+			//	handle_Waiting((int)e.getX(),(int)e.getY());
 			break;
 		case Main_Menu:
 			handle_Main_Menu((int)e.getX(),(int)e.getY());
@@ -68,18 +73,35 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	public void handle_NetWork(int x, int y){
 		int r = mRenderer.network.checkButton((int)x, (int)y);
 		if(r != -1){
-			if(r == 1)
+			if(r == 1){
 				//handle join\
-				;
-			else if(r == 2)
+				RendererAccessor.floatingText(100, 100, 0, 0, -1, ColorType.Red, null, "Hello World");
+			}else if(r == 2)
 				//handle host
-				;
+				RendererAccessor.floatingText(100, 100, 0, 0, -1, ColorType.Red, null, "Hello Android");
 		}
 		
 	}
 	public void handle_Game_Over(int x, int y){
 		if(mRenderer.gov.checkPressingMeu(x, y))
 			GLRenderer.state = GameState.Main_Menu;
+	}
+	public void handle_Waiting(int x, int y){
+		Point pickPoint = mRenderer.pick(x, y);
+		Unit pickUnit = mapData.getUnitAt(pickPoint);
+		boolean pressEnd = mRenderer.headsUpDisplay.checkPressingEndTurn(x, y);
+
+		if(pressEnd){
+			if(watch){
+				watch=false;
+				return;
+			}
+		}
+		if(pickUnit != null){
+			mRenderer.updateHUDPanel(pickUnit);
+			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
+		}else
+			mRenderer.headsUpDisplay.updateHUD(false, false, false, true);
 	}
 	/*
 	 * Hanlde touch event when we are in main menu state
@@ -116,14 +138,12 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		boolean pressEnd = mRenderer.headsUpDisplay.checkPressingEndTurn(x, y);
 
 
-		//check if out of bounce
-
-		//if(pickPoint.x == -1 && pickPoint.y == -1 && touchMenu == -1 && !pressCancel && !pressEnd){
-		//	ResetGUI();
-		//	return;
-		//}		
 		if(pressEnd && !pickControlledUnit){//might put condition if this is player turn
 			//end turn code goes here
+			//if(!watch){
+			//	watch = true;
+			//	return;
+			//}
 			//Log.d("MyGLSurfaceView", "End turn pressed");
 			GameEngine.endTurn();
 			if(mapData._activeGroup == UnitGroup.PlayerTwo){ //need check for if singleplayer or multiplayer
