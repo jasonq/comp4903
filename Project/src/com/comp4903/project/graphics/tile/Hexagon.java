@@ -8,6 +8,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.comp4903.project.graphics.GLRenderer;
+import com.comp4903.project.graphics.MapRenderer;
 import com.comp4903.project.graphics.RendererAccessor;
 import com.comp4903.project.graphics.model.MaterialLibrary;
 import com.comp4903.project.graphics.model.Texture;
@@ -221,11 +222,8 @@ public class Hexagon {
 				float dx = (float)tx * 1.5f;
 				float dy = 0;
 				float dz = (float)ty * 0.8660254038f * 2 + (tx % 2) * 0.8660254038f;
-												
-				if ((dx > GLRenderer.viewX - 16) &&
-					(dz > GLRenderer.viewZ - 16) &&
-					(dx < GLRenderer.viewX + 16) &&
-					(dz < GLRenderer.viewZ + 8))
+								
+				if (MapRenderer.tileOnScreen(dx, dy, dz))
 				{
 					screenCoords[screenCoordCount][6].x = tx;
 					screenCoords[screenCoordCount][6].y = ty;

@@ -29,7 +29,7 @@
 	</Ability>
 	<Ability>
 	    <Name>Headshot</Name>
-	    <Description>Decrease target unit's accuracy by %"src/com/comp4903/project/gameEngine/enums/SkillType.java"accuracy% for %duration% turns. Has a %chance% percent chance to instantly kill the target.</Description>
+	    <Description>Decrease target unit's accuracy by %accuracy% for %duration% turns. Has a %chance% percent chance to instantly kill the target.</Description>
 	    <Health>0</Health>
 	    <Energy>5</Energy>
 	    <Target>Enemy</Target>

@@ -69,13 +69,26 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		int r = mRenderer.network.checkButton((int)x, (int)y);
 		if(r != -1){
 			if(r == 1)
-				//handle join\
-				;
-			else if(r == 2)
-				//handle host
-				;
+				handle_join();				
+			else if (r == 2)
+				handle_host();
+				
+				
+				
 		}
 		
+	}
+	
+	public void handle_host()
+	{
+		Networking.broadcastJoinMode = false;
+		Networking.broadcastHostMode = true;		
+	}
+	
+	public void handle_join()
+	{
+		Networking.broadcastHostMode = false;
+		Networking.broadcastJoinMode = true;
 	}
 	public void handle_Game_Over(int x, int y){
 		if(mRenderer.gov.checkPressingMeu(x, y))
@@ -122,7 +135,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		//	ResetGUI();
 		//	return;
 		//}		
-		if(pressEnd && !pickControlledUnit){//might put condition if this is player turn
+		if(pressEnd && !pickControlledUnit){//might put condition if this is player turn			
 			//end turn code goes here
 			//Log.d("MyGLSurfaceView", "End turn pressed");
 			GameEngine.endTurn();

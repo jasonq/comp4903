@@ -102,6 +102,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				if( mRenderer.headsUpDisplay.checkPressingEndTurn((int)x,(int)y)){
 					mRenderer.headsUpDisplay.check =mRenderer.headsUpDisplay.pgiveUpTurn;
 				}
+				Point tx = mRenderer.pick(x, y);
+				RendererAccessor.map.highlight(tx.x, tx.y);
 			}else if(GLRenderer.state == GameState.Game_Over){
 				if(mRenderer.gov.checkPressingMeu((int)x, (int)y))
 					mRenderer.gov.flag = true;
@@ -115,6 +117,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				if( mRenderer.headsUpDisplay.checkPressingEndTurn((int)x,(int)y)){
 					mRenderer.headsUpDisplay.check =mRenderer.headsUpDisplay.giveUpTurn;
 				}
+				RendererAccessor.map.highlight(-1,-1);
 			}else if(GLRenderer.state == GameState.Game_Over){
 				if(mRenderer.gov.checkPressingMeu((int)x, (int)y))
 					mRenderer.gov.flag = false;

@@ -22,7 +22,7 @@
 		</def:base>
 	</def:tile>
 	
-	<def:tile name="floor_grate">
+	<def:tile name="floor_grate" elevate="0.1">
 		<def:base>
 			<def:point1 u="0.375"	v="0.125"/>
 			<def:point2 u="0.435"	v="0.01"/>
@@ -31,6 +31,9 @@
 			<def:point5 u="0.55"	v="0.24"/>
 			<def:point6 u="0.435"	v="0.24"/>					
 		</def:base>
+		<def:model>
+		   generator.gmodel
+		</def:model>
 	</def:tile>
 	
 	<def:tile name="white_metal">
