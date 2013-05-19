@@ -29,6 +29,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	private  MapData  mapData = null;
 	private Unit currentUnit = null;
 	private int decision = -1;
+	private boolean networking = false;
 	
 	public TouchGesture(GLRenderer mgl,MapData md){
 		super();
@@ -44,7 +45,11 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	public boolean onSingleTapConfirmed (MotionEvent e){
 		switch(GLRenderer.state){
 		case Game_Screen:
-			handle_Game_Screen((int)e.getX(),(int)e.getY());
+			//if(networking){
+			if(Networking.playerNumber == mapData._activeGroup.getCode())
+				handle_Game_Screen((int)e.getX(),(int)e.getY());
+			else
+				handle_Waiting((int)e.getX(),(int)e.getY());
 			break;
 		case Main_Menu:
 			handle_Main_Menu((int)e.getX(),(int)e.getY());
@@ -88,7 +93,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	{
 		//Networking.broadcastJoinMode = false;
 		//Networking.broadcastHostMode = true;	
-		
+		networking = true;
 		Networking.playerNumber = 0;
 		GLRenderer.state = GameState.Game_Screen;
 	}
@@ -97,7 +102,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	{
 		//Networking.broadcastHostMode = false;
 		//Networking.broadcastJoinMode = true;
-		
+		networking = true;
 		Networking.playerNumber = 1;
 		GLRenderer.state = GameState.Game_Screen;
 	}
@@ -112,9 +117,10 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		int result = mRenderer.setSelectMainMenu(x, y);
 		int a = 2;
 		if(result != -1){
-			if(result == 0)
+			if(result == 0){
+				networking = false;
 				GLRenderer.state = GameState.Game_Screen;
-			else if(result == 1){
+			}else if(result == 1){
 				GLRenderer.state = GameState.Network_Menu;
 				startNetworking();
 			}else if(result == 2){
