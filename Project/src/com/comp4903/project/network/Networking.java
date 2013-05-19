@@ -61,7 +61,7 @@ public class Networking {
 		IP = "undefined";
 		broadcastIP = "undefined";
 		timetosend = false;
-		currentTimeStamp = 0;
+		currentTimeStamp = 1;
 		currentPlaceInHistory = 0;
 		gameStarted = false;
 		blockingOnSend = false;
@@ -128,14 +128,14 @@ public class Networking {
 				if (gameStarted){
 					boolean missing = true;
 					for (int i = 0; i < 100; i++)
-						if (history_[i].timestamp == currentTimeStamp + 1) {
+						if (history_[i].timestamp == currentTimeStamp) {
 							 missing = false;
 							 submitMessageToGameEngine(history_[i]);
 							 currentTimeStamp++;
 						}
 					if (missing)
 					{
-						requestMissingPacket(currentTimeStamp + 1);
+						requestMissingPacket(currentTimeStamp);
 					}
 				}
 				Thread.sleep(10);
