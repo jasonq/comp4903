@@ -112,7 +112,7 @@ public class characterBox extends UI {
 		Bitmap sp2 = Bitmap.createScaledBitmap(p2, 512, 512, false);
 		
 		p1_box.loadGLTexture(gl, context, sp1);
-		p2_box.loadGLTexture(gl, context, p2);
+		p2_box.loadGLTexture(gl, context, sp2);
 		p1.recycle();
 		p2.recycle();
 	}
