@@ -168,22 +168,18 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		if(pressEnd && !pickControlledUnit){//might put condition if this is player turn			
 			//end turn code goes here
 			//Log.d("MyGLSurfaceView", "End turn pressed");
-
-			GameEngine.endTurn(true);
+			GameEngine.endTurn(networking);
 			if(mapData._activeGroup == UnitGroup.PlayerTwo && !networking){ //need check for if singleplayer or multiplayer
-
-				AIEngine.startTurn();
+				//AIEngine.startTurn();
 			}
 			if(mapData._activeGroup == UnitGroup.PlayerOne)
 				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P1);
 			else if(mapData._activeGroup == UnitGroup.PlayerTwo)
 				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P2);
-
 			ResetGUI();			
 		}
 
 		Unit pickUnit = mapData.getUnitAt(pickPoint);
-
 		if(handleClickBox(touchMenu,pressCancel))
 			return;
 
