@@ -10,7 +10,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.enums.ColorType;
+import com.comp4903.project.gameEngine.networking.Action;
 import com.comp4903.project.graphics.RendererAccessor;
 
 
@@ -115,6 +117,7 @@ public class Networking {
 				if (timetosend)
 				{
 					blockingOnSend = true;
+					RendererAccessor.floatingText(20, 300, 0, -1, 50, ColorType.White, "u" + currentTimeStamp, "sending " + currentTimeStamp);
 					timetosend = false;
 					sendPacket(sendBuffer.buffer, GAMEPACKET, true);
 					blockingOnSend = false;
@@ -184,10 +187,12 @@ public class Networking {
 			// NOTE: message pointer is indexed to the position
 			// in which game data begins (skipping the 8 bytes of the header)
 			
-			//Action a = new Action();
-			//if (a.decodeMessage(m))
-			//	if (GameEngine.executeAction(a)) {
-			// 		return;
+			RendererAccessor.floatingText(20, 300, 0, -1, 50, ColorType.White, "host", "submitted " + ts);
+			
+			Action a = new Action();
+			if (a.decodeMessage(m))
+				if (GameEngine.executeAction(a)) 
+			 		return;
 			
 			// die
 		}
@@ -343,6 +348,8 @@ public class Networking {
 		m.reset();
 		
 		int ts = m.readInt(); // timestamp
+		
+		RendererAccessor.floatingText(500, 300, 0, -1, 50, ColorType.White, "i"+ts, "incoming " + ts);
 		
 		if (ts != 0) 
 			addToHistory(m);
