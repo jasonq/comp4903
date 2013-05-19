@@ -11,8 +11,10 @@ import javax.microedition.khronos.opengles.GL10;
 
 
 import com.comp4903.project.GUI.GLText;
+import com.comp4903.project.GUI.GameOver;
 import com.comp4903.project.GUI.HUD;
 import com.comp4903.project.GUI.MainMenu;
+import com.comp4903.project.GUI.NetworkInterface;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.GameState;
@@ -74,6 +76,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 	public HUD headsUpDisplay;
 	public MainMenu mm;
+	public GameOver gov;
+	public NetworkInterface network;
+	
 	public GL10 myGL;
 	public Unit character = null;
 	public boolean update= false;
@@ -127,7 +132,11 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		mm = new MainMenu(context,GLwidth,GLheight);
 		mm.loadMenuTexture(gl);
 		
+		gov = new GameOver(context,GLwidth,GLheight);
+		gov.loadGameOVerTexture(gl);
 		
+		network = new NetworkInterface(context,GLwidth,GLheight);
+		network.loadNetWorkingTexture(gl);
 		
 		MaterialLibrary.init(gl, context);
 		
@@ -199,11 +208,14 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 			drawMainMenu(gl);
 			break;
 		case Network_Menu:
-			//drawNetworkMenu(gl);
-			drawGameScreen(gl);
+			drawNetworkMenu(gl);
+			//drawGameScreen(gl);
 			break;
 		case Game_Screen:
 			drawGameScreen(gl);
+			break;
+		case Game_Over:
+			drawGameOver(gl);
 			break;
 		}		
 		
@@ -224,9 +236,24 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 	public void drawNetworkMenu(GL10 gl)
 	{
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);			
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+		headsUpDisplay.SwithToOrtho(gl);
+		//headsUpDisplay.drawHUD(gl);
+		network.DrawNetWorking(gl);
+		headsUpDisplay.SwitchToPerspective(gl);
+		gl.glEnable(GL10.GL_DEPTH_TEST);
+	}
+	public void drawGameOver(GL10 gl){
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);			
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+		headsUpDisplay.SwithToOrtho(gl);
+		//headsUpDisplay.drawHUD(gl);
+		gov.DrawGameOver(gl);
+		headsUpDisplay.SwitchToPerspective(gl);
+		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
 	}
-	
 	public void drawGameScreen(GL10 gl)
 	{
 		// clear the buffer
@@ -307,7 +334,12 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	
 		mm = new MainMenu(context,GLwidth,GLheight);
 		mm.loadMenuTexture(gl);
-
+		
+		gov = new GameOver(context,GLwidth,GLheight);
+		gov.loadGameOVerTexture(gl);
+		
+		network = new NetworkInterface(context,GLwidth,GLheight);
+		network.loadNetWorkingTexture(gl);
 	} 
 	
 	// processes a scaling request ( which is interpreted as moving the camera closer

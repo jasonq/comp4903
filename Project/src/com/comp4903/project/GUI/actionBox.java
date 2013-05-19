@@ -85,8 +85,7 @@ public class actionBox extends UI{
 	public void loadUITexture(GL10 gl,Resources r, int id){
 		super.loadUITexture(gl, r, id);
 		
-		Bitmap bTex = BitmapFactory.decodeResource(r,R.drawable.menu);
-		box.loadGLTexture(gl, context, bTex);
+		
 		Bitmap commandT = BitmapFactory.decodeResource(r, R.drawable.better2);
 		//Bitmap pCommand =  BitmapFactory.decodeResource(r, R.drawable.unpresseded_new_icon);
 		//initialize cancel box
@@ -139,7 +138,6 @@ public class actionBox extends UI{
 		gl.glLoadIdentity();
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
-		//box.draw(gl);
 		
 		if(showCancel){
 			if(menuSelected == 0)

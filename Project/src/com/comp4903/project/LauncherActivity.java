@@ -18,7 +18,6 @@ import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.factory.*;
-import com.comp4903.project.network.NetworkAccessor;
 import com.comp4903.project.network.Networking;
 
 import com.comp4903.pathfind.PathFind;
@@ -44,10 +43,7 @@ public class LauncherActivity extends Activity {
 				
 		boolean loaded = loadContent();
 		InputStream in;
-		context = this;
-		
-		//Networking.staticInitializer();		
-		//startNetworking();
+		context = this;	
 		
 		try {
 			in = getResources().getAssets().open("MapTwo.xml");
@@ -81,23 +77,7 @@ public class LauncherActivity extends Activity {
 			return false;
 		}
 		return true;
-	}	
-	
-	private void startNetworking()
-	{
-		
-		Thread netThread = new Thread()
-		{			
-			public void run(){
-				//NetworkAccessor.net = new Networking(context);
-				Networking.staticInitializer(context);
-			}			
-		};
-		
-		
-		netThread.start();
-	}
-	
+	}		
 	
 	
 }

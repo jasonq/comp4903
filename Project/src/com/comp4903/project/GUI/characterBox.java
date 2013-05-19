@@ -25,6 +25,7 @@ public class characterBox extends UI {
 	public float scale;
 	public Square[] avatar = new Square[3];
 	public Square[] buff = new Square[2];
+	public Square border;
 	public characterBox(Context c, int w, int h,Unit u,GLText g) {
 		super(c,w,h);
 		currentHp = 500;
@@ -45,7 +46,7 @@ public class characterBox extends UI {
 		GLT = g;
 		float textHeight = GLT.getHeight();
 		scale = bHeight/textHeight;
-
+		border= new Square(x - 10, y -10, bWidth + 20, bHeight + 20);
 
 	}
 
@@ -95,6 +96,8 @@ public class characterBox extends UI {
 		temp1.recycle();
 		hp.recycle();
 		
+		Bitmap bb =  BitmapFactory.decodeResource(context.getResources(),R.drawable.border);
+		border.loadGLTexture(gl, context, bb);
 		loadAvatar(gl, context);
 	}
 	
@@ -117,6 +120,7 @@ public class characterBox extends UI {
 	}
 	public void draw(GL10 gl){
 		gl.glLoadIdentity();
+		border.draw(gl);
 		box.draw(gl);
 		if(unit != null){
 			//gl.glEnable( GL10.GL_TEXTURE_2D );

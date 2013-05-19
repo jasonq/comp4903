@@ -28,7 +28,6 @@ import com.comp4903.project.graphics.animation.ReceiveAttack;
 import com.comp4903.project.graphics.model.Model3D;
 import com.comp4903.project.graphics.model.ModelLoader;
 import com.comp4903.project.graphics.tile.Hexagon;
-import com.comp4903.project.network.NetworkAccessor;
 import com.comp4903.project.network.Networking;
 
 import android.content.Context;
@@ -223,14 +222,22 @@ public class MapRenderer {
 	}
 	
 	public void addFloatingText(int x, int y, int mx, int my, int l, ColorType col, String n, String c)
-	{
-		FloatingText f = new FloatingText(x,y,mx,my,l,col, n,c);
-		
+	{		
 		for (int i = 0; i < floatingText_.size(); i++)
 		{
 			if (!floatingText_.get(i).active)
 				floatingText_.remove(i);
 		}
+		for (int i = 0; i < floatingText_.size(); i++)
+		{
+			if (floatingText_.get(i).name.equals(n))
+			{
+				floatingText_.get(i).set(x,y,mx,my,l,col,n,c);
+				return;
+			}
+		}
+		
+		FloatingText f = new FloatingText(x,y,mx,my,l,col, n,c);
 		floatingText_.add(f);
 	}
 	
