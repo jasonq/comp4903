@@ -169,7 +169,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			//end turn code goes here
 			//Log.d("MyGLSurfaceView", "End turn pressed");
 			GameEngine.endTurn();
-			if(mapData._activeGroup == UnitGroup.PlayerTwo){ //need check for if singleplayer or multiplayer
+			if(mapData._activeGroup == UnitGroup.PlayerTwo && !networking){ //need check for if singleplayer or multiplayer
 				AIEngine.startTurn();
 			}
 			if(mapData._activeGroup == UnitGroup.PlayerOne)
