@@ -119,6 +119,15 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		}
 		mRenderer.mm.selected = -1;
 	}
+	
+	public void handle_Waiting(int x, int y){
+		Point pickPoint = mRenderer.pick(x, y);
+		Unit pickUnit = mapData.getUnitAt(pickPoint);
+		if(pickUnit != null){
+			mRenderer.updateHUDPanel(pickUnit);
+			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
+		}
+	}
 	/*
 	 * Handle touch event when we are in game screen state
 	 */
