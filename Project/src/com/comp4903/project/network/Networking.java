@@ -38,6 +38,7 @@ public class Networking {
 	public static boolean timetosend = false;
 	public static boolean broadcastHostMode = false;
 	public static boolean broadcastJoinMode = false;
+	public static boolean blockingOnSend = false;
 	
 	private static NetworkMessage message_ = new NetworkMessage();
 	private static NetworkMessage[] history_ = new NetworkMessage[100];
@@ -61,6 +62,7 @@ public class Networking {
 		currentTimeStamp = 0;
 		currentPlaceInHistory = 0;
 		gameStarted = false;
+		blockingOnSend = false;
 		
 		for (int i = 0; i <5; i++)
 			playerAssigned[i] = false;
@@ -112,8 +114,10 @@ public class Networking {
 				// if the app requests to send, process request
 				if (timetosend)
 				{
+					blockingOnSend = true;
 					timetosend = false;
 					sendPacket(sendBuffer.buffer, GAMEPACKET, true);
+					blockingOnSend = false;
 				}
 				
 				// check if the next needed packet is in the 
@@ -131,7 +135,7 @@ public class Networking {
 						requestMissingPacket(currentTimeStamp + 1);
 					}
 				}
-				Thread.sleep(100);
+				Thread.sleep(10);
 			}
 			
 			//while (!timetosend)		{Thread.sleep(10);}
@@ -159,6 +163,15 @@ public class Networking {
 	{
 		sendBuffer = m;
 		timetosend = true;
+		blockingOnSend = true;
+		while (blockingOnSend) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public static void submitMessageToGameEngine(NetworkMessage m)
