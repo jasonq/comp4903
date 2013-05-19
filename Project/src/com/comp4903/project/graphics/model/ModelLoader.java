@@ -23,6 +23,7 @@ public class ModelLoader {
 	public static final int MTRL = 0x4C52544D;
 	public static final int CPNT = 0x544E5043;
 	public static final int ANIM = 0x4d494e41;
+	public static final int XTRA = 0x41525458;
 	
 	private static Model3D model;
 	private static DataInputStream fs;
@@ -60,6 +61,10 @@ public class ModelLoader {
 				break;
 			case ANIM:
 				loadAnimations();
+				break;
+			case XTRA:
+				loadExtra();
+				break;
 			default:
 				done = true;
 			}
@@ -424,6 +429,34 @@ public class ModelLoader {
 					model.setComponentFrame(a, c, f, matrix, vec);
 					readInt();
 				}
+			}
+		}
+		
+	}
+	
+	private static void loadExtra()
+	{
+		int p = readInt();
+		
+		for (int i = 0; i < p; i++)
+		{
+			ModelParams mp = new ModelParams();
+			String name = readString();
+			mp.type = readInt();
+			switch (mp.type)
+			{
+			case ModelParams.INTVAL:
+				mp.intVal = readInt();
+				model.parameters.put(name, mp);				
+				break;			
+			case ModelParams.FLOATVAL:
+				mp.floatVal = readFloat();
+				model.parameters.put(name, mp);
+			break;		
+			case ModelParams.STRINGVAL:
+				mp.stringVal = readString();
+				model.parameters.put(name, mp);
+				break;
 			}
 		}
 		

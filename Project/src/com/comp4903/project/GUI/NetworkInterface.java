@@ -1,3 +1,4 @@
+
 package com.comp4903.project.GUI;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -13,8 +14,8 @@ public class NetworkInterface {
 
 	public Square jbutton,hbutton;
 	public Square pressed_jbutton, pressed_hbutton;
-
-	public int joinX,joinY,hostX,hostY;
+	public Square cancel,pressed_cancel;
+	public int joinX,joinY,hostX,hostY,cancelX,cancelY;
 	public int bWidth,bHeight;
 	public int width,height;
 	public Context context;
@@ -30,17 +31,21 @@ public class NetworkInterface {
 		int y = height/8;
 
 		jbutton = new Square(x,y,bWidth,bHeight);
-		pressed_jbutton = new Square(x,y,bWidth,bHeight);
+		pressed_jbutton = new Square(x + 10,y + 10,bWidth-20,bHeight-20);
 
 		hbutton = new Square(width/2 + x,y,bWidth,bHeight);
-		pressed_hbutton =  new Square(width/2 + x,y,bWidth,bHeight);
+		pressed_hbutton =  new Square(width/2  + x + 10,y + 10,bWidth - 20,bHeight-20);
 
 		joinX = x;
 		joinY = y;
 
 		hostX = width/2 + x;
 		hostY = y;
-
+		
+		cancelX = width - bWidth;
+		cancelY = height - bHeight;
+		cancel = new Square(cancelX,cancelY,bWidth,bHeight);
+		pressed_cancel = new Square(cancelX + 10,cancelY + 10,bWidth - 20,bHeight - 20);
 	}
 
 	public void loadNetWorkingTexture(GL10 gl){
@@ -65,10 +70,24 @@ public class NetworkInterface {
 		host.recycle();
 
 		Bitmap phost = Bitmap.createBitmap(network,w/2,h/2,w/2,h/2);
-
 		Bitmap sphost = Bitmap.createScaledBitmap(phost, 512, 512, false);
 		pressed_hbutton.loadGLTexture(gl, context, sphost);
 		sphost.recycle();
+		
+		Bitmap cbmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.cancel);
+		
+		int cancelW = cbmp.getWidth();
+		int cancelH = cbmp.getHeight();
+		
+		Bitmap can = Bitmap.createBitmap(cbmp,0,0,cancelW,cancelH/2);
+		Bitmap scan = Bitmap.createScaledBitmap(can, 512, 512, false);
+		cancel.loadGLTexture(gl, context, scan);
+		can.recycle();
+		
+		Bitmap pcan = Bitmap.createBitmap(cbmp,0,cancelH/2,cancelW,cancelH/2);
+		Bitmap pscan = Bitmap.createScaledBitmap(pcan, 512, 512, false);
+		pressed_cancel.loadGLTexture(gl, context, pscan);
+		pcan.recycle();
 	}
 
 	public void DrawNetWorking(GL10 gl){
@@ -78,13 +97,20 @@ public class NetworkInterface {
 		if(selected == -1){
 			jbutton.draw(gl);
 			hbutton.draw(gl);
+			cancel.draw(gl);
 		}else{
 			if(selected == 1){
 				pressed_jbutton.draw(gl);
 				hbutton.draw(gl);
+				cancel.draw(gl);
 			}else if(selected == 2){
 				jbutton.draw(gl);
 				pressed_hbutton.draw(gl);
+				cancel.draw(gl);
+			}else if(selected == 3){
+				jbutton.draw(gl);
+				hbutton.draw(gl);
+				pressed_cancel.draw(gl);
 			}
 
 		}
@@ -103,6 +129,9 @@ public class NetworkInterface {
 		}else if  (x >= hostX && x <= (hostX + bWidth) && y >= hostY && y <= (hostY + bHeight)){
 			//selected = 2;
 			return 2;
+		}else if  (x >= cancelX && x <= (cancelX + bWidth) && y >= cancelY && y <= (cancelY + bHeight)){
+			return 3;
+			
 		}else{
 			//selected = -1;
 			return -1;

@@ -33,8 +33,8 @@ public class Networking {
 	public static InetAddress[] playerIPAddresses = new InetAddress[5];
 	public static boolean[] playerAssigned = new boolean[5];
 	public static InetAddress candidateHostIP;
-	public static int playerNumber = 0;
-		
+	public static int playerNumber = -1;
+	public static boolean gameStarted = false;
 	public static boolean timetosend = false;
 	public static boolean broadcastHostMode = false;
 	public static boolean broadcastJoinMode = false;
@@ -60,6 +60,7 @@ public class Networking {
 		timetosend = false;
 		currentTimeStamp = 0;
 		currentPlaceInHistory = 0;
+		gameStarted = false;
 		
 		for (int i = 0; i <5; i++)
 			playerAssigned[i] = false;
@@ -79,6 +80,7 @@ public class Networking {
 						
 			 WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 			 DhcpInfo dhcp = wifi.getDhcpInfo();
+			 IPaddress = InetAddress.getLocalHost();
 			 IP = dhcp.toString();
 			 			
 			int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
@@ -100,6 +102,13 @@ public class Networking {
 			//	b.	Application gets too far behind
 			while (true)
 			{
+				
+				if (broadcastHostMode)
+					broadcastHost();
+				
+				if (broadcastJoinMode)
+					broadcastJoin();
+				
 				// if the app requests to send, process request
 				if (timetosend)
 				{
@@ -109,18 +118,20 @@ public class Networking {
 				
 				// check if the next needed packet is in the 
 				// packet history queue.  If not, request it.
-				boolean missing = true;
-				for (int i = 0; i < 100; i++)
-					if (history_[i].timestamp == currentTimeStamp + 1) {
-						 missing = false;
-						 submitMessageToGameEngine(history_[i]);
-						 currentTimeStamp++;
+				if (gameStarted){
+					boolean missing = true;
+					for (int i = 0; i < 100; i++)
+						if (history_[i].timestamp == currentTimeStamp + 1) {
+							 missing = false;
+							 submitMessageToGameEngine(history_[i]);
+							 currentTimeStamp++;
+						}
+					if (missing)
+					{
+						requestMissingPacket(currentTimeStamp + 1);
 					}
-				if (missing)
-				{
-					requestMissingPacket(currentTimeStamp + 1);
 				}
-				Thread.sleep(10);
+				Thread.sleep(100);
 			}
 			
 			//while (!timetosend)		{Thread.sleep(10);}
@@ -185,6 +196,22 @@ public class Networking {
 		
 	}
 	
+	public static void sendPacketToIP(InetAddress ip, byte buffer[], int type, boolean stamp)
+	{
+		createHeader(buffer, type, stamp);
+		DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
+		packet.setAddress(ip);
+		packet.setPort(4903);
+		try {
+			sendInterface.send(packet);
+			addToHistory(message_);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public static void createHeader(byte buffer[], int type, boolean stamp)
 	{
 		message_.reset();
@@ -205,14 +232,26 @@ public class Networking {
 	
 	public static void broadcastHost()
 	{
-		byte[] buf = { 0 };
-		
+		String s;
+		NetworkMessage m = new NetworkMessage();		
 		playerNumber = 0;
+		playerAssigned[0] = true;
+		playerIPAddresses[0] = IPaddress;
+		for (int i = 1; i < 5; i++)
+			playerAssigned[i] = false;
 		
 		broadcastHostMode = true;
 		while (broadcastHostMode)
 		{
-			sendPacket(buf, BROADCASTHOST, false);
+			sendPacket(m.buffer, BROADCASTHOST, false);
+			
+			int c=0;
+			for (int i = 0; i < 5; i++)
+				if (playerAssigned[i])
+					c++;
+			s = "Connected players: " + c;
+			RendererAccessor.floatingText(20, 20, 0, 0, -1, ColorType.White, "host", s);
+			
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {				
@@ -223,12 +262,12 @@ public class Networking {
 	
 	public static void broadcastJoin()
 	{
-		byte[] buf = { 0 };
+		NetworkMessage m = new NetworkMessage();
 		
 		broadcastJoinMode = true;
 		while (broadcastJoinMode)
 		{
-			sendPacket(buf, BROADCASTJOIN, false);
+			sendPacket(m.buffer, BROADCASTJOIN, false);
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {				
@@ -365,7 +404,7 @@ public class Networking {
 		
 		String s;
 		s = "Host detected at: " + incomingIP.getHostAddress().toString();
-		RendererAccessor.floatingText(10, 10, 0, 0, -1, ColorType.White, "host", s);
+		RendererAccessor.floatingText(10, 250, 0, 0, -1, ColorType.White, "stuff", s);
 		candidateHostIP = incomingIP;		
 	}
 	
@@ -380,7 +419,7 @@ public class Networking {
 		int p = m.readInt(); // player #
 		String s;
 		s = "Joined " + incomingIP.getHostAddress().toString() + " as player #" + p;
-		RendererAccessor.floatingText(10, 30, 0, 0, -1, ColorType.White, "join", s);
+		RendererAccessor.floatingText(10, 280, 0, 0, -1, ColorType.White, "join", s);
 		playerNumber = p;
 	}
 }

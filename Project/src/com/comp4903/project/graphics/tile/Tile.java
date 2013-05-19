@@ -13,6 +13,7 @@ public class Tile {
 	Model3D model = null;
 	float[] color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	boolean useColor = false;
+	float elevation = 0;
 	
 	public Tile(String n)
 	{

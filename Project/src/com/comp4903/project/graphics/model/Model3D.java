@@ -2,6 +2,8 @@ package com.comp4903.project.graphics.model;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -13,6 +15,7 @@ public class Model3D {
 	
 	private int numComponents;
 	public Component[] components;
+	public HashMap<String, ModelParams> parameters;
 	
 	private float[] orientation = new float[16];
 	public float[] position = new float[4];
@@ -38,6 +41,8 @@ public class Model3D {
 		scale[3] = 1.0f;
 		Matrix.setIdentityM(orientation, 0);
 		walking = false;
+		
+		parameters = new HashMap<String, ModelParams>();
 	}
 	
 	public void SetOrientation(float[] vm)

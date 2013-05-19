@@ -1,3 +1,4 @@
+
 package com.comp4903.project.GUI;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -5,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 import com.comp4903.project.R;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.data.UnitData;
+import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.factory.GameStats;
 
 import android.content.Context;
@@ -26,6 +28,7 @@ public class characterBox extends UI {
 	public Square[] avatar = new Square[3];
 	public Square[] buff = new Square[2];
 	public Square border;
+	public Square p1_box, p2_box;
 	public characterBox(Context c, int w, int h,Unit u,GLText g) {
 		super(c,w,h);
 		currentHp = 500;
@@ -43,6 +46,8 @@ public class characterBox extends UI {
 		bHeight = height  / 4;
 
 		box = new Square( x, y, bWidth, bHeight);
+		p1_box = new Square(x,y,bWidth,bHeight);
+		p2_box = new Square(x,y,bWidth,bHeight);
 		GLT = g;
 		float textHeight = GLT.getHeight();
 		scale = bHeight/textHeight;
@@ -97,8 +102,19 @@ public class characterBox extends UI {
 		hp.recycle();
 		
 		Bitmap bb =  BitmapFactory.decodeResource(context.getResources(),R.drawable.border);
-		border.loadGLTexture(gl, context, bb);
+		border.loadGLTexture(gl, context, Bitmap.createScaledBitmap(bb, 512, 512, false));
+		
 		loadAvatar(gl, context);
+		
+		Bitmap p1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.p1_panel);
+		Bitmap p2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.p2_panel);
+		Bitmap sp1 = Bitmap.createScaledBitmap(p1, 512, 512, false);
+		Bitmap sp2 = Bitmap.createScaledBitmap(p2, 512, 512, false);
+		
+		p1_box.loadGLTexture(gl, context, sp1);
+		p2_box.loadGLTexture(gl, context, sp2);
+		p1.recycle();
+		p2.recycle();
 	}
 	
 	public void loadAvatar(GL10 gl, Context c){
@@ -120,9 +136,13 @@ public class characterBox extends UI {
 	}
 	public void draw(GL10 gl){
 		gl.glLoadIdentity();
-		border.draw(gl);
-		box.draw(gl);
+		//border.draw(gl);
+		//box.draw(gl);
 		if(unit != null){
+			if(unit.unitGroup == UnitGroup.PlayerOne)
+				p1_box.draw(gl);
+			else
+				p2_box.draw(gl);
 			//gl.glEnable( GL10.GL_TEXTURE_2D );
 			gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 			gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function

@@ -23,6 +23,8 @@ public class HealthAnimation extends AnimationProcessor {
 		actorID = u.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
 		p = RendererAccessor.ScreenXYfromXYZ(actor_.getX(), actor_.getY() + 2, actor_.getZ());
+		if (p == null)
+			p = new Point(0,0);
 		RendererAccessor.floatingText(p.x, p.y, 0, -1, 150, ColorType.Green, "n", val);
 		
 		r = new Random();

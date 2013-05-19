@@ -99,6 +99,9 @@ public class TileSetDefinition {
 	public void processTileTag(XmlPullParser parser) throws XmlPullParserException, IOException
 	{
 		tiles[numberOfTiles] = new Tile(parser.getAttributeValue(ns, "name"));
+		String elevation = parser.getAttributeValue(ns, "elevation");
+		if (elevation != null)
+			tiles[numberOfTiles].elevation = Float.parseFloat(elevation);
 		tiles[numberOfTiles].model = null;
 		while (parser.next() != XmlPullParser.END_TAG)
 		{

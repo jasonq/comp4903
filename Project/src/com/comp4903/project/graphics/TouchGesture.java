@@ -1,3 +1,4 @@
+
 package com.comp4903.project.graphics;
 
 import android.graphics.Point;
@@ -70,13 +71,36 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		int r = mRenderer.network.checkButton((int)x, (int)y);
 		if(r != -1){
 			if(r == 1)
-				//handle join\
-				;
-			else if(r == 2)
-				//handle host
-				;
+				handle_join();				
+			else if (r == 2)
+				handle_host();
+			else if(r == 3)
+				handle_cancel();
+				
+				
 		}
 		
+	}
+	
+	public void handle_cancel(){
+		
+	}
+	public void handle_host()
+	{
+		//Networking.broadcastJoinMode = false;
+		//Networking.broadcastHostMode = true;	
+		
+		Networking.playerNumber = 0;
+		GLRenderer.state = GameState.Game_Screen;
+	}
+	
+	public void handle_join()
+	{
+		//Networking.broadcastHostMode = false;
+		//Networking.broadcastJoinMode = true;
+		
+		Networking.playerNumber = 1;
+		GLRenderer.state = GameState.Game_Screen;
 	}
 	public void handle_Game_Over(int x, int y){
 		if(mRenderer.gov.checkPressingMeu(x, y))
@@ -123,7 +147,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		//	ResetGUI();
 		//	return;
 		//}		
-		if(pressEnd && !pickControlledUnit){//might put condition if this is player turn
+		if(pressEnd && !pickControlledUnit){//might put condition if this is player turn			
 			//end turn code goes here
 			//Log.d("MyGLSurfaceView", "End turn pressed");
 			GameEngine.endTurn();
