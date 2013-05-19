@@ -8,6 +8,7 @@ public class NetworkMessage {
 	public NetworkMessage() {
 		position = 0;
 		buffer = new byte[120];
+		timestamp = 0;
 	}
 	
 	public void reset()

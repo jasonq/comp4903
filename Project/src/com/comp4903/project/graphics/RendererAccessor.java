@@ -101,7 +101,11 @@ public class RendererAccessor {
 			p.x = (int)(w + vec[0] / vec[3] * w);
 			p.y = (int)(h - vec[1] / vec[3] * h);	
 				
-				
+			if (vec[3] < 1.0)
+			{
+				p.x = -10000;
+				p.y = (int)(vec[3]*100f);
+			}	
 			
 			return p;
 		}

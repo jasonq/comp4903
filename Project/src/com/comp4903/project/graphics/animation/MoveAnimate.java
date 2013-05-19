@@ -7,7 +7,6 @@ import android.graphics.Point;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.graphics.RendererAccessor;
 import com.comp4903.project.graphics.tile.Hexagon;
-import com.comp4903.project.network.NetworkAccessor;
 import com.comp4903.project.network.Networking;
 
 /*	MOVEANIMATE - animation process for moving a unit down a 
@@ -59,10 +58,10 @@ public class MoveAnimate extends AnimationProcessor {
 		else
 			ended = true;	
 		
-		Networking.sendBuffer.reset();
-		Networking.sendBuffer.append("Unit: " + u.uID + " moves to: " + s.get(0).x + ", " + s.get(0).y);
-		Networking.timetosend = true;
-		//Networking.send();
+		//Networking.sendBuffer.reset();
+		//Networking.sendBuffer.append("Unit: " + u.uID + " moves to: " + s.get(0).x + ", " + s.get(0).y);
+		//Networking.timetosend = true;
+		
 		
 	}
 	

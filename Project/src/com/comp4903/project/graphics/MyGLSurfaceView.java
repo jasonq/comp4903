@@ -1,3 +1,5 @@
+
+
 package com.comp4903.project.graphics;
 
 import java.util.ArrayList;
@@ -54,8 +56,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		this.context = context;
 		// Set the Renderer for drawing on the GLSurfaceView
 		mRenderer = new GLRenderer(context, md);
+
 		setRenderer(mRenderer);
-		
 		TouchGesture newT = new TouchGesture(mRenderer, md);
 		//gDetect = new GestureDetector(context, new GestureDetection()); 
 		gDetect = new GestureDetector(context, newT); 
@@ -102,6 +104,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				if( mRenderer.headsUpDisplay.checkPressingEndTurn((int)x,(int)y)){
 					mRenderer.headsUpDisplay.check =mRenderer.headsUpDisplay.pgiveUpTurn;
 				}
+				Point tx = mRenderer.pick(x, y);
+				RendererAccessor.map.highlight(tx.x, tx.y);
 			}else if(GLRenderer.state == GameState.Game_Over){
 				if(mRenderer.gov.checkPressingMeu((int)x, (int)y))
 					mRenderer.gov.flag = true;
@@ -115,6 +119,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				if( mRenderer.headsUpDisplay.checkPressingEndTurn((int)x,(int)y)){
 					mRenderer.headsUpDisplay.check =mRenderer.headsUpDisplay.giveUpTurn;
 				}
+				RendererAccessor.map.highlight(-1,-1);
 			}else if(GLRenderer.state == GameState.Game_Over){
 				if(mRenderer.gov.checkPressingMeu((int)x, (int)y))
 					mRenderer.gov.flag = false;

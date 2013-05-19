@@ -29,6 +29,8 @@ public class Actor {
 	public float previousZ, lastZ;
 	public boolean remove = false;
 	
+	Model3D m3d;
+	
 	public Actor(int i)
 	{
 		uID = i;
@@ -39,6 +41,7 @@ public class Actor {
 		speed = 0;
 		previousZ = 0;
 		lastZ = 0;
+		
 	}
 	
 	public void setPosition(float xp, float yp, float zp)
@@ -78,7 +81,8 @@ public class Actor {
 	public void setType(UnitType t) 
 	{ 
 		type = t; 
-		model = type.getCode() % 3; 
+		model = type.getCode() % 3;
+		m3d = RendererAccessor.map.models[model];
 	}
 	
 	public void display(GL10 gl, float[] viewMatrix, Model3D m)

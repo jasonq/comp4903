@@ -14,6 +14,8 @@ public class GenericAttack extends AnimationProcessor {
 	private Random r;
 	private boolean signalled;
 	
+	int hitTime, endTime;
+	
 	private int time = 0;
 		
 	public void init(Unit attacker, Unit attackee)
@@ -34,8 +36,17 @@ public class GenericAttack extends AnimationProcessor {
 		victim.setYrotate(-angle + 3.141593f / 2f + 3.141593f);
 		
 		actor_.setAnimation("attack.basic");		
-		actor_.speed = 0.08f;
+		actor_.speed = 0.3f; //0.08f;
 		actor_.time = 3;
+		
+		if (actor_.animation != -1)
+		{
+			hitTime = actor_.m3d.parameters.get("hit.frame").intVal;
+			endTime = actor_.m3d.parameters.get("end.frame").intVal;
+		} else {
+			hitTime = 0;
+			endTime = 0;
+		}
 		
 		signalled = false;
 	}
@@ -45,7 +56,7 @@ public class GenericAttack extends AnimationProcessor {
 			
 		if (signalled)
 		{
-			if ((actor_.time > 35) || (actor_.animation == -1))
+			if ((actor_.time > endTime) || (actor_.animation == -1))
 			{
 				actor_.setAnimation("idle1");
 				ended = true;
@@ -55,7 +66,7 @@ public class GenericAttack extends AnimationProcessor {
 			return false;
 		}
 		
-		if ((actor_.time > 16) || (actor_.animation == -1))
+		if ((actor_.time > hitTime) || (actor_.animation == -1))
 		{
 			actor_.setZrotate(0);
 			actor_.setXrotate(0);			

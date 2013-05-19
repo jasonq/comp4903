@@ -28,7 +28,6 @@ import com.comp4903.project.graphics.animation.ReceiveAttack;
 import com.comp4903.project.graphics.model.Model3D;
 import com.comp4903.project.graphics.model.ModelLoader;
 import com.comp4903.project.graphics.tile.Hexagon;
-import com.comp4903.project.network.NetworkAccessor;
 import com.comp4903.project.network.Networking;
 
 import android.content.Context;
@@ -61,7 +60,9 @@ public class MapRenderer {
 	public float[] projectionMatrix;
 	private float[] modelMatrix = new float[16];
 	private float[] modelViewMatrix = new float[16];
-	private float eyeX, eyeY, eyeZ;
+	private static float eyeX;
+	private float eyeY;
+	private static float eyeZ;
 	
 	private Point selectedTile = new Point();	
 	
@@ -104,13 +105,7 @@ public class MapRenderer {
 		FloatingText.init(gl, context);
 		FloatingIcon.init(gl, context);
 				
-	}
-	
-	public void networkTest()
-	{
-		if (Networking.IP != null)
-			RendererAccessor.floatingText(20, 20, 0, 0, -1, ColorType.White, "bozo", Networking.IP);
-	}
+	}	
 	
 	/*	LOADMODELS - loads and initializes the 3D model data
 	 * 
@@ -152,7 +147,7 @@ public class MapRenderer {
 		mapWidth = w;
 		mapHeight = h;
 		tileMap = new Hex[w][h];
-		networkTest();
+		
 			
 	}
 	
@@ -197,7 +192,7 @@ public class MapRenderer {
 		
 	}
 	
-	private void floatingPass()
+	public void floatingPass()
 	{
 		HUD.SwithToOrtho(gl);
 		
@@ -223,14 +218,22 @@ public class MapRenderer {
 	}
 	
 	public void addFloatingText(int x, int y, int mx, int my, int l, ColorType col, String n, String c)
-	{
-		FloatingText f = new FloatingText(x,y,mx,my,l,col, n,c);
-		
+	{		
 		for (int i = 0; i < floatingText_.size(); i++)
 		{
 			if (!floatingText_.get(i).active)
 				floatingText_.remove(i);
 		}
+		for (int i = 0; i < floatingText_.size(); i++)
+		{
+			if (floatingText_.get(i).name.equals(n))
+			{
+				floatingText_.get(i).set(x,y,mx,my,l,col,n,c);
+				return;
+			}
+		}
+		
+		FloatingText f = new FloatingText(x,y,mx,my,l,col, n,c);
 		floatingText_.add(f);
 	}
 	
@@ -251,8 +254,7 @@ public class MapRenderer {
 	 * 
 	 */
 	private void basePass()
-	{
-		//hex.screenCoordCount = 0;
+	{		
 				
 		for (int x = 0; x < mapWidth; x++)
 		{
@@ -261,19 +263,13 @@ public class MapRenderer {
 				//tileMap[x][y].state = -1;
 				float dx = (float)x * 1.5f;
 				float dy = 0;
-				float dz = (float)y * 0.8660254038f * 2 + (x % 2) * 0.8660254038f;
+				float dz = (float)y * 0.8660254038f * 2 + (x % 2) * 0.8660254038f;											
 				
-				//if ((x == selectedTile.x) && (y == selectedTile.y))
-				//	dy = .1f;
-				
-				if ((dx > eyeX - 16) &&
-					(dz > eyeZ - 16) &&
-					(dx < eyeX + 16) &&
-					(dz < eyeZ + 8))
-				{
-					//hex.screenCoords[hex.screenCoordCount][6].x = x;
-					//hex.screenCoords[hex.screenCoordCount][6].y = y;
-				
+				if (tileOnScreen(dx, dy, dz))
+				{		
+					if ((x == selectedTile.x) && (y == selectedTile.y))
+						dy -= .1;
+					
 					// set up the model-view matrix for this hexagon
 					Matrix.setIdentityM(modelMatrix, 0);				
 					Matrix.multiplyMM(modelViewMatrix, 0, modelMatrix, 0, viewMatrix, 0);
@@ -286,6 +282,36 @@ public class MapRenderer {
 			}
 		}
 	}
+	
+	public static boolean tileOnScreen(float dx, float dy, float dz)
+	{
+		/*
+		Point p = RendererAccessor.ScreenXYfromXYZ(dx, dy, dz);
+		
+		if ((p.x == 10000) && (p.y < -1000))
+			return false;
+		else {
+			if (p.y > GLRenderer.GLheight + 100)
+				return false;
+			if (p.y < -20)
+				return false;
+			if (p.x > GLRenderer.GLwidth + 120)
+				return  false;
+			if (p.x < -120)
+				return false;
+		}
+		
+		return true;*/
+		
+		if ((dx > eyeX - 16) &&
+			(dz > eyeZ - 16) &&
+			(dx < eyeX + 16) &&
+			(dz < eyeZ + 8))
+			return true;
+		return false;
+	}
+	
+	
 		
 	/*	SELECTIONPASS - Draws selection effects transparently over
 	 *  floor tiles 
@@ -310,11 +336,10 @@ public class MapRenderer {
 						tileMap[x][y].size = 1.0f;
 				}
 												
-				if ((dx > eyeX - 16) &&
-						(dz > eyeZ - 16) &&
-						(dx < eyeX + 16) &&
-						(dz < eyeZ + 8))
+				if (tileOnScreen(dx, dy, dz))
 				{
+					if ((x == selectedTile.x) && (y == selectedTile.y))
+						dy -= .1;
 					// set up the model-view matrix for this hexagon
 					Matrix.setIdentityM(modelMatrix, 0);					
 					Matrix.multiplyMM(modelViewMatrix, 0, modelMatrix, 0, viewMatrix, 0);
@@ -365,56 +390,31 @@ public class MapRenderer {
 						
 			float x = a.getX();
 			float y = a.getY();
-			float z = a.getZ();			
-								
-			/*gl.glEnable(GL10.GL_LIGHTING);
-			gl.glEnable(GL10.GL_LIGHT0);
-			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, ambientLight, 0);
-			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, diffuseLight, 0);
-			gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPosition, 0);
-			*/
-			models[mdl].SetPosition(x, y, z);
-			models[mdl].ResetOrientation();
-			//models[mdl].XRotate(a.getXrotate());
-			//models[mdl].YRotateComponent(0, a.getYrotate());			
-			//models[mdl].ZRotate(a.getZrotate());
-			a.display(gl, viewMatrix, models[mdl]);
+			float z = a.getZ();									
 			
-			//gl.glDisable(GL10.GL_LIGHTING);
+			models[mdl].SetPosition(x, y, z);
+			models[mdl].ResetOrientation();			
+			a.display(gl, viewMatrix, models[mdl]);			
 			
 		}
 	}
 	
+	// draw the tiles which are composed of models
 	private void tileModelPass()
-	{
-				
+	{				
 		for (int x = 0; x < mapWidth; x++)
 		{
 			for (int y = 0; y < mapHeight; y++)
-			{
-				//tileMap[x][y].state = -1;
+			{					
 				float dx = (float)x * 1.5f;
 				float dy = 0;
 				float dz = (float)y * 0.8660254038f * 2 + (x % 2) * 0.8660254038f;
 				
-				//if ((x == selectedTile.x) && (y == selectedTile.y))
-				//	dy = .1f;
+				if ((x == selectedTile.x) && (y == selectedTile.y))
+					dy -= .1;
 				
-				if ((dx > eyeX - 16) &&
-					(dz > eyeZ - 16) &&
-					(dx < eyeX + 16) &&
-					(dz < eyeZ + 8))
-				{
-									
-					// set up the model-view matrix for this hexagon
-					/*Matrix.setIdentityM(modelMatrix, 0);				
-					Matrix.multiplyMM(modelViewMatrix, 0, modelMatrix, 0, viewMatrix, 0);
-					Matrix.translateM(modelViewMatrix, 0, dx, dy, dz);
-					gl.glMatrixMode(GL10.GL_MODELVIEW);
-					gl.glLoadMatrixf(modelViewMatrix, 0);*/
-					
-					hex.drawModel(gl, viewMatrix, dx, dy, dz, 1, tileMap[x][y].tile);
-				}
+				if (tileOnScreen(dx, dy, dz))
+					hex.drawModel(gl, viewMatrix, dx, dy, dz, 1, tileMap[x][y].tile);				
 			}
 		}
 	}
@@ -441,6 +441,14 @@ public class MapRenderer {
 		}
 		else { tileMap[x][y].state = -1; }
 		
+	}
+	
+	// Makes tile x,y the selected tile
+	public void highlight(int x, int y)
+	{
+		selectedTile.x = x;
+		selectedTile.y = y;
+					
 	}
 	
 	/*	DEFINEMAP - reads in the map data, unit start positions, and anything
@@ -484,8 +492,16 @@ public class MapRenderer {
 	 */
 	public void update(MapData m)
 	{
-		//GLRenderer.pauseRender = true;
+		GLRenderer.pauseRender = true;
 		//while (GLRenderer.isRenderingNow);
+		
+		 while(GLRenderer.isRenderingNow) 
+		 {
+			 try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {				
+			}
+		 }		
 		
 		_attackBoxColor = m._attackBoxColor;
 		_movementBoxColor = m._movementBoxColor;
@@ -535,7 +551,7 @@ public class MapRenderer {
 			}
 		}
 		
-		//GLRenderer.pauseRender = false;
+		GLRenderer.pauseRender = false;
 	}
 	
 	public void removeUnusedActors()
