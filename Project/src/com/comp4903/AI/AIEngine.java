@@ -47,7 +47,7 @@ public class AIEngine {
 		for(AIUnitData ai : AIUnits){
 			attack(ai.unit, PlayerUnits.get(0));
 		}
-		GameEngine.endTurn();
+		GameEngine.endTurn(false);
 	}
 	
 	private static void getUnitData(){
