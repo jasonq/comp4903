@@ -156,6 +156,12 @@ public class GameEngine {
 		}
 		mapData._activeGroup = currentGroup;
 		mapData.RemoveDeadUnit();
+		
+		if (network){
+			Action a = new Action();
+			a.action = ActionType.Endturn;
+			Networking.send(a.getActionMessage());
+		}
 	}
 	
 	/* Networking Supporting Method */

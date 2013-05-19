@@ -53,6 +53,8 @@ public class Action {
 				message.append(x);
 				message.append(y);
 				break;
+			case Endturn:
+				break;
 			default:
 				break;
 		}
@@ -79,6 +81,8 @@ public class Action {
 			case Move:
 				x = message.readInt();
 				y = message.readInt();
+				break;
+			case Endturn:
 				break;
 			default:
 				return false;
