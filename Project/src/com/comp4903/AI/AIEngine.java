@@ -22,14 +22,17 @@ public class AIEngine {
 	private static MapData _mapdata;
 	private static List<Unit> PlayerUnits;
 	private static List<AIUnitData> AIUnits;
-	private static InfluenceMap inMap;
+	private static InfluenceMap AIinMap;
+	private static InfluenceMap PLAYERinMap;
 	
 	public static void Initialize(MapData md){
 		_mapdata = md;
-		inMap = new InfluenceMap(md.NumberOfColumns(), md.NumberOfRows());
+		AIBehaviour.Intialize(md);
+		AIinMap = new InfluenceMap(md.NumberOfColumns(), md.NumberOfRows());
+		PLAYERinMap = new InfluenceMap(md.NumberOfColumns(), md.NumberOfRows());
 	}
 	
-	//run in MyGLSurfaceView line 184
+	//run in TouchGesture line 98
 	public static void startTurn(){
 		Thread aiThread = new Thread()
 		{			
@@ -37,16 +40,17 @@ public class AIEngine {
 				processTurn();
 			}			
 		};
-		
-		
 		aiThread.start();
 	}
 	public static void processTurn(){
 		getUnitData();
-		inMap.intializeInfluenceMap(PlayerUnits, AIUnits);
+		//inMap.intializeInfluenceMap(PlayerUnits, AIUnits);
 		for(AIUnitData ai : AIUnits){
-			attack(ai.unit, PlayerUnits.get(0));
+			AIinMap.getInfluenceMapAI(AIUnits);
+			PLAYERinMap.getInfluenceMap(PlayerUnits);
+			AIBehaviour.think(ai, AIinMap, PLAYERinMap);
 		}
+		Log.d("AIEngine", "End Turn");
 		GameEngine.endTurn();
 	}
 	
@@ -60,28 +64,5 @@ public class AIEngine {
 				AIUnits.add(new AIUnitData(u));
 		}
 		Collections.sort(AIUnits);
-	}
-	
-	private static void attack(Unit source, Unit target){
-		if(PathFind.Distance(source.position, target.position) > source.combatStats.range){
-			List<Point> pathTo = Algorithms.GetAttackPathAStar(source, target);
-			Point moveTo = pathTo.get(0);
-			GameEngine.moveUnit(source, moveTo, pathTo);
-			while(!AnimationEngine.noForegroundAnimations()){ try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} }
-		}
-		if(PathFind.Distance(source.position, target.position) <= source.combatStats.range){
-			GameEngine.useSkill(source, target, SkillType.Attack, true);
-			while(!AnimationEngine.noForegroundAnimations()){ try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} }
-		}
 	}
 }
