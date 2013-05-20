@@ -411,11 +411,11 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	public int setSelectMainMenu(int x, int y){
 		
 		if(!mm.checkPressingMenu(x, y)){
-			mm.selected = -1;
+			//mm.selected = -1;
 			return -1;
 		}else{
 			int result = mm.checkListItem(y);
-			mm.selected = result;
+			//mm.selected = result;
 			return result;
 		}
 		

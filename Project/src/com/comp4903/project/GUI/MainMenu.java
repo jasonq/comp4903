@@ -29,8 +29,8 @@ public class MainMenu {
 		
 		int totalHeight = height * 3/  5;
 		
-		int x = (width* 3 ) / 10; 
-		int menu_width = (width * 2)/5;
+		int x = (width*  4) / 10; 
+		int menu_width = (width * 1)/5;
 		int menu_height =  totalHeight / menu_Item.length;
 		int y = height / 5;
 		
@@ -40,8 +40,8 @@ public class MainMenu {
 		yBot = y + (menu_height * menu_Item.length);
 		
 		for(int i = 0; i < menu_Item.length; i++){
-			menu_Item[i] =  new Square(x,y, menu_width, menu_height );
-			pressed_menu_Item[i] = new Square(x,y,menu_width,menu_height);
+			menu_Item[i] =  new Square(x - 10,y - 10, menu_width - 20, menu_height -20 );
+			pressed_menu_Item[i] = new Square(x- 10,y - 10,menu_width -20,menu_height - 20);
 			y += menu_height;
 		}
 	}

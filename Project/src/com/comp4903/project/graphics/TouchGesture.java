@@ -133,7 +133,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			}
 
 		}
-		mRenderer.mm.selected = -1;
+		//mRenderer.mm.selected = -1;
 	}
 
 	public void handle_Waiting(int x, int y){
