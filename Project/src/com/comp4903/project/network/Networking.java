@@ -122,12 +122,12 @@ public class Networking {
 					RendererAccessor.floatingText(20, 300, 0, -1, 50, ColorType.White, "u" + currentTimeStamp, "sending " + currentTimeStamp);					
 					timetosend = false;
 					sendBuffer.timestamp = currentTimeStamp;
-					if (askDelay % 3 != 0) {						
+					//if (askDelay % 3 != 0) {						
 						sendPacket(sendBuffer.buffer, GAMEPACKET, true);
-					}
-					else 
-						currentTimeStamp++;
-					addToHistory(sendBuffer);
+					//}
+					//else 
+					//	currentTimeStamp++;
+					addToHistory(message_);
 					blockingOnSend = false;
 				}
 				
@@ -243,6 +243,7 @@ public class Networking {
 	public static void createHeader(byte buffer[], int type, boolean stamp)
 	{
 		message_.reset();
+		message_.timestamp = currentTimeStamp;
 		if (stamp)
 			message_.append(currentTimeStamp++);
 		else
@@ -365,10 +366,10 @@ public class Networking {
 		if (ts != 0) 
 		{
 			//addToHistory(m);
-			if (ts == currentTimeStamp) {
+			//if (ts == currentTimeStamp) {
 				submitMessageToGameEngine(m);
 				currentTimeStamp++;
-			}
+			//}
 		}
 		else
 			processRequest(m, incomingIP);
