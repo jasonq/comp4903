@@ -21,6 +21,7 @@ public class DefendAnimation extends AnimationProcessor {
 		actorID = u.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
 		p = RendererAccessor.ScreenXYfromXYZ(actor_.getX(), actor_.getY() + 2, actor_.getZ());
+		p.x -= 20;
 		if (p == null)
 			p = new Point(0,0);
 		
