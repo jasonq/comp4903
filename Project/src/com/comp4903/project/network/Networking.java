@@ -188,7 +188,7 @@ public class Networking {
 			// in which game data begins (skipping the 8 bytes of the header)
 			
 			RendererAccessor.floatingText(20, 330, 0, -1, 50, ColorType.White, "host", "submitted " + ts);
-			
+			currentTimeStamp++;
 			Action a = new Action();
 			if (a.decodeMessage(m))
 				if (GameEngine.executeAction(a)) 
