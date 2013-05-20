@@ -2,11 +2,13 @@ package com.comp4903.project.gameEngine.engine;
 
 import com.comp4903.project.gameEngine.data.Status;
 import com.comp4903.project.gameEngine.data.Unit;
+import com.comp4903.project.gameEngine.enums.ActionType;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.factory.GameStats;
 import com.comp4903.project.gameEngine.factory.SkillStats;
 import com.comp4903.project.gameEngine.networking.Action;
 import com.comp4903.project.graphics.RendererAccessor;
+import com.comp4903.project.network.Networking;
 
 public class SkillEngine {
 	
@@ -27,23 +29,35 @@ public class SkillEngine {
 		source.combatStats.fixHealthAndEnergy();
 		
 		int round = source.combatStats.round;
+		int[] intResult = new int[round];
 		String[] result = new String[round];
 		for (int i = 0; i < round; i++){
 			if (HelperEngine.doesHit(source.combatStats.accuracy)){
 				int damage = source.combatStats.attack - destination.combatStats.defence;
 				if (damage <= 0){
 					result[i] = "Blocked";
+					intResult[i] = 0;
 					damage = 0;
 				} else {
 					result[i] = "" + damage;
+					intResult[i] = damage;
 				}
 				destination.combatStats.currentHealth -= damage;
 			} else {
 				result[i] = "Miss";
+				intResult[i] = -1;
 			}
 		}
 		destination.combatStats.fixHealthAndEnergy();
 		RendererAccessor.attackAnimation( source, destination, result);
+		
+		if (network){
+			Action a = new Action();
+			a.action = ActionType.Attack;
+			a.numOfAttacks = round;
+			a.attack = intResult;
+			Networking.send(a.getActionMessage());
+		}
 		
 		/* Log */
 		System.out.print("Damage from " + source.uID + " to " + destination.uID + ":");
