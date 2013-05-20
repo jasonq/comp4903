@@ -135,7 +135,7 @@ public class TypeFinder {
 			return ActionType.Heal;
 		} else if (in.equals("move")){
 			return ActionType.Move;
-		} else if (in.equals("entturn")){
+		} else if (in.equals("endturn")){
 			return ActionType.Endturn;
 		} else
 			return ActionType.None;
