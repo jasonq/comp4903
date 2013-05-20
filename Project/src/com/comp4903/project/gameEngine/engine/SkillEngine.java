@@ -54,6 +54,8 @@ public class SkillEngine {
 		if (network){
 			Action a = new Action();
 			a.action = ActionType.Attack;
+			a.uIDOne = source.uID;
+			a.uIDTwo = destination.uID;
 			a.numOfAttacks = round;
 			a.attack = intResult;
 			Networking.send(a.getActionMessage());
