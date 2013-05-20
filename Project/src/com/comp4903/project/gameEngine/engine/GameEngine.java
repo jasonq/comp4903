@@ -183,11 +183,17 @@ public class GameEngine {
 			case Move:
 				return moveUnit(uOne, new Point(action.x, action.y), false);
 			case Attack:
-				return SkillEngine.NetVAttack(uOne, uTwo, action);
+				if(SkillEngine.NetVAttack(uOne, uTwo, action)){
+					mapData.RemoveDeadUnit();
+					return true;
+				}
 			case Defend:
 				return SkillEngine.Defend(uOne, false);
 			case Headshot:
-				return SkillEngine.NetVHeadShot(uOne, uTwo, action);
+				if (SkillEngine.NetVHeadShot(uOne, uTwo, action)){
+					mapData.RemoveDeadUnit();
+					return true;
+				}
 			case Heal:
 				return SkillEngine.Heal(uOne, uTwo, false);
 			case Endturn:
