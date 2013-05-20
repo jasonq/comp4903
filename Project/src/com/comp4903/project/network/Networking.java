@@ -355,13 +355,13 @@ public class Networking {
 		
 		int ts = m.readInt(); // timestamp
 		
-		RendererAccessor.floatingText(500, 300, 0, -1, 50, ColorType.White, "i"+ts, "incoming " + ts);
+		RendererAccessor.floatingText(500, 300, 0, -1, 50, ColorType.White, "i"+ts, "expected: " + currentTimeStamp + " incoming " + ts);
 		
 		if (ts != 0) 
 		{
-			addToHistory(m);
-			//if (ts == currentTimeStamp)
-			//	submitMessageToGameEngine(m);
+			//addToHistory(m);
+			if (ts == currentTimeStamp)
+				submitMessageToGameEngine(m);
 		}
 		else
 			processRequest(m, incomingIP);
