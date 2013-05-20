@@ -52,7 +52,7 @@ public class MainMenu {
 		Bitmap button2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.pressed_menu_items);
 		Bitmap bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.robot);
 		
-		background.loadGLTexture(gl, context, bg);
+		background.loadGLTexture(gl, context, Bitmap.createScaledBitmap(bg, 512, 512, false));
 		int width = button.getWidth();
 		int height = button.getHeight()/3;
 		for(int i = 0; i < menu_Item.length; i++){
