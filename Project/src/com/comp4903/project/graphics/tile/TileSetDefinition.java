@@ -186,7 +186,7 @@ public class TileSetDefinition {
 			
 			InputStream buf = null;
 			buf = am.open(filename);			
-			ModelLoader.load(buf, tiles[numberOfTiles].model);
+			ModelLoader.load(buf, tiles[numberOfTiles].model, false);
 		//}
 	}
 	

@@ -28,6 +28,7 @@ public class Actor {
 	public float speed;
 	public float previousZ, lastZ;
 	public boolean remove = false;
+	public boolean alt = false;
 	
 	Model3D m3d;
 	
@@ -90,9 +91,9 @@ public class Actor {
 		previousZ = lastZ;
 		lastZ = m.setPose(animation, time);		
 		
-		YaxisRotate(m);
-		
-		m.display(gl, viewMatrix, animation, time);
+		YaxisRotate(m);		
+				
+		m.display(gl, viewMatrix, animation, time, alt);
 				
 		time += speed * 2;
 		if (time >= 119)

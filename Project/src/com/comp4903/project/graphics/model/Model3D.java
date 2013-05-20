@@ -343,11 +343,12 @@ public class Model3D {
 	
 	public void display (GL10 gl, float[] viewMatrix)
 	{
-		display(gl, viewMatrix, -1, 0f);
+		display(gl, viewMatrix, -1, 0f, false);
 	}
 	
-	public void display(GL10 gl, float[] viewMatrix, int animation, float time)
-	{
+	public void display(GL10 gl, float[] viewMatrix, int animation, float time, boolean alt)
+	{		
+		
 		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, colorBlack, 0);
 		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, colorBlack, 0);
 		
@@ -395,7 +396,13 @@ public class Model3D {
 					gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, m.Diffuse, 0);					
 					if (m.texture != -1)
 					{
-						gl.glBindTexture(GL10.GL_TEXTURE_2D, MaterialLibrary.texturenames[m.texture]);
+						if (alt)
+						{
+							int t = MaterialLibrary.textures.get(m.texture).alternate;
+							if (t != -1)
+								gl.glBindTexture(GL10.GL_TEXTURE_2D, MaterialLibrary.texturenames[t]);
+						} else
+							gl.glBindTexture(GL10.GL_TEXTURE_2D, MaterialLibrary.texturenames[m.texture]);
 					} else {
 						gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
 					}
@@ -412,7 +419,8 @@ public class Model3D {
 		gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
 		gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
 		
-		gl.glDisable(GL10.GL_CULL_FACE);
+		gl.glDisable(GL10.GL_CULL_FACE);		
+		
 	}
 	
 	public float setPose(int animation, float time)

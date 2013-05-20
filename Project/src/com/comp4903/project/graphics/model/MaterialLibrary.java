@@ -37,7 +37,7 @@ public class MaterialLibrary {
 	public static int[] texturenames = new int[100];
 	
 	public static GL10 gl;
-	public static Context context;
+	public static Context context;	
 	
 	public static void init(GL10 g, Context c)
 	{
@@ -47,7 +47,8 @@ public class MaterialLibrary {
 		gl.glGenTextures(100, texturenames, 0);
 		
 		materials = new ArrayList<Material>();
-		textures = new ArrayList<Texture>();
+		textures = new ArrayList<Texture>();		
+		
 	}
 	
 	public static int getMaterialIndex(String n)
@@ -93,7 +94,7 @@ public class MaterialLibrary {
 	{
 		int indx = -1;
 		for (int i = 0; i < numTextures; i++)
-			if (t.name == textures.get(i).name)
+			if (t.name.equals(textures.get(i).name))
 				indx = i;
 		if (indx != -1)
 			textures.set(indx, t);
@@ -116,10 +117,10 @@ public class MaterialLibrary {
 		
 		String filename = textures.get(i).filename;
 		
-		if (filename.startsWith("assets//"))
-		{
-			filename = "models/" + filename.substring(8);
-		}
+		//if (filename.startsWith("assets//"))
+		//{
+		//	filename = "models/" + filename;//.substring(8);
+		//}
 		
 		path += filename; //textures.get(i).filename;
 		
