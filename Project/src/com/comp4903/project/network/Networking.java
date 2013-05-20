@@ -123,6 +123,8 @@ public class Networking {
 					timetosend = false;
 					if (askDelay % 3 != 0)
 						sendPacket(sendBuffer.buffer, GAMEPACKET, true);
+					else 
+						currentTimeStamp++;
 					addToHistory(sendBuffer);
 					blockingOnSend = false;
 				}
