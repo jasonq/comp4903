@@ -56,7 +56,7 @@ public class MaterialLibrary {
 		int result = -1;
 		
 		for (int i = 0; i < numMaterials; i++)
-			if (materials.get(i).name == n)
+			if (materials.get(i).name.equals(n))
 				return i;
 		
 		return result;
@@ -66,7 +66,7 @@ public class MaterialLibrary {
 	{
 		int indx = -1;
 		for (int i = 0; i < numMaterials; i++)
-			if (t.name == materials.get(i).name)
+			if (t.name.equals(materials.get(i).name))
 				indx = i;
 		if (indx != -1)
 			materials.set(indx, t);
@@ -84,7 +84,7 @@ public class MaterialLibrary {
 		int result = -1;
 		
 		for (int i = 0; i < numTextures; i++)
-			if (textures.get(i).name == n)
+			if (textures.get(i).name.equals(n))
 				return i;
 		
 		return result;
