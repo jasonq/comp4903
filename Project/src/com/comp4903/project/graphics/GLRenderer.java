@@ -156,39 +156,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		//modeltest(gl);
 		
 	}	
-	
-	public void modeltest(GL10 gl) 
-	{
 		
-		AssetManager am = context.getAssets();
-		testmodels = new Model3D[5];
-		
-		for (int t = 0; t < 3; t++)
-		{
-			testmodels[t] = new Model3D();
-			try {
-				InputStream buf = null;
-				if (t < 2)
-					buf = am.open("models/testmodel.mdl");
-				else
-					buf = am.open("models/soldier.gmodel");
-				ModelLoader.load(buf, testmodels[t]);
-				testmodels[t].SetScale(.08f, .08f, .08f);
-				testmodels[t].SetPosition(1, 1, 1);
-				buf.close();
-				
-			} catch (IOException e)
-			{ }			
-		}
-		testmodels[0].SetPosition(21,1,21);
-		testmodels[1].YRotate(-0.4f);
-		testmodels[1].SetPosition(23, 1, 23);
-		testmodels[2].YRotate(1.6f);
-		testmodels[2].XRotate(1.57f);
-		testmodels[2].SetScale(1, 1, 1);
-		testmodels[2].SetPosition(26, 0, 23);
-		
-	}
 	
 	/*
 	 * ONDRAWFRAME(non-Javadoc)

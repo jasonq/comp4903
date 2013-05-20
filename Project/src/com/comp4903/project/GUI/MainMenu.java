@@ -13,16 +13,20 @@ public class MainMenu {
 	public Square[] menu_Item;
 	public int selected= -1;
 	public Square[] pressed_menu_Item;
+	public Square background;
 	public Context context;
 	public int width,height;
 	public int xTop,yTop,xBot,yBot;
 	
 	public MainMenu(Context c,int w , int h){
 		menu_Item = new Square[3];
+		
 		pressed_menu_Item = new Square[3];
 		width = w;
 		height = h;
 		context = c;
+		background = new Square(0,0,width,height);
+		
 		int totalHeight = height * 3/  5;
 		
 		int x = (width* 3 ) / 10; 
@@ -46,6 +50,9 @@ public class MainMenu {
 		
 		Bitmap button = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_items);
 		Bitmap button2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.pressed_menu_items);
+		Bitmap bg = BitmapFactory.decodeResource(context.getResources(), R.drawable.robot);
+		
+		background.loadGLTexture(gl, context, bg);
 		int width = button.getWidth();
 		int height = button.getHeight()/3;
 		for(int i = 0; i < menu_Item.length; i++){
@@ -74,6 +81,7 @@ public class MainMenu {
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
 		//box.draw(gl);
+		background.draw(gl);
 		for(int i = 0; i < menu_Item.length; i++){
 			
 			if(selected == i){

@@ -30,13 +30,16 @@ public class ModelLoader {
 	
 	private static int[] mat_cross_ref = new int[100];
 	
+	static boolean alternate;
+	
 	/* LOAD - Loads a model from a provided FileInputStream
 	 *	f	InputStream representing the .gmodel file resource 
 	 *	m	Model3D object to contain the model
+	 *	alt Specify whether an alternate blue texture is required
 	 */
-	public static void load(InputStream f, Model3D m)
+	public static void load(InputStream f, Model3D m, boolean alt)
 	{
-		
+		alternate = alt;
 		model = m;
 		boolean done = false;
 		
@@ -356,8 +359,12 @@ public class ModelLoader {
 		mat.texture = readInt();
 		if (mat.texture != -1)
 		{
-			tex.name = readString();
+			tex.name = readString();			
 			tex.filename = readString();
+			if (tex.filename.startsWith("assets//"))
+			{
+				tex.filename = tex.filename.substring(8);
+			}
 		}
 		
 		foundIndex = MaterialLibrary.getMaterialIndex(mat.name);
@@ -371,8 +378,23 @@ public class ModelLoader {
 				int tex_index = MaterialLibrary.getTextureIndex(tex.name);
 				if (tex_index == -1)
 				{
+					String altFilename = "ALTERNATE" + tex.filename;
+					tex.filename = "models/" + tex.filename;
+					int h = MaterialLibrary.numTextures;
 					tex_index = MaterialLibrary.addTexture(tex);
-					MaterialLibrary.loadTexture(tex_index);					
+					if (MaterialLibrary.numTextures != h)
+						MaterialLibrary.loadTexture(tex_index);
+					if (alternate) // get the blue version of this texture
+					{
+						Texture tex2 = new Texture();
+						tex2.filename = "models/" + altFilename;
+						tex2.name = "ALTERNATE" + tex.name;		
+						h = MaterialLibrary.numTextures;
+						int tex_index2 = MaterialLibrary.addTexture(tex2);
+						if (MaterialLibrary.numTextures != h)
+							MaterialLibrary.loadTexture(tex_index2);
+						tex.alternate = tex_index2;						
+					}
 				}
 				mat.texture = tex_index;
 			}

@@ -73,7 +73,6 @@ public class Unit {
 			}
 		}
 		if (tileStatus.resolveAtEndOfTurn == endTurn){
-			System.out.println("Heal at end of turn");
 			combatStats.currentHealth -= tileStatus.damageHealth;
 			combatStats.currentEnergy -= tileStatus.damageEnergy;
 			combatStats.fixHealthAndEnergy();

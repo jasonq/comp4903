@@ -10,7 +10,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.enums.ColorType;
+import com.comp4903.project.gameEngine.networking.Action;
 import com.comp4903.project.graphics.RendererAccessor;
 
 
@@ -38,6 +40,7 @@ public class Networking {
 	public static boolean timetosend = false;
 	public static boolean broadcastHostMode = false;
 	public static boolean broadcastJoinMode = false;
+	public static boolean blockingOnSend = false;
 	
 	private static NetworkMessage message_ = new NetworkMessage();
 	private static NetworkMessage[] history_ = new NetworkMessage[100];
@@ -58,9 +61,10 @@ public class Networking {
 		IP = "undefined";
 		broadcastIP = "undefined";
 		timetosend = false;
-		currentTimeStamp = 0;
+		currentTimeStamp = 1;
 		currentPlaceInHistory = 0;
 		gameStarted = false;
+		blockingOnSend = false;
 		
 		for (int i = 0; i <5; i++)
 			playerAssigned[i] = false;
@@ -112,26 +116,29 @@ public class Networking {
 				// if the app requests to send, process request
 				if (timetosend)
 				{
+					blockingOnSend = true;
+					RendererAccessor.floatingText(20, 300, 0, -1, 50, ColorType.White, "u" + currentTimeStamp, "sending " + currentTimeStamp);					
 					timetosend = false;
-					sendPacket(sendBuffer.buffer, GAMEPACKET, true);
+					sendPacket(sendBuffer.buffer, GAMEPACKET, true);					
+					blockingOnSend = false;
 				}
 				
 				// check if the next needed packet is in the 
 				// packet history queue.  If not, request it.
-				if (gameStarted){
+				/*if (gameStarted){
 					boolean missing = true;
 					for (int i = 0; i < 100; i++)
-						if (history_[i].timestamp == currentTimeStamp + 1) {
+						if (history_[i].timestamp == currentTimeStamp) {
 							 missing = false;
 							 submitMessageToGameEngine(history_[i]);
 							 currentTimeStamp++;
 						}
 					if (missing)
 					{
-						requestMissingPacket(currentTimeStamp + 1);
+						requestMissingPacket(currentTimeStamp);
 					}
-				}
-				Thread.sleep(100);
+				}*/
+				Thread.sleep(10);
 			}
 			
 			//while (!timetosend)		{Thread.sleep(10);}
@@ -159,11 +166,20 @@ public class Networking {
 	{
 		sendBuffer = m;
 		timetosend = true;
+		blockingOnSend = true;
+		while (blockingOnSend) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public static void submitMessageToGameEngine(NetworkMessage m)
 	{
-		int ts = m.readInt();
+		int ts = 0; //m.readInt();
 		int type = m.readInt();
 		
 		if (type == GAMEPACKET)
@@ -171,11 +187,14 @@ public class Networking {
 			// NOTE: message pointer is indexed to the position
 			// in which game data begins (skipping the 8 bytes of the header)
 			
-			//Action a = new Action();
-			//if (a.decodeMessage(m))
-			//	if (GameEngine.executeAction(a)) {
-			// 		return;
+			RendererAccessor.floatingText(20, 330, 0, -1, 50, ColorType.White, "host", "submitted " + ts);
+			currentTimeStamp++;
+			Action a = new Action();
+			if (a.decodeMessage(m))
+				if (GameEngine.executeAction(a)) 
+			 		return;
 			
+			RendererAccessor.floatingText(20, 330, 0, -1, 50, ColorType.White, "host", "Failed " + ts);
 			// die
 		}
 	}
@@ -331,8 +350,14 @@ public class Networking {
 		
 		int ts = m.readInt(); // timestamp
 		
+		RendererAccessor.floatingText(500, 300, 0, -1, 50, ColorType.White, "i"+ts, "incoming " + ts);
+		
 		if (ts != 0) 
+		{
 			addToHistory(m);
+			if (ts == currentTimeStamp)
+				submitMessageToGameEngine(m);
+		}
 		else
 			processRequest(m, incomingIP);
 	}

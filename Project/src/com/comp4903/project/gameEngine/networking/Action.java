@@ -31,6 +31,7 @@ public class Action {
 	
 	public NetworkMessage getActionMessage(){
 		NetworkMessage message = new NetworkMessage();
+		System.out.println("Sent message: " + action);
 		message.append("" + action);
 		message.append(uIDOne);
 		message.append(uIDTwo);
@@ -53,6 +54,8 @@ public class Action {
 				message.append(x);
 				message.append(y);
 				break;
+			case Endturn:
+				break;
 			default:
 				break;
 		}
@@ -66,6 +69,10 @@ public class Action {
 		switch (action){
 			case Attack:
 				numOfAttacks = message.readInt();
+				attack = new int[numOfAttacks];
+				for (int i = 0; i < numOfAttacks; i++){
+					attack[i] = message.readInt();
+				}
 				break;
 			case Defend:
 				break;
@@ -79,6 +86,8 @@ public class Action {
 			case Move:
 				x = message.readInt();
 				y = message.readInt();
+				break;
+			case Endturn:
 				break;
 			default:
 				return false;

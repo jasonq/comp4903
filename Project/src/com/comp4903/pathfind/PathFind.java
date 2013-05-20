@@ -15,7 +15,7 @@ import com.comp4903.project.graphics.RendererAccessor;
 public class PathFind {
 
 	private static MapData _map;
-	public static void initialize(MapData map) { _map = map; Algorithms.initialize(map); }
+	public static void initialize(MapData map) { _map = map; Algorithms.initialize(map);  AIAlgorithm.initialize(map);}
 	
 	public static void DisplayUnitMoveBox(Unit u){
 		List<Point> l = Algorithms.GetUnitPointsBFS(u);

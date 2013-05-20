@@ -10,8 +10,7 @@ import com.comp4903.pathfind.BFSNode;
 import com.comp4903.project.gameEngine.data.Unit;
 
 public class InfluenceMap {
-	public int playerTiles[][];
-	public int AiTiles[][];
+	public int tiles[][];
 	int col;
 	int row;
 	
@@ -20,7 +19,7 @@ public class InfluenceMap {
 		row = rows;
 	}
 	
-	public void intializeInfluenceMap(List<Unit> player, List<AIUnitData> ai){
+	/*public void intializeInfluenceMap(List<Unit> player, List<AIUnitData> ai){
 		playerTiles = getInfluenceMap(player);
 		AiTiles = getInfluenceMapAI(ai);
 		for(int y = 0; y < row; y++){
@@ -33,14 +32,14 @@ public class InfluenceMap {
 			}
 			System.out.println();
 		}
-	}
+	}*/
 	
 	/**
 	 * Gets influence map based on units passed
 	 * @param units list of units (should belong to only one unit group, player/ai)
 	 * @return influence map
 	 */
-	private int[][] getInfluenceMap(List<Unit> units){
+	public void getInfluenceMap(List<Unit> units){
 		int infMap[][] = new int[col][row];
 		for(Unit u : units){
 			Point pos = u.position;
@@ -62,10 +61,10 @@ public class InfluenceMap {
 					
 			}
 		}
-		return infMap;
+		tiles = infMap;
 	}
 	
-	private int[][] getInfluenceMapAI(List<AIUnitData> units){
+	public void getInfluenceMapAI(List<AIUnitData> units){
 		int infMap[][] = new int[col][row];
 		for(AIUnitData u : units){
 			Point pos = u.unit.position;
@@ -87,7 +86,7 @@ public class InfluenceMap {
 					
 			}
 		}
-		return infMap;
+		tiles = infMap;
 	}
 	/**
 	 * Get influence value based on number of steps taken.

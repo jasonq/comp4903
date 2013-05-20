@@ -27,12 +27,12 @@ public class AIEngine {
 	
 	public static void Initialize(MapData md){
 		_mapdata = md;
-		AIBehaviour.Intialize(md);
+		AIBehaviours.Intialize(md);
 		AIinMap = new InfluenceMap(md.NumberOfColumns(), md.NumberOfRows());
 		PLAYERinMap = new InfluenceMap(md.NumberOfColumns(), md.NumberOfRows());
 	}
 	
-	//run in TouchGesture line 98
+	//run in TouchGesture line 175
 	public static void startTurn(){
 		Thread aiThread = new Thread()
 		{			
@@ -48,10 +48,12 @@ public class AIEngine {
 		for(AIUnitData ai : AIUnits){
 			AIinMap.getInfluenceMapAI(AIUnits);
 			PLAYERinMap.getInfluenceMap(PlayerUnits);
-			AIBehaviour.think(ai, AIinMap, PLAYERinMap);
+			ai.getState(_mapdata._units, AIinMap, PLAYERinMap);
+			ai.initializeUnitLists(_mapdata._units);
+			SMBehaviour.think(ai, AIinMap, PLAYERinMap);
 		}
 		Log.d("AIEngine", "End Turn");
-		GameEngine.endTurn();
+		GameEngine.endTurn(false);
 	}
 	
 	private static void getUnitData(){
