@@ -63,7 +63,7 @@ public class AnimationEngine {
 	public static void signal(String animationName, int value)
 	{
 		AnimationProcessor a;	
-		if (animationName == "all")
+		if (animationName.equals("all"))
 		{					
 		
 			Iterator<Entry<String, AnimationProcessor>> i = animations_.entrySet().iterator();

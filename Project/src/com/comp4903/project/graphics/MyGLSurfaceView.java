@@ -98,34 +98,49 @@ public class MyGLSurfaceView extends GLSurfaceView {
 			}
 			break;
 		case MotionEvent.ACTION_DOWN:
-
-			if(GLRenderer.state == GameState.Game_Screen){
+			switch(GLRenderer.state){
+			case Game_Screen:
 				mRenderer.setSelectedHUD((int)x, (int)y);
 				if( mRenderer.headsUpDisplay.checkPressingEndTurn((int)x,(int)y)){
 					mRenderer.headsUpDisplay.check =mRenderer.headsUpDisplay.pgiveUpTurn;
 				}
 				Point tx = mRenderer.pick(x, y);
 				RendererAccessor.map.highlight(tx.x, tx.y);
-			}else if(GLRenderer.state == GameState.Game_Over){
+				break;
+			case Game_Over:
 				if(mRenderer.gov.checkPressingMeu((int)x, (int)y))
 					mRenderer.gov.flag = true;
-			}else if(GLRenderer.state == GameState.Network_Menu){
+				break;
+			case Network_Menu:
 				mRenderer.network.selected = mRenderer.network.checkButton((int)x, (int)y);
+				break;
+			case Main_Menu:
+				int result = mRenderer.setSelectMainMenu((int)x, (int)y);
+				mRenderer.mm.selected = result;
+				break;
 			}
 			break;
 		case MotionEvent.ACTION_UP:
-			if(GLRenderer.state == GameState.Game_Screen){
+			switch(GLRenderer.state){
+			case Game_Screen:
 				mRenderer.setSelectedHUD(10000, 10000);
 				if( mRenderer.headsUpDisplay.checkPressingEndTurn((int)x,(int)y)){
 					mRenderer.headsUpDisplay.check =mRenderer.headsUpDisplay.giveUpTurn;
 				}
 				RendererAccessor.map.highlight(-1,-1);
-			}else if(GLRenderer.state == GameState.Game_Over){
+				break;
+			case Game_Over:
 				if(mRenderer.gov.checkPressingMeu((int)x, (int)y))
 					mRenderer.gov.flag = false;
-			}else if(GLRenderer.state == GameState.Network_Menu){
+				break;
+			case Network_Menu:
 				mRenderer.network.selected = -1;
+				break;
+			case Main_Menu:
+				mRenderer.mm.selected = -1;
+				break;
 			}
+			
 			break;
 		}
 		mPreviousX = x;

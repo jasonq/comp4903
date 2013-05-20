@@ -31,6 +31,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	private Unit currentUnit = null;
 	private int decision = -1;
 	private boolean networking = false;
+	private boolean AI = false;
 
 	public TouchGesture(GLRenderer mgl,MapData md){
 		super();
@@ -98,6 +99,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		//Networking.broadcastJoinMode = false;
 		//Networking.broadcastHostMode = true;	
 		networking = true;
+		AI = false;
 		Networking.playerNumber = 0;
 		GLRenderer.state = GameState.Game_Screen;
 	}
@@ -107,6 +109,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		//Networking.broadcastHostMode = false;
 		//Networking.broadcastJoinMode = true;
 		networking = true;
+		AI = false;
 		Networking.playerNumber = 1;
 		GLRenderer.state = GameState.Game_Screen;
 	}
@@ -123,17 +126,20 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		if(result != -1){
 			if(result == 0){
 				networking = false;
+				AI = true;
 				GLRenderer.state = GameState.Game_Screen;
 			}else if(result == 1){
 				GLRenderer.state = GameState.Network_Menu;
 				startNetworking();
 			}else if(result == 2){
-				GLRenderer.state = GameState.Game_Over;
-				mRenderer.gov.UpdateWinner(UnitGroup.PlayerOne);
+				networking = false;
+				AI = false;
+				GLRenderer.state = GameState.Game_Screen;
+				//mRenderer.gov.UpdateWinner(UnitGroup.PlayerOne);
 			}
 
 		}
-		mRenderer.mm.selected = -1;
+		//mRenderer.mm.selected = -1;
 	}
 
 	public void handle_Waiting(int x, int y){
@@ -170,11 +176,12 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			//Log.d("MyGLSurfaceView", "End turn pressed");
 
 			GameEngine.endTurn(networking);
-			if(mapData._activeGroup == UnitGroup.PlayerTwo && !networking){ //need check for if singleplayer or multiplayer
+			ResetGUI();
+			if(mapData._activeGroup == UnitGroup.PlayerTwo && !networking && AI){ //need check for if singleplayer or multiplayer
 
 				AIEngine.startTurn();
 			}
-			ResetGUI();			
+						
 		}
 
 		Unit pickUnit = mapData.getUnitAt(pickPoint);
