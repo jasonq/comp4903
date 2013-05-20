@@ -69,6 +69,10 @@ public class Action {
 		switch (action){
 			case Attack:
 				numOfAttacks = message.readInt();
+				attack = new int[numOfAttacks];
+				for (int i = 0; i < numOfAttacks; i++){
+					attack[i] = message.readInt();
+				}
 				break;
 			case Defend:
 				break;
