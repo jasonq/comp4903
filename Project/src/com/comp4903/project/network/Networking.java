@@ -194,6 +194,7 @@ public class Networking {
 				if (GameEngine.executeAction(a)) 
 			 		return;
 			
+			RendererAccessor.floatingText(20, 330, 0, -1, 50, ColorType.White, "host", "Failed " + ts);
 			// die
 		}
 	}
