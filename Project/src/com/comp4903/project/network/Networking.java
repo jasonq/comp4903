@@ -121,7 +121,8 @@ public class Networking {
 					blockingOnSend = true;
 					RendererAccessor.floatingText(20, 300, 0, -1, 50, ColorType.White, "u" + currentTimeStamp, "sending " + currentTimeStamp);					
 					timetosend = false;
-					sendPacket(sendBuffer.buffer, GAMEPACKET, true);					
+					sendPacket(sendBuffer.buffer, GAMEPACKET, true);
+					addToHistory(sendBuffer);
 					blockingOnSend = false;
 				}
 				
@@ -133,7 +134,7 @@ public class Networking {
 						if (history_[i].timestamp == currentTimeStamp) {
 							 missing = false;
 							 submitMessageToGameEngine(history_[i]);
-							 //currentTimeStamp++;
+							 currentTimeStamp++;
 						}
 					if ((missing) && (askDelay++ > 20))
 					{
