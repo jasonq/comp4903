@@ -124,6 +124,15 @@ public class SkillEngine {
 		s.duration = stats.getModifier("Duration").intValue();
 		s.resolveAtEndOfTurn = false;
 		source.AddStatus(s);
+		
+		RendererAccessor.defendAnimation(source);
+		
+		if (network){
+			Action a = new Action();
+			a.action = ActionType.Defend;
+			a.uIDOne = source.uID;
+			Networking.send(a.getActionMessage());
+		}
 		return true;
 	}
 	
@@ -139,9 +148,11 @@ public class SkillEngine {
 		source.combatStats.currentEnergy -= stats.energyCost;
 		source.combatStats.fixHealthAndEnergy();
 		
+		int choice = -1;
 		if (HelperEngine.doesHit(stats.getModifier("Chance").intValue())){
 			destination.combatStats.currentHealth = 0;
 			destination.combatStats.fixHealthAndEnergy();
+			choice = 0;
 		} else {
 			Status s = new Status();
 			s.name = SkillType.Headshot;
@@ -149,6 +160,16 @@ public class SkillEngine {
 			s.duration = stats.getModifier("Duration").intValue();
 			s.resolveAtEndOfTurn = true;
 			destination.AddStatus(s);
+			choice = 1;
+		}
+		
+		if (network){
+			Action a = new Action();
+			a.action = ActionType.Headshot;
+			a.uIDOne = source.uID;
+			a.uIDTwo = destination.uID;
+			a.decisionNum = choice;
+			Networking.send(a.getActionMessage());
 		}
 		return true;
 	}
@@ -200,8 +221,16 @@ public class SkillEngine {
 			heal = stats.getModifier("Heal").intValue();
 		destination.combatStats.currentHealth += stats.getModifier("Heal");
 		destination.combatStats.fixHealthAndEnergy();
+		
+		if (network){
+			Action a = new Action();
+			a.action = ActionType.Heal;
+			a.uIDOne = source.uID;
+			a.uIDTwo = destination.uID;
+			Networking.send(a.getActionMessage());
+		}
+		
 		RendererAccessor.healthAnimation(destination ,""+ heal);
-		//empty method
 		return false;
 	}
 }
