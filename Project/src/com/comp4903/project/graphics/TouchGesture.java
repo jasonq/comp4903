@@ -174,10 +174,6 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
 				//AIEngine.startTurn();
 			}
-			if(mapData._activeGroup == UnitGroup.PlayerOne)
-				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P1);
-			else if(mapData._activeGroup == UnitGroup.PlayerTwo)
-				RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P2);
 			ResetGUI();			
 		}
 

@@ -10,12 +10,14 @@ import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Status;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.ActionType;
+import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.factory.GameStats;
 import com.comp4903.project.gameEngine.factory.SkillStats;
 import com.comp4903.project.gameEngine.factory.UnitStats;
 import com.comp4903.project.gameEngine.networking.Action;
+import com.comp4903.project.graphics.GLRenderer;
 import com.comp4903.project.graphics.RendererAccessor;
 import com.comp4903.project.network.Networking;
 
@@ -161,16 +163,20 @@ public class GameEngine {
 		}
 		mapData._activeGroup = currentGroup;
 		mapData.RemoveDeadUnit();
-		System.out.println("Networking: " + network);
 		if (network){
 			Action a = new Action();
 			a.action = ActionType.Endturn;
 			Networking.send(a.getActionMessage());
 		}
+		if(mapData._activeGroup == UnitGroup.PlayerOne)
+			RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P1);
+		else if(mapData._activeGroup == UnitGroup.PlayerTwo)
+			RendererAccessor.floatingIcon(GLRenderer.GLwidth/2 - 125, GLRenderer.GLheight/10, 0, 0, 100, null, IconType.P2);
 	}
 	
 	/* Networking Supporting Method */
 	public static boolean executeAction(Action action){
+		System.out.println("GameEngine: Received Action message.");
 		Unit uOne = mapData.getUnitByID(action.uIDOne);
 		Unit uTwo = mapData.getUnitByID(action.uIDTwo);
 		switch (action.action){
