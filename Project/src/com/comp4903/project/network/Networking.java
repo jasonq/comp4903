@@ -328,6 +328,7 @@ public class Networking {
 			 		netInterface.receive(packet);
 					
 					receiveMessage_.buffer = packet.getData();
+					receiveMessage_.timestamp = receiveMessage_.readInt();
 					incomingIP = packet.getAddress();
 					
 					//receiveMessage_.reset();
