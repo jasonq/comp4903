@@ -87,7 +87,7 @@ public class GameEngine {
 			case Defend:
 				System.out.println("Defend");
 				if (canCastSkill(unitOne, SkillType.Defend))
-				if (SkillEngine.Defend(unitOne, true)){
+				if (SkillEngine.Defend(unitOne, network)){
 					RendererAccessor.update(mapData);
 					if (inActive) source.active = false;
 					return true;
