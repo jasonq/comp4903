@@ -133,7 +133,7 @@ public class Networking {
 				
 				// check if the next needed packet is in the 
 				// packet history queue.  If not, request it.
-				if (gameStarted){
+				/*if (gameStarted){
 					boolean missing = true;
 					for (int i = 0; i < 100; i++)
 						if (history_[i].timestamp == currentTimeStamp) {
@@ -146,7 +146,7 @@ public class Networking {
 						askDelay = 0;
 						requestMissingPacket(currentTimeStamp);
 					}
-				}
+				}*/
 				Thread.sleep(10);
 			}
 			
