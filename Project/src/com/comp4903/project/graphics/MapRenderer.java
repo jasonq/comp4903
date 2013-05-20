@@ -126,7 +126,7 @@ public class MapRenderer {
 					buf = am.open("models/sniper.gmodel");
 				if (t == 0)
 					buf = am.open("models/swordmaster.gmodel");
-				ModelLoader.load(buf, models[t]);
+				ModelLoader.load(buf, models[t], true);
 				models[t].SetScale(.08f, .08f, .08f);
 				models[t].SetPosition(1, 1, 1);
 				buf.close();
@@ -135,7 +135,7 @@ public class MapRenderer {
 			{ }			
 		}
 		
-		models[0].SetScale(.75f, .75f, .75f);
+		//models[0].SetScale(.75f, .75f, .75f);
 	}
 	
 	/*	INIT - Used to initialize, or re-initialize the map
@@ -472,6 +472,12 @@ public class MapRenderer {
 		{
 			Actor a = new Actor(m._units.get(i).uID);
 			
+
+			if (m._units.get(i).unitGroup.getCode() == 1)
+				a.alt = true;
+			else
+				a.alt = false;
+			
 			a.setTilePosition(m._units.get(i).position);				
 			a.setType(m._units.get(i).unitType);
 			
@@ -538,6 +544,10 @@ public class MapRenderer {
 			{
 				Actor a = new Actor(m._units.get(i).uID);
 				
+				if (m._units.get(i).unitGroup.getCode() == 1)
+					a.alt = true;
+				else
+					a.alt = false;
 				a.setTilePosition(m._units.get(i).position);				
 				a.setType(m._units.get(i).unitType);
 				
