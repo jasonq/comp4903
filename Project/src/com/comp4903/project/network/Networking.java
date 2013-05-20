@@ -197,7 +197,7 @@ public class Networking {
 			// in which game data begins (skipping the 8 bytes of the header)
 			
 			RendererAccessor.floatingText(20, 330, 0, -1, 50, ColorType.White, "host", "submitted " + ts);
-			currentTimeStamp++;
+			//currentTimeStamp++;
 			Action a = new Action();
 			if (a.decodeMessage(m))
 				if (GameEngine.executeAction(a)) 
@@ -232,7 +232,7 @@ public class Networking {
 		packet.setPort(4903);
 		try {
 			sendInterface.send(packet);
-			addToHistory(message_);
+			//addToHistory(message_);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -365,8 +365,10 @@ public class Networking {
 		if (ts != 0) 
 		{
 			//addToHistory(m);
-			if (ts == currentTimeStamp)
+			if (ts == currentTimeStamp) {
 				submitMessageToGameEngine(m);
+				currentTimeStamp++;
+			}
 		}
 		else
 			processRequest(m, incomingIP);
@@ -458,13 +460,13 @@ public class Networking {
 				message_.timestamp = ts;
 				message_.position = 0;
 				for (int q = 0; q < 100; q++)
-					message_.buffer[q] = m.buffer[q];
+					message_.buffer[q] = history_[h].buffer[q];
 				DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
 				packet.setAddress(broadcastAddress);
 				packet.setPort(4903);
 				try {
 					sendInterface.send(packet);
-					addToHistory(message_);
+					//addToHistory(message_);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
