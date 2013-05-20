@@ -216,7 +216,7 @@ public class Networking {
 		packet.setPort(4903);
 		try {
 			sendInterface.send(packet);
-			addToHistory(message_);
+			//addToHistory(message_);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
