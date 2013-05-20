@@ -19,6 +19,7 @@ import com.comp4903.project.gameEngine.enums.UnitType;
 import com.comp4903.project.graphics.animation.Actor;
 import com.comp4903.project.graphics.animation.AnimationEngine;
 import com.comp4903.project.graphics.animation.DeathAnimation;
+import com.comp4903.project.graphics.animation.DefendAnimation;
 import com.comp4903.project.graphics.animation.FloatingIcon;
 import com.comp4903.project.graphics.animation.FloatingText;
 import com.comp4903.project.graphics.animation.GenericAttack;
@@ -473,7 +474,7 @@ public class MapRenderer {
 			Actor a = new Actor(m._units.get(i).uID);
 			
 
-			if (m._units.get(i).unitGroup.getCode() == 1)
+			if (m._units.get(i).unitGroup.getCode() == 0)
 				a.alt = true;
 			else
 				a.alt = false;
@@ -544,7 +545,7 @@ public class MapRenderer {
 			{
 				Actor a = new Actor(m._units.get(i).uID);
 				
-				if (m._units.get(i).unitGroup.getCode() == 1)
+				if (m._units.get(i).unitGroup.getCode() == 0)
 					a.alt = true;
 				else
 					a.alt = false;
@@ -623,6 +624,14 @@ public class MapRenderer {
 		h.init(u,  val);
 		AnimationEngine.add("Health" + u.uID, h);
 		AnimationEngine.start("Health" + u.uID);
+	}
+	
+	public static void defendAnimation(Unit u)
+	{
+		DefendAnimation d = new DefendAnimation();
+		d.init(u);
+		AnimationEngine.add("Defend" + u.uID, d);
+		AnimationEngine.start("Defend" + u.uID);
 	}
 	
 	public Actor getActor(int id)
