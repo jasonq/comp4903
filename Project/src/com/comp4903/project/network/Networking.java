@@ -121,8 +121,8 @@ public class Networking {
 					blockingOnSend = true;
 					RendererAccessor.floatingText(20, 300, 0, -1, 50, ColorType.White, "u" + currentTimeStamp, "sending " + currentTimeStamp);					
 					timetosend = false;
-					if (askDelay % 3 != 0) {
-						sendBuffer.timestamp = currentTimeStamp;
+					sendBuffer.timestamp = currentTimeStamp;
+					if (askDelay % 3 != 0) {						
 						sendPacket(sendBuffer.buffer, GAMEPACKET, true);
 					}
 					else 
