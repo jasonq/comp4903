@@ -552,7 +552,7 @@ public class Algorithms {
         	while (cur.parent != null)
             {
         		int curDis = PathFind.Distance(cur.p, atkUnit.position);
-                if(curDis < dis){
+                if(curDis < dis && _map.isOpen(cur.p) && _map.getUnitAt(cur.p) == null){
                 	dis = curDis;
                 	result = cur.p;
                 }
