@@ -187,6 +187,7 @@ public class Networking {
 	public static void submitMessageToGameEngine(NetworkMessage m)
 	{
 		m.reset();
+		m.readInt();
 		int ts = m.readInt(); // timestamp
 		int type = m.readInt(); // message type
 		
@@ -357,6 +358,7 @@ public class Networking {
 			 		netInterface.receive(packet);
 					
 					receiveMessage_.buffer = packet.getData();
+					receiveMessage_.readInt(); // player number
 					receiveMessage_.timestamp = receiveMessage_.readInt();
 					incomingIP = packet.getAddress();	
 					processIncoming(receiveMessage_, incomingIP);
@@ -387,10 +389,10 @@ public class Networking {
 		if (ts != 0) 
 		{
 			//addToHistory(m);
-			if (ts == currentTimeStamp) {				
-				submitMessageToGameEngine(m);
-				sendAck(ts);
+			if (ts == currentTimeStamp) {	
 				currentTimeStamp++;
+				sendAck(ts);
+				submitMessageToGameEngine(m);				
 			} else if (ts < currentTimeStamp)
 			{
 				sendAck(ts);
@@ -402,7 +404,7 @@ public class Networking {
 	
 	public static void sendAck(int ts)
 	{
-		NetworkMessage n = new NetworkMessage();
+		NetworkMessage n = new NetworkMessage();		
 		n.append(ts);
 		sendPacket(n.buffer, ACKNOWLEDGEPACKET, 0);
 	}
