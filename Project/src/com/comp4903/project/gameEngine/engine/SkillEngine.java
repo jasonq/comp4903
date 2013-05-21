@@ -1,5 +1,6 @@
 package com.comp4903.project.gameEngine.engine;
 
+import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.Status;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.ActionType;
@@ -232,5 +233,32 @@ public class SkillEngine {
 		
 		RendererAccessor.healthAnimation(destination ,""+ heal);
 		return false;
+	}
+	
+	public static boolean Grab(Unit source, Unit destination, boolean network){
+		if (source == null || destination == null){
+			System.out.println("Missing units");
+			return false;
+		}
+		
+		SkillStats stats = GameStats.getSkillStats(SkillType.Headshot);
+		
+		//Skill cost, used in all skills
+		source.combatStats.currentHealth -= stats.healthCost;
+		source.combatStats.currentEnergy -= stats.energyCost;
+		source.combatStats.fixHealthAndEnergy();
+		
+		destination.position = PathFind.TractorBeam(source, destination);
+		
+		Attack(source, destination, false);
+		
+		if (network){
+			Action a = new Action();
+			a.action = ActionType.Grab;
+			a.uIDOne = source.uID;
+			a.uIDTwo = destination.uID;
+			Networking.send(a.getActionMessage());
+		}
+		return true;
 	}
 }
