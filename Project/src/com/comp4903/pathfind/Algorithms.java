@@ -505,9 +505,9 @@ public class Algorithms {
     {
     	Point start = atkUnit.position;
     	Point end = defUnit.position;
-        List<AStarNode> openList = new ArrayList<AStarNode>();
+        Point result = defUnit.position;
+    	List<AStarNode> openList = new ArrayList<AStarNode>();
         List<AStarNode> closedList = new ArrayList<AStarNode>();
-        List<Point> result = new ArrayList<Point>();
         AStarNode cur = null;
         AStarNode startNode = new AStarNode(start, null, 0, heuristic(start, end));
         openList.add(startNode);
@@ -547,13 +547,19 @@ public class Algorithms {
         }
         if (endFound)
         {
+        	int dis = Integer.MAX_VALUE;
+        	
         	while (cur.parent != null)
             {
-                result.add(cur.p);
+        		int curDis = PathFind.Distance(cur.p, atkUnit.position);
+                if(curDis < dis){
+                	dis = curDis;
+                	result = cur.p;
+                }
                 cur = cur.parent;
             }
         }
-        return null;
+        return result;
     }
     
     
