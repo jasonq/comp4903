@@ -29,6 +29,7 @@ public class Actor {
 	public float previousZ, lastZ;
 	public boolean remove = false;
 	public boolean alt = false;
+	public boolean noRepeat = false;
 	
 	Model3D m3d;
 	
@@ -42,6 +43,7 @@ public class Actor {
 		speed = 0;
 		previousZ = 0;
 		lastZ = 0;
+		noRepeat = false;
 		
 	}
 	
@@ -96,9 +98,10 @@ public class Actor {
 		m.display(gl, viewMatrix, animation, time, alt);
 				
 		time += speed * 2;
-		if (time >= 119)
-			time = 10;
-		
+		if ((!noRepeat) && (time >= 119))
+			time = 0;
+		if ((noRepeat) && time >= 118)
+			time = 110;
 	}
 	
 	public void YaxisRotate(Model3D m)

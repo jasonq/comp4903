@@ -128,7 +128,8 @@ public class MapRenderer {
 				if (t == 0)
 					buf = am.open("models/swordmaster.gmodel");
 				ModelLoader.load(buf, models[t], true);
-				models[t].SetScale(.08f, .08f, .08f);
+				//models[t].SetScale(.08f, .08f, .08f);
+				models[t].SetScale(0.07f, 0.07f, 0.07f);
 				models[t].SetPosition(1, 1, 1);
 				buf.close();
 				
@@ -487,7 +488,7 @@ public class MapRenderer {
 					       (float)m._units.get(i).position.y * 0.8660254038f * 2f 
 					       + (m._units.get(i).position.x % 2) * 0.8660254038f);
 			a.setAnimation("idle1");
-			a.time = 0; a.speed = 0.03f;
+			a.time = ((m._units.get(i).uID * 30) % 120); a.speed = 0.03f;
 			actors.put(a.getID(), a);
 		}
 	}

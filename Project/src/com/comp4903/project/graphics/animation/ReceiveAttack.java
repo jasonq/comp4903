@@ -15,13 +15,18 @@ public class ReceiveAttack extends AnimationProcessor {
 	String[] messages_;
 	int count = 2;
 	int m = 0;
+	boolean dying;
 	
 	public void init(Unit attacker, Unit attackee, String[] messages)
 	{
 		foreground = true;
 		actorID = attackee.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
-		messages_ = messages;		
+		messages_ = messages;
+		if (attackee.combatStats.currentHealth <= 0)
+			dying = true;
+		else
+			dying = false;
 		
 	}
 	
@@ -51,7 +56,12 @@ public class ReceiveAttack extends AnimationProcessor {
 
 		state = 1;
 		
-		actor_.setAnimation("attack.recoil");
+		actor_.noRepeat = true;
+		
+		if (!dying)
+			actor_.setAnimation("attack.recoil");
+		else
+			actor_.setAnimation("death.standard");
 		actor_.speed = 0.2f;
 		actor_.time = 0;	
 		
