@@ -178,7 +178,7 @@ public class Algorithms {
             	adjNodes = oddNodes(t);
             
             for(BFSNode node : adjNodes){
-            	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
+            	if(!ListHasNode(marked, node)){
             		queue.add(node);
             		marked.add(node);
             	}
@@ -211,7 +211,7 @@ public class Algorithms {
             	adjNodes = oddNodes(t);
             
             for(BFSNode node : adjNodes){
-            	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
+            	if(!ListHasNode(marked, node)){
             		queue.add(node);
             		marked.add(node);
             	}
@@ -505,9 +505,9 @@ public class Algorithms {
     {
     	Point start = atkUnit.position;
     	Point end = defUnit.position;
-        List<AStarNode> openList = new ArrayList<AStarNode>();
+        Point result = defUnit.position;
+    	List<AStarNode> openList = new ArrayList<AStarNode>();
         List<AStarNode> closedList = new ArrayList<AStarNode>();
-        List<Point> result = new ArrayList<Point>();
         AStarNode cur = null;
         AStarNode startNode = new AStarNode(start, null, 0, heuristic(start, end));
         openList.add(startNode);
@@ -547,13 +547,19 @@ public class Algorithms {
         }
         if (endFound)
         {
+        	int dis = Integer.MAX_VALUE;
+        	
         	while (cur.parent != null)
             {
-                result.add(cur.p);
+        		int curDis = PathFind.Distance(cur.p, atkUnit.position);
+                if(curDis < dis && _map.isOpen(cur.p) && _map.getUnitAt(cur.p) == null){
+                	dis = curDis;
+                	result = cur.p;
+                }
                 cur = cur.parent;
             }
         }
-        return null;
+        return result;
     }
     
     

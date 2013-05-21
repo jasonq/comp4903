@@ -112,6 +112,16 @@ public class GameEngine {
 					return true;
 				}
 				break;
+			case Grab:
+				System.out.println("Grab");
+				if (canCastSkill(unitOne, SkillType.Grab))
+				if (SkillEngine.Grab(unitOne, unitTwo, network)){
+					mapData.RemoveDeadUnit();
+					RendererAccessor.update(mapData);
+					if (inActive) source.active = false;
+					return true;
+				}
+				break;
 			case ExposeWeakness: //not in use
 				break;
 			case StimPack: //not in use

@@ -41,6 +41,7 @@ public class Networking {
 	public static boolean broadcastHostMode = false;
 	public static boolean broadcastJoinMode = false;
 	public static boolean blockingOnSend = false;
+	public static boolean receiveAcknowledge = false;
 	
 	private static NetworkMessage message_ = new NetworkMessage();
 	private static NetworkMessage[] history_ = new NetworkMessage[100];
@@ -56,6 +57,7 @@ public class Networking {
 	private static final int ACCEPTJOIN = 3;
 	private static final int GAMEPACKET = 4;
 	private static final int REQUESTPACKET = 5;
+	private static final int ACKNOWLEDGEPACKET = 6;
 	
 	public static void staticInitializer(Context c)
 	{
@@ -125,13 +127,14 @@ public class Networking {
 					timetosend = false;
 					sendBuffer.timestamp = currentTimeStamp;	
 					currentTimeStamp++;
-					sendPacket(sendBuffer.buffer, GAMEPACKET, sendBuffer.timestamp);										
-					addToHistory(message_);
+					sendPacket(sendBuffer.buffer, GAMEPACKET, sendBuffer.timestamp);					
+					//addToHistory(message_);
 					blockingOnSend = false;
+					confirmSend();
 				} else {				
 					// check if the next needed packet is in the 
 					// packet history queue.  If not, request it.
-					if (gameStarted){
+					/*if (gameStarted){
 						if (askDelay++ > 20)
 						{
 							askDelay = 0;
@@ -145,7 +148,7 @@ public class Networking {
 							if (missing)
 								requestMissingPacket(currentTimeStamp);						
 						}
-					}
+					}*/
 				}
 				Thread.sleep(10);
 			}			
@@ -218,8 +221,31 @@ public class Networking {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}		
+	}
+	
+	public static void confirmSend() {
+		receiveAcknowledge = false;
+		DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
+		packet.setAddress(broadcastAddress);
+		packet.setPort(4903);
+		while (!receiveAcknowledge)
+		{
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				sendInterface.send(packet);
+				//addToHistory(message_);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
 		}
-		
 	}
 	
 	public static void sendPacketToIP(InetAddress ip, byte buffer[], int type, int stamp)
@@ -241,7 +267,8 @@ public class Networking {
 	public static void createHeader(byte buffer[], int type, int stamp)
 	{
 		message_.reset();
-		message_.timestamp = stamp;		
+		message_.timestamp = stamp;
+		message_.append(playerNumber);
 		message_.append(stamp);
 		
 		message_.append(type);
@@ -347,20 +374,37 @@ public class Networking {
 	{
 		m.reset();
 		
+		int pn = m.readInt(); // playernumber
+		
+		
 		int ts = m.readInt(); // timestamp
 		
 		RendererAccessor.floatingText(500, 300, 0, -1, 50, ColorType.White, "i"+ts, "expected: " + currentTimeStamp + " incoming " + ts);
 		
+		if (pn == playerNumber)
+			return;
+		
 		if (ts != 0) 
 		{
 			//addToHistory(m);
-			if (ts == currentTimeStamp) {
+			if (ts == currentTimeStamp) {				
 				submitMessageToGameEngine(m);
+				sendAck(ts);
 				currentTimeStamp++;
+			} else if (ts < currentTimeStamp)
+			{
+				sendAck(ts);
 			}
 		}
 		else
 			processRequest(m, incomingIP);
+	}
+	
+	public static void sendAck(int ts)
+	{
+		NetworkMessage n = new NetworkMessage();
+		n.append(ts);
+		sendPacket(n.buffer, ACKNOWLEDGEPACKET, 0);
 	}
 	
 	// adds message to the history buffer
@@ -377,7 +421,8 @@ public class Networking {
 	
 	public static void processRequest(NetworkMessage m, InetAddress incomingIP)
 	{
-		m.reset();
+		m.reset();		
+		m.readInt(); // skip playernumber
 		m.readInt(); // skip timestamp
 		int type = m.readInt();
 		
@@ -395,7 +440,15 @@ public class Networking {
 		case ACCEPTJOIN:
 			processAccept(m, incomingIP);
 			break;
+		case ACKNOWLEDGEPACKET:
+			processAck(m, incomingIP);
+			break;
 		}
+	}
+	
+	public static void processAck(NetworkMessage m, InetAddress incomingIP)
+	{
+		receiveAcknowledge = true;
 	}
 	
 	public static void processJoinRequest(NetworkMessage m, InetAddress incomingIP)
@@ -438,6 +491,7 @@ public class Networking {
 	{
 		int ts;
 		m.reset();
+		m.readInt(); // playernumber
 		m.readInt(); // timestamp
 		m.readInt(); // type
 		ts = m.readInt(); // requested timestamp
