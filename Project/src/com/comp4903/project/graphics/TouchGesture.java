@@ -247,6 +247,14 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 					} else {
 						RendererAccessor.floatingText(300, 170, 0, -1, 100, ColorType.Blue, "n", "Not Enough Energy");
 					}
+				} else if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Grab)){
+					if (GameEngine.canCastSkill(currentUnit, SkillType.Grab)){
+						stats = GameStats.getSkillStats(SkillType.Grab);
+						PathFind.DisplayUnitEnemyBox(currentUnit, stats.range);
+						//Log.d("MyGLSurfaceView", "Find Heal");
+					} else {
+						RendererAccessor.floatingText(300, 170, 0, -1, 100, ColorType.Blue, "n", "Not Enough Energy");
+					}
 				} else {
 					//Log.d("MyGLSurfaceView", "Find Nothing");
 				}//show the attack range
@@ -307,8 +315,6 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 					ResetGUI();
 					//return;
 				}
-
-
 			}
 
 		}else{
@@ -339,11 +345,15 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				RendererAccessor.update(mapData);
 				Log.d("Debug", "I ATTACK YOUUUU");
 				ResetGUI();
-			} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+			} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)
+					&& currentUnit.getUnitStats().canUseThisSkill(SkillType.Headshot)){
 				GameEngine.useSkill(currentUnit, pickUnit, SkillType.Headshot, true, networking);
 				ResetGUI();
+			} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)
+					&& currentUnit.getUnitStats().canUseThisSkill(SkillType.Grab)){
+				GameEngine.useSkill(currentUnit, pickUnit, SkillType.Grab, true, networking);
+				ResetGUI();
 			}
-
 		}
 	}
 

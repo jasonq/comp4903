@@ -1,5 +1,7 @@
 package com.comp4903.project.gameEngine.engine;
 
+import android.graphics.Point;
+
 import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.Status;
 import com.comp4903.project.gameEngine.data.Unit;
@@ -236,21 +238,25 @@ public class SkillEngine {
 	}
 	
 	public static boolean Grab(Unit source, Unit destination, boolean network){
+		System.out.println("In Grab Function.");
 		if (source == null || destination == null){
 			System.out.println("Missing units");
 			return false;
 		}
-		
-		SkillStats stats = GameStats.getSkillStats(SkillType.Headshot);
+		System.out.println("Has Unit");
+		SkillStats stats = GameStats.getSkillStats(SkillType.Grab);
 		
 		//Skill cost, used in all skills
 		source.combatStats.currentHealth -= stats.healthCost;
 		source.combatStats.currentEnergy -= stats.energyCost;
 		source.combatStats.fixHealthAndEnergy();
+
+		System.out.println("Finding Point");
+		Point p = PathFind.TractorBeam(source, destination);
+		System.out.println("Destination Unit move to:" + p.x + ", " + p.y);
+		destination.position = p;
 		
-		destination.position = PathFind.TractorBeam(source, destination);
-		
-		Attack(source, destination, false);
+		//Attack(source, destination, false);
 		
 		if (network){
 			Action a = new Action();
