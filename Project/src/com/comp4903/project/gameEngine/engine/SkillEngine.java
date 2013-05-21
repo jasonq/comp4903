@@ -254,7 +254,7 @@ public class SkillEngine {
 		System.out.println("Finding Point");
 		Point p = PathFind.TractorBeam(source, destination);
 		System.out.println("Destination Unit move to:" + p.x + ", " + p.y);
-		//destination.position = p;
+		destination.position = p;
 		
 		//Attack(source, destination, false);
 		
