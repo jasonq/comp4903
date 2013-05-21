@@ -177,6 +177,12 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
 			GameEngine.endTurn(networking);
 			ResetGUI();
+			UnitGroup winner = checkWinner();
+			if(winner != UnitGroup.None){
+				mRenderer.gov.UpdateWinner(winner);
+				GLRenderer.state = GameState.Game_Over;
+				return;
+			}
 			if(mapData._activeGroup == UnitGroup.PlayerTwo && !networking && AI){ //need check for if singleplayer or multiplayer
 
 				AIEngine.startTurn();
@@ -241,6 +247,14 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 					} else {
 						RendererAccessor.floatingText(300, 170, 0, -1, 100, ColorType.Blue, "n", "Not Enough Energy");
 					}
+				} else if (currentUnit.getUnitStats().canUseThisSkill(SkillType.Grab)){
+					if (GameEngine.canCastSkill(currentUnit, SkillType.Grab)){
+						stats = GameStats.getSkillStats(SkillType.Grab);
+						PathFind.DisplayUnitEnemyBox(currentUnit, stats.range);
+						//Log.d("MyGLSurfaceView", "Find Heal");
+					} else {
+						RendererAccessor.floatingText(300, 170, 0, -1, 100, ColorType.Blue, "n", "Not Enough Energy");
+					}
 				} else {
 					//Log.d("MyGLSurfaceView", "Find Nothing");
 				}//show the attack range
@@ -301,8 +315,6 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 					ResetGUI();
 					//return;
 				}
-
-
 			}
 
 		}else{
@@ -333,11 +345,15 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				RendererAccessor.update(mapData);
 				Log.d("Debug", "I ATTACK YOUUUU");
 				ResetGUI();
-			} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+			} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)
+					&& currentUnit.getUnitStats().canUseThisSkill(SkillType.Headshot)){
 				GameEngine.useSkill(currentUnit, pickUnit, SkillType.Headshot, true, networking);
 				ResetGUI();
+			} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)
+					&& currentUnit.getUnitStats().canUseThisSkill(SkillType.Grab)){
+				GameEngine.useSkill(currentUnit, pickUnit, SkillType.Grab, true, networking);
+				ResetGUI();
 			}
-
 		}
 	}
 
@@ -425,6 +441,24 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
 
 		netThread.start();
+	}
+	
+	private UnitGroup checkWinner(){
+		int result = 0;
+		UnitGroup loser = UnitGroup.None;
+		int cp1 = 0;
+		int cp2 = 0;
+		for(int i = 0; i < mapData._units.size(); i++){
+			if(mapData._units.get(i).unitGroup == UnitGroup.PlayerOne)
+				cp1++;
+			else if(mapData._units.get(i).unitGroup == UnitGroup.PlayerTwo)
+				cp2++;
+		}
+		if(cp1 == 0)
+			loser = UnitGroup.PlayerTwo;
+		else if(cp2 == 0)
+			loser = UnitGroup.PlayerOne;
+		return loser;
 	}
 
 }

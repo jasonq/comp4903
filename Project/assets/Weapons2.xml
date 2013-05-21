@@ -3,7 +3,7 @@
 	<Weapon>
 	    <Name>Automatic Rifle</Name>
 	    <Description>Fast rifle fires at medium range</Description>
-	    <Damage>7</Damage>
+	    <Damage>18</Damage>
 	    <Accuracy>60</Accuracy>
 	    <Rounds>6</Rounds>
 	    <Range>2</Range>

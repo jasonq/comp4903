@@ -112,6 +112,16 @@ public class GameEngine {
 					return true;
 				}
 				break;
+			case Grab:
+				System.out.println("Grab");
+				if (canCastSkill(unitOne, SkillType.Grab))
+				if (SkillEngine.Grab(unitOne, unitTwo, network)){
+					mapData.RemoveDeadUnit();
+					RendererAccessor.update(mapData);
+					if (inActive) source.active = false;
+					return true;
+				}
+				break;
 			case ExposeWeakness: //not in use
 				break;
 			case StimPack: //not in use
@@ -183,11 +193,17 @@ public class GameEngine {
 			case Move:
 				return moveUnit(uOne, new Point(action.x, action.y), false);
 			case Attack:
-				return SkillEngine.NetVAttack(uOne, uTwo, action);
+				if(SkillEngine.NetVAttack(uOne, uTwo, action)){
+					mapData.RemoveDeadUnit();
+					return true;
+				}
 			case Defend:
 				return SkillEngine.Defend(uOne, false);
 			case Headshot:
-				return SkillEngine.NetVHeadShot(uOne, uTwo, action);
+				if (SkillEngine.NetVHeadShot(uOne, uTwo, action)){
+					mapData.RemoveDeadUnit();
+					return true;
+				}
 			case Heal:
 				return SkillEngine.Heal(uOne, uTwo, false);
 			case Endturn:

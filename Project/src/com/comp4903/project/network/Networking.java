@@ -48,6 +48,7 @@ public class Networking {
 	public static NetworkMessage receiveBuffer = new NetworkMessage();
 	private static int currentTimeStamp = 0;
 	private static int currentPlaceInHistory = 0;
+	private static int packetCounter = 0;
 	
 	// network message codes
 	private static final int BROADCASTHOST = 1;
@@ -65,6 +66,7 @@ public class Networking {
 		currentPlaceInHistory = 0;
 		gameStarted = true;
 		blockingOnSend = false;
+		packetCounter = 0;
 		
 		for (int i = 0; i <5; i++)
 			playerAssigned[i] = false;
@@ -121,34 +123,32 @@ public class Networking {
 					blockingOnSend = true;
 					RendererAccessor.floatingText(20, 300, 0, -1, 50, ColorType.White, "u" + currentTimeStamp, "sending " + currentTimeStamp);					
 					timetosend = false;
-					sendPacket(sendBuffer.buffer, GAMEPACKET, true);
-					addToHistory(sendBuffer);
+					sendBuffer.timestamp = currentTimeStamp;	
+					currentTimeStamp++;
+					sendPacket(sendBuffer.buffer, GAMEPACKET, sendBuffer.timestamp);										
+					addToHistory(message_);
 					blockingOnSend = false;
-				}
-				
-				// check if the next needed packet is in the 
-				// packet history queue.  If not, request it.
-				if (gameStarted){
-					boolean missing = true;
-					for (int i = 0; i < 100; i++)
-						if (history_[i].timestamp == currentTimeStamp) {
-							 missing = false;
-							 submitMessageToGameEngine(history_[i]);
-							 currentTimeStamp++;
+				} else {				
+					// check if the next needed packet is in the 
+					// packet history queue.  If not, request it.
+					if (gameStarted){
+						if (askDelay++ > 20)
+						{
+							askDelay = 0;
+							boolean missing = true;
+							for (int i = 0; i < 100; i++)
+								if (history_[i].timestamp == currentTimeStamp) {
+									 missing = false;
+									 submitMessageToGameEngine(history_[i]);
+									 currentTimeStamp++;
+								}
+							if (missing)
+								requestMissingPacket(currentTimeStamp);						
 						}
-					if ((missing) && (askDelay++ > 20))
-					{
-						askDelay = 0;
-						requestMissingPacket(currentTimeStamp);
 					}
 				}
 				Thread.sleep(10);
-			}
-			
-			//while (!timetosend)		{Thread.sleep(10);}
-			//	sendPacket(sendBuffer, true);
-			
-			//netInterface.receive(packet);
+			}			
 			
 			
 		} catch (IOException e)
@@ -168,7 +168,7 @@ public class Networking {
 	
 	public static void send(NetworkMessage m)
 	{
-		sendBuffer = m;
+		sendBuffer.copy(m);
 		timetosend = true;
 		blockingOnSend = true;
 		while (blockingOnSend) {
@@ -183,8 +183,9 @@ public class Networking {
 	
 	public static void submitMessageToGameEngine(NetworkMessage m)
 	{
-		int ts = 0; //m.readInt();
-		int type = m.readInt();
+		m.reset();
+		int ts = m.readInt(); // timestamp
+		int type = m.readInt(); // message type
 		
 		if (type == GAMEPACKET)
 		{
@@ -192,7 +193,7 @@ public class Networking {
 			// in which game data begins (skipping the 8 bytes of the header)
 			
 			RendererAccessor.floatingText(20, 330, 0, -1, 50, ColorType.White, "host", "submitted " + ts);
-			currentTimeStamp++;
+			//currentTimeStamp++;
 			Action a = new Action();
 			if (a.decodeMessage(m))
 				if (GameEngine.executeAction(a)) 
@@ -203,15 +204,17 @@ public class Networking {
 		}
 	}
 			
-	public static void sendPacket(byte buffer[], int type, boolean stamp)
-	{
+	public static void sendPacket(byte buffer[], int type, int stamp)
+	{		
 		createHeader(buffer, type, stamp);
+		if (packetCounter++ % 3 == 0)
+			return;
 		DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
 		packet.setAddress(broadcastAddress);
 		packet.setPort(4903);
 		try {
 			sendInterface.send(packet);
-			addToHistory(message_);
+			//addToHistory(message_);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -219,7 +222,7 @@ public class Networking {
 		
 	}
 	
-	public static void sendPacketToIP(InetAddress ip, byte buffer[], int type, boolean stamp)
+	public static void sendPacketToIP(InetAddress ip, byte buffer[], int type, int stamp)
 	{
 		createHeader(buffer, type, stamp);
 		DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
@@ -227,7 +230,7 @@ public class Networking {
 		packet.setPort(4903);
 		try {
 			sendInterface.send(packet);
-			addToHistory(message_);
+			//addToHistory(message_);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -235,13 +238,11 @@ public class Networking {
 		
 	}
 	
-	public static void createHeader(byte buffer[], int type, boolean stamp)
+	public static void createHeader(byte buffer[], int type, int stamp)
 	{
 		message_.reset();
-		if (stamp)
-			message_.append(currentTimeStamp++);
-		else
-			message_.append(0);
+		message_.timestamp = stamp;		
+		message_.append(stamp);
 		
 		message_.append(type);
 		
@@ -266,7 +267,7 @@ public class Networking {
 		broadcastHostMode = true;
 		while (broadcastHostMode)
 		{
-			sendPacket(m.buffer, BROADCASTHOST, false);
+			sendPacket(m.buffer, BROADCASTHOST, 0);
 			
 			int c=0;
 			for (int i = 0; i < 5; i++)
@@ -290,7 +291,7 @@ public class Networking {
 		broadcastJoinMode = true;
 		while (broadcastJoinMode)
 		{
-			sendPacket(m.buffer, BROADCASTJOIN, false);
+			sendPacket(m.buffer, BROADCASTJOIN, 0);
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {				
@@ -303,14 +304,14 @@ public class Networking {
 	{
 		NetworkMessage n = new NetworkMessage();
 		n.append(ts);
-		sendPacket(n.buffer, REQUESTPACKET, false);
+		sendPacket(n.buffer, REQUESTPACKET, 0);
 	}
 	
 	public static void sendAccept(InetAddress ip, int pn)
 	{
 		NetworkMessage n = new NetworkMessage();
 		n.append(pn);
-		sendPacket(n.buffer, ACCEPTJOIN, false);
+		sendPacket(n.buffer, ACCEPTJOIN, 0);
 	}
 			
 	static Thread receiveThread = new Thread()
@@ -330,14 +331,7 @@ public class Networking {
 					
 					receiveMessage_.buffer = packet.getData();
 					receiveMessage_.timestamp = receiveMessage_.readInt();
-					incomingIP = packet.getAddress();
-					
-					//receiveMessage_.reset();
-					//int tm = receiveMessage_.readInt();
-					//String s = receiveMessage_.readString();
-	
-					//RendererAccessor.floatingText(20, 500, 0, -1, 100, ColorType.White, "test", s);
-	
+					incomingIP = packet.getAddress();	
 					processIncoming(receiveMessage_, incomingIP);
 					
 				} catch (IOException e) {
@@ -355,13 +349,15 @@ public class Networking {
 		
 		int ts = m.readInt(); // timestamp
 		
-		RendererAccessor.floatingText(500, 300, 0, -1, 50, ColorType.White, "i"+ts, "incoming " + ts);
+		RendererAccessor.floatingText(500, 300, 0, -1, 50, ColorType.White, "i"+ts, "expected: " + currentTimeStamp + " incoming " + ts);
 		
 		if (ts != 0) 
 		{
-			addToHistory(m);
-			//if (ts == currentTimeStamp)
-			//	submitMessageToGameEngine(m);
+			//addToHistory(m);
+			if (ts == currentTimeStamp) {
+				submitMessageToGameEngine(m);
+				currentTimeStamp++;
+			}
 		}
 		else
 			processRequest(m, incomingIP);
@@ -453,13 +449,13 @@ public class Networking {
 				message_.timestamp = ts;
 				message_.position = 0;
 				for (int q = 0; q < 100; q++)
-					message_.buffer[q] = m.buffer[q];
+					message_.buffer[q] = history_[h].buffer[q];
 				DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
 				packet.setAddress(broadcastAddress);
 				packet.setPort(4903);
 				try {
 					sendInterface.send(packet);
-					addToHistory(message_);
+					//addToHistory(message_);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

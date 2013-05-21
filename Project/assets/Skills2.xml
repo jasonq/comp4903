@@ -36,7 +36,7 @@
 	    <Range>3</Range>
 	    <Modifier parameter="Accuracy">20</Modifier>
 	    <Modifier parameter="Duration">2</Modifier>
-	    <Modifier parameter="Chance">30</Modifier>
+	    <Modifier parameter="Chance">10</Modifier>
 	</Ability>
 	<Ability>
 	    <Name>Heal</Name>

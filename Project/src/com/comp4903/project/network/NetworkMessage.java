@@ -16,6 +16,14 @@ public class NetworkMessage {
 		position = 0;
 	}
 	
+	public void copy(NetworkMessage m)
+	{
+		timestamp = m.timestamp;
+		position = m.position;
+		for (int i = 0; i < 100; i++)
+			buffer[i] = m.buffer[i];
+	}
+	
 	public void append(int v)
 	{
 		buffer[position++] = (byte)(v & 0x0ff);

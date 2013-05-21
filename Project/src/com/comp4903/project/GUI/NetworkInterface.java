@@ -19,7 +19,7 @@ public class NetworkInterface {
 	public int bWidth,bHeight;
 	public int width,height;
 	public Context context;
-
+	public Square bg;
 	public int selected = -1;
 	public  NetworkInterface(Context c,int w , int h){
 		width = w;
@@ -46,6 +46,7 @@ public class NetworkInterface {
 		cancelY = height - bHeight;
 		cancel = new Square(cancelX,cancelY,bWidth,bHeight);
 		pressed_cancel = new Square(cancelX + 10,cancelY + 10,bWidth - 20,bHeight - 20);
+		bg = new Square(0,0,width,height);
 	}
 
 	public void loadNetWorkingTexture(GL10 gl){
@@ -88,12 +89,18 @@ public class NetworkInterface {
 		Bitmap pscan = Bitmap.createScaledBitmap(pcan, 512, 512, false);
 		pressed_cancel.loadGLTexture(gl, context, pscan);
 		pcan.recycle();
+
+		Bitmap background  = BitmapFactory.decodeResource(context.getResources(), R.drawable.marvin_bg);
+		bg.loadGLTexture(gl, context,  Bitmap.createScaledBitmap(background, 1024	, 1024, false));
+		background.recycle();
+		
 	}
 
 	public void DrawNetWorking(GL10 gl){
 		gl.glLoadIdentity();
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
+		bg.draw(gl);
 		if(selected == -1){
 			jbutton.draw(gl);
 			hbutton.draw(gl);
