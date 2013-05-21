@@ -143,6 +143,7 @@ public class MoveAnimate extends AnimationProcessor {
 			{
 				ended = true;
 				actor_.setAnimation("idle1");
+				actor_.noRepeat = false;
 				actor_.speed = 0.03f;
 				actor_.time = 0f;
 				

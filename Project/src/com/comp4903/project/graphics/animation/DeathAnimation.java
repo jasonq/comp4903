@@ -24,14 +24,19 @@ public class DeathAnimation extends AnimationProcessor {
 		
 		float r = actor_.getYrotate();
 		r += 0.1;
-		actor_.setYrotate(r);
+		//actor_.setYrotate(r);
 		time++;
 		
 		if (time > 50)
 		{
+			actor_.setY(actor_.getY() - 0.02f);			
+		}
+		if (time > 100)
+		{
 			actor_.remove = true;
 			ended = true;
 		}
+		
 		return false;
 	}
 

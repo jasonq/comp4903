@@ -121,12 +121,11 @@ public class Networking {
 					blockingOnSend = true;
 					RendererAccessor.floatingText(20, 300, 0, -1, 50, ColorType.White, "u" + currentTimeStamp, "sending " + currentTimeStamp);					
 					timetosend = false;
-					sendBuffer.timestamp = currentTimeStamp;					
+					sendBuffer.timestamp = currentTimeStamp;	
+					currentTimeStamp++;
 					//if (askDelay % 3 != 0) {						
-						sendPacket(sendBuffer.buffer, GAMEPACKET, true);
-					//}
-					//else 
-					//	currentTimeStamp++;
+						sendPacket(sendBuffer.buffer, GAMEPACKET, sendBuffer.timestamp);
+					//}					
 					addToHistory(message_);
 					blockingOnSend = false;
 				}
@@ -208,7 +207,7 @@ public class Networking {
 		}
 	}
 			
-	public static void sendPacket(byte buffer[], int type, boolean stamp)
+	public static void sendPacket(byte buffer[], int type, int stamp)
 	{
 		createHeader(buffer, type, stamp);
 		DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
@@ -224,7 +223,7 @@ public class Networking {
 		
 	}
 	
-	public static void sendPacketToIP(InetAddress ip, byte buffer[], int type, boolean stamp)
+	public static void sendPacketToIP(InetAddress ip, byte buffer[], int type, int stamp)
 	{
 		createHeader(buffer, type, stamp);
 		DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
@@ -240,14 +239,11 @@ public class Networking {
 		
 	}
 	
-	public static void createHeader(byte buffer[], int type, boolean stamp)
+	public static void createHeader(byte buffer[], int type, int stamp)
 	{
 		message_.reset();
-		message_.timestamp = currentTimeStamp;
-		if (stamp)
-			message_.append(currentTimeStamp++);
-		else
-			message_.append(0);
+		message_.timestamp = stamp;		
+		message_.append(stamp);
 		
 		message_.append(type);
 		
@@ -272,7 +268,7 @@ public class Networking {
 		broadcastHostMode = true;
 		while (broadcastHostMode)
 		{
-			sendPacket(m.buffer, BROADCASTHOST, false);
+			sendPacket(m.buffer, BROADCASTHOST, 0);
 			
 			int c=0;
 			for (int i = 0; i < 5; i++)
@@ -296,7 +292,7 @@ public class Networking {
 		broadcastJoinMode = true;
 		while (broadcastJoinMode)
 		{
-			sendPacket(m.buffer, BROADCASTJOIN, false);
+			sendPacket(m.buffer, BROADCASTJOIN, 0);
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {				
@@ -309,14 +305,14 @@ public class Networking {
 	{
 		NetworkMessage n = new NetworkMessage();
 		n.append(ts);
-		sendPacket(n.buffer, REQUESTPACKET, false);
+		sendPacket(n.buffer, REQUESTPACKET, 0);
 	}
 	
 	public static void sendAccept(InetAddress ip, int pn)
 	{
 		NetworkMessage n = new NetworkMessage();
 		n.append(pn);
-		sendPacket(n.buffer, ACCEPTJOIN, false);
+		sendPacket(n.buffer, ACCEPTJOIN, 0);
 	}
 			
 	static Thread receiveThread = new Thread()

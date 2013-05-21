@@ -59,6 +59,7 @@ public class GenericAttack extends AnimationProcessor {
 			if ((actor_.time > endTime) || (actor_.animation == -1))
 			{
 				actor_.setAnimation("idle1");
+				actor_.noRepeat = false;
 				ended = true;
 				actor_.time = 0;
 				actor_.speed = 0.03f;
