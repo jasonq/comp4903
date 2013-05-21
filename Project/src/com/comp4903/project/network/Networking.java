@@ -48,6 +48,7 @@ public class Networking {
 	public static NetworkMessage receiveBuffer = new NetworkMessage();
 	private static int currentTimeStamp = 0;
 	private static int currentPlaceInHistory = 0;
+	private static int packetCounter = 0;
 	
 	// network message codes
 	private static final int BROADCASTHOST = 1;
@@ -65,6 +66,7 @@ public class Networking {
 		currentPlaceInHistory = 0;
 		gameStarted = true;
 		blockingOnSend = false;
+		packetCounter = 0;
 		
 		for (int i = 0; i <5; i++)
 			playerAssigned[i] = false;
@@ -204,8 +206,10 @@ public class Networking {
 	}
 			
 	public static void sendPacket(byte buffer[], int type, int stamp)
-	{
+	{		
 		createHeader(buffer, type, stamp);
+		if (packetCounter++ % 3 == 0)
+			return;
 		DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
 		packet.setAddress(broadcastAddress);
 		packet.setPort(4903);
