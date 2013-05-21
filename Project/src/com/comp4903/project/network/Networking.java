@@ -125,27 +125,26 @@ public class Networking {
 					timetosend = false;
 					sendBuffer.timestamp = currentTimeStamp;	
 					currentTimeStamp++;
-					//if (askDelay % 3 != 0) {						
-						sendPacket(sendBuffer.buffer, GAMEPACKET, sendBuffer.timestamp);
-					//}					
+					sendPacket(sendBuffer.buffer, GAMEPACKET, sendBuffer.timestamp);										
 					addToHistory(message_);
 					blockingOnSend = false;
-				}
-				
-				// check if the next needed packet is in the 
-				// packet history queue.  If not, request it.
-				if (gameStarted){
-					boolean missing = true;
-					for (int i = 0; i < 100; i++)
-						if (history_[i].timestamp == currentTimeStamp) {
-							 missing = false;
-							 submitMessageToGameEngine(history_[i]);
-							 currentTimeStamp++;
+				} else {				
+					// check if the next needed packet is in the 
+					// packet history queue.  If not, request it.
+					if (gameStarted){
+						if (askDelay++ > 20)
+						{
+							askDelay = 0;
+							boolean missing = true;
+							for (int i = 0; i < 100; i++)
+								if (history_[i].timestamp == currentTimeStamp) {
+									 missing = false;
+									 submitMessageToGameEngine(history_[i]);
+									 currentTimeStamp++;
+								}
+							if (missing)
+								requestMissingPacket(currentTimeStamp);						
 						}
-					if ((missing) && (askDelay++ > 20))
-					{
-						askDelay = 0;
-						requestMissingPacket(currentTimeStamp);
 					}
 				}
 				Thread.sleep(10);
@@ -169,7 +168,7 @@ public class Networking {
 	
 	public static void send(NetworkMessage m)
 	{
-		sendBuffer = m;
+		sendBuffer.copy(m);
 		timetosend = true;
 		blockingOnSend = true;
 		while (blockingOnSend) {
@@ -332,14 +331,7 @@ public class Networking {
 					
 					receiveMessage_.buffer = packet.getData();
 					receiveMessage_.timestamp = receiveMessage_.readInt();
-					incomingIP = packet.getAddress();
-					
-					//receiveMessage_.reset();
-					//int tm = receiveMessage_.readInt();
-					//String s = receiveMessage_.readString();
-	
-					//RendererAccessor.floatingText(20, 500, 0, -1, 100, ColorType.White, "test", s);
-	
+					incomingIP = packet.getAddress();	
 					processIncoming(receiveMessage_, incomingIP);
 					
 				} catch (IOException e) {
