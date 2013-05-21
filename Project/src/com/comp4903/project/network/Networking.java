@@ -389,10 +389,10 @@ public class Networking {
 		if (ts != 0) 
 		{
 			//addToHistory(m);
-			if (ts == currentTimeStamp) {				
-				submitMessageToGameEngine(m);
-				sendAck(ts);
+			if (ts == currentTimeStamp) {	
 				currentTimeStamp++;
+				sendAck(ts);
+				submitMessageToGameEngine(m);				
 			} else if (ts < currentTimeStamp)
 			{
 				sendAck(ts);
