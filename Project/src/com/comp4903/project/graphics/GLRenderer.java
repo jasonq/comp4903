@@ -217,7 +217,8 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		RendererAccessor.map.floatingPass();
 	}
 	public void drawGameOver(GL10 gl){
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);			
+		drawGameScreen(gl);
+		//gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);			
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		headsUpDisplay.SwithToOrtho(gl);
 		//headsUpDisplay.drawHUD(gl);
