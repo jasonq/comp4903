@@ -177,6 +177,12 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
 			GameEngine.endTurn(networking);
 			ResetGUI();
+			UnitGroup winner = checkWinner();
+			if(winner != UnitGroup.None){
+				mRenderer.gov.UpdateWinner(winner);
+				GLRenderer.state = GameState.Game_Over;
+				return;
+			}
 			if(mapData._activeGroup == UnitGroup.PlayerTwo && !networking && AI){ //need check for if singleplayer or multiplayer
 
 				AIEngine.startTurn();
@@ -425,6 +431,24 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
 
 		netThread.start();
+	}
+	
+	private UnitGroup checkWinner(){
+		int result = 0;
+		UnitGroup loser = UnitGroup.None;
+		int cp1 = 0;
+		int cp2 = 0;
+		for(int i = 0; i < mapData._units.size(); i++){
+			if(mapData._units.get(i).unitGroup == UnitGroup.PlayerOne)
+				cp1++;
+			else if(mapData._units.get(i).unitGroup == UnitGroup.PlayerTwo)
+				cp2++;
+		}
+		if(cp1 == 0)
+			loser = UnitGroup.PlayerTwo;
+		else if(cp2 == 0)
+			loser = UnitGroup.PlayerOne;
+		return loser;
 	}
 
 }
