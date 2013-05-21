@@ -178,7 +178,7 @@ public class Algorithms {
             	adjNodes = oddNodes(t);
             
             for(BFSNode node : adjNodes){
-            	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
+            	if(!ListHasNode(marked, node)){
             		queue.add(node);
             		marked.add(node);
             	}
@@ -211,7 +211,7 @@ public class Algorithms {
             	adjNodes = oddNodes(t);
             
             for(BFSNode node : adjNodes){
-            	if(!ListHasNode(marked, node) && _map.isOpen(node.p)){
+            	if(!ListHasNode(marked, node)){
             		queue.add(node);
             		marked.add(node);
             	}
