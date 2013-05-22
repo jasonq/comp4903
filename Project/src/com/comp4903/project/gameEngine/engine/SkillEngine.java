@@ -168,9 +168,9 @@ public class SkillEngine {
 
 		String[] s = new String[1];
 		if (choice == 0)
-			s[0] = "Blinded";
-		else
 			s[0] = "HeadShot";
+		else
+			s[0] = "Blinded";
 		RendererAccessor.headShotAnimation(source, destination, s);
 		
 		if (network){
@@ -215,9 +215,9 @@ public class SkillEngine {
 
 		String[] s = new String[1];
 		if (action.decisionNum == 0)
-			s[0] = "Blinded";
-		else
 			s[0] = "HeadShot";
+		else
+			s[0] = "Blinded";
 		RendererAccessor.headShotAnimation(source, destination, s);
 		
 		return true;
