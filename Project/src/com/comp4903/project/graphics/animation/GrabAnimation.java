@@ -16,6 +16,7 @@ public class GrabAnimation extends AnimationProcessor {
 	float stepPosition;
 	float tx, ty, tz;
 	int count;
+	boolean animateVictim, finishing;
 	
 	public void init(Unit attacker, Unit attackee, Point target)
 	{
@@ -44,6 +45,7 @@ public class GrabAnimation extends AnimationProcessor {
 		victim_.setPosition(x, y, z);		
 		
 		stepLength = (float)Math.sqrt((x2-x) * (x2-x) + (y2-y)*(y2-y) + (z2-z)*(z2-z));
+		stepLength *= 30f;
 		if (stepLength == 0)
 			stepLength = 0.000001f;
 		xStep = (x2 - x) / stepLength; // * RendererAccessor.map.models[actor_.model].scale[0];
@@ -52,20 +54,58 @@ public class GrabAnimation extends AnimationProcessor {
 		stepPosition = 0f;
 		
 		count = 0;
+		animateVictim = false;
+		finishing = false;
+		
+		actor_.setAnimation("attack.grab");
+		actor_.time =0;
+		actor_.speed = 0.2f;
 		
 	}
 	
 	@Override
 	public boolean iteration() {
+				
+		if (finishing)
+		{
+			if (actor_.time == 0)
+			{
+				ended = true;
+				victim_.setAnimation("idle1");
+				victim_.time = 0;
+				victim_.speed = 0.03f;
+				actor_.setAnimation("idle1");
+				actor_.time = 0;
+				actor_.speed = 0.03f;
+			}
+		}
 		
-		x += xStep / stepLength;
-		y += yStep / stepLength;
-		z += zStep / stepLength;
+		if (actor_.time < 13)
+			return false;
+		
+		if (!animateVictim)
+		{
+			animateVictim = true;
+			victim_.setAnimation("drag.standard");
+			victim_.time = 0;
+			victim_.speed = 0.2f;
+		}
+		
+		x += xStep;
+		y += yStep;
+		z += zStep;
 		
 		victim_.setPosition(x,y,z);
+		
 		count++;
-		if (count > stepLength * stepLength)
-			ended = true;
+		if (count > stepLength)
+		{
+			finishing = true;
+			victim_.time = 6;
+			victim_.speed = -0.2f;
+			actor_.time = 13;
+			actor_.speed = -0.25f;			
+		}
 		
 		return false;
 	}

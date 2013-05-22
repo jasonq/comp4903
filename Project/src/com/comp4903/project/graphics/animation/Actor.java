@@ -98,6 +98,8 @@ public class Actor {
 		m.display(gl, viewMatrix, animation, time, alt);
 				
 		time += speed * 2;
+		if (time < 0)
+			time = 0;
 		if ((!noRepeat) && (time >= 119))
 			time = 0;
 		if ((noRepeat) && time >= 118)

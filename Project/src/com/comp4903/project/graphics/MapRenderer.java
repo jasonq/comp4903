@@ -470,6 +470,15 @@ public class MapRenderer {
 				tileMap[x][y].state = -1;
 			}
 				
+		tileMap[6][6].tile = 4;
+		tileMap[6][7].tile = 4;
+		tileMap[6][5].tile = 4;
+		tileMap[5][6].tile = 4;
+		tileMap[5][5].tile = 4;
+		tileMap[7][7].tile = 5;
+		//tileMap[8][8].tile = 6;
+		//tileMap[9][9].tile = 7;
+		
 		GLRenderer.viewX = (mapWidth / 2) * 1.5f;
 		GLRenderer.viewZ = (mapHeight / 2) * 1.5f;
 		GLRenderer.viewY = 0;
