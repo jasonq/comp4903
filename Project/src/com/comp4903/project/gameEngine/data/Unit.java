@@ -9,6 +9,7 @@ import com.comp4903.project.gameEngine.factory.ArmourStats;
 import com.comp4903.project.gameEngine.factory.GameStats;
 import com.comp4903.project.gameEngine.factory.UnitStats;
 import com.comp4903.project.gameEngine.factory.WeaponStats;
+import com.comp4903.project.graphics.RendererAccessor;
 
 public class Unit {
 	private static int id = 0;
@@ -76,6 +77,7 @@ public class Unit {
 			combatStats.currentHealth -= tileStatus.damageHealth;
 			combatStats.currentEnergy -= tileStatus.damageEnergy;
 			combatStats.fixHealthAndEnergy();
+			RendererAccessor.healthAnimation(this, "" + -tileStatus.damageHealth);
 		}
 		UpdateCombatStats();
 		status = temp;
