@@ -197,6 +197,7 @@ public class GameEngine {
 					mapData.RemoveDeadUnit();
 					return true;
 				}
+				break;
 			case Defend:
 				return SkillEngine.Defend(uOne, false);
 			case Headshot:
@@ -204,8 +205,15 @@ public class GameEngine {
 					mapData.RemoveDeadUnit();
 					return true;
 				}
+				break;
 			case Heal:
 				return SkillEngine.Heal(uOne, uTwo, false);
+			case Grab:
+				if (SkillEngine.Grab(uOne, uTwo, false)){
+					mapData.RemoveDeadUnit();
+					return true;
+				}
+				break;
 			case Endturn:
 				endTurn(false);
 				return true;
