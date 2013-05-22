@@ -40,7 +40,7 @@
 	</Unit>
 	<Unit>
 	    <Name>Medic</Name>
-	    <Health>110</Health>
+	    <Health>100</Health>
 	    <Energy>75</Energy>
 	    <Attack>0</Attack>
 	    <Defence>0</Defence>
