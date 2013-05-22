@@ -10,6 +10,7 @@ public class GrabAnimation extends AnimationProcessor {
 	int actorID;
 	Actor actor_;
 	Actor victim_;
+	Unit attacker, attackee;
 	
 	float x, y, z, stepLength;
 	float xStep, yStep, zStep;
@@ -17,9 +18,14 @@ public class GrabAnimation extends AnimationProcessor {
 	float tx, ty, tz;
 	int count;
 	boolean animateVictim, finishing;
+	String[] damages;
 	
-	public void init(Unit attacker, Unit attackee, Point target)
+	public void init(Unit a1, Unit a2, Point target, String[] d)
 	{
+		attacker = a1;
+		attackee = a2;
+		damages = d;
+	
 		actorID = attacker.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
 		
@@ -71,13 +77,13 @@ public class GrabAnimation extends AnimationProcessor {
 			if (actor_.time == 0)
 			{
 				ended = true;
-				victim_.setAnimation("idle1");
+				spawnAttack();
+				/*victim_.setAnimation("idle1");
 				victim_.time = 0;
 				victim_.speed = 0.03f;
 				actor_.setAnimation("idle1");
 				actor_.time = 0;
-				actor_.speed = 0.03f;
-			}
+				actor_.speed = 0.03f;*/
 		}
 		
 		if (actor_.time < 13)
@@ -114,6 +120,20 @@ public class GrabAnimation extends AnimationProcessor {
 	public boolean signal(int value) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public void spawnAttack()
+	{
+		GenericAttack m = new GenericAttack();
+		ReceiveAttack r = new ReceiveAttack();
+		
+		m.init(attacker, attackee);
+		r.init(attacker,  attackee, damages);
+		
+		AnimationEngine.add("Attack", m);
+		AnimationEngine.add("Receiver", r);
+		AnimationEngine.start("Attack");
+		AnimationEngine.start("Receiver");
 	}
 
 	
