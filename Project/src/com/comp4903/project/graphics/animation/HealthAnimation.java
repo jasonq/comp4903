@@ -25,8 +25,11 @@ public class HealthAnimation extends AnimationProcessor {
 		p = RendererAccessor.ScreenXYfromXYZ(actor_.getX(), actor_.getY() + 2, actor_.getZ());
 		if (p == null)
 			p = new Point(0,0);
-		RendererAccessor.floatingText(p.x, p.y, 0, -1, 150, ColorType.Green, "n", val);
-		
+		//RendererAccessor.floatingText(p.x, p.y, 0, -1, 150, ColorType.Green, "n", val);
+		RendererAccessor.floatingText(actor_.getX(),
+									  actor_.getY() + 2,
+									  actor_.getZ(),
+									  0, -1, 150, ColorType.Green, "n", val);
 		r = new Random();
 		time = 0;
 	}
@@ -46,7 +49,11 @@ public class HealthAnimation extends AnimationProcessor {
 				ic = IconType.Health3;
 			int spd = r.nextInt(2) * -1 -1;
 			int x = r.nextInt(120) -60;
-			RendererAccessor.floatingIcon(p.x + x - 30, p.y, 0, spd, 50, "h", ic);
+			//RendererAccessor.floatingIcon(p.x + x - 30, p.y, 0, spd, 50, "h", ic);
+			RendererAccessor.floatingIcon(actor_.getX() + (r.nextFloat() * 2f) - 1f, 
+										  actor_.getY() + 2,
+										  actor_.getZ(),
+										  0, spd, 50, "h" + time, ic);
 			
 		}
 		time++;

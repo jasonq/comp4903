@@ -56,7 +56,7 @@ public class Status {
 			defence = 2;
 			break;
 		case Generator:
-			damageHealth = -10;
+			damageHealth = -15;
 			resolveAtEndOfTurn = false;
 			break;
 		case Building:

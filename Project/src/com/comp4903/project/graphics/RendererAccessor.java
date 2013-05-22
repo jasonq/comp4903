@@ -92,6 +92,18 @@ public class RendererAccessor {
 			map.addFloatingIcon(x,y,mx,my,l,n,i);
 		}
 		
+		/*	Alternate versions accepting 3 floats.  This text or icon will
+		 *  be pinned to a 3d object on the map
+		 */
+		public static void floatingIcon(float x, float y, float z, int mx, int my, int l, String n, IconType i)
+		{
+			map.addFloatingIcon(x,y,z,mx,my,l,n,i);
+		}
+		public static void floatingText(float x, float y, float z, int mx, int my, int l, ColorType col, String n, String c)
+		{
+			map.addFloatingText(x,y,z,mx,my,l,col,n,c);
+		}
+		
 		/*	SCREENXYFROMXYZ - takes a 3D world co-ordinate (xyz) and returns the 
 		 *  xy location on the screen where it would appear if rendered
 		 * 
