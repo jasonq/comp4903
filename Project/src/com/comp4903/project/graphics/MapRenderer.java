@@ -649,12 +649,38 @@ public class MapRenderer {
 		AnimationEngine.start("Defend" + u.uID);
 	}
 	
-	public static void grabAnimation(Unit u, Unit u2, Point p)
+	public static void grabAnimation(Unit u, Unit u2, Point p, String[] damages)
 	{
 		GrabAnimation d = new GrabAnimation();
 		d.init(u, u2, p);
 		AnimationEngine.add("Grab" + u.uID, d);
 		AnimationEngine.start("Grab" + u.uID);
+		
+		/*GenericAttack m = new GenericAttack();
+		ReceiveAttack r = new ReceiveAttack();
+		
+		m.init(u, u2);
+		r.init(u,  u2, damages);
+		
+		AnimationEngine.add("Attack", m);
+		AnimationEngine.add("Receiver", r);
+		AnimationEngine.start("Attack");
+		AnimationEngine.start("Receiver");*/
+	}
+	
+	public void headShotAnimation(Unit u, Unit u2, String[] messages)
+	{
+		GenericAttack m = new GenericAttack();
+		ReceiveAttack r = new ReceiveAttack();
+		
+		m.init(u, u2);
+		m.setSpeed(0.01f);
+		r.init(u,  u2, messages);
+		
+		AnimationEngine.add("Attack", m);
+		AnimationEngine.add("Receiver", r);
+		AnimationEngine.start("Attack");
+		AnimationEngine.start("Receiver");
 	}
 	
 	public Actor getActor(int id)

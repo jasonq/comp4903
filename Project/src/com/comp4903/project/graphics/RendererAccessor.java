@@ -61,9 +61,14 @@ public class RendererAccessor {
 			map.defendAnimation(u);
 		}
 		
-		public static void grabAnimation(Unit a1, Unit a2, Point p)
+		public static void grabAnimation(Unit a1, Unit a2, Point p, String[] damages)
 		{
-			map.grabAnimation(a1, a2, p);
+			map.grabAnimation(a1, a2, p, damages);
+		}
+		
+		public static void headShotAnimation(Unit u, Unit u2, String[] whatever)
+		{
+			map.headShotAnimation(u, u2, whatever);
 		}
 		
 		/*	FLOATINGTEXT - will summon floating text to appear over the game screen

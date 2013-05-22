@@ -174,6 +174,7 @@ public class SkillEngine {
 			a.decisionNum = choice;
 			Networking.send(a.getActionMessage());
 		}
+		
 		return true;
 	}
 	
