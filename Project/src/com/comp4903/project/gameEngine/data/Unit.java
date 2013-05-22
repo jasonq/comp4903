@@ -77,7 +77,9 @@ public class Unit {
 			combatStats.currentHealth -= tileStatus.damageHealth;
 			combatStats.currentEnergy -= tileStatus.damageEnergy;
 			combatStats.fixHealthAndEnergy();
-			RendererAccessor.healthAnimation(this, "" + -tileStatus.damageHealth);
+			if (tileStatus.damageHealth < 0){
+				RendererAccessor.healthAnimation(this, "" + -tileStatus.damageHealth);
+			}
 		}
 		UpdateCombatStats();
 		status = temp;
