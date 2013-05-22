@@ -192,7 +192,7 @@ public class MapRenderer {
 		
 		gl.glDisable(GL10.GL_LIGHTING);
 				
-		floatingPass(); 	// floating text, do last so it is overlayed over map
+		floatingPass(); 	// floating text and icons, do last so it is overlayed over map
 		
 	}
 	
@@ -283,6 +283,27 @@ public class MapRenderer {
 				floatingIcons_.remove(p);
 		}
 		floatingIcons_.add(f);
+	}
+	
+	public void clearFloatingIcons(String n)
+	{		
+		if (n.equals("all"))
+		{
+			floatingIcons_.clear();
+		}
+		else
+		{
+			for (int p = 0; p < floatingIcons_.size(); p++)
+			{
+				if (floatingIcons_.get(p).name != null)
+				{
+					if (floatingIcons_.get(p).name.equals(n))
+					{
+						floatingIcons_.get(p).active = false;
+					}
+				}
+			}
+		}
 	}
 	
 	
@@ -431,19 +452,19 @@ public class MapRenderer {
 			models[mdl].SetPosition(x, y, z);
 			models[mdl].ResetOrientation();	
 			
-			if (!a.active)
+			/*if ((!a.active) && (!a.displayInactive))
 			{
-				gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, grayedOutLight, 0);
-				gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, grayedOutLight, 0);
-			}
+				RendererAccessor.clearFloatingIcons("inactive" + a.getID());
+				RendererAccessor.floatingIcon(a.getX(),
+											  a.getY(),
+											  a.getZ(),
+											  0, 0, -1, "inactive" + a.getID(),
+											  IconType.Lock);
+				a.displayInactive = true;
+			}*/
 			
 			a.display(gl, viewMatrix, models[mdl]);			
 			
-			if (!a.active)
-			{
-				gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, ambientLight, 0);
-				gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, diffuseLight, 0);
-			}
 			
 		}
 	}

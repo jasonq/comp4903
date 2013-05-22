@@ -104,6 +104,14 @@ public class RendererAccessor {
 			map.addFloatingText(x,y,z,mx,my,l,col,n,c);
 		}
 		
+		/*  CLEARFLOATINGICONS - clears floating icons named s, or all of them if "all"
+		 *  is specified		 * 
+		 */
+		public static void clearFloatingIcons(String s)
+		{
+			map.clearFloatingIcons(s);
+		}
+		
 		/*	SCREENXYFROMXYZ - takes a 3D world co-ordinate (xyz) and returns the 
 		 *  xy location on the screen where it would appear if rendered
 		 * 

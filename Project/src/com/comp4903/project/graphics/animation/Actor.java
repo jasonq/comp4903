@@ -30,7 +30,7 @@ public class Actor {
 	public boolean remove = false;
 	public boolean alt = false;
 	public boolean noRepeat = false;
-	public boolean active;
+	public boolean active, displayInactive;
 	
 	Model3D m3d;
 	
@@ -46,6 +46,7 @@ public class Actor {
 		lastZ = 0;
 		noRepeat = false;
 		active = true;
+		displayInactive = false;
 		
 	}
 	

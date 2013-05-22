@@ -15,7 +15,7 @@ import com.comp4903.project.graphics.RendererAccessor;
 public class FloatingIcon {
 
 	int x, y, xMovement, yMovement, lifetime, elapsed;
-	String name;
+	public String name;
 	IconType icon;
 	public boolean active;
 	int delay = 20;
@@ -69,6 +69,7 @@ public class FloatingIcon {
 		loadImage(IconType.Health1.getCode(), R.drawable.plus1, 16, 16);
 		loadImage(IconType.Health2.getCode(), R.drawable.plus2, 32, 32);
 		loadImage(IconType.Health3.getCode(), R.drawable.plus3, 64, 64);
+		loadImage(IconType.Lock.getCode(), R.drawable.lockicon, 64, 64);
 		
 	}
 	
