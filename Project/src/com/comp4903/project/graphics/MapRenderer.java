@@ -78,6 +78,7 @@ public class MapRenderer {
 	public Model3D[] models;
 		
 	private float[] ambientLight = { 0.6f, 0.6f, 0.6f, 1 };
+	private float[] grayedOutLight = { 0.3f, 0.3f, 0.3f, 1 };
 	private float[] tileColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 0.0f };	
@@ -240,9 +241,41 @@ public class MapRenderer {
 		floatingText_.add(f);
 	}
 	
+	public void addFloatingText(float x, float y, float z, int mx, int my, int l, ColorType col, String n, String c)
+	{		
+		for (int i = 0; i < floatingText_.size(); i++)
+		{
+			if (!floatingText_.get(i).active)
+				floatingText_.remove(i);
+		}
+		for (int i = 0; i < floatingText_.size(); i++)
+		{
+			if (floatingText_.get(i).name.equals(n))
+			{
+				//floatingText_.get(i).set(x,y,mx,my,l,col,n,c);
+				return;
+			}
+		}
+		
+		FloatingText f = new FloatingText(x,y,z,mx,my,l,col, n,c);
+		floatingText_.add(f);
+	}
+	
 	public void addFloatingIcon(int x, int y, int mx, int my, int l, String n, IconType i)
 	{
 		FloatingIcon f = new FloatingIcon(x,y,mx,my,l,n,i);
+		
+		for (int p = 0; p < floatingIcons_.size(); p++)
+		{
+			if (!floatingIcons_.get(p).active)
+				floatingIcons_.remove(p);
+		}
+		floatingIcons_.add(f);
+	}
+	
+	public void addFloatingIcon(float x, float y, float z, int mx, int my, int l, String n, IconType i)
+	{
+		FloatingIcon f = new FloatingIcon(x,y,z,mx,my,l,n,i);
 		
 		for (int p = 0; p < floatingIcons_.size(); p++)
 		{
@@ -396,8 +429,21 @@ public class MapRenderer {
 			float z = a.getZ();									
 			
 			models[mdl].SetPosition(x, y, z);
-			models[mdl].ResetOrientation();			
+			models[mdl].ResetOrientation();	
+			
+			if (!a.active)
+			{
+				gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, grayedOutLight, 0);
+				gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, grayedOutLight, 0);
+			}
+			
 			a.display(gl, viewMatrix, models[mdl]);			
+			
+			if (!a.active)
+			{
+				gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, ambientLight, 0);
+				gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, diffuseLight, 0);
+			}
 			
 		}
 	}
@@ -554,11 +600,13 @@ public class MapRenderer {
 			if (actors.containsKey(m._units.get(i).uID))
 			{
 				Actor a = actors.get(m._units.get(i).uID);
+				a.active = m._units.get(i).active;
 				a.setTilePosition(m._units.get(i).position);				
 			} 
 			else
 			{
 				Actor a = new Actor(m._units.get(i).uID);
+				a.active = m._units.get(i).active;
 				
 				if (m._units.get(i).unitGroup.getCode() == 0)
 					a.alt = true;
@@ -664,7 +712,7 @@ public class MapRenderer {
 		ReceiveAttack r = new ReceiveAttack();
 		
 		m.init(u, u2);
-		m.setSpeed(0.01f);
+		m.setSpeed(0.08f);
 		r.init(u,  u2, messages);
 		
 		AnimationEngine.add("Attack", m);

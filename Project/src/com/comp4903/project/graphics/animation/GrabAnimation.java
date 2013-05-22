@@ -78,12 +78,8 @@ public class GrabAnimation extends AnimationProcessor {
 			{
 				ended = true;
 				spawnAttack();
-				/*victim_.setAnimation("idle1");
-				victim_.time = 0;
-				victim_.speed = 0.03f;
-				actor_.setAnimation("idle1");
-				actor_.time = 0;
-				actor_.speed = 0.03f;*/
+				
+			}
 		}
 		
 		if (actor_.time < 13)
@@ -124,16 +120,26 @@ public class GrabAnimation extends AnimationProcessor {
 	
 	public void spawnAttack()
 	{
-		GenericAttack m = new GenericAttack();
-		ReceiveAttack r = new ReceiveAttack();
-		
-		m.init(attacker, attackee);
-		r.init(attacker,  attackee, damages);
-		
-		AnimationEngine.add("Attack", m);
-		AnimationEngine.add("Receiver", r);
-		AnimationEngine.start("Attack");
-		AnimationEngine.start("Receiver");
+		if (damages.length == 0)
+		{   
+			victim_.setAnimation("idle1");
+			victim_.time = 0;
+			victim_.speed = 0.03f;
+			actor_.setAnimation("idle1");
+			actor_.time = 0;
+			actor_.speed = 0.03f;
+		} else {
+			GenericAttack m = new GenericAttack();
+			ReceiveAttack r = new ReceiveAttack();
+			
+			m.init(attacker, attackee);
+			r.init(attacker,  attackee, damages);
+			
+			AnimationEngine.add("Attack", m);
+			AnimationEngine.add("Receiver", r);
+			AnimationEngine.start("Attack");
+			AnimationEngine.start("Receiver");
+		}
 	}
 
 	
