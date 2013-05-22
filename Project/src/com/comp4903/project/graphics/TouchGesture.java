@@ -177,6 +177,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
 			GameEngine.endTurn(networking);
 			ResetGUI();
+			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 			UnitGroup winner = checkWinner();
 			if(winner != UnitGroup.None){
 				mRenderer.gov.UpdateWinner(winner);
