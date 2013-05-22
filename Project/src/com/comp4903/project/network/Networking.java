@@ -20,6 +20,10 @@ import android.content.Context;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 
+/*	NETWORKING - handles the network communication of the game.
+ *  Runs 2 threads, one to receive packets and one to send. *  
+ *  
+ */
 public class Networking {
 
 	public static String IP = "undefined";
@@ -43,12 +47,11 @@ public class Networking {
 	public static boolean blockingOnSend = false;
 	public static boolean receiveAcknowledge = false;
 	
-	private static NetworkMessage message_ = new NetworkMessage();
-	private static NetworkMessage[] history_ = new NetworkMessage[100];
+	private static NetworkMessage message_ = new NetworkMessage();	
 	public static NetworkMessage sendBuffer = new NetworkMessage();
 	public static NetworkMessage receiveBuffer = new NetworkMessage();
-	private static int currentTimeStamp = 0;
-	private static int currentPlaceInHistory = 0;
+	
+	private static int currentTimeStamp = 0;	
 	private static int packetCounter = 0;
 	
 	// network message codes
@@ -59,43 +62,39 @@ public class Networking {
 	private static final int REQUESTPACKET = 5;
 	private static final int ACKNOWLEDGEPACKET = 6;
 	
+	/*	STATICINITIALIZER - as this is a static class, this method initializes
+	 *  the members, and starts the receive thread.
+	 * 
+	 */
 	public static void staticInitializer(Context c)
 	{
 		IP = "undefined";
 		broadcastIP = "undefined";
 		timetosend = false;
-		currentTimeStamp = 1;
-		currentPlaceInHistory = 0;
+		currentTimeStamp = 1;		
 		gameStarted = true;
 		blockingOnSend = false;
 		packetCounter = 0;
 		
 		for (int i = 0; i <5; i++)
-			playerAssigned[i] = false;
-		
-		for (int i = 0; i < 100; i++)
-			history_[i] = new NetworkMessage();
-	//}
+			playerAssigned[i] = false;		
 	
-	//public Networking(Context c)
-	//{
 		context = c;
 		
 		try {
 			netInterface = new DatagramSocket(4903);
-			netInterface.setSoTimeout(0);
-			//netInterface.setBroadcast(true);
+			netInterface.setSoTimeout(0);			
 						
 			 WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 			 DhcpInfo dhcp = wifi.getDhcpInfo();
 			 IPaddress = InetAddress.getLocalHost();
 			 IP = dhcp.toString();
-			 			
+			 
+			 // determine the broadcast IP address, usually xxx.xxx.xxx.255
 			int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
 		    byte[] quads = new byte[4];
 		    for (int k = 0; k < 4; k++)
 		      quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
-		    //broadcastAddress = InetAddress.getByName("142.232.165.79");
 		    
 		    broadcastIP =  InetAddress.getByAddress(quads).toString();
 		    broadcastAddress =  InetAddress.getByAddress(quads);
@@ -103,13 +102,24 @@ public class Networking {
 			sendInterface.setBroadcast(true);
 			
 			// start a thread to watch for incoming network requests			
-			receiveThread.start();
+			receiveThread.start();				
 			
-			int askDelay = 0;
-			
-			// wait on two types of events:
-			//	a.	Application requests to send a packet
-			//	b.	Application gets too far behind
+		} catch (IOException e)
+		{
+			int a = 1;
+			RendererAccessor.floatingText(20, 500, 0, -1, 50, ColorType.Green, "test", "Exception - Network initialization failed");
+			return;
+		} 
+		sendLoop();
+	}
+	
+	/*	SENDLOOP - waits on application network send requests and
+	 *  processes them as they come in.
+	 */
+	private static void sendLoop()
+	{
+		try {	
+			// wait for application to request to send a packet
 			while (true)
 			{
 				
@@ -127,48 +137,24 @@ public class Networking {
 					timetosend = false;
 					sendBuffer.timestamp = currentTimeStamp;	
 					currentTimeStamp++;
-					sendPacket(sendBuffer.buffer, GAMEPACKET, sendBuffer.timestamp);					
-					//addToHistory(message_);
+					sendPacket(sendBuffer.buffer, GAMEPACKET, sendBuffer.timestamp);						
 					blockingOnSend = false;
 					confirmSend();
-				} else {				
-					// check if the next needed packet is in the 
-					// packet history queue.  If not, request it.
-					/*if (gameStarted){
-						if (askDelay++ > 20)
-						{
-							askDelay = 0;
-							boolean missing = true;
-							for (int i = 0; i < 100; i++)
-								if (history_[i].timestamp == currentTimeStamp) {
-									 missing = false;
-									 submitMessageToGameEngine(history_[i]);
-									 currentTimeStamp++;
-								}
-							if (missing)
-								requestMissingPacket(currentTimeStamp);						
-						}
-					}*/
-				}
+				} 
+				
 				Thread.sleep(10);
 			}			
 			
 			
-		} catch (IOException e)
-		{
-			int a = 1;
-			RendererAccessor.floatingText(20, 500, 0, -1, 50, ColorType.Green, "test", "Exception");
-
-			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
+		}		
 		
 	}
 	
+	// called by application when it wants to send a message to the
+	// other party on the network
 	public static void send(NetworkMessage m)
 	{
 		sendBuffer.copy(m);
@@ -184,6 +170,8 @@ public class Networking {
 		}
 	}
 	
+	// submits an incoming message to the game engine for processing.
+	// message will generally represent a player move or action
 	public static void submitMessageToGameEngine(NetworkMessage m)
 	{
 		m.reset();
@@ -194,31 +182,31 @@ public class Networking {
 		if (type == GAMEPACKET)
 		{
 			// NOTE: message pointer is indexed to the position
-			// in which game data begins (skipping the 8 bytes of the header)
+			// in which game data begins (skipping the 12 bytes of the header)
 			
 			RendererAccessor.floatingText(20, 330, 0, -1, 50, ColorType.White, "host", "submitted " + ts);
-			//currentTimeStamp++;
+			
 			Action a = new Action();
 			if (a.decodeMessage(m))
 				if (GameEngine.executeAction(a)) 
 			 		return;
 			
 			RendererAccessor.floatingText(20, 330, 0, -1, 50, ColorType.White, "host", "Failed " + ts);
-			// die
+			// die here
 		}
 	}
-			
+	
+	// 
 	public static void sendPacket(byte buffer[], int type, int stamp)
 	{		
 		createHeader(buffer, type, stamp);
-		if (packetCounter++ % 3 == 0)
-			return;
+		//if (packetCounter++ % 3 == 0)
+		//	return;
 		DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
 		packet.setAddress(broadcastAddress);
 		packet.setPort(4903);
 		try {
-			sendInterface.send(packet);
-			//addToHistory(message_);
+			sendInterface.send(packet);			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -240,8 +228,7 @@ public class Networking {
 			}
 			
 			try {
-				sendInterface.send(packet);
-				//addToHistory(message_);
+				sendInterface.send(packet);				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -256,8 +243,7 @@ public class Networking {
 		packet.setAddress(ip);
 		packet.setPort(4903);
 		try {
-			sendInterface.send(packet);
-			//addToHistory(message_);
+			sendInterface.send(packet);			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -327,14 +313,7 @@ public class Networking {
 			}
 		}
 	}
-	
-	public static void requestMissingPacket(int ts)
-	{
-		NetworkMessage n = new NetworkMessage();
-		n.append(ts);
-		sendPacket(n.buffer, REQUESTPACKET, 0);
-	}
-	
+		
 	public static void sendAccept(InetAddress ip, int pn)
 	{
 		NetworkMessage n = new NetworkMessage();
@@ -408,19 +387,7 @@ public class Networking {
 		n.append(ts);
 		sendPacket(n.buffer, ACKNOWLEDGEPACKET, 0);
 	}
-	
-	// adds message to the history buffer
-	public static void addToHistory(NetworkMessage m)
-	{
-		history_[currentPlaceInHistory].position = 0;
-		history_[currentPlaceInHistory].timestamp = m.timestamp;
-		for (int q = 0; q < 100; q ++)
-			history_[currentPlaceInHistory].buffer[q] = m.buffer[q];
-		currentPlaceInHistory++;
-		if (currentPlaceInHistory == 100)
-			currentPlaceInHistory = 0;
-	}
-	
+		
 	public static void processRequest(NetworkMessage m, InetAddress incomingIP)
 	{
 		m.reset();		
@@ -436,8 +403,7 @@ public class Networking {
 		case BROADCASTHOST:
 			processHostRequest(m, incomingIP);
 			break;
-		case REQUESTPACKET:
-			processRequestPacket(m, incomingIP);
+		case REQUESTPACKET:			
 			break;
 		case ACCEPTJOIN:
 			processAccept(m, incomingIP);
@@ -475,7 +441,6 @@ public class Networking {
 			}
 		}
 		
-		
 	}
 	
 	
@@ -488,38 +453,7 @@ public class Networking {
 		RendererAccessor.floatingText(10, 250, 0, 0, -1, ColorType.White, "stuff", s);
 		candidateHostIP = incomingIP;		
 	}
-	
-	public static void processRequestPacket(NetworkMessage m, InetAddress incomingIP)
-	{
-		int ts;
-		m.reset();
-		m.readInt(); // playernumber
-		m.readInt(); // timestamp
-		m.readInt(); // type
-		ts = m.readInt(); // requested timestamp
 		
-		for (int h = 0; h < 100; h++)
-		{
-			if (history_[h].timestamp == ts)
-			{
-				message_.timestamp = ts;
-				message_.position = 0;
-				for (int q = 0; q < 100; q++)
-					message_.buffer[q] = history_[h].buffer[q];
-				DatagramPacket packet = new DatagramPacket(message_.buffer, 100);
-				packet.setAddress(broadcastAddress);
-				packet.setPort(4903);
-				try {
-					sendInterface.send(packet);
-					//addToHistory(message_);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
 	public static void processAccept(NetworkMessage m, InetAddress incomingIP)
 	{
 		broadcastJoinMode = false;
