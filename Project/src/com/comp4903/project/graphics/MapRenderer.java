@@ -23,6 +23,7 @@ import com.comp4903.project.graphics.animation.DefendAnimation;
 import com.comp4903.project.graphics.animation.FloatingIcon;
 import com.comp4903.project.graphics.animation.FloatingText;
 import com.comp4903.project.graphics.animation.GenericAttack;
+import com.comp4903.project.graphics.animation.GrabAnimation;
 import com.comp4903.project.graphics.animation.HealthAnimation;
 import com.comp4903.project.graphics.animation.MoveAnimate;
 import com.comp4903.project.graphics.animation.ReceiveAttack;
@@ -469,6 +470,19 @@ public class MapRenderer {
 				tileMap[x][y].state = -1;
 			}
 				
+		tileMap[6][6].tile = 4;
+		tileMap[6][7].tile = 4;
+		tileMap[6][5].tile = 4;
+		tileMap[5][6].tile = 4;
+		tileMap[5][5].tile = 4;
+		tileMap[7][7].tile = 5;
+		//tileMap[8][8].tile = 6;
+		//tileMap[9][9].tile = 7;
+		
+		GLRenderer.viewX = (mapWidth / 2) * 1.5f;
+		GLRenderer.viewZ = (mapHeight / 2) * 1.5f;
+		GLRenderer.viewY = 0;
+		
 		actors.clear();
 		for (int i = 0; i < m._units.size(); i++)
 		{
@@ -633,6 +647,14 @@ public class MapRenderer {
 		d.init(u);
 		AnimationEngine.add("Defend" + u.uID, d);
 		AnimationEngine.start("Defend" + u.uID);
+	}
+	
+	public static void grabAnimation(Unit u, Unit u2, Point p)
+	{
+		GrabAnimation d = new GrabAnimation();
+		d.init(u, u2, p);
+		AnimationEngine.add("Grab" + u.uID, d);
+		AnimationEngine.start("Grab" + u.uID);
 	}
 	
 	public Actor getActor(int id)

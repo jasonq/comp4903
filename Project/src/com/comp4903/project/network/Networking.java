@@ -187,7 +187,7 @@ public class Networking {
 	public static void submitMessageToGameEngine(NetworkMessage m)
 	{
 		m.reset();
-		m.readInt();
+		m.readInt(); // playernumber
 		int ts = m.readInt(); // timestamp
 		int type = m.readInt(); // message type
 		

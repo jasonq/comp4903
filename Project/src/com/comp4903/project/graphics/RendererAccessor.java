@@ -61,6 +61,11 @@ public class RendererAccessor {
 			map.defendAnimation(u);
 		}
 		
+		public static void grabAnimation(Unit a1, Unit a2, Point p)
+		{
+			map.grabAnimation(a1, a2, p);
+		}
+		
 		/*	FLOATINGTEXT - will summon floating text to appear over the game screen
 		 *  at any time.  Parameters:
 		 * 

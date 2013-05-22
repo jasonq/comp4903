@@ -42,7 +42,7 @@ public class ReceiveAttack extends AnimationProcessor {
 			Point p = RendererAccessor.ScreenXYfromXYZ(actor_.getX(), actor_.getY() + 2, actor_.getZ());
 			if (p == null)
 				p = new Point(0,0);
-			RendererAccessor.floatingText(p.x-40, p.y, 0, -2, 100, ColorType.Red, "bozo", messages_[m++]);
+			RendererAccessor.floatingText(p.x-40, p.y, 0, -2, 100, ColorType.Red, "m"+ m, messages_[m++]);
 			count = 20;
 		}
 		if (m == messages_.length)

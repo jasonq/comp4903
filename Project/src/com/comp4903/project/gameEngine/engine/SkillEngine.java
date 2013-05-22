@@ -257,6 +257,7 @@ public class SkillEngine {
 		destination.position = p;
 		
 		//Attack(source, destination, false);
+		RendererAccessor.grabAnimation(source, destination, p);
 		
 		if (network){
 			Action a = new Action();
