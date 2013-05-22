@@ -165,6 +165,13 @@ public class SkillEngine {
 			destination.AddStatus(s);
 			choice = 1;
 		}
+
+		String[] s = new String[1];
+		if (choice == 0)
+			s[0] = "HeadShot";
+		else
+			s[0] = "Blinded";
+		RendererAccessor.headShotAnimation(source, destination, s);
 		
 		if (network){
 			Action a = new Action();
@@ -204,6 +211,15 @@ public class SkillEngine {
 			System.out.println("Unknown Decision for NetVHeadShot from network");
 			return false;
 		}
+		
+
+		String[] s = new String[1];
+		if (action.decisionNum == 0)
+			s[0] = "HeadShot";
+		else
+			s[0] = "Blinded";
+		RendererAccessor.headShotAnimation(source, destination, s);
+		
 		return true;
 	}
 	
@@ -257,8 +273,36 @@ public class SkillEngine {
 		System.out.println("Destination Unit move to:" + p.x + ", " + p.y);
 		destination.position = p;
 		
-		//Attack(source, destination, false);
-		RendererAccessor.grabAnimation(source, destination, p);
+		//********* Code Copied from Attack **************//
+		stats = GameStats.getSkillStats(SkillType.Attack);
+		
+		//Skill cost, used in all skills
+		source.combatStats.currentHealth -= stats.healthCost;
+		source.combatStats.currentEnergy -= stats.energyCost;
+		source.combatStats.fixHealthAndEnergy();
+		
+		int round = source.combatStats.round;
+		int[] intResult = new int[round];
+		String[] result = new String[round];
+		for (int i = 0; i < round; i++){
+			if (HelperEngine.doesHit(source.combatStats.accuracy)){
+				int damage = source.combatStats.attack - destination.combatStats.defence;
+				if (damage <= 0){
+					result[i] = "Blocked";
+					intResult[i] = 0;
+					damage = 0;
+				} else {
+					result[i] = "" + damage;
+					intResult[i] = damage;
+				}
+				destination.combatStats.currentHealth -= damage;
+			} else {
+				result[i] = "Miss";
+				intResult[i] = -1;
+			}
+		}
+		destination.combatStats.fixHealthAndEnergy();
+		RendererAccessor.grabAnimation(source, destination, p, result);
 		
 		if (network){
 			Action a = new Action();
