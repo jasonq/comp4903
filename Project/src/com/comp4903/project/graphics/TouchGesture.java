@@ -347,6 +347,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				ResetGUI();
 			} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)
 					&& currentUnit.getUnitStats().canUseThisSkill(SkillType.Headshot)){
+
 				GameEngine.useSkill(currentUnit, pickUnit, SkillType.Headshot, true, networking);
 				ResetGUI();
 			} else if(decision == 3 && mapData._attackBox.contains(pickUnit.position) && !currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)
