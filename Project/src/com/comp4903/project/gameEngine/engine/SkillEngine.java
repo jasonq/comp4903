@@ -274,34 +274,38 @@ public class SkillEngine {
 		destination.position = p;
 		
 		//********* Code Copied from Attack **************//
-		stats = GameStats.getSkillStats(SkillType.Attack);
-		
-		//Skill cost, used in all skills
-		source.combatStats.currentHealth -= stats.healthCost;
-		source.combatStats.currentEnergy -= stats.energyCost;
-		source.combatStats.fixHealthAndEnergy();
-		
-		int round = source.combatStats.round;
-		int[] intResult = new int[round];
-		String[] result = new String[round];
-		for (int i = 0; i < round; i++){
-			if (HelperEngine.doesHit(source.combatStats.accuracy)){
-				int damage = source.combatStats.attack - destination.combatStats.defence;
-				if (damage <= 0){
-					result[i] = "Blocked";
-					intResult[i] = 0;
-					damage = 0;
+		String[] result = new String[0];
+		if (PathFind.Distance(source.position, destination.position) <= 1){
+			stats = GameStats.getSkillStats(SkillType.Attack);
+			
+			//Skill cost, used in all skills
+			source.combatStats.currentHealth -= stats.healthCost;
+			source.combatStats.currentEnergy -= stats.energyCost;
+			source.combatStats.fixHealthAndEnergy();
+			
+			int round = source.combatStats.round;
+			int[] intResult = new int[round];
+			result = new String[round];
+			for (int i = 0; i < round; i++){
+				if (HelperEngine.doesHit(source.combatStats.accuracy)){
+					int damage = source.combatStats.attack - destination.combatStats.defence;
+					if (damage <= 0){
+						result[i] = "Blocked";
+						intResult[i] = 0;
+						damage = 0;
+					} else {
+						result[i] = "" + damage;
+						intResult[i] = damage;
+					}
+					destination.combatStats.currentHealth -= damage;
 				} else {
-					result[i] = "" + damage;
-					intResult[i] = damage;
+					result[i] = "Miss";
+					intResult[i] = -1;
 				}
-				destination.combatStats.currentHealth -= damage;
-			} else {
-				result[i] = "Miss";
-				intResult[i] = -1;
 			}
+			destination.combatStats.fixHealthAndEnergy();					
 		}
-		destination.combatStats.fixHealthAndEnergy();
+		
 		RendererAccessor.grabAnimation(source, destination, p, result);
 		
 		if (network){
