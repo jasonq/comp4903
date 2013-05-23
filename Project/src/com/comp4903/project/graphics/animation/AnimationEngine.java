@@ -71,7 +71,7 @@ public class AnimationEngine {
 	/*	EXECUTE - execute one iteration of each active AnimationProcessor 
 	 * 
 	 */
-	public static void execute()
+	public synchronized static void execute()
 	{
 		AnimationProcessor a;
 		List<String> removeList = new ArrayList<String>();

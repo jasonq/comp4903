@@ -251,7 +251,7 @@ public class SkillEngine {
 		}
 		
 		RendererAccessor.healthAnimation(destination ,""+ heal);
-		return false;
+		return true;
 	}
 	
 	public static boolean Grab(Unit source, Unit destination, boolean network){

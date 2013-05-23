@@ -19,6 +19,7 @@ import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.factory.GameStats;
 import com.comp4903.project.gameEngine.factory.SkillStats;
 import com.comp4903.project.network.Networking;
+import com.comp4903.project.sound.SFX;
 
 public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
@@ -92,7 +93,10 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	}
 
 	public void handle_cancel(){
-
+		Networking.broadcastJoinMode = false;
+		Networking.broadcastHostMode = false;
+		networking = false;
+		GLRenderer.state = GameState.Main_Menu;
 	}
 	public void handle_host()
 	{
@@ -124,6 +128,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		int result = mRenderer.setSelectMainMenu(x, y);
 		int a = 2;
 		if(result != -1){
+			
 			if(result == 0){
 				networking = false;
 				AI = true;
@@ -177,6 +182,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
 			GameEngine.endTurn(networking);
 			ResetGUI();
+			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 			UnitGroup winner = checkWinner();
 			if(winner != UnitGroup.None){
 				mRenderer.gov.UpdateWinner(winner);
@@ -263,6 +269,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			}
 			return true;
 		}else if(pickControlledUnit && finishMoving && chooseAction && touchMenu == -1 && pressCancel){
+			SFX.play(SFX.CANCEL);
 			mRenderer.headsUpDisplay.updateHUD(true, true, false, false);//show cancel is enable, hide the rest of actionbox
 			chooseAction = false;
 			decision = -1;
@@ -271,6 +278,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			RendererAccessor.update(mapData);
 			return true;
 		}else if (pickControlledUnit && pressCancel && !finishMoving){
+			SFX.play(SFX.CANCEL);
 			ResetGUI();
 			return true;
 		}else
@@ -396,6 +404,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			mRenderer.headsUpDisplay.updateHUD(true, true, true, false);
 			finishMoving = false;
 		}else{
+			SFX.play(SFX.NOTYET);
 			mRenderer.updateHUDPanel(p);
 			mapData.clearBoxes();
 			RendererAccessor.update(mapData);
@@ -431,7 +440,8 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
 	private void startNetworking()
 	{
-
+		if (Networking.started)
+			return;
 		Thread netThread = new Thread()
 		{			
 			public void run(){

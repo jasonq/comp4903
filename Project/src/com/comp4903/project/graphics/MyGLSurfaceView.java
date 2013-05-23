@@ -2,35 +2,22 @@
 
 package com.comp4903.project.graphics;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.gesture.GestureOverlayView;
-import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.GestureDetector;
 
-import com.comp4903.AI.AIEngine;
-import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
-import com.comp4903.project.gameEngine.enums.ColorType;
-import com.comp4903.project.gameEngine.enums.GameState;
-import com.comp4903.project.gameEngine.enums.IconType;
-import com.comp4903.project.gameEngine.enums.SkillType;
-import com.comp4903.project.gameEngine.enums.UnitGroup;
-import com.comp4903.project.gameEngine.engine.GameEngine;
-import com.comp4903.project.gameEngine.factory.GameStats;
-import com.comp4903.project.gameEngine.factory.SkillStats;
 import com.comp4903.project.graphics.GLRenderer;
+
 import com.comp4903.project.network.Networking;
+import com.comp4903.project.sound.SFX;
+
 
 public class MyGLSurfaceView extends GLSurfaceView {
 
@@ -100,7 +87,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		case MotionEvent.ACTION_DOWN:
 			switch(GLRenderer.state){
 			case Game_Screen:
-				mRenderer.setSelectedHUD((int)x, (int)y);
+				int abc = mRenderer.setSelectedHUD((int)x, (int)y);
+				if(abc != -1)
+					SFX.play(SFX.PRESS2);
 				if( mRenderer.headsUpDisplay.checkPressingEndTurn((int)x,(int)y)){
 					mRenderer.headsUpDisplay.check =mRenderer.headsUpDisplay.pgiveUpTurn;
 				}
@@ -112,11 +101,17 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					mRenderer.gov.flag = true;
 				break;
 			case Network_Menu:
-				mRenderer.network.selected = mRenderer.network.checkButton((int)x, (int)y);
+				int nw = mRenderer.network.checkButton((int)x, (int)y);
+				if(nw != -1){
+					SFX.play(SFX.PRESS2);
+				}
+				mRenderer.network.selected = nw;
 				break;
 			case Main_Menu:
 				int result = mRenderer.setSelectMainMenu((int)x, (int)y);
 				mRenderer.mm.selected = result;
+				if(result != -1)
+					SFX.play(SFX.PRESS2);
 				break;
 			}
 			break;
@@ -140,7 +135,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				mRenderer.mm.selected = -1;
 				break;
 			}
-			
+
 			break;
 		}
 		mPreviousX = x;

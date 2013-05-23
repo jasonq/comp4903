@@ -110,6 +110,11 @@ public class RendererAccessor {
 			map.clearFloatingIcons(s);
 		}
 		
+		public static void clearFloatingText(String s)
+		{
+			map.clearFloatingText(s);
+		}
+		
 		/*	SCREENXYFROMXYZ - takes a 3D world co-ordinate (xyz) and returns the 
 		 *  xy location on the screen where it would appear if rendered.  Convenient
 		 * 

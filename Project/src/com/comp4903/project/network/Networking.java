@@ -30,7 +30,7 @@ public class Networking {
 
 	public static String IP = "undefined";
 	public static String broadcastIP;
-	
+	public static boolean started = false;
 	public static InetAddress IPaddress;
 	public static InetAddress broadcastAddress;
 	
@@ -77,6 +77,7 @@ public class Networking {
 		gameStarted = true;
 		blockingOnSend = false;
 		packetCounter = 0;
+		started = true;
 		
 		for (int i = 0; i <5; i++)
 			playerAssigned[i] = false;		
@@ -280,6 +281,8 @@ public class Networking {
 		for (int i = 1; i < 5; i++)
 			playerAssigned[i] = false;
 		
+		RendererAccessor.floatingText(20, 20, 0, 0, -1, ColorType.White, "host", "Waiting for players...");
+		
 		broadcastHostMode = true;
 		while (broadcastHostMode)
 		{
@@ -289,8 +292,8 @@ public class Networking {
 			for (int i = 0; i < 5; i++)
 				if (playerAssigned[i])
 					c++;
-			s = "Connected players: " + c;
-			RendererAccessor.floatingText(20, 20, 0, 0, -1, ColorType.White, "host", s);
+			//s = "Connected players: " + c;
+			//RendererAccessor.floatingText(20, 20, 0, 0, -1, ColorType.White, "host", s);
 			
 			try {
 				Thread.sleep(100);
@@ -298,6 +301,9 @@ public class Networking {
 				e.printStackTrace();
 			}
 		}
+		
+		RendererAccessor.clearFloatingText("host");
+		
 	}
 	
 	public static void broadcastJoin()
@@ -362,7 +368,7 @@ public class Networking {
 		
 		int ts = m.readInt(); // timestamp
 		
-		RendererAccessor.floatingText(500, 300, 0, -1, 50, ColorType.White, "i"+ts, "expected: " + currentTimeStamp + " incoming " + ts);
+		//RendererAccessor.floatingText(500, 300, 0, -1, 50, ColorType.White, "i"+ts, "expected: " + currentTimeStamp + " incoming " + ts);
 		
 		if (pn == playerNumber)
 			return;
@@ -456,7 +462,7 @@ public class Networking {
 		
 		String s;
 		s = "Host detected at: " + incomingIP.getHostAddress().toString();
-		RendererAccessor.floatingText(10, 250, 0, 0, -1, ColorType.White, "stuff", s);
+		RendererAccessor.floatingText(10, 250, 0, 0, -1, ColorType.White, "detected", s);
 		candidateHostIP = incomingIP;		
 	}
 		
@@ -465,10 +471,11 @@ public class Networking {
 		broadcastJoinMode = false;
 		int p = m.readInt(); // player #
 		String s;
-		s = "Joined " + incomingIP.getHostAddress().toString() + " as player #" + p;
-		RendererAccessor.floatingText(10, 280, 0, 0, -1, ColorType.White, "join", s);
+		//s = "Joined " + incomingIP.getHostAddress().toString() + " as player #" + p;
+		//RendererAccessor.floatingText(10, 280, 0, 0, -1, ColorType.White, "join", s);
 		playerNumber = 1; //p;
 		GLRenderer.state = GameState.Game_Screen;
 		broadcastJoinMode = false;
+		RendererAccessor.clearFloatingText("detected");
 	}
 }
