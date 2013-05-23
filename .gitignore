@@ -55,5 +55,7 @@ local.properties
 
 # PDT-specific
 .buildpath
-
+# project properties
 Project.properties
+Project/project.properties
+project.properties
