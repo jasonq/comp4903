@@ -17,9 +17,7 @@ import android.opengl.Matrix;
  *  game screen rendering system (to send updates to it)
  */
 public class RendererAccessor {
-	
 		
-	
 		public static MapRenderer map;
 		
 		
@@ -93,7 +91,7 @@ public class RendererAccessor {
 		}
 		
 		/*	Alternate versions accepting 3 floats.  This text or icon will
-		 *  be pinned to a 3d object on the map
+		 *  be pinned to a 3D point on the map
 		 */
 		public static void floatingIcon(float x, float y, float z, int mx, int my, int l, String n, IconType i)
 		{
@@ -113,7 +111,7 @@ public class RendererAccessor {
 		}
 		
 		/*	SCREENXYFROMXYZ - takes a 3D world co-ordinate (xyz) and returns the 
-		 *  xy location on the screen where it would appear if rendered
+		 *  xy location on the screen where it would appear if rendered.  Convenient
 		 * 
 		 */
 		public static Point ScreenXYfromXYZ(float x, float y, float z)

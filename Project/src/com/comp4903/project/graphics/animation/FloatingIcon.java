@@ -12,6 +12,13 @@ import com.comp4903.project.GUI.Square;
 import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.graphics.RendererAccessor;
 
+/*	FLOATINGICON - Can be used to instantiate a floating icon (which can move
+ *  in a specified direction, and automatically disappear after a certain time)
+ *  anywhere.
+ *  
+ *  To use, call RendererAccessor.floatingIcon(....), which manages the icons
+ * 
+ */
 public class FloatingIcon {
 
 	int x, y, xMovement, yMovement, lifetime, elapsed;
@@ -58,6 +65,9 @@ public class FloatingIcon {
 		tied = false;
 	}
 	
+	/*	INIT - preloads the graphics for the icons.  Any new icons must be added here.
+	 * 
+	 */
 	public static void init(GL10 g, Context c)
 	{
 		gl = g;
@@ -73,6 +83,12 @@ public class FloatingIcon {
 		
 	}
 	
+	/*	LOADIMAGE - loads a bitmap and scales it to sx, sy
+	 * 
+	 * 	i		index of image (image #)
+	 *  res		associated resource in the res folder
+	 *  sx,sy	new size
+	 */
 	public static void loadImage(int i, int res, int sx, int sy)
 	{
 		width[i] = sx; height[i] = sy;
@@ -83,6 +99,10 @@ public class FloatingIcon {
 		temp.recycle();
 	}
 	
+	/*	DRAW - draws the icon, handles movement of the icon and de-activates it
+	 *  when it's time is up.
+	 * 
+	 */
 	public void draw()
 	{		
 		if (active)

@@ -9,6 +9,10 @@ import com.comp4903.project.gameEngine.enums.ColorType;
 import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.graphics.RendererAccessor;
 
+/*	DEFENDANIMATION - Not really an animation; it displays a small
+ *  shield icon that slowly drifts up the screen.
+ * 
+ */
 public class DefendAnimation extends AnimationProcessor {
 
 	int actorID;

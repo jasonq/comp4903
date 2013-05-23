@@ -31,6 +31,7 @@ import com.comp4903.project.graphics.model.Model3D;
 import com.comp4903.project.graphics.model.ModelLoader;
 import com.comp4903.project.graphics.tile.Hexagon;
 import com.comp4903.project.network.Networking;
+import com.comp4903.project.sound.SFX;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -83,6 +84,7 @@ public class MapRenderer {
 	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 0.0f };	
 	
+	// to keep track of floating text and icons
 	private ArrayList<FloatingText> floatingText_;
 	private ArrayList<FloatingIcon> floatingIcons_;
 	
@@ -107,6 +109,7 @@ public class MapRenderer {
 		floatingIcons_ = new ArrayList<FloatingIcon>();
 		FloatingText.init(gl, context);
 		FloatingIcon.init(gl, context);
+		SFX.init(context);
 				
 	}	
 	
@@ -137,9 +140,7 @@ public class MapRenderer {
 				
 			} catch (IOException e)
 			{ }			
-		}
-		
-		//models[0].SetScale(.75f, .75f, .75f);
+		}		
 	}
 	
 	/*	INIT - Used to initialize, or re-initialize the map
@@ -150,9 +151,7 @@ public class MapRenderer {
 	{
 		mapWidth = w;
 		mapHeight = h;
-		tileMap = new Hex[w][h];
-		
-			
+		tileMap = new Hex[w][h];			
 	}
 	
 	/*	RENDER - draw the map
@@ -185,6 +184,7 @@ public class MapRenderer {
 		gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPosition, 0);
 		
 		// execute the rendering passes
+		backgroundPass();		// extra background tiles
 		basePass();				// flat tiles
 		selectionPass();		// selection effects
 		actorPass();			// 3D units
@@ -196,6 +196,9 @@ public class MapRenderer {
 		
 	}
 	
+	/*	FLOATINGPASS - displays the floating text and icons
+	 * 
+	 */
 	public void floatingPass()
 	{
 		HUD.SwithToOrtho(gl);
@@ -204,13 +207,9 @@ public class MapRenderer {
 		
 		gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
 		gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
-		
-		
-		
+				
 		for (int i = 0; i < floatingText_.size(); i++)
-			floatingText_.get(i).draw();
-		
-		
+			floatingText_.get(i).draw();		
 		
 		for (int i = 0; i < floatingIcons_.size(); i++)
 			floatingIcons_.get(i).draw();
@@ -221,6 +220,16 @@ public class MapRenderer {
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 	}
 	
+	/*	ADDFLOATINGTEXT - adds a new line of text to appear on the screen as 
+	 *  feedback.  Will also remove any inactive text that is currently being stored.
+	 *  
+	 *  x, y	screen co-ordinates
+	 *  mx, my	motion vector for text (to make it rise up on the screen for example)
+	 *  l		lifetime of the text (in no particular standard time measurement system)
+	 *  col		text color (use ColorType enum)
+	 *  n		name of the text (in case it needs to be identified)
+	 *  c		content - what will be displayed
+	 */
 	public void addFloatingText(int x, int y, int mx, int my, int l, ColorType col, String n, String c)
 	{		
 		for (int i = 0; i < floatingText_.size(); i++)
@@ -241,6 +250,9 @@ public class MapRenderer {
 		floatingText_.add(f);
 	}
 	
+	/*	same as above, but accepts 3 floats for x,y, and z.  This text will be fixed
+	 *  to a point in 3D space (but will still move according to the motion vector)
+	 */
 	public void addFloatingText(float x, float y, float z, int mx, int my, int l, ColorType col, String n, String c)
 	{		
 		for (int i = 0; i < floatingText_.size(); i++)
@@ -261,6 +273,7 @@ public class MapRenderer {
 		floatingText_.add(f);
 	}
 	
+	// same as above, but for icons.  Use the IconType enum to specify which icon
 	public void addFloatingIcon(int x, int y, int mx, int my, int l, String n, IconType i)
 	{
 		FloatingIcon f = new FloatingIcon(x,y,mx,my,l,n,i);
@@ -273,6 +286,7 @@ public class MapRenderer {
 		floatingIcons_.add(f);
 	}
 	
+	// another version for 3D points in space
 	public void addFloatingIcon(float x, float y, float z, int mx, int my, int l, String n, IconType i)
 	{
 		FloatingIcon f = new FloatingIcon(x,y,z,mx,my,l,n,i);
@@ -285,6 +299,9 @@ public class MapRenderer {
 		floatingIcons_.add(f);
 	}
 	
+	/*	CLEARFLOATINGICONS - will de-activate icons with the specified name
+	 * 	s	name of icon, or "all" for all icons
+	 */
 	public void clearFloatingIcons(String n)
 	{		
 		if (n.equals("all"))
@@ -316,8 +333,7 @@ public class MapRenderer {
 		for (int x = 0; x < mapWidth; x++)
 		{
 			for (int y = 0; y < mapHeight; y++)
-			{
-				//tileMap[x][y].state = -1;
+			{				
 				float dx = (float)x * 1.5f;
 				float dy = 0;
 				float dz = (float)y * 0.8660254038f * 2 + (x % 2) * 0.8660254038f;											
@@ -340,6 +356,56 @@ public class MapRenderer {
 		}
 	}
 	
+	/* BACKGROUNDPASS - draws the background hexagons
+	 * 
+	 */
+	private void backgroundPass()
+	{		
+				
+		for (int x = -20; x < mapWidth + 20; x++)
+		{
+			for (int y = -20; y < mapHeight + 20; y++)
+			{
+				if ((x < 0) || (y < 0) || (x >= mapWidth) || (y >= mapHeight))
+				{
+					float dx = (float)x * 1.5f;
+					float dy = 0;
+					float dz = (float)y * 0.8660254038f * 2 + (x % 2) * 0.8660254038f;											
+					
+					if (tileOnScreen(dx, dy, dz))
+					{								
+						
+						// set up the model-view matrix for this hexagon
+						Matrix.setIdentityM(modelMatrix, 0);				
+						Matrix.multiplyMM(modelViewMatrix, 0, modelMatrix, 0, viewMatrix, 0);
+						Matrix.translateM(modelViewMatrix, 0, dx, dy, dz);
+						gl.glMatrixMode(GL10.GL_MODELVIEW);
+						gl.glLoadMatrixf(modelViewMatrix, 0);
+						
+						int t = (int)(0.567576f * (x * x) * (y*y)) % 6;
+						if (t == 3)
+							t = 4;
+						t = 4;
+						if ( ((x == -1) && (y >= -1) && (y <= mapHeight)) ||
+						     ((x == mapWidth) && (y >= -1) && (y <= mapHeight)) ||
+						     ((y == -1) && (x >= -1) && (x <= mapWidth)) ||
+						     ((y == mapHeight) && (x >= -1) && (x <= mapWidth)))
+							t = 5;
+												
+						hex.draw(gl, modelViewMatrix, projectionMatrix, 1, t, false);
+					}
+				}
+			}
+		}
+	}
+	
+	/*	TILEONSCREEN - given x,y,z of center of tile, determines if it is
+	 *  visible
+	 * 
+	 * 	dx,dy,dz	the center of the tile
+	 * 
+	 *  returns true or false
+	 */
 	public static boolean tileOnScreen(float dx, float dy, float dz)
 	{
 		/*
@@ -371,7 +437,8 @@ public class MapRenderer {
 	
 		
 	/*	SELECTIONPASS - Draws selection effects transparently over
-	 *  floor tiles 
+	 *  floor tiles.  Some animation is built into this method, to
+	 *  make the highlights shrink or expand. 
 	 */
 	private void selectionPass()
 	{
@@ -469,7 +536,8 @@ public class MapRenderer {
 		}
 	}
 	
-	// draw the tiles which are composed of models
+	// Some tile types (like buildings or generators) has 3D models that
+	// display with them.  This pass handles that.
 	private void tileModelPass()
 	{				
 		for (int x = 0; x < mapWidth; x++)
@@ -513,7 +581,7 @@ public class MapRenderer {
 		
 	}
 	
-	// Makes tile x,y the selected tile
+	// Makes tile x,y the selected tile as well
 	public void highlight(int x, int y)
 	{
 		selectedTile.x = x;
@@ -537,18 +605,22 @@ public class MapRenderer {
 				tileMap[x][y].state = -1;
 			}
 				
-		tileMap[6][6].tile = 4;
+		/*tileMap[6][6].tile = 4;
 		tileMap[6][7].tile = 4;
 		tileMap[6][5].tile = 4;
 		tileMap[5][6].tile = 4;
 		tileMap[5][5].tile = 4;
-		tileMap[7][7].tile = 5;
+		tileMap[7][7].tile = 5;*/
 		//tileMap[8][8].tile = 6;
 		//tileMap[9][9].tile = 7;
 		
-		GLRenderer.viewX = (mapWidth / 2) * 1.5f;
-		GLRenderer.viewZ = (mapHeight / 2) * 1.5f;
+		
+		 int mw = mapWidth / 2;
+		 int mh = mapHeight / 2;
+			
+		GLRenderer.viewX = (float)mw * 1.5f;
 		GLRenderer.viewY = 0;
+		GLRenderer.viewZ = (float)mh * 0.8660254038f * 2 + (mw % 2) * 0.8660254038f;
 		
 		actors.clear();
 		for (int i = 0; i < m._units.size(); i++)
@@ -581,10 +653,11 @@ public class MapRenderer {
 	 */
 	public void update(MapData m)
 	{
-		GLRenderer.pauseRender = true;
-		//while (GLRenderer.isRenderingNow);
 		
-		 while(GLRenderer.isRenderingNow) 
+		// Block the renderer during the update.  Renderer executes
+		// on a different thread.
+		GLRenderer.pauseRender = true;				
+		while(GLRenderer.isRenderingNow) 
 		 {
 			 try {
 				Thread.sleep(10);
@@ -599,6 +672,7 @@ public class MapRenderer {
 			for (int y = 0; y < mapHeight; y++)
 				tileMap[x][y].state = -1;
 		
+		// Identify which tiles need to be highlighted white
 		for (int i = 0; i < m._movementBox.size(); i++)
 		{
 			int dx = m._movementBox.get(i).x;
@@ -607,6 +681,7 @@ public class MapRenderer {
 			tileMap[dx][dy].size = 0;
 		}
 		
+		// Identify which tiles need to be highlighted red
 		for (int i = 0; i < m._attackBox.size(); i++)
 		{
 			int dx = m._attackBox.get(i).x;
@@ -615,7 +690,8 @@ public class MapRenderer {
 			tileMap[dx][dy].size = 0;
 		}		
 		
-		//actors.clear();
+		// Update the Actors, which are entities which handle the
+		// state of the animations of the units they are associated with
 		for (int i = 0; i < m._units.size(); i++)
 		{
 			if (actors.containsKey(m._units.get(i).uID))
@@ -649,6 +725,9 @@ public class MapRenderer {
 		GLRenderer.pauseRender = false;
 	}
 	
+	/*	REMOVEUNUSEDACTORS - clean up actor entities which are no longer being used,
+	 *  usually used after the final 'death' animation of the unit. 
+	 */
 	public void removeUnusedActors()
 	{
 		Actor a;
@@ -670,6 +749,12 @@ public class MapRenderer {
 			actors.remove(removeList.get(q));
 	}
 	
+	/*	MOVEANIMATION - initiates a unit moving animation through the
+	 *  animation engine.
+	 *  
+	 *  u		Unit to move
+	 *  steps	List of map points, in order, that the units move to
+	 */
 	public void moveAnimation(Unit u, List<Point> steps)
 	{
 		MoveAnimate m = new MoveAnimate();
@@ -680,6 +765,13 @@ public class MapRenderer {
 		AnimationEngine.start("move");
 	}
 	
+	/*	ATTACKANIMATION - initiates an attack animation through the
+	 *  animation engine.
+	 *  
+	 *  u			unit who initiates the attack
+	 *  u2			unit who receives the attack
+	 *  messages	text to display above the recipient unit (array of string)
+	 */
 	public void attackAnimation(Unit u, Unit u2, String[] messages)
 	{
 		GenericAttack m = new GenericAttack();
@@ -694,6 +786,11 @@ public class MapRenderer {
 		AnimationEngine.start("Receiver");
 	}
 	
+	/*	DEATHANIMATION - submits a death animation to the 
+	 *  animation engine
+	 * 
+	 * 	u	applicable unit
+	 */
 	public void deathAnimation(Unit u) {
 		DeathAnimation d = new DeathAnimation();
 		d.init(u);
@@ -702,6 +799,12 @@ public class MapRenderer {
 		
 	}
 	
+	/*	HEALTHANIMATION - submits a healing animation to the 
+	 *  animation engine
+	 * 
+	 * 	u		applicable unit
+	 *  val		text to appear above unit (usually indicates healing amount)
+	 */
 	public static void healthAnimation(Unit u, String val)
 	{
 		HealthAnimation h = new HealthAnimation();
@@ -710,6 +813,12 @@ public class MapRenderer {
 		AnimationEngine.start("Health" + u.uID);
 	}
 	
+	/*	DEFENDANIMATION - submits a defend animation to the 
+	 *  animation engine (Usually just an icon appearing, not much of
+	 *  an animation)
+	 * 
+	 * 	u		applicable unit	
+	 */
 	public static void defendAnimation(Unit u)
 	{
 		DefendAnimation d = new DefendAnimation();
@@ -718,6 +827,16 @@ public class MapRenderer {
 		AnimationEngine.start("Defend" + u.uID);
 	}
 	
+	/*	GRABANIMATION - initiates the grab animation in which one unit
+	 *  uses telekinesis to levitate another unit to bring it into
+	 *  better position to receive an attack
+	 *  
+	 *  u			Unit who initiates the action
+	 *  u2			Unit upon whom the action is performed
+	 *  p			destination point on map where u2 will be transported
+	 *  damages		array of text messages which appear above u2
+	 * 
+	 */
 	public static void grabAnimation(Unit u, Unit u2, Point p, String[] damages)
 	{
 		GrabAnimation d = new GrabAnimation();
@@ -727,6 +846,9 @@ public class MapRenderer {
 		
 	}
 	
+	/*	HEADSHOTANIMATION - same as attack animation, but specific to a
+	 *  certain unit type 
+	 */
 	public void headShotAnimation(Unit u, Unit u2, String[] messages)
 	{
 		GenericAttack m = new GenericAttack();
@@ -742,6 +864,9 @@ public class MapRenderer {
 		AnimationEngine.start("Receiver");
 	}
 	
+	/*	GETACTOR - given an ID, returns the actor associated with it
+	 * 
+	 */
 	public Actor getActor(int id)
 	{
 		return actors.get(id);
