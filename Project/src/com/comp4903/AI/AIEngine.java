@@ -14,6 +14,7 @@ import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitGroup;
+import com.comp4903.project.graphics.TouchGesture;
 import com.comp4903.project.graphics.animation.AnimationEngine;
 import com.comp4903.project.network.Networking;
 
@@ -62,7 +63,8 @@ public class AIEngine {
 			}
 		}
 		Log.d("AIEngine", "End Turn");
-		GameEngine.endTurn(false);
+		GameEngine.endTurn(false);	
+		TouchGesture.AIPlaying = false;
 	}
 	
 	private static void getUnitData(){

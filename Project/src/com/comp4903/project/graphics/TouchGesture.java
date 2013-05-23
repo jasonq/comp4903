@@ -33,6 +33,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	private int decision = -1;
 	private boolean networking = false;
 	private boolean AI = false;
+	public static boolean AIPlaying = false;
 
 	public TouchGesture(GLRenderer mgl,MapData md){
 		super();
@@ -54,7 +55,9 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				else
 					handle_Waiting((int)e.getX(),(int)e.getY());
 			}else{
+
 				handle_Game_Screen((int)e.getX(),(int)e.getY());
+
 			}
 			break;
 		case Main_Menu:
@@ -128,7 +131,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		int result = mRenderer.setSelectMainMenu(x, y);
 		int a = 2;
 		if(result != -1){
-			
+
 			if(result == 0){
 				networking = false;
 				AI = true;
@@ -190,10 +193,11 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				return;
 			}
 			if(mapData._activeGroup == UnitGroup.PlayerTwo && !networking && AI){ //need check for if singleplayer or multiplayer
-
+				AIPlaying = true;
 				AIEngine.startTurn();
+				//AIPlaying = false;
 			}
-						
+
 		}
 
 		Unit pickUnit = mapData.getUnitAt(pickPoint);
@@ -305,7 +309,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 					ResetGUI();
 					return;
 				}else if(finishMoving && chooseAction && decision == 3 &&
-						 currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
+						currentUnit.getUnitStats().canUseThisSkill(SkillType.Heal)){
 					GameEngine.useSkill(currentUnit, currentUnit, SkillType.Heal, true, networking);
 					Log.d("Debug", "I heal myself");
 					ResetGUI();
@@ -404,7 +408,8 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			mRenderer.headsUpDisplay.updateHUD(true, true, true, false);
 			finishMoving = false;
 		}else{
-			SFX.play(SFX.NOTYET);
+			if(!AIPlaying)
+				SFX.play(SFX.NOTYET);
 			mRenderer.updateHUDPanel(p);
 			mapData.clearBoxes();
 			RendererAccessor.update(mapData);
@@ -453,7 +458,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
 		netThread.start();
 	}
-	
+
 	private UnitGroup checkWinner(){
 		int result = 0;
 		UnitGroup loser = UnitGroup.None;

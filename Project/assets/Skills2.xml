@@ -25,7 +25,7 @@
 	    <Energy>20</Energy>
 	    <Target>Enemy</Target>
 	    <Range>4</Range>
-	    <Modifier parameter="Damage">10</Modifier>
+	    <Modifier parameter="Damage">25</Modifier>
 	</Ability>
 	<Ability>
 	    <Name>Headshot</Name>
