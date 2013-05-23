@@ -24,7 +24,7 @@
 	    <Health>0</Health>
 	    <Energy>20</Energy>
 	    <Target>Enemy</Target>
-	    <Range>4</Range>
+	    <Range>2</Range>
 	    <Modifier parameter="Damage">25</Modifier>
 	</Ability>
 	<Ability>
@@ -34,15 +34,15 @@
 	    <Energy>5</Energy>
 	    <Target>Enemy</Target>
 	    <Range>3</Range>
-	    <Modifier parameter="Accuracy">20</Modifier>
+	    <Modifier parameter="Accuracy">15</Modifier>
 	    <Modifier parameter="Duration">2</Modifier>
-	    <Modifier parameter="Chance">10</Modifier>
+	    <Modifier parameter="Chance">17</Modifier>
 	</Ability>
 	<Ability>
 	    <Name>Heal</Name>
 	    <Description>Heals the targeted unit by %health%.</Description>
 	    <Health>0</Health>
-	    <Energy>15</Energy>
+	    <Energy>24</Energy>
 	    <Target>Ally</Target>
 	    <Range>2</Range>
 	    <Modifier parameter="Heal">25</Modifier>
