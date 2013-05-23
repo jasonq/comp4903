@@ -12,7 +12,9 @@ import java.util.Enumeration;
 
 import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.enums.ColorType;
+import com.comp4903.project.gameEngine.enums.GameState;
 import com.comp4903.project.gameEngine.networking.Action;
+import com.comp4903.project.graphics.GLRenderer;
 import com.comp4903.project.graphics.RendererAccessor;
 
 
@@ -441,6 +443,9 @@ public class Networking {
 			}
 		}
 		
+		GLRenderer.state = GameState.Game_Screen;
+		broadcastHostMode = false;
+		
 	}
 	
 	
@@ -461,6 +466,8 @@ public class Networking {
 		String s;
 		s = "Joined " + incomingIP.getHostAddress().toString() + " as player #" + p;
 		RendererAccessor.floatingText(10, 280, 0, 0, -1, ColorType.White, "join", s);
-		playerNumber = p;
+		playerNumber = 1; //p;
+		GLRenderer.state = GameState.Game_Screen;
+		broadcastJoinMode = false;
 	}
 }

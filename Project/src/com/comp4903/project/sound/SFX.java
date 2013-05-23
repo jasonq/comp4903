@@ -1,5 +1,8 @@
 package com.comp4903.project.sound;
 
+
+import com.comp4903.project.R;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -17,7 +20,7 @@ public class SFX {
 		
 		library_ = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
 		
-		LASER = library_.load("SFX/FX-Lazer283.wav", 1);
+		LASER = library_.load(context, R.raw.fxlazer283, 1);
 	}
 	
 	public static void play(int s)
