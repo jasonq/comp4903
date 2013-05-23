@@ -5,16 +5,16 @@
 	    <Description>Fast rifle fires at medium range</Description>
 	    <Damage>11</Damage>
 	    <Accuracy>60</Accuracy>
-	    <Rounds>6</Rounds>
+	    <Rounds>5</Rounds>
 	    <Range>2</Range>
 	</Weapon>
 	<Weapon>
 	    <Name>Sniper Rifle</Name>
 	    <Description>A long range rifle with high accuracy and damage.</Description>
-	    <Damage>30</Damage>
+	    <Damage>38</Damage>
 	    <Accuracy>80</Accuracy>
 	    <Rounds>1</Rounds>
-	    <Range>3</Range>
+	    <Range>4</Range>
 	</Weapon>
 	<Weapon>
 	    <Name>Sword</Name>

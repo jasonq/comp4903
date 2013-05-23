@@ -8,11 +8,11 @@
     <Armour>
         <Name>Medium Armour</Name>
         <Defence>2</Defence>
-        <Health>15</Health>
+        <Health>10</Health>
     </Armour>
     <Armour>
         <Name>Heavy Armour</Name>
         <Defence>3</Defence>
-        <Health>20</Health>
+        <Health>10</Health>
     </Armour>
 </ArmourList>
