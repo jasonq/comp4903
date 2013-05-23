@@ -21,15 +21,16 @@ public class AIEngine {
 	
 	private static MapData _mapdata;
 	private static List<Unit> PlayerUnits;
-	private static List<AIUnitData> AIUnits;
+	private static List<Unit> AIUnits;
 	private static InfluenceMap AIinMap;
 	private static InfluenceMap PLAYERinMap;
 	
 	public static void Initialize(MapData md){
 		_mapdata = md;
-		AIBehaviours.Intialize(md);
+		AI.Intialize(md);
 		AIinMap = new InfluenceMap(md.NumberOfColumns(), md.NumberOfRows());
 		PLAYERinMap = new InfluenceMap(md.NumberOfColumns(), md.NumberOfRows());
+		getUnitData();
 	}
 	
 	//run in TouchGesture line 175
@@ -45,12 +46,21 @@ public class AIEngine {
 	public static void processTurn(){
 		getUnitData();
 		//inMap.intializeInfluenceMap(PlayerUnits, AIUnits);
-		for(AIUnitData ai : AIUnits){
-			AIinMap.getInfluenceMapAI(AIUnits);
+		for(Unit ai : AIUnits){
+			AIinMap.getInfluenceMap(AIUnits);
 			PLAYERinMap.getInfluenceMap(PlayerUnits);
-			ai.getState(_mapdata._units, AIinMap, PLAYERinMap);
-			ai.initializeUnitLists(_mapdata._units);
-			SMBehaviour.think(ai, AIinMap, PLAYERinMap);
+			ai.aiData.intializeState(ai, ai.unitType, PlayerUnits);
+			switch(ai.unitType){
+			case SwordMaster:
+				SMBehaviour.think(ai, AIinMap, PLAYERinMap, AIUnits, PlayerUnits);
+				break;
+			case Sniper:
+				SPBehaviour.think(ai, AIinMap, PLAYERinMap, AIUnits, PlayerUnits);
+				break;
+			case Medic:
+				//SMBehaviour.think(ai, AIinMap, PLAYERinMap);
+				break;
+			}
 		}
 		Log.d("AIEngine", "End Turn");
 		GameEngine.endTurn(false);
@@ -58,13 +68,13 @@ public class AIEngine {
 	
 	private static void getUnitData(){
 		PlayerUnits = new ArrayList<Unit>();
-		AIUnits = new ArrayList<AIUnitData>();
+		AIUnits = new ArrayList<Unit>();
 		for(Unit u : _mapdata._units){
 			if(u.unitGroup == UnitGroup.PlayerOne)
 				PlayerUnits.add(u);
 			if(u.unitGroup == UnitGroup.PlayerTwo)
-				AIUnits.add(new AIUnitData(u));
+				AIUnits.add(u);
 		}
-		Collections.sort(AIUnits);
+		//Collections.sort(AIUnits);
 	}
 }

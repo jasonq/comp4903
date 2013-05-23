@@ -42,7 +42,11 @@ public class ReceiveAttack extends AnimationProcessor {
 			Point p = RendererAccessor.ScreenXYfromXYZ(actor_.getX(), actor_.getY() + 2, actor_.getZ());
 			if (p == null)
 				p = new Point(0,0);
-			RendererAccessor.floatingText(p.x-40, p.y, 0, -2, 100, ColorType.Red, "m"+ m, messages_[m++]);
+			//RendererAccessor.floatingText(p.x-40, p.y, 0, -2, 100, ColorType.Red, "m"+ m, messages_[m++]);
+			RendererAccessor.floatingText(actor_.getX(),
+										actor_.getY() + 2,
+										actor_.getZ(),
+										0, -2, 100, ColorType.Red, "m"+ m, messages_[m++]);
 			count = 20;
 		}
 		if (m == messages_.length)
@@ -59,10 +63,20 @@ public class ReceiveAttack extends AnimationProcessor {
 		actor_.noRepeat = true;
 		
 		if (!dying)
+		{
 			actor_.setAnimation("attack.recoil");
+			actor_.speed = 0.2f;
+		}
 		else
+		{
 			actor_.setAnimation("death.standard");
-		actor_.speed = 0.2f;
+			actor_.speed = 0.2f;
+			//if (actor_.m3d.parameters.containsKey("death.speed"))
+			//{
+			//	actor_.speed = actor_.m3d.parameters.get("death.speed").floatVal;
+			//}
+		}
+		
 		actor_.time = 0;	
 		
 		return false;

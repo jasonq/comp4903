@@ -2,21 +2,31 @@ package com.comp4903.project.graphics.animation;
 
 import android.graphics.Point;
 
-/*	ANIMATIONPROCESSOR - base class to define generic animations
- *  such as walking and attacking
+/*	ANIMATIONPROCESSOR - base class to define generic animation logic.
+ *  Derived classes will implement logic of various types of animations
+ *  such as walking or attacking, and must implement:
+ *  
+ *  iteration()		performs an iteration of the animation
+ *  signal(..)		used to send signals between animations
  * 
+ * 	It is also recommended to implement a method called init(...) although not
+ *  required.
  */
 public abstract class AnimationProcessor {
 
-	int delay;
+	int delay;						// can be used to delay start of an animation
 	boolean started = false;
 	boolean ended = false;
-	boolean foreground = false;
+	boolean foreground = false;		// indicate whether the animation is to have priority over the user
 	String name;
 	
 	public abstract boolean iteration();
 	public abstract boolean signal(int value);
 	
+	/*	PROCESS - checks to see if the animation is active and ready, and
+	 *  if so, performs an iteration of it.
+	 * 
+	 */
 	public boolean process()
 	{
 		if (!started)
@@ -30,6 +40,9 @@ public abstract class AnimationProcessor {
 		
 		return true;
 	}
+	
+	// Some useful functions which can be used by derived classes, or by any class
+	// for that matter.
 	
 	/*	ANGLEFROMDIRECTION - given a direction (0 - 5, representing
 	 *  the 6 sides of a hexagon starting from northwest), returns

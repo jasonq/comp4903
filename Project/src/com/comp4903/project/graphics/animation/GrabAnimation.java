@@ -51,7 +51,7 @@ public class GrabAnimation extends AnimationProcessor {
 		victim_.setPosition(x, y, z);		
 		
 		stepLength = (float)Math.sqrt((x2-x) * (x2-x) + (y2-y)*(y2-y) + (z2-z)*(z2-z));
-		stepLength *= 30f;
+		stepLength *= 15f;
 		if (stepLength == 0)
 			stepLength = 0.000001f;
 		xStep = (x2 - x) / stepLength; // * RendererAccessor.map.models[actor_.model].scale[0];

@@ -96,22 +96,22 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	}
 	public void handle_host()
 	{
-		//Networking.broadcastJoinMode = false;
-		//Networking.broadcastHostMode = true;	
+		Networking.broadcastJoinMode = false;
+		Networking.broadcastHostMode = true;	
 		networking = true;
 		AI = false;
 		Networking.playerNumber = 0;
-		GLRenderer.state = GameState.Game_Screen;
+		//GLRenderer.state = GameState.Game_Screen;
 	}
 
 	public void handle_join()
 	{
-		//Networking.broadcastHostMode = false;
-		//Networking.broadcastJoinMode = true;
+		Networking.broadcastHostMode = false;
+		Networking.broadcastJoinMode = true;
 		networking = true;
 		AI = false;
 		Networking.playerNumber = 1;
-		GLRenderer.state = GameState.Game_Screen;
+		//GLRenderer.state = GameState.Game_Screen;
 	}
 	public void handle_Game_Over(int x, int y){
 		if(mRenderer.gov.checkPressingMeu(x, y))

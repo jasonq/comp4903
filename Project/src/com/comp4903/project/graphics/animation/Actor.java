@@ -30,7 +30,7 @@ public class Actor {
 	public boolean remove = false;
 	public boolean alt = false;
 	public boolean noRepeat = false;
-	public boolean active;
+	public boolean active, displayInactive;
 	
 	Model3D m3d;
 	
@@ -46,6 +46,7 @@ public class Actor {
 		lastZ = 0;
 		noRepeat = false;
 		active = true;
+		displayInactive = false;
 		
 	}
 	
@@ -119,10 +120,12 @@ public class Actor {
 		float[] rotation = m.matrixAngleAroundAxis(yRotate, yAxis[0], yAxis[1], yAxis[2]);
 		float[] temp = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 				
-		Matrix.multiplyMM(temp, 0, rotation, 0, m.components[0].orientation, 0);
+		//Matrix.multiplyMM(temp, 0, rotation, 0, m.components[0].orientation, 0);
 		
-		for (int i = 0; i < 16; i++)
-			m.components[0].orientation[i] = temp[i];
+		//for (int i = 0; i < 16; i++)
+		//	m.components[0].orientation[i] = temp[i];
+		
+		m.SetOrientation(rotation);
 		
 	}	
 		

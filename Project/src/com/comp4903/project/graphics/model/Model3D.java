@@ -242,15 +242,25 @@ public class Model3D {
 		Matrix.setIdentityM(t, 0);
 		Matrix.translateM(t, 0, position[0], 
 								position[1], 
-								position[2] );
+								position[2]);
 		
-		Matrix.multiplyMM(w, 0, t, 0, components[0].orientation, 0);	
+		//Matrix.scaleM(t, 0, scale[0], scale[1], scale[2]);	
 		
-		Matrix.translateM(w, 0, adjust[0], 
+		Matrix.multiplyMM(s, 0, t, 0, orientation, 0);
+		
+		Matrix.translateM(s, 0, adjust[0], 
 				adjust[1], 
 				adjust[2] * multiplier);
 		
-		Matrix.scaleM(w, 0, scale[0], scale[1], scale[2]);		
+		Matrix.scaleM(s, 0, scale[0], scale[1], scale[2]);
+						
+		Matrix.multiplyMM(w, 0, s, 0, components[0].orientation, 0);
+		
+		//Matrix.translateM(w, 0, adjust[0], 
+		//		adjust[1], 
+		//		adjust[2] * multiplier);
+		
+		//Matrix.scaleM(w, 0, scale[0], scale[1], scale[2]);		
 		
 		//Matrix.translateM(r, 0, orientation, 0, position[0], position[1], position[2]);
 		//Matrix.scaleM(w, 0, r, 0, scale[0], scale[1], scale[2]);
