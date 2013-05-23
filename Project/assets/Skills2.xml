@@ -33,8 +33,8 @@
 	    <Health>0</Health>
 	    <Energy>5</Energy>
 	    <Target>Enemy</Target>
-	    <Range>3</Range>
-	    <Modifier parameter="Accuracy">15</Modifier>
+	    <Range>4</Range>
+	    <Modifier parameter="Accuracy">17</Modifier>
 	    <Modifier parameter="Duration">2</Modifier>
 	    <Modifier parameter="Chance">17</Modifier>
 	</Ability>
