@@ -557,6 +557,14 @@ public class AI {
 			}
 			return false;
 		}
+		
+		protected static boolean checkInfluence(List<Point> points, InfluenceMap imap){
+			for(Point p : points){
+				if(imap.getValue(p.x, p.y) > 0)
+					return true;
+			}
+			return false;
+		}
 	}
 	
 	static class Actions{

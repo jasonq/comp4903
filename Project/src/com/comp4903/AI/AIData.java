@@ -34,7 +34,7 @@ public class AIData{
 			state = sniperState(unit, prevState, enemyUnits);
 			break;
 		case Medic:
-			//state = medicState(imap);
+			state = medicState(unit, prevState, enemyUnits);
 			state = AIState.Aggressive;
 			break;
 		default:
@@ -116,6 +116,37 @@ public class AIData{
 			}
 		default:
 			Log.d(TAG, "Default to aggressive");
+			return AIState.Aggressive;
+		}
+	}
+	
+	/**
+	 * Gets the medics current state
+	 */
+	private AIState medicState(Unit unit, AIState prevState, List<Unit> enemyUnits){
+		switch (prevState){
+		case Aggressive:
+			if (currentHealthPercent(unit) < 20.0f)
+				return AIState.Retreat;
+			else if(numberOfEnemiesInRange(unit, enemyUnits, 3) >= 3)
+				return AIState.Defensive;
+			else
+				return AIState.Aggressive;
+		case Defensive:
+			if (currentHealthPercent(unit) < 20.0f)
+				return AIState.Retreat;
+			else if(numberOfEnemiesInRange(unit, enemyUnits, 3) < 3)
+				return AIState.Aggressive;
+			else
+				return AIState.Defensive;
+		case Retreat:
+			if(currentHealthPercent(unit) > 70.0f)
+				return AIState.Aggressive;
+			else if(currentHealthPercent(unit) > 50.0f)
+				return AIState.Defensive;
+			else
+				return AIState.Retreat;
+		default:
 			return AIState.Aggressive;
 		}
 	}

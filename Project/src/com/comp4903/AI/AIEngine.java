@@ -45,7 +45,6 @@ public class AIEngine {
 	}
 	public static void processTurn(){
 		getUnitData();
-		//inMap.intializeInfluenceMap(PlayerUnits, AIUnits);
 		for(Unit ai : AIUnits){
 			AIinMap.getInfluenceMap(AIUnits);
 			PLAYERinMap.getInfluenceMap(PlayerUnits);
@@ -58,7 +57,7 @@ public class AIEngine {
 				SPBehaviour.think(ai, AIinMap, PLAYERinMap, AIUnits, PlayerUnits);
 				break;
 			case Medic:
-				//SMBehaviour.think(ai, AIinMap, PLAYERinMap);
+				MDBehaviour.think(ai, AIinMap, PLAYERinMap, AIUnits, PlayerUnits);
 				break;
 			}
 		}
