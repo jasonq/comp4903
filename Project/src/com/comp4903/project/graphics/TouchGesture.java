@@ -55,8 +55,10 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 				else
 					handle_Waiting((int)e.getX(),(int)e.getY());
 			}else{
-
-				handle_Game_Screen((int)e.getX(),(int)e.getY());
+				if(AIPlaying)
+					handle_Waiting((int)e.getX(),(int)e.getY());
+				else
+					handle_Game_Screen((int)e.getX(),(int)e.getY());
 
 			}
 			break;
@@ -157,6 +159,8 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			mRenderer.updateHUDPanel(pickUnit);
 			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 		}
+		else
+			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 	}
 	/*
 	 * Handle touch event when we are in game screen state
@@ -186,6 +190,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			GameEngine.endTurn(networking);
 			ResetGUI();
 			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
+			mRenderer.headsUpDisplay.showEnd = false;
 			UnitGroup winner = checkWinner();
 			if(winner != UnitGroup.None){
 				mRenderer.gov.UpdateWinner(winner);
@@ -195,6 +200,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			if(mapData._activeGroup == UnitGroup.PlayerTwo && !networking && AI){ //need check for if singleplayer or multiplayer
 				AIPlaying = true;
 				AIEngine.startTurn();
+				return;
 				//AIPlaying = false;
 			}
 
