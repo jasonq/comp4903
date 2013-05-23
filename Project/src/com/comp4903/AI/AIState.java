@@ -2,9 +2,8 @@ package com.comp4903.AI;
 
 public enum AIState {
 	Aggressive(0),
-	Cautious(1),
-	Defensive(2),
-	Retreat(3);
+	Defensive(1),
+	Retreat(2);
 	
 	private int code;
 	

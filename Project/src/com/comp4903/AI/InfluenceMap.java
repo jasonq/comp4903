@@ -10,29 +10,18 @@ import com.comp4903.pathfind.BFSNode;
 import com.comp4903.project.gameEngine.data.Unit;
 
 public class InfluenceMap {
-	public int tiles[][];
-	int col;
-	int row;
+	private int tiles[][];
+	private int col;
+	private int row;
 	
 	public InfluenceMap(int columns, int rows){
 		col = columns;
 		row = rows;
 	}
 	
-	/*public void intializeInfluenceMap(List<Unit> player, List<AIUnitData> ai){
-		playerTiles = getInfluenceMap(player);
-		AiTiles = getInfluenceMapAI(ai);
-		for(int y = 0; y < row; y++){
-			for(int x = 0; x < col; x++){
-				System.out.print(" " + AiTiles[x][y]);
-				if(AiTiles[x][y] < 10)
-					System.out.print(" ");
-				//Log.d("InfluenceMap", "Player " + x + "," + y + " influence: " + playerTiles[x][y]);
-				
-			}
-			System.out.println();
-		}
-	}*/
+	public int getValue(int x, int y){
+		return tiles[x][y];
+	}
 	
 	/**
 	 * Gets influence map based on units passed
@@ -64,30 +53,6 @@ public class InfluenceMap {
 		tiles = infMap;
 	}
 	
-	public void getInfluenceMapAI(List<AIUnitData> units){
-		int infMap[][] = new int[col][row];
-		for(AIUnitData u : units){
-			Point pos = u.unit.position;
-			List<BFSNode> nodes = Algorithms.GetNodesBFS(u.unit.position, 4);
-			if(infMap[pos.x][pos.y] == 0){
-				infMap[pos.x][pos.y] = 10;
-			} else {
-				infMap[pos.x][pos.y] += 10;
-			}
-			for(BFSNode n : nodes){
-				int influence = getInfluenceValue(n);
-				int x = n.p.x;
-				int y = n.p.y;
-				if(infMap[x][y] == 0){
-					infMap[x][y] = influence;
-				} else {
-					infMap[x][y] += influence;
-				}
-					
-			}
-		}
-		tiles = infMap;
-	}
 	/**
 	 * Get influence value based on number of steps taken.
 	 * @param node BFSnode with step value
