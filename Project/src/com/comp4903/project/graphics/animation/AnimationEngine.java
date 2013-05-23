@@ -71,23 +71,25 @@ public class AnimationEngine {
 	/*	EXECUTE - execute one iteration of each active AnimationProcessor 
 	 * 
 	 */
-	public synchronized static void execute()
+	public static void execute()
 	{
-		AnimationProcessor a;
-		List<String> removeList = new ArrayList<String>();
 		
-		Iterator<Entry<String, AnimationProcessor>> i = animations_.entrySet().iterator();
-		while (i.hasNext())
-		{
-			a = i.next().getValue();
-			if ((a.started) && (!a.ended))
-				a.process();
-			if (a.ended)
-				removeList.add(a.name);
-		}
+			AnimationProcessor a;
+			List<String> removeList = new ArrayList<String>();
+			
+			Iterator<Entry<String, AnimationProcessor>> i = animations_.entrySet().iterator();
+			while (i.hasNext())
+			{
+				a = i.next().getValue();
+				if ((a.started) && (!a.ended))
+					a.process();
+				if (a.ended)
+					removeList.add(a.name);
+			}
+			
+			for (int q = 0; q < removeList.size(); q++)
+				animations_.remove(removeList.get(q));
 		
-		for (int q = 0; q < removeList.size(); q++)
-			animations_.remove(removeList.get(q));
 	}
 	
 	/*	SIGNAL - sends a signal to a certain animation.
