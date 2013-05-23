@@ -423,6 +423,10 @@ public class Networking {
 	
 	public static void processJoinRequest(NetworkMessage m, InetAddress incomingIP)
 	{
+		
+		GLRenderer.state = GameState.Game_Screen;
+		broadcastHostMode = false;
+		
 		for (int i = 0; i < 5; i++)
 		{
 			if ((playerAssigned[i]) && (incomingIP.equals(playerIPAddresses[i])))
@@ -441,10 +445,7 @@ public class Networking {
 				sendAccept(incomingIP, i);
 				return;
 			}
-		}
-		
-		GLRenderer.state = GameState.Game_Screen;
-		broadcastHostMode = false;
+		}				
 		
 	}
 	
