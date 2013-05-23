@@ -13,7 +13,7 @@ public class GenericAttack extends AnimationProcessor {
 	private int actorID;
 	private Actor actor_;
 	private Random r;
-	private boolean signalled;
+	private boolean signalled, swung;
 	
 	int hitTime, endTime;
 	
@@ -39,6 +39,8 @@ public class GenericAttack extends AnimationProcessor {
 		actor_.setAnimation("attack.basic");		
 		actor_.speed = 0.3f; //0.08f;
 		actor_.time = 3;
+		
+		swung = false;
 		
 		if (actor_.animation != -1)
 		{
@@ -72,6 +74,16 @@ public class GenericAttack extends AnimationProcessor {
 			}
 			return false;
 		}
+		
+		if ((actor_.time > 9) && (!swung))
+		{
+			swung = true;
+			if (actor_.m3d.parameters.containsKey("sound.swing"))
+			{
+				SFX.play(actor_.m3d.parameters.get("sound.swing").intVal);
+			}
+		}
+			
 		
 		if ((actor_.time > hitTime) || (actor_.animation == -1))
 		{

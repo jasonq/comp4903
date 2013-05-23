@@ -2,35 +2,18 @@
 
 package com.comp4903.project.graphics;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.gesture.GestureOverlayView;
-import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.GestureDetector;
 
-import com.comp4903.AI.AIEngine;
-import com.comp4903.pathfind.PathFind;
 import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
-import com.comp4903.project.gameEngine.enums.ColorType;
-import com.comp4903.project.gameEngine.enums.GameState;
-import com.comp4903.project.gameEngine.enums.IconType;
-import com.comp4903.project.gameEngine.enums.SkillType;
-import com.comp4903.project.gameEngine.enums.UnitGroup;
-import com.comp4903.project.gameEngine.engine.GameEngine;
-import com.comp4903.project.gameEngine.factory.GameStats;
-import com.comp4903.project.gameEngine.factory.SkillStats;
 import com.comp4903.project.graphics.GLRenderer;
-import com.comp4903.project.network.Networking;
 
 public class MyGLSurfaceView extends GLSurfaceView {
 

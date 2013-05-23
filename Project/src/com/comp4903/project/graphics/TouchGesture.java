@@ -92,7 +92,10 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 	}
 
 	public void handle_cancel(){
-
+		Networking.broadcastJoinMode = false;
+		Networking.broadcastHostMode = false;
+		networking = false;
+		GLRenderer.state = GameState.Main_Menu;
 	}
 	public void handle_host()
 	{
@@ -431,7 +434,8 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 
 	private void startNetworking()
 	{
-
+		if (Networking.started)
+			return;
 		Thread netThread = new Thread()
 		{			
 			public void run(){

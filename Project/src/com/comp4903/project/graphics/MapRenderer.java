@@ -151,9 +151,18 @@ public class MapRenderer {
 		p = new ModelParams();
 		p.intVal = SFX.BOOM;
 		p.type = p.INTVAL;		
-		models[1].parameters.put("sound.attack", p);
+		models[1].parameters.put("sound.attack", p);		
+		models[1].parameters.get("hit.frame").intVal = 14;	
 		
-		models[1].parameters.get("hit.frame").intVal = 14;		
+		p = new ModelParams();
+		p.intVal = SFX.BUMP;
+		p.type = p.INTVAL;		
+		models[0].parameters.put("sound.attack", p);
+		
+		p = new ModelParams();
+		p.intVal = SFX.SWOOSH;
+		p.type = p.INTVAL;		
+		models[0].parameters.put("sound.swing", p);
 	}
 	
 	/*	INIT - Used to initialize, or re-initialize the map
@@ -330,6 +339,27 @@ public class MapRenderer {
 					if (floatingIcons_.get(p).name.equals(n))
 					{
 						floatingIcons_.get(p).active = false;
+					}
+				}
+			}
+		}
+	}
+	
+	public void clearFloatingText(String n)
+	{		
+		if (n.equals("all"))
+		{
+			floatingText_.clear();
+		}
+		else
+		{
+			for (int p = 0; p < floatingText_.size(); p++)
+			{
+				if (floatingText_.get(p).name != null)
+				{
+					if (floatingText_.get(p).name.equals(n))
+					{
+						floatingText_.get(p).active = false;
 					}
 				}
 			}

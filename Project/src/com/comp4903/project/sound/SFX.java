@@ -14,6 +14,8 @@ public class SFX {
 	
 	public static int LASER;
 	public static int BOOM;
+	public static int BUMP;
+	public static int SWOOSH;
 	
 	public static void init(Context c)
 	{
@@ -23,6 +25,8 @@ public class SFX {
 		
 		LASER = library_.load(context, R.raw.fxlazer283, 1);
 		BOOM = library_.load(context, R.raw.boom5, 1);
+		BUMP = library_.load(context, R.raw.bump1, 1);
+		SWOOSH = library_.load(context, R.raw.swoosh, 1);
 	}
 	
 	public static void play(int s)
