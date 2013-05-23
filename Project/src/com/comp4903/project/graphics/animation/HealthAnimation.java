@@ -19,7 +19,7 @@ public class HealthAnimation extends AnimationProcessor {
 	
 	public void init(Unit u, String val)
 	{
-		foreground = true;
+		foreground = false;
 		actorID = u.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
 		p = RendererAccessor.ScreenXYfromXYZ(actor_.getX(), actor_.getY() + 2, actor_.getZ());

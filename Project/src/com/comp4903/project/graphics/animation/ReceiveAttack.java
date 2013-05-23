@@ -46,7 +46,7 @@ public class ReceiveAttack extends AnimationProcessor {
 			RendererAccessor.floatingText(actor_.getX(),
 										actor_.getY() + 2,
 										actor_.getZ(),
-										0, -2, 100, ColorType.Red, "m"+ m, messages_[m++]);
+										0, -2, 100, ColorType.Red, "m"+ m + "u" + actorID, messages_[m++]);
 			count = 20;
 		}
 		if (m == messages_.length)
