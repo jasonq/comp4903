@@ -78,7 +78,10 @@ public class GenericAttack extends AnimationProcessor {
 			actor_.setZrotate(0);
 			actor_.setXrotate(0);			
 			AnimationEngine.signal("Receiver", 1);
-			SFX.play(SFX.LASER);
+			if (actor_.m3d.parameters.containsKey("sound.attack"))
+			{
+				SFX.play(actor_.m3d.parameters.get("sound.attack").intVal);
+			}
 			signalled = true;
 			return true;
 		}

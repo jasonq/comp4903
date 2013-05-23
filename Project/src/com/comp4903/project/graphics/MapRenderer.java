@@ -29,6 +29,7 @@ import com.comp4903.project.graphics.animation.MoveAnimate;
 import com.comp4903.project.graphics.animation.ReceiveAttack;
 import com.comp4903.project.graphics.model.Model3D;
 import com.comp4903.project.graphics.model.ModelLoader;
+import com.comp4903.project.graphics.model.ModelParams;
 import com.comp4903.project.graphics.tile.Hexagon;
 import com.comp4903.project.network.Networking;
 import com.comp4903.project.sound.SFX;
@@ -141,6 +142,18 @@ public class MapRenderer {
 			} catch (IOException e)
 			{ }			
 		}		
+		
+		ModelParams p = new ModelParams();
+		p.intVal = SFX.LASER;
+		p.type = p.INTVAL;		
+		models[2].parameters.put("sound.attack", p);
+		
+		p = new ModelParams();
+		p.intVal = SFX.BOOM;
+		p.type = p.INTVAL;		
+		models[1].parameters.put("sound.attack", p);
+		
+		models[1].parameters.get("hit.frame").intVal = 14;		
 	}
 	
 	/*	INIT - Used to initialize, or re-initialize the map
