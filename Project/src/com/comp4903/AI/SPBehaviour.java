@@ -5,7 +5,6 @@ import java.util.List;
 import android.graphics.Point;
 import android.util.Log;
 
-import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.SkillType;
 import com.comp4903.project.gameEngine.enums.UnitType;
@@ -76,8 +75,12 @@ public class SPBehaviour {
 					Unit medic = AI.GetUnit.closestPoint(medics, aiUnit.position);
 					List<Point> medicAtkRange = AI.Pathfind.GetOpenSpaces(medic.position, aiUnit.combatStats.range);
 					List<Point> validMoves = AI.GetPoints.matchingPoints(movePath, medicAtkRange);
-					Point bestMove = AI.GetPoint.lowestInf(validMoves, playerMap);
-					AI.Actions.moveAttack(aiUnit, medic, bestMove);
+					if(validMoves.size() > 0){ //valid moves
+						Point bestMove = AI.GetPoint.lowestInf(validMoves, playerMap);
+						AI.Actions.moveAttack(aiUnit, medic, bestMove);
+					} else {
+						AI.Actions.attack(aiUnit, medic);
+					}
 				} else {
 					List<Unit> swordmasters = AI.GetUnits.fromType(enInRange, UnitType.SwordMaster);
 					if(swordmasters.size() > 0){ //sword master in atk range

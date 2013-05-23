@@ -537,6 +537,16 @@ public class AI {
 			}
 			return targets;
 		}
+		
+		protected static List<Point> coverPoints(List<Point> pts){
+			List<Point> targets = new ArrayList<Point>();
+			for(Point p: pts){
+				if(_mapdata._tileTypes[p.x][p.y] == TileType.Generator || _mapdata._tileTypes[p.x][p.y] == TileType.Sandbag){
+					targets.add(p);
+				}
+			}
+			return targets;
+		}
 	}
 	
 	static class Check{

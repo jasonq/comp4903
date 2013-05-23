@@ -1,22 +1,14 @@
 package com.comp4903.AI;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Point;
 import android.util.Log;
 
-import com.comp4903.pathfind.Algorithms;
-import com.comp4903.pathfind.PathFind;
-import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
-import com.comp4903.project.gameEngine.engine.GameEngine;
 import com.comp4903.project.gameEngine.enums.SkillType;
-import com.comp4903.project.gameEngine.enums.TileType;
-import com.comp4903.project.gameEngine.enums.UnitGroup;
 import com.comp4903.project.gameEngine.enums.UnitType;
 import com.comp4903.project.gameEngine.factory.GameStats;
-import com.comp4903.project.graphics.animation.AnimationEngine;
 
 /**
  * Swordmaster Behaviour
@@ -85,8 +77,9 @@ public class SMBehaviour {
 				List<Point> spaceAroundTarget = AI.Pathfind.GetOpenSpaces(target.position, aiUnit.combatStats.range);
 				List<Point> validMoves = AI.GetPoints.matchingPoints(movePath, spaceAroundTarget);
 				if(validMoves.size() > 0){ //valid moves in move range
-					Point cover = AI.GetPoint.closestCover(validMoves, target.position);
-					if(cover != null){ // cover is in valid move
+					List<Point> coverPoints = AI.GetPoints.coverPoints(validMoves);
+					if(coverPoints.size() > 0){ // cover is in valid move
+						Point cover = AI.GetPoint.closestCover(coverPoints, aiUnit.position);
 						AI.Actions.moveAttack(aiUnit, target, cover);
 					} else {
 						Point lowestInf = AI.GetPoint.lowestInf(validMoves, playerMap);
@@ -157,13 +150,11 @@ public class SMBehaviour {
 				Unit target = AI.GetUnit.lowestHP(movAtkUnits);
 				List<Point> areaAroundTarget = AI.Pathfind.GetOpenSpaces(target.position, aiUnit.combatStats.range);
 				if(areaAroundTarget.size() > 0) { //there is an area around the target
-					Point cover = AI.GetPoint.closestCover(areaAroundTarget, aiUnit.position);
-					if(cover != null){ //cover is around target
-						if(AI.Check.checkPoint(cover, movePath)){ //cover is in movePath
-							AI.Actions.moveAttack(aiUnit, target, cover);
-						} else {
-							AI.Actions.attack(aiUnit, target);
-						}
+					List<Point> coverPoints = AI.GetPoints.coverPoints(areaAroundTarget);
+					List<Point> validPoints = AI.GetPoints.matchingPoints(movePath, coverPoints);
+					if(validPoints.size() > 0){ //cover is around target
+						Point cover = AI.GetPoint.closestCover(validPoints, aiUnit.position);
+						AI.Actions.moveAttack(aiUnit, target, cover);
 					} else {
 						Point lowInf = AI.GetPoint.lowestInf(areaAroundTarget, playerMap);
 						if(AI.Check.checkPoint(lowInf, movePath)){ //lowInf point is in movePath
@@ -189,24 +180,18 @@ public class SMBehaviour {
 	}
 	
 	private static void retreatSM(Unit aiUnit, InfluenceMap aiMap, InfluenceMap playerMap, List<Unit> allyUnits, List<Unit> enemyUnits){
-		int atkMov = aiUnit.combatStats.range + aiUnit.combatStats.maxMovement;
-		
 		List<Point> movePath = AI.Pathfind.GetMovePath(aiUnit);
-		List<Unit> unitsInAtkRng = AI.Pathfind.GetAttackUnitPrediction(aiUnit, aiUnit.position);
 		List<Unit> unitsInMvRng = AI.GetUnits.fromPoints(enemyUnits, movePath);
-		List<Point> atkMovRange = AI.Pathfind.GetOpenSpaces(aiUnit.position, atkMov);
 		
 		if(unitsInMvRng.size() < 0){ //is aiUnit in player Influence
 			Unit target = AI.GetUnit.lowestHP(unitsInMvRng);
 			if(target.combatStats.currentHealth < 25){
 				List<Point> areaTarget = AI.Pathfind.GetOpenSpaces(target.position, aiUnit.combatStats.range);
-				Point cover = AI.GetPoint.closestCover(areaTarget, aiUnit.position);
-				if(cover != null){ //cover exists
-					if(AI.Check.checkPoint(cover, movePath)){
-						AI.Actions.moveAttack(aiUnit, target, cover);
-					} else {
-						AI.Actions.attack(aiUnit, target);
-					}
+				List<Point> coverPoints = AI.GetPoints.coverPoints(movePath);
+				List<Point> validMoves = AI.GetPoints.matchingPoints(areaTarget, coverPoints);
+				if(validMoves.size() > 0){ //cover exists
+					Point cover = AI.GetPoint.closestCover(validMoves, aiUnit.position);
+					AI.Actions.moveAttack(aiUnit, target, cover);
 				} else {
 					AI.Actions.attack(aiUnit, target);
 				}
