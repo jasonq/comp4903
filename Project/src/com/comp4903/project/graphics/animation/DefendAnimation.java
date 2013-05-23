@@ -31,7 +31,11 @@ public class DefendAnimation extends AnimationProcessor {
 	@Override
 	public boolean iteration() {
 		
-		RendererAccessor.floatingIcon(p.x, p.y, 0, -1, 50, "defense" + actorID, IconType.Defense);
+		//RendererAccessor.floatingIcon(p.x, p.y, 0, -1, 50, "defense" + actorID, IconType.Defense);
+		RendererAccessor.floatingIcon(actor_.getX(),
+									  actor_.getY(),
+									  actor_.getZ(),
+									  0, -1, 50, "defense" + actorID, IconType.Defense);
 		ended = true;
 		
 		return false;

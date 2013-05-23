@@ -5,18 +5,22 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 
 import com.comp4903.project.R;
 import com.comp4903.project.GUI.Square;
 import com.comp4903.project.gameEngine.enums.IconType;
+import com.comp4903.project.graphics.RendererAccessor;
 
 public class FloatingIcon {
 
-	int x, y, xMovement, yMovement, lifetime;
-	String name;
+	int x, y, xMovement, yMovement, lifetime, elapsed;
+	public String name;
 	IconType icon;
 	public boolean active;
 	int delay = 20;
+	boolean tied;
+	float xf,yf,zf;
 	
 	static int[] width = new int[50];
 	static int[] height = new int[50];
@@ -25,6 +29,21 @@ public class FloatingIcon {
 	public static GL10 gl;
 	
 	static Square[] images_ = new Square[50];
+	
+	public FloatingIcon(float xf1, float yf1, float zf1, int mx, int my, int l, String n, IconType i)
+	{
+		icon = i;
+		name = n;
+		xf = xf1;
+		yf = yf1;
+		zf = zf1;
+		xMovement = mx;
+		yMovement = my;
+		lifetime = l;
+		active = true;	
+		tied = true;
+		elapsed = 0;
+	}
 	
 	public FloatingIcon(int x1, int y1, int mx, int my, int l, String n, IconType i)
 	{
@@ -36,6 +55,7 @@ public class FloatingIcon {
 		yMovement = my;
 		lifetime = l;
 		active = true;		
+		tied = false;
 	}
 	
 	public static void init(GL10 g, Context c)
@@ -49,6 +69,7 @@ public class FloatingIcon {
 		loadImage(IconType.Health1.getCode(), R.drawable.plus1, 16, 16);
 		loadImage(IconType.Health2.getCode(), R.drawable.plus2, 32, 32);
 		loadImage(IconType.Health3.getCode(), R.drawable.plus3, 64, 64);
+		loadImage(IconType.Lock.getCode(), R.drawable.lockicon, 64, 64);
 		
 	}
 	
@@ -66,6 +87,14 @@ public class FloatingIcon {
 	{		
 		if (active)
 		{
+			if (tied)
+			{
+				Point p = RendererAccessor.ScreenXYfromXYZ(xf, yf, zf);
+				x = p.x + xMovement * elapsed;
+				y = p.y + yMovement * elapsed;
+				elapsed++;
+			}
+			
 			images_[icon.getCode()].UpdateVertices(x, y, width[icon.getCode()], height[icon.getCode()]);
 			images_[icon.getCode()].draw(gl);
 			

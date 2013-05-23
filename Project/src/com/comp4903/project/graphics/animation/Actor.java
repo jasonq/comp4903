@@ -30,6 +30,7 @@ public class Actor {
 	public boolean remove = false;
 	public boolean alt = false;
 	public boolean noRepeat = false;
+	public boolean active, displayInactive;
 	
 	Model3D m3d;
 	
@@ -44,6 +45,8 @@ public class Actor {
 		previousZ = 0;
 		lastZ = 0;
 		noRepeat = false;
+		active = true;
+		displayInactive = false;
 		
 	}
 	
@@ -98,6 +101,8 @@ public class Actor {
 		m.display(gl, viewMatrix, animation, time, alt);
 				
 		time += speed * 2;
+		if (time < 0)
+			time = 0;
 		if ((!noRepeat) && (time >= 119))
 			time = 0;
 		if ((noRepeat) && time >= 118)

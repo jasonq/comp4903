@@ -24,7 +24,7 @@
 	    <Health>0</Health>
 	    <Energy>20</Energy>
 	    <Target>Enemy</Target>
-	    <Range>3</Range>
+	    <Range>4</Range>
 	    <Modifier parameter="Damage">10</Modifier>
 	</Ability>
 	<Ability>

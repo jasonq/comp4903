@@ -51,6 +51,11 @@ public class GenericAttack extends AnimationProcessor {
 		signalled = false;
 	}
 	
+	public void setSpeed(float f)
+	{
+		actor_.speed = f;
+	}
+	
 	@Override
 	public boolean iteration() {
 			

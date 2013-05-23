@@ -61,6 +61,16 @@ public class RendererAccessor {
 			map.defendAnimation(u);
 		}
 		
+		public static void grabAnimation(Unit a1, Unit a2, Point p, String[] damages)
+		{
+			map.grabAnimation(a1, a2, p, damages);
+		}
+		
+		public static void headShotAnimation(Unit u, Unit u2, String[] whatever)
+		{
+			map.headShotAnimation(u, u2, whatever);
+		}
+		
 		/*	FLOATINGTEXT - will summon floating text to appear over the game screen
 		 *  at any time.  Parameters:
 		 * 
@@ -80,6 +90,26 @@ public class RendererAccessor {
 		public static void floatingIcon(int x, int y, int mx, int my, int l, String n, IconType i)
 		{
 			map.addFloatingIcon(x,y,mx,my,l,n,i);
+		}
+		
+		/*	Alternate versions accepting 3 floats.  This text or icon will
+		 *  be pinned to a 3d object on the map
+		 */
+		public static void floatingIcon(float x, float y, float z, int mx, int my, int l, String n, IconType i)
+		{
+			map.addFloatingIcon(x,y,z,mx,my,l,n,i);
+		}
+		public static void floatingText(float x, float y, float z, int mx, int my, int l, ColorType col, String n, String c)
+		{
+			map.addFloatingText(x,y,z,mx,my,l,col,n,c);
+		}
+		
+		/*  CLEARFLOATINGICONS - clears floating icons named s, or all of them if "all"
+		 *  is specified		 * 
+		 */
+		public static void clearFloatingIcons(String s)
+		{
+			map.clearFloatingIcons(s);
 		}
 		
 		/*	SCREENXYFROMXYZ - takes a 3D world co-ordinate (xyz) and returns the 

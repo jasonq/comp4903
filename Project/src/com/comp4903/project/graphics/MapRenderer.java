@@ -23,6 +23,7 @@ import com.comp4903.project.graphics.animation.DefendAnimation;
 import com.comp4903.project.graphics.animation.FloatingIcon;
 import com.comp4903.project.graphics.animation.FloatingText;
 import com.comp4903.project.graphics.animation.GenericAttack;
+import com.comp4903.project.graphics.animation.GrabAnimation;
 import com.comp4903.project.graphics.animation.HealthAnimation;
 import com.comp4903.project.graphics.animation.MoveAnimate;
 import com.comp4903.project.graphics.animation.ReceiveAttack;
@@ -77,6 +78,7 @@ public class MapRenderer {
 	public Model3D[] models;
 		
 	private float[] ambientLight = { 0.6f, 0.6f, 0.6f, 1 };
+	private float[] grayedOutLight = { 0.3f, 0.3f, 0.3f, 1 };
 	private float[] tileColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 0.0f };	
@@ -190,7 +192,7 @@ public class MapRenderer {
 		
 		gl.glDisable(GL10.GL_LIGHTING);
 				
-		floatingPass(); 	// floating text, do last so it is overlayed over map
+		floatingPass(); 	// floating text and icons, do last so it is overlayed over map
 		
 	}
 	
@@ -239,6 +241,26 @@ public class MapRenderer {
 		floatingText_.add(f);
 	}
 	
+	public void addFloatingText(float x, float y, float z, int mx, int my, int l, ColorType col, String n, String c)
+	{		
+		for (int i = 0; i < floatingText_.size(); i++)
+		{
+			if (!floatingText_.get(i).active)
+				floatingText_.remove(i);
+		}
+		for (int i = 0; i < floatingText_.size(); i++)
+		{
+			if (floatingText_.get(i).name.equals(n))
+			{
+				//floatingText_.get(i).set(x,y,mx,my,l,col,n,c);
+				return;
+			}
+		}
+		
+		FloatingText f = new FloatingText(x,y,z,mx,my,l,col, n,c);
+		floatingText_.add(f);
+	}
+	
 	public void addFloatingIcon(int x, int y, int mx, int my, int l, String n, IconType i)
 	{
 		FloatingIcon f = new FloatingIcon(x,y,mx,my,l,n,i);
@@ -249,6 +271,39 @@ public class MapRenderer {
 				floatingIcons_.remove(p);
 		}
 		floatingIcons_.add(f);
+	}
+	
+	public void addFloatingIcon(float x, float y, float z, int mx, int my, int l, String n, IconType i)
+	{
+		FloatingIcon f = new FloatingIcon(x,y,z,mx,my,l,n,i);
+		
+		for (int p = 0; p < floatingIcons_.size(); p++)
+		{
+			if (!floatingIcons_.get(p).active)
+				floatingIcons_.remove(p);
+		}
+		floatingIcons_.add(f);
+	}
+	
+	public void clearFloatingIcons(String n)
+	{		
+		if (n.equals("all"))
+		{
+			floatingIcons_.clear();
+		}
+		else
+		{
+			for (int p = 0; p < floatingIcons_.size(); p++)
+			{
+				if (floatingIcons_.get(p).name != null)
+				{
+					if (floatingIcons_.get(p).name.equals(n))
+					{
+						floatingIcons_.get(p).active = false;
+					}
+				}
+			}
+		}
 	}
 	
 	
@@ -395,8 +450,21 @@ public class MapRenderer {
 			float z = a.getZ();									
 			
 			models[mdl].SetPosition(x, y, z);
-			models[mdl].ResetOrientation();			
+			models[mdl].ResetOrientation();	
+			
+			/*if ((!a.active) && (!a.displayInactive))
+			{
+				RendererAccessor.clearFloatingIcons("inactive" + a.getID());
+				RendererAccessor.floatingIcon(a.getX(),
+											  a.getY(),
+											  a.getZ(),
+											  0, 0, -1, "inactive" + a.getID(),
+											  IconType.Lock);
+				a.displayInactive = true;
+			}*/
+			
 			a.display(gl, viewMatrix, models[mdl]);			
+			
 			
 		}
 	}
@@ -469,6 +537,19 @@ public class MapRenderer {
 				tileMap[x][y].state = -1;
 			}
 				
+		tileMap[6][6].tile = 4;
+		tileMap[6][7].tile = 4;
+		tileMap[6][5].tile = 4;
+		tileMap[5][6].tile = 4;
+		tileMap[5][5].tile = 4;
+		tileMap[7][7].tile = 5;
+		//tileMap[8][8].tile = 6;
+		//tileMap[9][9].tile = 7;
+		
+		GLRenderer.viewX = (mapWidth / 2) * 1.5f;
+		GLRenderer.viewZ = (mapHeight / 2) * 1.5f;
+		GLRenderer.viewY = 0;
+		
 		actors.clear();
 		for (int i = 0; i < m._units.size(); i++)
 		{
@@ -540,11 +621,13 @@ public class MapRenderer {
 			if (actors.containsKey(m._units.get(i).uID))
 			{
 				Actor a = actors.get(m._units.get(i).uID);
+				a.active = m._units.get(i).active;
 				a.setTilePosition(m._units.get(i).position);				
 			} 
 			else
 			{
 				Actor a = new Actor(m._units.get(i).uID);
+				a.active = m._units.get(i).active;
 				
 				if (m._units.get(i).unitGroup.getCode() == 0)
 					a.alt = true;
@@ -633,6 +716,30 @@ public class MapRenderer {
 		d.init(u);
 		AnimationEngine.add("Defend" + u.uID, d);
 		AnimationEngine.start("Defend" + u.uID);
+	}
+	
+	public static void grabAnimation(Unit u, Unit u2, Point p, String[] damages)
+	{
+		GrabAnimation d = new GrabAnimation();
+		d.init(u, u2, p, damages);
+		AnimationEngine.add("Grab" + u.uID, d);
+		AnimationEngine.start("Grab" + u.uID);		
+		
+	}
+	
+	public void headShotAnimation(Unit u, Unit u2, String[] messages)
+	{
+		GenericAttack m = new GenericAttack();
+		ReceiveAttack r = new ReceiveAttack();
+		
+		m.init(u, u2);
+		m.setSpeed(0.08f);
+		r.init(u,  u2, messages);
+		
+		AnimationEngine.add("Attack", m);
+		AnimationEngine.add("Receiver", r);
+		AnimationEngine.start("Attack");
+		AnimationEngine.start("Receiver");
 	}
 	
 	public Actor getActor(int id)

@@ -7,7 +7,8 @@ public enum IconType {
 	P2(2),
 	Health1(3),
 	Health2(4),
-	Health3(5);
+	Health3(5),
+	Lock(6);
 	
 	private int code;
 	

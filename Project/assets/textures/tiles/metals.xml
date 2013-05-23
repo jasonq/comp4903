@@ -50,4 +50,54 @@
 		</def:model>
 	</def:tile>
 	
+	<def:tile name="metal_floor">
+	    <def:base>
+			<def:point1 u="0.621"	v="0.125"/>
+			<def:point2 u="0.683"	v="0.003"/>
+			<def:point3 u="0.806"	v="0.003"/>
+			<def:point4 u="0.87"	v="0.125"/>
+			<def:point5 u="0.806"	v="0.246"/>
+			<def:point6 u="0.683"	v="0.246"/>
+		</def:base>		
+	</def:tile>
+	
+	<def:tile name="futuristic_floor_panel">
+	    <def:base>
+			<def:point1 u="0.004"	v="0.37"/>
+			<def:point2 u="0.062"	v="0.249"/>
+			<def:point3 u="0.188"	v="0.249"/>
+			<def:point4 u="0.249"	v="0.37"/>
+			<def:point5 u="0.188"	v="0.491"/>
+			<def:point6 u="0.062"	v="0.491"/>
+		</def:base>		
+	</def:tile>
+	
+	<def:tile name="ruined_wall">
+	    <def:base>
+			<def:point1 u="0.13"	v="0.12"/>
+			<def:point2 u="0.185"	v="0.005"/>
+			<def:point3 u="0.30"	v="0.005"/>
+			<def:point4 u="0.355"	v="0.12"/>
+			<def:point5 u="0.30"	v="0.235"/>
+			<def:point6 u="0.185"	v="0.235"/>					
+		</def:base>
+		<def:model>
+		    ruin.gmodel
+		</def:model>
+	</def:tile>
+	
+	<def:tile name="ruined_truck">
+	    <def:base>
+			<def:point1 u="0.13"	v="0.12"/>
+			<def:point2 u="0.185"	v="0.005"/>
+			<def:point3 u="0.30"	v="0.005"/>
+			<def:point4 u="0.355"	v="0.12"/>
+			<def:point5 u="0.30"	v="0.235"/>
+			<def:point6 u="0.185"	v="0.235"/>					
+		</def:base>
+		<def:model>
+		    truck.gmodel
+		</def:model>
+	</def:tile>
+	
 </def:tileset>

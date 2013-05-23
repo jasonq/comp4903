@@ -3,9 +3,12 @@ package com.comp4903.project.graphics.animation;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.graphics.Point;
 
 import com.comp4903.project.GUI.GLText;
 import com.comp4903.project.gameEngine.enums.ColorType;
+import com.comp4903.project.gameEngine.enums.IconType;
+import com.comp4903.project.graphics.RendererAccessor;
 
 public class FloatingText {
 
@@ -14,18 +17,31 @@ public class FloatingText {
 	public static GL10 gl;
 	public static int delay;
 	
+	boolean tied;
+	float xf,yf,zf;
+	
 	String content;
 	public String name;
 	int x, y;
 	int xMovement, yMovement;
-	int lifetime;
+	int lifetime, elapsed;
 	float[] color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	
 	ColorType clr;
 	public boolean active;
+	
+	public FloatingText(float xf1, float yf1, float zf1, int mx, int my, int l, ColorType col, String n, String c)
+	{
+		set(0,0,mx,my,l,col,n,c);
+		xf = xf1; yf = yf1; zf = zf1;
+		tied = true;
+		
+	}
 	
 	public FloatingText(int x1, int y1, int mx, int my, int l, ColorType col, String n, String c)
 	{
 		set(x1,y1,mx,my,l,col,n,c);
+		tied = false;
 		
 	}
 	
@@ -48,6 +64,13 @@ public class FloatingText {
 	{
 		if (active)
 		{
+			if (tied)
+			{
+				Point p = RendererAccessor.ScreenXYfromXYZ(xf, yf, zf);
+				x = p.x + xMovement * elapsed;
+				y = p.y + yMovement * elapsed;
+				elapsed++;
+			}
 			
 			font.begin(color[0], color[1], color[2], color[3] );         // Begin Text Rendering (Set Color WHITE)
 			font.setScale(2.0f);
