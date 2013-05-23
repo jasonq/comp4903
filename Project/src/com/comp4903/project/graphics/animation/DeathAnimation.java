@@ -6,6 +6,11 @@ import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.IconType;
 import com.comp4903.project.graphics.RendererAccessor;
 
+/*	DEATHANIMATION - slightly misleading name as the actual death animation
+ *  frame sequence is initiated by the ReceiveAttack class.  However, this
+ *  class will 'clean up' the map after a unit is killed, by having it sink
+ *  into the ground. 
+ */
 public class DeathAnimation extends AnimationProcessor {
 
 	Actor actor_;
@@ -27,11 +32,11 @@ public class DeathAnimation extends AnimationProcessor {
 		//actor_.setYrotate(r);
 		time++;
 		
-		if (time > 50)
+		if (time > 150)
 		{
 			actor_.setY(actor_.getY() - 0.02f);			
 		}
-		if (time > 100)
+		if (time > 200)
 		{
 			actor_.remove = true;
 			ended = true;

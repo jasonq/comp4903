@@ -147,14 +147,11 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		RendererAccessor.map.loadModels();
 		RendererAccessor.map.defineMap(mapData);
 		
-		viewX = 20;
-		viewY = 0;
-		viewZ = 20;
-		distance = 8; //7;
-		viewAngle = 0; //1.57f / 2f;
+		//distance = 8;
+		//viewAngle = 0; //1.57f / 2f;
 		
-		//modeltest(gl);
-		
+		distance = 12;
+		viewAngle = 2f;
 	}	
 		
 	
@@ -227,6 +224,13 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
 	}
+	
+	/* 	DRAWGAMESCREEN - Executes main rendering of the 3D scene through the
+	 *  MapRenderer class instantiated in RendererAccessor.
+	 *  
+	 *  Also draws the HUD overlay
+	 * 
+	 */
 	public void drawGameScreen(GL10 gl)
 	{
 		// clear the buffer
@@ -238,13 +242,17 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		eyeZ = (float) ((Math.sin(viewAngle) + Math.cos(viewAngle)) * distance);
 		eyeX += viewX;
 		eyeZ += viewZ;
-		eyeY = distance*(distance / 7f);		
+		eyeY = distance*(distance / 7f);	
+		
+		if (distance > 8)
+			distance -= 0.05f * (distance - 6)*0.3f;
+		
+		if (viewAngle > 0)
+			viewAngle -= 0.025f* (distance - 6)*0.3f;
 				
 		Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1f, 0f);
 				
-		RendererAccessor.map.render(viewMatrix, projectionMatrix, viewX, viewY, viewZ);
-			
-		//draw(gl);
+		RendererAccessor.map.render(viewMatrix, projectionMatrix, viewX, viewY, viewZ);		
 		
 		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);		
 		headsUpDisplay.SwithToOrtho(gl);
@@ -316,13 +324,20 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		viewX -= (float) ((Math.cos(zAngle) - Math.sin(zAngle)) * dy * distance * 0.002f);		 
 		viewZ -= (float) ((Math.sin(zAngle) + Math.cos(zAngle)) * dy * distance *0.002f);
 		
-		//viewX -= dx * 0.03f;
-		//viewZ -= dy * 0.03f;
+		if (viewX < 0)
+			viewX = 0;
+		if (viewX > ((float)RendererAccessor.map.mapWidth - 1) * 1.5f)
+			viewX = ((float)RendererAccessor.map.mapWidth - 1) * 1.5f;
+		if (viewZ < 0)
+			viewZ = 0;
+		if (viewZ > ((float)RendererAccessor.map.mapHeight - 1) * 0.8660254038f * 2 + ((RendererAccessor.map.mapWidth-1) % 2) * 0.8660254038f)
+			viewZ = ((float)RendererAccessor.map.mapHeight - 1) * 0.8660254038f * 2 + ((RendererAccessor.map.mapWidth-1) % 2) * 0.8660254038f;
+					
 	}
 	
-	// a crazy way of doing picking.  Don't look too closely at this code.
-	// Given two screen co-ordinates, will return
-	// a Point, containing the x and y map co-ordinates selected.
+	/*	PCIK - Given two screen co-ordinates, will return
+	 * 	a Point, containing the x and y map co-ordinates selected.
+	 */
 	public Point pick(float x, float y)
 	{			
 		return RendererAccessor.map.pick(x, y);
@@ -344,6 +359,9 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		selectedTile = s;		
 	}
 	
+	/*	SETPROJECTIONMATRIX - initializes the projection matrix based
+	 *  on predefined screen dimensions 
+	 */
 	public void SetProjectionMatrix(GL10 gl)
 	{		
 		Matrix.setIdentityM(projectionMatrix, 0);
@@ -351,10 +369,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		projectionMatrix[15] = 0; // 3,3
 
 		float near_plane = 1;
-		float far_plane = 1000;
-		
-		//h_fov = 30.0 * ((float)width_ / (float)height_);
-		//v_fov = 60.0 * ((float)height_ / (float)width_);
+		float far_plane = 1000;		
 
 		float h_fov = (float) (30.0 * ((float)GLwidth / (float)GLheight));
 		float v_fov = 30.0f;
@@ -364,21 +379,14 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 
 		float w = (float) (1.0f / Math.tan(h_fov / 180.0f * 3.141593f * 0.5f));
 		float h = (float) (1.0f / Math.tan(v_fov / 180.0f * 3.141593f * 0.5f));
-		float q = far_plane / (far_plane - near_plane);
-		
-		/*projectionMatrix[0] = w;
-		projectionMatrix[5] = h; // 1, 1
-		projectionMatrix[10] = q; // 2,2
-		projectionMatrix[11] = -q*near_plane; // 3,2
-		projectionMatrix[14] = 1; // 2,3*/	
+		float q = far_plane / (far_plane - near_plane);		
 		
 		projectionMatrix[0] = f / aspect;
 		projectionMatrix[5] = f;
 		projectionMatrix[10] = (far_plane + near_plane) / (near_plane - far_plane);
 		projectionMatrix[11] = -1;
 		projectionMatrix[14] = (2f * far_plane * near_plane) / (near_plane - far_plane);
-		projectionMatrix[15] = 0;
-			
+		projectionMatrix[15] = 0;			
 	}
 	
 	public boolean checkHUD(int x, int y){

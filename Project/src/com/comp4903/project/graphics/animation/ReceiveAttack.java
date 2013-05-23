@@ -63,10 +63,20 @@ public class ReceiveAttack extends AnimationProcessor {
 		actor_.noRepeat = true;
 		
 		if (!dying)
+		{
 			actor_.setAnimation("attack.recoil");
+			actor_.speed = 0.2f;
+		}
 		else
+		{
 			actor_.setAnimation("death.standard");
-		actor_.speed = 0.2f;
+			actor_.speed = 0.2f;
+			//if (actor_.m3d.parameters.containsKey("death.speed"))
+			//{
+			//	actor_.speed = actor_.m3d.parameters.get("death.speed").floatVal;
+			//}
+		}
+		
 		actor_.time = 0;	
 		
 		return false;

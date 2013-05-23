@@ -6,6 +6,7 @@ import android.graphics.Point;
 
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.graphics.RendererAccessor;
+import com.comp4903.project.sound.SFX;
 
 public class GenericAttack extends AnimationProcessor {
 	
@@ -77,6 +78,7 @@ public class GenericAttack extends AnimationProcessor {
 			actor_.setZrotate(0);
 			actor_.setXrotate(0);			
 			AnimationEngine.signal("Receiver", 1);
+			SFX.play(SFX.LASER);
 			signalled = true;
 			return true;
 		}
