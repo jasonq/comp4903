@@ -13,6 +13,7 @@ public class SFX {
 	static Context context;
 	
 	public static int LASER;
+	public static int BOOM;
 	
 	public static void init(Context c)
 	{
@@ -21,6 +22,7 @@ public class SFX {
 		library_ = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
 		
 		LASER = library_.load(context, R.raw.fxlazer283, 1);
+		BOOM = library_.load(context, R.raw.boom5, 1);
 	}
 	
 	public static void play(int s)
