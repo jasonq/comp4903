@@ -27,6 +27,8 @@ public class ReceiveAttack extends AnimationProcessor {
 			dying = true;
 		else
 			dying = false;
+		if (messages.length == 0)
+			RendererAccessor.floatingText(500, 30,0, 0, -1, ColorType.Red, "error", "messages blank");
 		
 	}
 	
