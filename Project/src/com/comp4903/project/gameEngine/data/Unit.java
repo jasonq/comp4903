@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.graphics.Point;
 
+import com.comp4903.AI.AIData;
 import com.comp4903.project.gameEngine.enums.*;
 import com.comp4903.project.gameEngine.factory.ArmourStats;
 import com.comp4903.project.gameEngine.factory.GameStats;
@@ -21,6 +22,7 @@ public class Unit {
 	private List<Status> status;
 	public Status tileStatus;
 	public UnitData combatStats;
+	public AIData aiData;
 	public boolean active;
 	
 	public Unit(UnitType type, UnitGroup group, Point pos){
@@ -33,6 +35,7 @@ public class Unit {
 		tileStatus = new Status(TileType.None);
 		active = true;
 		status = new ArrayList<Status>();
+		aiData = new AIData();
 		InitializeCombatStats();
 	}
 	
@@ -46,6 +49,7 @@ public class Unit {
 		tileStatus = new Status(TileType.None);
 		active = true;
 		status = new ArrayList<Status>();
+		aiData = new AIData();
 		InitializeCombatStats();
 	}
 	
