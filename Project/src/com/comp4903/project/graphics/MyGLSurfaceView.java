@@ -15,6 +15,10 @@ import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.graphics.GLRenderer;
 
+import com.comp4903.project.network.Networking;
+import com.comp4903.project.sound.SFX;
+
+
 public class MyGLSurfaceView extends GLSurfaceView {
 
 	private final GLRenderer mRenderer;
@@ -83,7 +87,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		case MotionEvent.ACTION_DOWN:
 			switch(GLRenderer.state){
 			case Game_Screen:
-				mRenderer.setSelectedHUD((int)x, (int)y);
+				int abc = mRenderer.setSelectedHUD((int)x, (int)y);
+				if(abc != -1)
+					SFX.play(SFX.PRESS2);
 				if( mRenderer.headsUpDisplay.checkPressingEndTurn((int)x,(int)y)){
 					mRenderer.headsUpDisplay.check =mRenderer.headsUpDisplay.pgiveUpTurn;
 				}
@@ -95,11 +101,17 @@ public class MyGLSurfaceView extends GLSurfaceView {
 					mRenderer.gov.flag = true;
 				break;
 			case Network_Menu:
-				mRenderer.network.selected = mRenderer.network.checkButton((int)x, (int)y);
+				int nw = mRenderer.network.checkButton((int)x, (int)y);
+				if(nw != -1){
+					SFX.play(SFX.PRESS2);
+				}
+				mRenderer.network.selected = nw;
 				break;
 			case Main_Menu:
 				int result = mRenderer.setSelectMainMenu((int)x, (int)y);
 				mRenderer.mm.selected = result;
+				if(result != -1)
+					SFX.play(SFX.PRESS2);
 				break;
 			}
 			break;
@@ -123,7 +135,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 				mRenderer.mm.selected = -1;
 				break;
 			}
-			
+
 			break;
 		}
 		mPreviousX = x;
