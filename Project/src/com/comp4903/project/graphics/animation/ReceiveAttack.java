@@ -27,8 +27,8 @@ public class ReceiveAttack extends AnimationProcessor {
 			dying = true;
 		else
 			dying = false;
-		if (messages.length == 0)
-			RendererAccessor.floatingText(500, 30,0, 0, -1, ColorType.Red, "error", "messages blank");
+		//if ((messages.length > 0) && (messages[0].equals("")))
+		//	RendererAccessor.floatingText(500, 30,0, 0, -1, ColorType.Red, "error", "messages blank");
 		
 	}
 	
@@ -41,9 +41,9 @@ public class ReceiveAttack extends AnimationProcessor {
 		count--;
 		if (count == 0)
 		{
-			Point p = RendererAccessor.ScreenXYfromXYZ(actor_.getX(), actor_.getY() + 2, actor_.getZ());
-			if (p == null)
-				p = new Point(0,0);
+			//Point p = RendererAccessor.ScreenXYfromXYZ(actor_.getX(), actor_.getY() + 2, actor_.getZ());
+			//if (p == null)
+			//	p = new Point(0,0);
 			//RendererAccessor.floatingText(p.x-40, p.y, 0, -2, 100, ColorType.Red, "m"+ m, messages_[m++]);
 			RendererAccessor.floatingText(actor_.getX(),
 										actor_.getY() + 2,
