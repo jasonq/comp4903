@@ -10,7 +10,12 @@ import com.comp4903.project.graphics.RendererAccessor;
 import com.comp4903.project.graphics.model.Model3D;
 
 /*	ACTOR - used to store the graphical aspects of a unit, such as 3D orientation,
- *  position and other data as required by the renderer and animation system
+ *  position and other data as required by the renderer and animation system.  
+ *  
+ *  Whereas the Unit class stores gameplay information about a unit, such as unit type.
+ *  map location, current health remaining, the Actor class keeps track of which frame
+ *  of animation to display, which direction the 3D model is facing, and other aspects
+ *  of presentation.
  * 
  */
 public class Actor {
@@ -27,9 +32,12 @@ public class Actor {
 	public float time;
 	public float speed;
 	public float previousZ, lastZ;
-	public boolean remove = false;
-	public boolean alt = false;
-	public boolean noRepeat = false;
+	
+	public boolean remove = false; // candidate to be removed
+	
+	public boolean alt = false; // use alternate armor color? (blue)
+	
+	public boolean noRepeat = false; // repeat animation?
 	public boolean active, displayInactive;
 	
 	Model3D m3d;

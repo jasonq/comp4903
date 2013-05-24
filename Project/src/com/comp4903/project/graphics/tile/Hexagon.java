@@ -34,13 +34,11 @@ public class Hexagon {
 	private float[] modelViewMatrix = new float[16];
 	private float[] viewMatrix = new float[16];
 	
-	private float vertices[];
-	private float colors[];
+	private float vertices[];	
 	
 	private TileSetDefinition[] tileDefinitions = new TileSetDefinition[10];
 		
-	private FloatBuffer vertexBuffer;
-	private FloatBuffer colorBuffer;
+	private FloatBuffer vertexBuffer;	
 			
 	/* CONSTRUCTOR - sets up default shape for the hexagons, and
 	 * initializes the vertex and index buffers	 * 
@@ -66,22 +64,13 @@ public class Hexagon {
 			vertices[i * 3] -= C;
 			vertices[i * 3 + 2] -= B;
 		}
-		
-		colors = new float[6 * 3];
-		for (int i = 0; i < 6 * 3; i++)
-			colors[i] = 0.5f;
+				
 		
 		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
 		vbb.order(ByteOrder.nativeOrder());
 		vertexBuffer = vbb.asFloatBuffer();
 		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);	
-		
-		vbb = ByteBuffer.allocateDirect(colors.length * 4);
-		vbb.order(ByteOrder.nativeOrder());
-		colorBuffer = vbb.asFloatBuffer();
-		colorBuffer.put(colors);
-		colorBuffer.position(0);	
+		vertexBuffer.position(0);			
 		
 		for (int i = 0; i < 5000; i++)
 			for (int p = 0; p < 7; p++)
@@ -95,11 +84,7 @@ public class Hexagon {
 	public void readTileData()
 	{
 		tileDefinitions[0] = new TileSetDefinition("textures/tiles/selectiontiles.xml", context);
-		tileDefinitions[1] = new TileSetDefinition("textures/tiles/metals.xml", context);
-				
-		/*Texture t = new Texture(tileDefinitions[0].name, "tiles/" + tileDefinitions[0].texFileName, 0);
-		int index = MaterialLibrary.addTexture(t);
-		MaterialLibrary.loadTexture(index);*/
+		tileDefinitions[1] = new TileSetDefinition("textures/tiles/metals.xml", context);		
 		
 		for (int d = 0; d < 2; d++)
 		{
@@ -112,20 +97,7 @@ public class Hexagon {
 				tileDefinitions[d].tiles[i].UV.position(0);
 			}
 		}
-	}
-	
-	public void setColor(float[] c)
-	{
-		for (int i = 0; i < 6; i++)
-		{
-			colors[i * 3 ] =c[0];
-			colors[i * 3 + 1] = c[1];
-			colors[i*3+2] = c[2];
-		}
-		
-		colorBuffer.put(colors);
-		colorBuffer.position(0);
-	}
+	}	
 	
 	/*	DRAW - draws a hexagon with the specified texture
 	 * 
@@ -143,28 +115,15 @@ public class Hexagon {
 	
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+				
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, tileDefinitions[set].tiles[typ].UV);
 		
-		if (usecolor)
-		{
-			gl.glDisable(GL10.GL_COLOR_MATERIAL);
-			gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-			gl.glColorPointer(3, GL10.GL_FLOAT, 0, colorBuffer);	
-		} //else
-		//{
-			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, tileDefinitions[set].tiles[typ].UV);
-		//}
-					
-		//gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, tileDefinitions[set].tiles[typ].UV);
-
 		gl.glDrawArrays(GL10.GL_TRIANGLE_FAN, 0, vertices.length / 3);
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);		
-			
-		/*if (cpick)
-			computePick(transformMatrix, projectionMatrix);*/
 		
 	}
 	
@@ -202,10 +161,10 @@ public class Hexagon {
 				
 		screenCoordCount++;	
 	}
-	
-	// a crazy way of doing picking.  Don't look too closely at this code.
+		
 	// Given two screen co-ordinates, will return
 	// a Point, containing the x and y map co-ordinates selected.
+	// Magic is used here.
 	public Point pick(float x, float y)
 	{	
 		float w = (float)GLRenderer.GLwidth / 2f;
@@ -246,6 +205,8 @@ public class Hexagon {
 		r.x = -1;
 		r.y = -1;		
 		
+		// somehow these loops magically determine whether the 2D point is
+		// in the 2D polygon
 		for (int m = 0; m < screenCoordCount; m++)
 		{
 			pnts = screenCoords[m];
@@ -256,9 +217,7 @@ public class Hexagon {
 				if (  ((float)pnts[t].y > y) != ((float)pnts[v].y > y)
 						  &&
 						  (x < ((float)pnts[v].x - (float)pnts[t].x) *
-								  (y - (float)pnts[t].y) / ((float)pnts[v].y - (float)pnts[t].y) + (float)pnts[t].x  ))
-						  
-						
+								  (y - (float)pnts[t].y) / ((float)pnts[v].y - (float)pnts[t].y) + (float)pnts[t].x  ))						
 				{
 					p = !p;
 				}
@@ -274,6 +233,14 @@ public class Hexagon {
 		return r;
 	}
 	
+	// returns a numeric value representing the direction one tile is
+	// from another.
+	// 0 - NW
+	// 1 - N
+	// 2 - NE
+	// 3 - SE
+	// 4 - S
+	// 5 - SW
 	public static int getDirection(Point p1, Point p2)
 	{
 		int d = -1;

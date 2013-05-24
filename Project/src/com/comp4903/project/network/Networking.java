@@ -187,7 +187,7 @@ public class Networking {
 			// NOTE: message pointer is indexed to the position
 			// in which game data begins (skipping the 12 bytes of the header)
 			
-			RendererAccessor.floatingText(20, 330, 0, -1, 50, ColorType.White, "host", "submitted " + ts);
+			//RendererAccessor.floatingText(20, 330, 0, -1, 50, ColorType.White, "host", "submitted " + ts);
 			
 			Action a = new Action();
 			if (a.decodeMessage(m))

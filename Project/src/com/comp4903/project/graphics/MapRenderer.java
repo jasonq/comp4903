@@ -15,7 +15,6 @@ import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.ColorType;
 import com.comp4903.project.gameEngine.enums.IconType;
-import com.comp4903.project.gameEngine.enums.UnitType;
 import com.comp4903.project.graphics.animation.Actor;
 import com.comp4903.project.graphics.animation.AnimationEngine;
 import com.comp4903.project.graphics.animation.DeathAnimation;
@@ -31,7 +30,6 @@ import com.comp4903.project.graphics.model.Model3D;
 import com.comp4903.project.graphics.model.ModelLoader;
 import com.comp4903.project.graphics.model.ModelParams;
 import com.comp4903.project.graphics.tile.Hexagon;
-import com.comp4903.project.network.Networking;
 import com.comp4903.project.sound.SFX;
 
 import android.content.Context;
@@ -55,17 +53,12 @@ public class MapRenderer {
 	// map data
 	private Hex tileMap[][];
 	
-	// vectors to be used throughout
-	private float[] vec = new float[4];
-	private float[] resultVec = new float[4];
-	
 	// standard 3d matrices
 	public float[] viewMatrix;
 	public float[] projectionMatrix;
 	private float[] modelMatrix = new float[16];
 	private float[] modelViewMatrix = new float[16];
 	private static float eyeX;
-	private float eyeY;
 	private static float eyeZ;
 	
 	private Point selectedTile = new Point();	
@@ -80,17 +73,12 @@ public class MapRenderer {
 	public Model3D[] models;
 		
 	private float[] ambientLight = { 0.6f, 0.6f, 0.6f, 1 };
-	private float[] grayedOutLight = { 0.3f, 0.3f, 0.3f, 1 };
-	private float[] tileColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
 	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 0.0f };	
 	
 	// to keep track of floating text and icons
 	private ArrayList<FloatingText> floatingText_;
 	private ArrayList<FloatingIcon> floatingIcons_;
-	
-	private ColorType _attackBoxColor;
-	private ColorType _movementBoxColor;
 	
 	/*	CONSTRUCTOR - sets up data structures
 	 * 
@@ -133,8 +121,7 @@ public class MapRenderer {
 					buf = am.open("models/sniper.gmodel");
 				if (t == 0)
 					buf = am.open("models/swordmaster.gmodel");
-				ModelLoader.load(buf, models[t], true);
-				//models[t].SetScale(.08f, .08f, .08f);
+				ModelLoader.load(buf, models[t], true);				
 				models[t].SetScale(0.07f, 0.07f, 0.07f);
 				models[t].SetPosition(1, 1, 1);
 				buf.close();
@@ -143,6 +130,7 @@ public class MapRenderer {
 			{ }			
 		}		
 		
+		// associate sound effects with various actions		
 		ModelParams p = new ModelParams();
 		p.intVal = SFX.LASER;
 		p.type = p.INTVAL;		
@@ -192,7 +180,6 @@ public class MapRenderer {
 		projectionMatrix = projM;
 		
 		eyeX = eX;
-		eyeY = eY;
 		eyeZ = eZ;
 				
 		// execute one iteration of all active animations
@@ -443,7 +430,7 @@ public class MapRenderer {
 	}
 	
 	/*	TILEONSCREEN - given x,y,z of center of tile, determines if it is
-	 *  visible
+	 *  visible.  This is kind of approximate.
 	 * 
 	 * 	dx,dy,dz	the center of the tile
 	 * 
@@ -530,13 +517,8 @@ public class MapRenderer {
 					gl.glLoadMatrixf(modelViewMatrix, 0);
 				
 					if (tileMap[x][y].state != -1)
-					{
-						if (tileMap[x][y].state == 0)
-							_movementBoxColor.getAsFloats(tileColor);
-						if (tileMap[x][y].state == 1)
-							_attackBoxColor.getAsFloats(tileColor);
-						hex.setColor(tileColor);
-						hex.draw(gl, modelViewMatrix, projectionMatrix, 0, tileMap[x][y].state, true);
+					{						
+						hex.draw(gl, modelViewMatrix, projectionMatrix, 0, tileMap[x][y].state, false);
 					}
 				}
 			}
@@ -560,22 +542,10 @@ public class MapRenderer {
 			float z = a.getZ();									
 			
 			models[mdl].SetPosition(x, y, z);
-			models[mdl].ResetOrientation();	
+			models[mdl].ResetOrientation();				
 			
-			/*if ((!a.active) && (!a.displayInactive))
-			{
-				RendererAccessor.clearFloatingIcons("inactive" + a.getID());
-				RendererAccessor.floatingIcon(a.getX(),
-											  a.getY(),
-											  a.getZ(),
-											  0, 0, -1, "inactive" + a.getID(),
-											  IconType.Lock);
-				a.displayInactive = true;
-			}*/
-			
-			a.display(gl, viewMatrix, models[mdl]);			
-			
-			
+			a.display(gl, viewMatrix, models[mdl]);	
+						
 		}
 	}
 	
@@ -648,18 +618,8 @@ public class MapRenderer {
 				tileMap[x][y].state = -1;
 			}
 				
-		/*tileMap[6][6].tile = 4;
-		tileMap[6][7].tile = 4;
-		tileMap[6][5].tile = 4;
-		tileMap[5][6].tile = 4;
-		tileMap[5][5].tile = 4;
-		tileMap[7][7].tile = 5;*/
-		//tileMap[8][8].tile = 6;
-		//tileMap[9][9].tile = 7;
-		
-		
-		 int mw = mapWidth / 2;
-		 int mh = mapHeight / 2;
+		int mw = mapWidth / 2;
+		int mh = mapHeight / 2;
 			
 		GLRenderer.viewX = (float)mw * 1.5f;
 		GLRenderer.viewY = 0;
@@ -707,10 +667,7 @@ public class MapRenderer {
 			} catch (InterruptedException e) {				
 			}
 		 }		
-		
-		_attackBoxColor = m._attackBoxColor;
-		_movementBoxColor = m._movementBoxColor;
-		
+				
 		for (int x = 0; x < mapWidth; x++)
 			for (int y = 0; y < mapHeight; y++)
 				tileMap[x][y].state = -1;

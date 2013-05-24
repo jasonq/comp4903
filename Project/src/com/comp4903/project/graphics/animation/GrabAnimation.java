@@ -135,10 +135,10 @@ public class GrabAnimation extends AnimationProcessor {
 			m.init(attacker, attackee);
 			r.init(attacker,  attackee, damages);
 			
-			AnimationEngine.add("Attack", m);
-			AnimationEngine.add("Receiver", r);
-			AnimationEngine.start("Attack");
-			AnimationEngine.start("Receiver");
+			AnimationEngine.unsafeAdd("Attack", m);
+			AnimationEngine.unsafeAdd("Receiver", r);
+			AnimationEngine.unsafeStart("Attack");
+			AnimationEngine.unsafeStart("Receiver");
 		}
 	}
 

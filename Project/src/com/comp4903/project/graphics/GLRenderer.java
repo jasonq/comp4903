@@ -59,21 +59,12 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	private float eyeX, eyeY, eyeZ; // location of camera
 	private float distance; // distance of camera
 	private float viewAngle; // angle of camera
-	
-	private float[] modelMatrix = new float[16];
+		
 	public static float[] viewMatrix = new float[16];
 	public static float[] modelViewMatrix = new float[16]; // combined model+view, needed for openGL
 	public static float[] projectionMatrix = new float[16];
 	
 	public Context context;
-	
-	private Hexagon hex; // get rid of this
-	private Model3D[] testmodels;
-	private int[][] tileset = new int[40][40]; // this too
-	
-	private float[] ambientLight = { 0.4f, 0.4f, 0.4f, 1 };
-	private float[] diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
-	private float[] lightPosition = { 10.0f, 10.0f, 10.0f, 10.0f };
 	
 	public HUD headsUpDisplay;
 	public MainMenu mm;
@@ -105,8 +96,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	 * (non-Javadoc)
 	 * @see android.opengl.GLSurfaceView.Renderer#onSurfaceCreated(javax.microedition.khronos.opengles.GL10, javax.microedition.khronos.egl.EGLConfig)
 	 *
-	 *	Initialize surface when created.  Move this code into a more
-	 *  appropriate location
+	 *	Initialize surface when created.  
 	 *
 	 */
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -126,7 +116,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		gl.glCullFace(GL10.GL_BACK);
 		glText = new GLText( gl, context.getAssets() );
 		glText.load( "Roboto-Regular.ttf", 14, 2, 2 );
-		//hex = new Hexagon(gl, context);
+		
 		headsUpDisplay = new HUD(context, GLwidth, GLheight,glText);
 		headsUpDisplay.initialBoxTexture(gl);
 		
@@ -146,10 +136,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		RendererAccessor.map.init(mapData.NumberOfColumns(), mapData.NumberOfRows());
 		RendererAccessor.map.loadModels();
 		RendererAccessor.map.defineMap(mapData);
-		
-		//distance = 8;
-		//viewAngle = 0; //1.57f / 2f;
-		
+				
 		distance = 12;
 		viewAngle = 2f;
 	}	
@@ -159,7 +146,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	 * ONDRAWFRAME(non-Javadoc)
 	 * @see android.opengl.GLSurfaceView.Renderer#onDrawFrame(javax.microedition.khronos.opengles.GL10)
 	 * 
-	 * Main drawing loop
+	 * Main drawing loop, chooses which screen to draw (menu, game, etc..)
 	 */	
 	public void onDrawFrame(GL10 gl) {
 		
@@ -244,14 +231,18 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 		eyeZ += viewZ;
 		eyeY = distance*(distance / 7f);	
 		
+		// adjust camera position, to move it closer to a distance of 8 from the view point
 		if (distance > 8)
 			distance -= 0.05f * (distance - 6)*0.3f;
 		
+		// bring angle of camera closer to zero
 		if (viewAngle > 0)
 			viewAngle -= 0.025f* (distance - 6)*0.3f;
 				
 		Matrix.setLookAtM(viewMatrix, 0, eyeX, eyeY, eyeZ, viewX, viewY, viewZ, 0f, 1f, 0f);
 				
+		// Renders all the game related objects (units, map, etc...)
+		// Main work is done in this method
 		RendererAccessor.map.render(viewMatrix, projectionMatrix, viewX, viewY, viewZ);		
 		
 		gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);		
@@ -296,7 +287,7 @@ public class GLRenderer implements android.opengl.GLSurfaceView.Renderer {
 	// or farther from the map)
 	// Amount > 1 moves closer
 	// Amount < 1 moves out
-	// I've disabled it for now
+	// I've disabled it for now, actually
 	public void scaleRequest(float amount)
 	{
 		/*
