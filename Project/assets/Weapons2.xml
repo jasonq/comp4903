@@ -19,8 +19,8 @@
 	<Weapon>
 	    <Name>Sword</Name>
 	    <Description>A mighty sword that can only be used in meelee range</Description>
-	    <Damage>20</Damage>
-	    <Accuracy>90</Accuracy>
+	    <Damage>18</Damage>
+	    <Accuracy>85</Accuracy>
 	    <Rounds>2</Rounds>
 	    <Range>1</Range>
 	</Weapon>
