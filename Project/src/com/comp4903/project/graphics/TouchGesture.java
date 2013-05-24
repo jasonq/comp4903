@@ -167,7 +167,7 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
 		}
 		else
-			mRenderer.headsUpDisplay.updateHUD(false, true, false, false);
+			mRenderer.headsUpDisplay.updateHUD(false, false, false, false);
 	}
 	/*
 	 * Handle touch event when we are in game screen state
