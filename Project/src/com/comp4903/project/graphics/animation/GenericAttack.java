@@ -28,7 +28,21 @@ public class GenericAttack extends AnimationProcessor {
 		actorID = attacker.uID;
 		actor_ = RendererAccessor.map.getActor(actorID);
 		
+		Point p = attacker.position;
+		
+		float x = (float)p.x * 1.5f;
+		float z = (float)p.y * 0.8660254038f * 2f + (p.x % 2) * 0.8660254038f;
+		float y = 0;
+		actor_.setPosition(x, y, z);
+		
 		Actor victim = RendererAccessor.map.getActor(attackee.uID);
+		
+		p = attackee.position;
+		
+		x = (float)p.x * 1.5f;
+		z = (float)p.y * 0.8660254038f * 2f + (p.x % 2) * 0.8660254038f;
+		y = 0;
+		victim.setPosition(x, y, z);
 		
 		float angle = angleFromPoints(actor_.getX(), actor_.getZ(),
 									  victim.getX(), victim.getZ());
