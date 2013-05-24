@@ -18,7 +18,7 @@ public class FloatingText {
 	public static int delay;
 	
 	boolean tied;
-	float xf,yf,zf;
+	public float xf,yf,zf;
 	
 	String content;
 	public String name;

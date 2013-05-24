@@ -273,7 +273,10 @@ public class MapRenderer {
 		{
 			if (floatingText_.get(i).name.equals(n))
 			{
-				//floatingText_.get(i).set(x,y,mx,my,l,col,n,c);
+				floatingText_.get(i).set(0,0,mx,my,l,col,n,c);
+				floatingText_.get(i).xf = x;
+				floatingText_.get(i).yf = y;
+				floatingText_.get(i).zf = z;
 				return;
 			}
 		}
