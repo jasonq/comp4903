@@ -115,7 +115,7 @@ public class GameEngine {
 			case Grab:
 				System.out.println("Grab");
 				if (canCastSkill(unitOne, SkillType.Grab))
-				if (SkillEngine.Grab(unitOne, unitTwo, network)){
+				if (SkillEngine.Grab(unitOne, unitTwo, network, mapData)){
 					mapData.RemoveDeadUnit();
 					RendererAccessor.update(mapData);
 					if (inActive) source.active = false;
@@ -209,7 +209,7 @@ public class GameEngine {
 			case Heal:
 				return SkillEngine.Heal(uOne, uTwo, false);
 			case Grab:
-				if (SkillEngine.Grab(uOne, uTwo, false)){
+				if (SkillEngine.Grab(uOne, uTwo, false, mapData)){
 					mapData.RemoveDeadUnit();
 					return true;
 				}

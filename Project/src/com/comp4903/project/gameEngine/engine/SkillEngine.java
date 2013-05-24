@@ -3,6 +3,7 @@ package com.comp4903.project.gameEngine.engine;
 import android.graphics.Point;
 
 import com.comp4903.pathfind.PathFind;
+import com.comp4903.project.gameEngine.data.MapData;
 import com.comp4903.project.gameEngine.data.Status;
 import com.comp4903.project.gameEngine.data.Unit;
 import com.comp4903.project.gameEngine.enums.ActionType;
@@ -254,7 +255,7 @@ public class SkillEngine {
 		return true;
 	}
 	
-	public static boolean Grab(Unit source, Unit destination, boolean network){
+	public static boolean Grab(Unit source, Unit destination, boolean network, MapData data){
 		System.out.println("In Grab Function.");
 		if (source == null || destination == null){
 			System.out.println("Missing units");
@@ -272,6 +273,10 @@ public class SkillEngine {
 		Point p = PathFind.TractorBeam(source, destination);
 		System.out.println("Destination Unit move to:" + p.x + ", " + p.y);
 		destination.position = p;
+
+		Status s = new Status(data._tileTypes[p.x][p.y]);
+		destination.tileStatus = s;
+		destination.UpdateCombatStats();
 		
 		//********* Code Copied from Attack **************//
 		int damage = stats.getModifier("Damage").intValue();
