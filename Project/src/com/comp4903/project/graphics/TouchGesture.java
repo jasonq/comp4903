@@ -123,8 +123,13 @@ public class TouchGesture extends GestureDetector.SimpleOnGestureListener {
 		//GLRenderer.state = GameState.Game_Screen;
 	}
 	public void handle_Game_Over(int x, int y){
-		if(mRenderer.gov.checkPressingMeu(x, y))
+		if(mRenderer.gov.checkPressingMeu(x, y)) {
 			GLRenderer.state = GameState.Main_Menu;
+			AIEngine.Initialize(mapData);
+			PathFind.initialize(mapData);
+			GameEngine.Initialize(mapData);
+			RendererAccessor.map.defineMap(mapData);
+		}
 	}
 	/*
 	 * Hanlde touch event when we are in main menu state
